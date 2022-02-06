@@ -1,16 +1,17 @@
 import { Element2D } from "./elements/Element2D"
 
+/**
+ * Espace de travail 
+ */
 export class M2d {
     width: number
     height: number
-    k: number
     id: string
     pixelsPerCm: number
     list: Element2D[] = []
-    constructor ({width = 600, height = 400, k = 30, id = 'm2d', pixelsPerCm = 30} : {width?: number, height?: number, k?: number, id?: string, pixelsPerCm?: number} = {}) {
+    constructor ({width = 600, height = 400, id = 'm2d', pixelsPerCm = 30} : {width?: number, height?: number, k?: number, id?: string, pixelsPerCm?: number} = {}) {
         this.width = width
         this.height = height
-        this.k = k
         this.id = id
         this.pixelsPerCm = pixelsPerCm
     }
