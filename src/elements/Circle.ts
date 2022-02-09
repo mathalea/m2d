@@ -69,7 +69,7 @@ export class Circle extends Element2D {
         return new Circle(O2, this.radius * k)
     }
 
-    svg (pixelsPerCm: number = 30) {
+    svgContainer (pixelsPerCm: number = 30) {
         const xSvg = this.O.x * pixelsPerCm
         const ySvg = - this.O.y * pixelsPerCm
         const circle = document.createElementNS("http://www.w3.org/2000/svg",'circle')

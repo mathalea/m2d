@@ -10,7 +10,7 @@ export class Polygone extends Element2D {
         this.fill = 'none'
     }
 
-    svg (pixelsPerCm:number = 30) {
+    svgContainer (pixelsPerCm:number = 30) {
         let binomeXY = ''
         for (const point of this.points) {
             binomeXY += `${(point.x * pixelsPerCm)},${(-point.y * pixelsPerCm)} `
