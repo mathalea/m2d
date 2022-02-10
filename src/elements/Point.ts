@@ -3,6 +3,7 @@ import { Element2D } from './Element2D'
 import { Segment } from './Segment'
 
 type Binome = { x: number, y: number }
+export type OptionsPoint = { style?: 'x' | '', size?: number, color?: string, thickness?: number }
 
 export class Point extends Element2D {
     x: number
@@ -12,24 +13,26 @@ export class Point extends Element2D {
     svgElement: SVGElement
     svgContainer: M2d
     // On définit un point avec ses deux coordonnées
-    constructor(x: number, y: number, svgContainer: M2d, {style = 'x', size = 0.2}: {style?: 'x' | '', size?: number} = {}) {
+    constructor(svgContainer: M2d, x: number, y: number, { style = 'x', size = 0.2, thickness = 1, color = 'black' }: OptionsPoint = {}) {
         super()
         this.x = x
         this.y = y
-        this.style = style 
+        this.style = style
         this.size = size // Pour la taille de la croix
         this.group = []
         this.svgContainer = svgContainer
+        this.thickness = thickness
+        this.color = color
         if (this.style === 'x') {
             // Croix avec [AB] et [CD]
-            const A = new Point(this.x - this.size, this.y + this.size, svgContainer, { style: '' })
-            const B = new Point(this.x + this.size, this.y - this.size, svgContainer, { style: '' })
-            const C = new Point(this.x - this.size, this.y - this.size, svgContainer, { style: '' })
-            const D = new Point(this.x + this.size, this.y + this.size, svgContainer, { style: '' })
-            const sAB = new Segment(A, B, svgContainer)
-            const sCD = new Segment(C, D, svgContainer)
+            const A = new Point(svgContainer, this.x - this.size, this.y + this.size, { style: '' })
+            const B = new Point(svgContainer, this.x + this.size, this.y - this.size, { style: '' })
+            const C = new Point(svgContainer, this.x - this.size, this.y - this.size, { style: '' })
+            const D = new Point(svgContainer, this.x + this.size, this.y + this.size, { style: '' })
+            const sAB = new Segment(A, B, svgContainer, {color: this.color, thickness: this.thickness})
+            const sCD = new Segment(C, D, svgContainer, {color: this.color, thickness: this.thickness})
             this.group.push(sAB, sCD)
-
+            this.svgContainer.list.push(this)
         }
         const groupSvg = document.createElementNS("http://www.w3.org/2000/svg", 'g')
         // Le cercle ne doit pas être stylisés, on n'appelle donc pas super.svg()
@@ -52,19 +55,30 @@ export class Point extends Element2D {
         this.x = x
         this.y = y
         for (const dependence of this.dependences) {
-           if (dependence.type === 'end1') {
-               const segment = dependence.object as Segment
-               segment.moveEnd(x, y, 1)
-           }
-           if (dependence.type === 'end2') {
-               const segment = dependence.object as Segment
-               segment.moveEnd(x, y, 2)
-           }
+            if (dependence.type === 'end1') {
+                const segment = dependence.object as Segment
+                segment.moveEnd(x, y, 1)
+            }
+            if (dependence.type === 'end2') {
+                const segment = dependence.object as Segment
+                segment.moveEnd(x, y, 2)
+            }
         }
     }
 
     moveTranslation(x: number, y: number) {
         this.moveTo(this.x + x, this.y + y)
+    }
+
+    notifyMouseMove(x: number, y: number) {
+        this.moveTo(x, y)
+    }
+
+    get distancePointer() {
+        if (this.svgContainer.pointerX !== null && this.svgContainer.pointerY !== null) {
+            return Math.sqrt((this.x - this.svgContainer.pointerX) ** 2 + (this.y - this.svgContainer.pointerY) ** 2)
+        }
+        return Infinity
     }
 
     /**
@@ -81,7 +95,7 @@ export class Point extends Element2D {
             xt = arg1.x
             yt = arg1.y
         }
-        return new Point(this.x + xt, this.y + yt, this.svgContainer)
+        return new Point(this.svgContainer, this.x + xt, this.y + yt)
     }
 
     /**
@@ -91,7 +105,7 @@ export class Point extends Element2D {
     rotation(O: Point, angle: number) {
         const x = (O.x + (this.x - O.x) * Math.cos((angle * Math.PI) / 180) - (this.y - O.y) * Math.sin((angle * Math.PI) / 180))
         const y = (O.y + (this.x - O.x) * Math.sin((angle * Math.PI) / 180) + (this.y - O.y) * Math.cos((angle * Math.PI) / 180))
-        return new Point(x, y, this.svgContainer)
+        return new Point(this.svgContainer, x, y)
     }
 
     /**
@@ -102,7 +116,7 @@ export class Point extends Element2D {
     homothetie(O: Point, k: number) {
         const x = (O.x + k * (this.x - O.x))
         const y = (O.y + k * (this.y - O.y))
-        return new Point(x, y, this.svgContainer)
+        return new Point(this.svgContainer, x, y)
     }
 
     /**
@@ -114,10 +128,10 @@ export class Point extends Element2D {
         const x = (O.x + k * (Math.cos(angleRadian) * (this.x - O.x) - Math.sin(angleRadian) * (this.y - O.y)))
         const y = (O.y + k * (Math.cos(angleRadian) * (this.y - O.y) + Math.sin(angleRadian) * (this.x - O.x))
         )
-        return new Point(x, y, this.svgContainer)
+        return new Point(this.svgContainer, x, y)
     }
 
-    notifyDependence (dependence: {object: Element2D, type: string}) {
+    notifyDependence(dependence: { object: Element2D, type: string }) {
         this.dependences.push(dependence)
     }
 

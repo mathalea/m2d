@@ -1,11 +1,14 @@
 import { Segment } from "./Segment"
 
+export type optionsElement2D = { color?: string, thickness?: number, fill?: string}
+
 /**
  * Classe parente de tous les éléments de géométrie
  */
-export abstract class Element2D {
+export class Element2D {
     color: string
     thickness: number
+    drag: boolean
     // Un élément de géométrie peut être composé de plusieurs autres éléments de géométrie (plusieurs segments pour marquer un point ou coder un angle par exemple)
     group: Segment[]
     id: string
@@ -18,7 +21,6 @@ export abstract class Element2D {
         this.dependences = []
         this.id = ''
         this.svgElement = document.createElementNS("http://www.w3.org/2000/svg", 'g')
-
+        this.drag = false
     }
-
 }
