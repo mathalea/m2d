@@ -44,6 +44,7 @@ export class M2d {
         this.svgElement.id = this.id
         this.svgElement.setAttribute('viewBox', `${this.xToxSvg(this.xMin)} ${this.yToySvg(this.yMax)} ${this.width} ${this.height}`)
         this.svgElement.style.backgroundColor = 'lightGray'
+        this.svgElement.style.touchAction = 'none'
 
         if (this.isDynamic) this.getPointerTouch()
     }
@@ -90,6 +91,7 @@ export class M2d {
      */
     private getMouseCoord() {
         const pointerMove = (event: PointerEvent) => {
+            event.preventDefault()
             this.setMouseCord(event)
             this.notifySetMove(this.setInDrag)
         }
@@ -138,6 +140,7 @@ export class M2d {
      * @param event 
      */
     private setMouseCord = (event: PointerEvent) => {
+        event.preventDefault()
         const rect = this.svgElement.getBoundingClientRect()
         this.pointerX = (event.clientX - rect.x) / this.pixelsPerUnit + this.xMin
         this.pointerY = - (event.clientY - rect.y) / this.pixelsPerUnit + this.yMax
