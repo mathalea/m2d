@@ -1,4 +1,4 @@
-import { Segment } from "./Segment"
+import { Segment } from './Segment'
 
 export type optionsElement2D = { color?: string, thickness?: number, fill?: string}
 
@@ -15,12 +15,12 @@ export class Element2D {
     svgElement: SVGElement
     dependences: {object: Element2D, type: string}[]
     constructor () {
-        this.color = 'black'
-        this.thickness = 1
-        this.group = []
-        this.dependences = []
-        this.id = ''
-        this.svgElement = document.createElementNS("http://www.w3.org/2000/svg", 'g')
-        this.drag = false
+      this.color = 'black'
+      this.thickness = 1
+      this.group = []
+      this.dependences = []
+      this.id = ''
+      this.svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+      this.drag = false
     }
 }

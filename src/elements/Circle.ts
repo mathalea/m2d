@@ -14,7 +14,7 @@
 //         this.radius = radius
 //         this.fill = 'none'
 //     }
-    
+
 //     /**
 //      * Translation définie par un couple de coordonnées ou un objet possédant des paramètres x et y
 //      * Renvoie un nouveau cercle sans modifier le premier
@@ -32,7 +32,7 @@
 //         const O2 = new Point(this.O.x + xt, this.O.y + yt)
 //         return new Circle(O2, this.radius)
 //     }
-    
+
 //     /**
 //      * Rotation définie par un centre et un angle en degrés
 //      * Renvoie un nouveau cercle sans modifier le premier
@@ -87,7 +87,6 @@
 //         // Quand fill est à none, il faut ajouter pointer-events="visible" cf https://www.smashingmagazine.com/2018/05/svg-interaction-pointer-events-property/
 //         circle.setAttribute('pointer-events', 'visible')
 //         return circle
-
 
 //     }
 // }
