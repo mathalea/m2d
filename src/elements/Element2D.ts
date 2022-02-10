@@ -1,4 +1,4 @@
-import { Segment } from "./Segment"
+import { Segment } from './Segment'
 
 export type optionsElement2D = { color?: string, thickness?: number, fill?: string}
 

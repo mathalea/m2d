@@ -1,9 +1,7 @@
-import { Element2D } from "./elements/Element2D"
-import { OptionsPoint, Point } from "./elements/Point"
-import { Polygon } from "./elements/Polygon"
-import { OptionsSegment, Segment } from "./elements/Segment"
-
-
+import { Element2D } from './elements/Element2D'
+import { OptionsPoint, Point } from './elements/Point'
+import { Polygon } from './elements/Polygon'
+import { OptionsSegment, Segment } from './elements/Segment'
 
 export class Figure {
     width: number
@@ -49,8 +47,8 @@ export class Figure {
 
     /**
      * abscisse de nos coordonnées => abscisse du SVG
-     * @param x number 
-     * @returns number 
+     * @param x number
+     * @returns number
      */
     xToSx(x: number) {
         return x * this.pixelsPerUnit
@@ -58,8 +56,8 @@ export class Figure {
 
     /**
      * ordonnée de nos coordonnées => ordonnée du SVG
-     * @param y number 
-     * @returns number 
+     * @param y number
+     * @returns number
      */
     yToSy(y: number) {
         return - y * this.pixelsPerUnit
@@ -67,8 +65,8 @@ export class Figure {
 
     /**
      * abscisse du SVG => abscisse de nos coordonnées
-     * @param x number 
-     * @returns number 
+     * @param x number
+     * @returns number
      */
     sxTox(x: number) {
         return x / this.pixelsPerUnit
@@ -76,8 +74,8 @@ export class Figure {
 
     /**
      * ordonnée du SVG => ordonnée de nos coordonnées
-     * @param y number 
-     * @returns number 
+     * @param y number
+     * @returns number
      */
     syToy(y: number) {
         return - y * this.pixelsPerUnit
@@ -96,28 +94,27 @@ export class Figure {
         this.svg.onpointermove = pointerMove
     }
 
-
     /**
      * Gère le toucher du dessin
      */
-    private getPointerTouch() {
-        this.getMouseCoord()
-        /**
+    private getPointerTouch () {
+      this.getMouseCoord()
+      /**
          * Au clic sur le SVG, on cherche les points à proximité pour leur initier le drag
-         * @param event 
+         * @param event
          */
-        const startDrag = (event: PointerEvent) => {
-            event.preventDefault()
-            this.setMouseCord(event)
-            for (const e of this.list) {
-                if (e instanceof Point && e.distancePointer < 1) {
-                    this.setInDrag.add(e)
-                    this.isDraging = true
-                }
-            }
+      const startDrag = (event: PointerEvent) => {
+        event.preventDefault()
+        this.setMouseCord(event)
+        for (const e of this.list) {
+          if (e instanceof Point && e.distancePointer < 1) {
+            this.setInDrag.add(e)
+            this.isDraging = true
+          }
         }
+      }
 
-        /**
+      /**
          * Signifie à tous les points que le drag est terminé
          */
         const endDrag = () => {
@@ -135,7 +132,7 @@ export class Figure {
 
     /**
      * Stocke les coordonnées du pointeur dans this.pointerX et this.pointerY
-     * @param event 
+     * @param event
      */
     private setMouseCord = (event: PointerEvent) => {
         event.preventDefault()
@@ -146,22 +143,22 @@ export class Figure {
 
     /**
      * Notifie tous les éléments du set qu'il faut se mettre en mouvement
-     * @param set 
+     * @param set
      */
-    private notifySetMove(set: Set<Point>) {
-        if (this.pointerX !== null && this.pointerY !== null) {
-            for (const e of set) {
-                e.notifyMouseMove(this.pointerX, this.pointerY)
-            }
+    private notifySetMove (set: Set<Point>) {
+      if (this.pointerX !== null && this.pointerY !== null) {
+        for (const e of set) {
+          e.notifyMouseMove(this.pointerX, this.pointerY)
         }
+      }
     }
 
     /**
      * Ajoute un segment au SVG
-     * @param A 
-     * @param B 
-     * @param options 
-     * @returns 
+     * @param A
+     * @param B
+     * @param options
+     * @returns
      */
     segment(A: Point, B: Point, options: OptionsSegment) {
         const s = new Segment(A, B, this, options)
@@ -170,7 +167,7 @@ export class Figure {
         return s
     }
 
-    polygon(listPoints: Point[]) {
+    polygon (listPoints: Point[]) {
     // polygon(listPoints: Point[], options: object = {}) {
         const p = new Polygon(this, listPoints)
         // for (const key in options) {
@@ -182,10 +179,10 @@ export class Figure {
 
     /**
      * Ajoute un point au SVG
-     * @param x 
-     * @param y 
-     * @param options 
-     * @returns 
+     * @param x
+     * @param y
+     * @param options
+     * @returns
      */
     point(x: number, y: number, options?: OptionsPoint) {
         const A = new Point(this, x, y, options)

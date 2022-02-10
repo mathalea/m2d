@@ -59,5 +59,4 @@ export class Segment extends Element2D {
         this[`x${n}`] = x
         this[`y${n}`] = y
     }
-
 }
