@@ -13,7 +13,7 @@ export class Point extends Element2D {
   g: SVGElement
   svgContainer: Figure
   // On définit un point avec ses deux coordonnées
-  constructor(svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.2, thickness = 1, color = 'black' }: OptionsPoint = {}) {
+  constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.2, thickness = 1, color = 'black' }: OptionsPoint = {}) {
     super()
     this.x = x
     this.y = y
@@ -34,7 +34,7 @@ export class Point extends Element2D {
       this.group.push(sAB, sCD)
       this.svgContainer.list.push(this)
     }
-    const groupSvg = document.createElementNS("http://www.w3.org/2000/svg", 'g')
+    const groupSvg = document.createElementNS('http://www.w3.org/2000/svg', 'g')
     // Le cercle ne doit pas être stylisés, on n'appelle donc pas super.svg()
     for (const e of this.group) {
       e.color = this.color
@@ -48,7 +48,7 @@ export class Point extends Element2D {
     // groupSvg.appendChild(c.svgContainer(1)) // Le rayon du cercle est défini par this.size en pixels
   }
 
-  moveTo(x: number, y: number) {
+  moveTo (x: number, y: number) {
     for (const e of this.group) {
       e.moveTranslation(x - this.x, y - this.y)
     }
@@ -67,69 +67,69 @@ export class Point extends Element2D {
     }
   }
 
-moveTranslation(x: number, y: number) {
-  this.moveTo(this.x + x, this.y + y)
-}
+  moveTranslation (x: number, y: number) {
+    this.moveTo(this.x + x, this.y + y)
+  }
 
-notifyMouseMove(x: number, y: number) {
-  this.moveTo(x, y)
-}
+  notifyMouseMove (x: number, y: number) {
+    this.moveTo(x, y)
+  }
 
-  public distancePointer(pointerX: number, pointerY: number) {
-      return Math.sqrt((this.x - pointerX) ** 2 + (this.y - pointerY) ** 2)
-}
+  public distancePointer (pointerX: number, pointerY: number) {
+    return Math.sqrt((this.x - pointerX) ** 2 + (this.y - pointerY) ** 2)
+  }
 
-/**
+  /**
  * Translation définie par un couple de coordonnées ou un objet possédant des paramètres x et y
  * Renvoie un nouveau point sans modifier le premier
  */
-translation(arg1: number | Binome, arg2 ?: number) {
-  let xt: number
-  let yt: number
-  if (typeof arg1 === 'number') {
-    xt = arg1
-    yt = arg2 || 0
-  } else {
-    xt = arg1.x
-    yt = arg1.y
+  translation (arg1: number | Binome, arg2 ?: number) {
+    let xt:number
+    let yt: number
+    if (typeof arg1 === 'number') {
+      xt = arg1
+      yt = arg2 || 0
+    } else {
+      xt = arg1.x
+      yt = arg1.y
+    }
+    return new Point(this.svgContainer, this.x + xt, this.y + yt)
   }
-  return new Point(this.svgContainer, this.x + xt, this.y + yt)
-}
 
-/**
+  /**
  * Rotation définie par un centre et un angle en degrés
  * Renvoie un nouveau point sans modifier le premier
  */
-rotation(O: Point, angle: number) {
-  const x = (O.x + (this.x - O.x) * Math.cos((angle * Math.PI) / 180) - (this.y - O.y) * Math.sin((angle * Math.PI) / 180))
-  const y = (O.y + (this.x - O.x) * Math.sin((angle * Math.PI) / 180) + (this.y - O.y) * Math.cos((angle * Math.PI) / 180))
-  return new Point(this.svgContainer, x, y)
-}
+  rotation (O: Point, angle: number) {
+    const x = (O.x + (this.x - O.x) * Math.cos((angle * Math.PI) / 180) - (this.y - O.y) * Math.sin((angle * Math.PI) / 180))
+    const y = (O.y + (this.x - O.x) * Math.sin((angle * Math.PI) / 180) + (this.y - O.y) * Math.cos((angle * Math.PI) / 180))
+    return new Point(this.svgContainer, x, y)
+  }
 
-/**
+  /**
  * Homothétie définie par un centre et un rapport
  * Renvoie un nouveau point sans modifier le premier
  */
 
-homothetie(O: Point, k: number) {
-  const x = (O.x + k * (this.x - O.x))
-  const y = (O.y + k * (this.y - O.y))
-  return new Point(this.svgContainer, x, y)
-}
+  homothetie (O: Point, k: number) {
+    const x = (O.x + k * (this.x - O.x))
+    const y = (O.y + k * (this.y - O.y))
+    return new Point(this.svgContainer, x, y)
+  }
 
-/**
+  /**
  * Similitude définie par un centre, un rapport et un angle en degré
  * Renvoie un nouveau point sans modifier le premier
  */
-similitude(O: Point, k: number, angle: number) {
-  const angleRadian = angle * Math.PI / 180
-  const x = (O.x + k * (Math.cos(angleRadian) * (this.x - O.x) - Math.sin(angleRadian) * (this.y - O.y)))
-  const y = (O.y + k * (Math.cos(angleRadian) * (this.y - O.y) + Math.sin(angleRadian) * (this.x - O.x))
-  )
-  return new Point(this.svgContainer, x, y)
-}
+  similitude (O: Point, k: number, angle: number) {
+    const angleRadian = angle * Math.PI / 180
+    const x = (O.x + k * (Math.cos(angleRadian) * (this.x - O.x) - Math.sin(angleRadian) * (this.y - O.y)))
+    const y = (O.y + k * (Math.cos(angleRadian) * (this.y - O.y) + Math.sin(angleRadian) * (this.x - O.x))
+    )
+    return new Point(this.svgContainer, x, y)
+  }
 
-notifyDependency(dependency: { element: Element2D, type: string }) {
-  this.dependencies.push(dependency)
-}
+  notifyDependency (dependency: { element: Element2D, type: string }) {
+    this.dependencies.push(dependency)
+  }
 }

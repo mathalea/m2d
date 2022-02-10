@@ -14,11 +14,11 @@ export class Element2D {
     g: SVGElement
     dependencies: {element: Element2D, type: string}[]
     constructor () {
-        this.color = 'black'
-        this.thickness = 1
-        this.group = []
-        this.dependencies = []
-        this.g = document.createElementNS("http://www.w3.org/2000/svg", 'g')
-        this.drag = false
+      this.color = 'black'
+      this.thickness = 1
+      this.group = []
+      this.dependencies = []
+      this.g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+      this.drag = false
     }
 }
