@@ -14,7 +14,7 @@ MathALEA 2D doit permettre de générer toutes les figures de géométrie utiles
 
 On créé un objet `m2d` instance de la classe `M2d` qui stockera toutes les information sur le container SVG et les éléments de ce SVG.
 
-On créé un objet graphique avec `md2.object(...params, ?config)` qui renvoie un objet d'une sous classe de `Element2D` qui a pour paramètre `this.elementSvg` qui sera un groupe SVG que l'on pourra insérer dans le DOM
+On créé un objet graphique avec `md2.element(...params, ?config)` qui renvoie un objet d'une sous classe de `Element2D` qui a pour paramètre `this.elementSvg` qui sera un groupe SVG que l'on pourra insérer dans le DOM
 
 
 ```
@@ -45,7 +45,7 @@ const C = A.symetrie(B)
 #### Les dépendances
 
 ```
-dependences: {object: Element2D, type: string}[]
+dependencies: {element: Element2D, type: string}[]
 ```
 
 Chaque objet a la liste des autres objets qui dépendent de lui. Par exemple si le point est l'extrémité d'un segment ou si un point est le centre d'un cercle.

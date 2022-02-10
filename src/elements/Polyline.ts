@@ -20,7 +20,6 @@
 //         polyline.setAttribute('stroke-width', `${this.thickness}`)
 //         polyline.setAttribute('points', `${binomeXY}`)
 //         polyline.setAttribute('fill', `${this.fill}`)
-//         if (this.id) polyline.setAttribute('id', `${this.id}`)
 //         return polyline
 //     }
 // }

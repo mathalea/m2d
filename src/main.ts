@@ -1,11 +1,11 @@
-import { M2d } from './M2d'
+import { Figure } from './Figure'
 
 /**
  * Script qui permet de tester M2D 
  */
 
 // On créé un espace de travail avec les réglages par défaut
-const m2d = new M2d()
+const m2d = new Figure()
 
 // On créé des points à partir de leur coordonnées
 const A = m2d.point(0, 0, {thickness: 3, color: 'yellow'})
@@ -23,8 +23,8 @@ m2d.polygon([A, B, C, D, E])
 
 
 const body = document.querySelector('body')
-if (body) body.appendChild(m2d.svgElement)
+if (body) body.appendChild(m2d.svg)
 
 
-m2d.svgElement.style.margin = '100'
+m2d.svg.style.margin = '100'
 

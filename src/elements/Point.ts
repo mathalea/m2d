@@ -1,4 +1,4 @@
-import { M2d } from '../M2d'
+import { Figure } from '../Figure'
 import { Element2D } from './Element2D'
 import { Segment } from './Segment'
 
@@ -10,10 +10,10 @@ export class Point extends Element2D {
     y: number
     style: 'x' | ''
     size: number
-    svgElement: SVGElement
-    svgContainer: M2d
+    g: SVGElement
+    svgContainer: Figure
     // On définit un point avec ses deux coordonnées
-    constructor(svgContainer: M2d, x: number, y: number, { style = 'x', size = 0.2, thickness = 1, color = 'black' }: OptionsPoint = {}) {
+    constructor(svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.2, thickness = 1, color = 'black' }: OptionsPoint = {}) {
         super()
         this.x = x
         this.y = y
@@ -39,9 +39,9 @@ export class Point extends Element2D {
         for (const e of this.group) {
             e.color = this.color
             e.thickness = this.thickness
-            groupSvg.appendChild(e.svgElement)
+            groupSvg.appendChild(e.g)
         }
-        this.svgElement = groupSvg
+        this.g = groupSvg
         // On créé un cercle transparent pour la zone d'effet du clic
         // const c = new Circle(new Point(this.x, this.y), this.size)
         // c.thickness = 0
@@ -54,13 +54,13 @@ export class Point extends Element2D {
         }
         this.x = x
         this.y = y
-        for (const dependence of this.dependences) {
+        for (const dependence of this.dependencies) {
             if (dependence.type === 'end1') {
-                const segment = dependence.object as Segment
+                const segment = dependence.element as Segment
                 segment.moveEnd(x, y, 1)
             }
             if (dependence.type === 'end2') {
-                const segment = dependence.object as Segment
+                const segment = dependence.element as Segment
                 segment.moveEnd(x, y, 2)
             }
         }
@@ -131,8 +131,8 @@ export class Point extends Element2D {
         return new Point(this.svgContainer, x, y)
     }
 
-    notifyDependence(dependence: { object: Element2D, type: string }) {
-        this.dependences.push(dependence)
+    notifyDependency(dependency: { element: Element2D, type: string }) {
+        this.dependencies.push(dependency)
     }
 
 }

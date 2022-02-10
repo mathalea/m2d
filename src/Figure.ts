@@ -5,10 +5,9 @@ import { OptionsSegment, Segment } from "./elements/Segment"
 
 
 
-export class M2d {
+export class Figure {
     width: number
     height: number
-    id: string
     pixelsPerUnit: number
     list: Element2D[]
     isDynamic: boolean
@@ -18,13 +17,12 @@ export class M2d {
     xMax: number
     yMin: number
     yMax: number
-    svgElement: SVGElement
+    svg: SVGElement
     pointerX: number | null
     pointerY: number | null
-    constructor({ width = 600, height = 400, id = 'm2d', pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true }: { width?: number, height?: number, id?: string, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean } = {}) {
+    constructor({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean } = {}) {
         this.width = width
         this.height = height
-        this.id = id
         this.pixelsPerUnit = pixelsPerUnit
         this.xMin = xMin
         this.xMax = xMin + width / pixelsPerUnit
@@ -38,13 +36,13 @@ export class M2d {
         this.pointerX = null
         this.pointerY = null
 
-        this.svgElement = document.createElementNS("http://www.w3.org/2000/svg", 'svg')
-        this.svgElement.style.width = `${this.width}px`
-        this.svgElement.style.height = `${this.height}px`
-        this.svgElement.id = this.id
-        this.svgElement.setAttribute('viewBox', `${this.xToxSvg(this.xMin)} ${this.yToySvg(this.yMax)} ${this.width} ${this.height}`)
-        this.svgElement.style.backgroundColor = 'lightGray'
-        this.svgElement.style.touchAction = 'none'
+        this.svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg')
+        this.svg.style.width = `${this.width}px`
+        this.svg.style.height = `${this.height}px`
+        this.svg.setAttribute('viewBox', `${this.xToSx(this.xMin)} ${this.yToSy(this.yMax)} ${this.width} ${this.height}`)
+        this.svg.style.backgroundColor = 'lightGray'
+        // Pour éviter le scroll quand on manipule la figure sur un écran tactile
+        this.svg.style.touchAction = 'none'
 
         if (this.isDynamic) this.getPointerTouch()
     }
@@ -54,7 +52,7 @@ export class M2d {
      * @param x number 
      * @returns number 
      */
-    xToxSvg(x: number) {
+    xToSx(x: number) {
         return x * this.pixelsPerUnit
     }
 
@@ -63,7 +61,7 @@ export class M2d {
      * @param y number 
      * @returns number 
      */
-    yToySvg(y: number) {
+    yToSy(y: number) {
         return - y * this.pixelsPerUnit
     }
 
@@ -72,7 +70,7 @@ export class M2d {
      * @param x number 
      * @returns number 
      */
-    xSvgTox(x: number) {
+    sxTox(x: number) {
         return x / this.pixelsPerUnit
     }
 
@@ -81,7 +79,7 @@ export class M2d {
      * @param y number 
      * @returns number 
      */
-    ySvgToy(y: number) {
+    syToy(y: number) {
         return - y * this.pixelsPerUnit
     }
 
@@ -95,7 +93,7 @@ export class M2d {
             this.setMouseCord(event)
             this.notifySetMove(this.setInDrag)
         }
-        this.svgElement.onpointermove = pointerMove
+        this.svg.onpointermove = pointerMove
     }
 
 
@@ -127,11 +125,11 @@ export class M2d {
             this.setInDrag.clear()
 
         }
-        this.svgElement.onpointerdown = startDrag
-        this.svgElement.onpointercancel = endDrag
-        this.svgElement.onpointerleave = endDrag
-        this.svgElement.onpointerup = endDrag
-        this.svgElement.onpointerleave = endDrag
+        this.svg.onpointerdown = startDrag
+        this.svg.onpointercancel = endDrag
+        this.svg.onpointerleave = endDrag
+        this.svg.onpointerup = endDrag
+        this.svg.onpointerleave = endDrag
 
     }
 
@@ -141,7 +139,7 @@ export class M2d {
      */
     private setMouseCord = (event: PointerEvent) => {
         event.preventDefault()
-        const rect = this.svgElement.getBoundingClientRect()
+        const rect = this.svg.getBoundingClientRect()
         this.pointerX = (event.clientX - rect.x) / this.pixelsPerUnit + this.xMin
         this.pointerY = - (event.clientY - rect.y) / this.pixelsPerUnit + this.yMax
     }
@@ -167,8 +165,8 @@ export class M2d {
      */
     segment(A: Point, B: Point, options: OptionsSegment) {
         const s = new Segment(A, B, this, options)
-        const segmentElementSvg = s.svgElement
-        this.svgElement.appendChild(segmentElementSvg)
+        const segmentElementSvg = s.g
+        this.svg.appendChild(segmentElementSvg)
         return s
     }
 
@@ -178,8 +176,8 @@ export class M2d {
         // for (const key in options) {
         //     p[key] = options[key]
         // }
-        const polygonElementSvg = p.svgElement
-        this.svgElement.appendChild(polygonElementSvg)
+        const polygonElementSvg = p.g
+        this.svg.appendChild(polygonElementSvg)
     }
 
     /**
@@ -191,8 +189,8 @@ export class M2d {
      */
     point(x: number, y: number, options?: OptionsPoint) {
         const A = new Point(this, x, y, options)
-        const pointElementSvg = A.svgElement
-        this.svgElement.appendChild(pointElementSvg)
+        const pointElementSvg = A.g
+        this.svg.appendChild(pointElementSvg)
         return A
     }
 }

@@ -82,7 +82,6 @@
 //             circle.setAttribute('stroke-width', `${this.thickness}`)
 //         }
 //         circle.setAttribute('fill', `${this.fill}`)
-//         circle.setAttribute('id', `${this.id}`)
 //         // Le cercle est la zone d'effet pour les évènements
 //         // Quand fill est à none, il faut ajouter pointer-events="visible" cf https://www.smashingmagazine.com/2018/05/svg-interaction-pointer-events-property/
 //         circle.setAttribute('pointer-events', 'visible')

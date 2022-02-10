@@ -11,16 +11,14 @@ export class Element2D {
     drag: boolean
     // Un élément de géométrie peut être composé de plusieurs autres éléments de géométrie (plusieurs segments pour marquer un point ou coder un angle par exemple)
     group: Segment[]
-    id: string
-    svgElement: SVGElement
-    dependences: {object: Element2D, type: string}[]
+    g: SVGElement
+    dependencies: {element: Element2D, type: string}[]
     constructor () {
         this.color = 'black'
         this.thickness = 1
         this.group = []
-        this.dependences = []
-        this.id = ''
-        this.svgElement = document.createElementNS("http://www.w3.org/2000/svg", 'g')
+        this.dependencies = []
+        this.g = document.createElementNS("http://www.w3.org/2000/svg", 'g')
         this.drag = false
     }
 }
