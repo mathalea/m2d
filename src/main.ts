@@ -15,7 +15,7 @@ const D = m2d.point(-1, 6)
 const E = m2d.point(-9, -5)
 // m2d.segment(A, B, {color: 'blue'})
 // m2d.segment(C, B, {thickness: 2})
-m2d.polygon([A, B, C, D, E], {color: 'blue'})
+m2d.polygon([A, B, C, D, E])
 
 
 // On insère les objets créé dans l'instance de m2d en modifiant la liste des objets

@@ -107,6 +107,7 @@ export class M2d {
          * @param event 
          */
         const startDrag = (event: PointerEvent) => {
+            event.preventDefault()
             this.setMouseCord(event)
             for (const e of this.list) {
                 if (e instanceof Point && e.distancePointer < 1) {
@@ -168,11 +169,12 @@ export class M2d {
         return s
     }
 
-    polygon(listPoints: Point[], options: object = {}) {
+    polygon(listPoints: Point[]) {
+    // polygon(listPoints: Point[], options: object = {}) {
         const p = new Polygon(this, listPoints)
-        for (const key in options) {
-            p[key] = options[key]
-        }
+        // for (const key in options) {
+        //     p[key] = options[key]
+        // }
         const polygonElementSvg = p.svgElement
         this.svgElement.appendChild(polygonElementSvg)
     }
