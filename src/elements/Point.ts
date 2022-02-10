@@ -75,11 +75,8 @@ notifyMouseMove(x: number, y: number) {
   this.moveTo(x, y)
 }
 
-    get distancePointer() {
-  if (this.svgContainer.pointerX !== null && this.svgContainer.pointerY !== null) {
-    return Math.sqrt((this.x - this.svgContainer.pointerX) ** 2 + (this.y - this.svgContainer.pointerY) ** 2)
-  }
-  return Infinity
+  public distancePointer(pointerX: number, pointerY: number) {
+      return Math.sqrt((this.x - pointerX) ** 2 + (this.y - pointerY) ** 2)
 }
 
 /**

@@ -42,7 +42,7 @@ export class Figure {
         // Pour éviter le scroll quand on manipule la figure sur un écran tactile
         this.svg.style.touchAction = 'none'
 
-        if (this.isDynamic) this.getPointerTouch()
+        if (this.isDynamic) this.listenPointer()
     }
 
     /**
@@ -82,75 +82,43 @@ export class Figure {
     }
 
     /**
-     * À chaque déplacement du pointeur sur le container, this.pointerX et this.PointerY sont mis à jour
-     * Si un élément est dans listInDrag alors on lui notifie de bouger
+     * Récupère les coordonnées du pointeur dans le repère de la figure
+     * @param event 
+     * @returns 
      */
-    private getMouseCoord() {
-        const pointerMove = (event: PointerEvent) => {
-            event.preventDefault()
-            this.setMouseCord(event)
-            this.notifySetMove(this.setInDrag)
-        }
-        this.svg.onpointermove = pointerMove
+    private getPointerCoord(event: PointerEvent) {
+        const rect = this.svg.getBoundingClientRect()
+        const pointerX = (event.clientX - rect.x) / this.pixelsPerUnit + this.xMin
+        const pointerY = - (event.clientY - rect.y) / this.pixelsPerUnit + this.yMax
+        return [pointerX, pointerY]
     }
 
     /**
-     * Gère le toucher du dessin
+     * 
      */
-    private getPointerTouch () {
-      this.getMouseCoord()
-      /**
-         * Au clic sur le SVG, on cherche les points à proximité pour leur initier le drag
-         * @param event
-         */
-      const startDrag = (event: PointerEvent) => {
-        event.preventDefault()
-        this.setMouseCord(event)
-        for (const e of this.list) {
-          if (e instanceof Point && e.distancePointer < 1) {
-            this.setInDrag.add(e)
-            this.isDraging = true
-          }
-        }
-      }
+    private listenPointer() {
+        this.svg.addEventListener('pointermove', (event) => {
+            if (!this.isDraging) return
+            const [pointerX, pointerY] = this.getPointerCoord(event)
+            for (const e of this.setInDrag) {
+                e.notifyMouseMove(pointerX, pointerY)
+            }
+        })
 
-      /**
-         * Signifie à tous les points que le drag est terminé
-         */
-        const endDrag = () => {
+        this.svg.addEventListener('pointerdown', (event) => {
+            const [pointerX, pointerY] = this.getPointerCoord(event)
+            for (const e of this.list) {
+                if (e instanceof Point && e.distancePointer(pointerX, pointerY) < 1) {
+                    this.setInDrag.add(e)
+                    this.isDraging = true
+                }
+            }
+        })
+
+        this.svg.addEventListener('pointerup', () => {
             this.isDraging = false
             this.setInDrag.clear()
-
-        }
-        this.svg.onpointerdown = startDrag
-        this.svg.onpointercancel = endDrag
-        this.svg.onpointerleave = endDrag
-        this.svg.onpointerup = endDrag
-        this.svg.onpointerleave = endDrag
-
-    }
-
-    /**
-     * Stocke les coordonnées du pointeur dans this.pointerX et this.pointerY
-     * @param event
-     */
-    private setMouseCord = (event: PointerEvent) => {
-        event.preventDefault()
-        const rect = this.svg.getBoundingClientRect()
-        this.pointerX = (event.clientX - rect.x) / this.pixelsPerUnit + this.xMin
-        this.pointerY = - (event.clientY - rect.y) / this.pixelsPerUnit + this.yMax
-    }
-
-    /**
-     * Notifie tous les éléments du set qu'il faut se mettre en mouvement
-     * @param set
-     */
-    private notifySetMove (set: Set<Point>) {
-      if (this.pointerX !== null && this.pointerY !== null) {
-        for (const e of set) {
-          e.notifyMouseMove(this.pointerX, this.pointerY)
-        }
-      }
+        })
     }
 
     /**
@@ -167,8 +135,8 @@ export class Figure {
         return s
     }
 
-    polygon (listPoints: Point[]) {
-    // polygon(listPoints: Point[], options: object = {}) {
+    polygon(listPoints: Point[]) {
+        // polygon(listPoints: Point[], options: object = {}) {
         const p = new Polygon(this, listPoints)
         // for (const key in options) {
         //     p[key] = options[key]
