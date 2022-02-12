@@ -2,16 +2,18 @@ import { Point } from './Point'
 import { Element2D } from './Element2D'
 import { Figure } from '../Figure'
 
-export type OptionsSegment = { color?: string, style?: '' | '|-' | '-|' | '|-|', thickness?: number }
+export type SegmentStyle = '' | '|-' | '-|' | '|-|'
+export type OptionsSegment = { color?: string, style?: SegmentStyle, thickness?: number }
 
 export class Segment extends Element2D {
     x1: number
     y1: number
     x2: number
     y2: number
+    private _color : string
     parentFigure: Figure
     g: SVGElement
-    style : '' | '|-' | '-|' | '|-|'
+    style : SegmentStyle
     constructor (A: Point, B: Point, parentFigure: Figure, { color = 'black', thickness = 1, style = '' }: OptionsSegment = {}) {
       super()
       this.x1 = A.x
@@ -33,11 +35,11 @@ export class Segment extends Element2D {
       segment.setAttribute('y1', `${y1Svg}`)
       segment.setAttribute('x2', `${x2Svg}`)
       segment.setAttribute('y2', `${y2Svg}`)
-      segment.setAttribute('stroke', `${this.color}`)
       segment.setAttribute('stroke-width', `${this.thickness}`)
 
       this.g = segment
       this.parentFigure.svg.appendChild(this.g)
+      this.color = color
 
       // Pour les points de construction pas besoin de gérer les dépendances
       if (!A.temp && !B.temp) {
@@ -62,5 +64,14 @@ export class Segment extends Element2D {
       this.g.setAttribute(`y${n}`, this.parentFigure.yToSy(y).toString())
       this[`x${n}`] = x
       this[`y${n}`] = y
+    }
+
+    get color () {
+      return this._color
+    }
+
+    set color (color) {
+      this._color = color
+      this.g.setAttribute('stroke', `${color}`)
     }
 }

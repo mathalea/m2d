@@ -1,13 +1,14 @@
 import { Figure } from '../Figure'
 import { Element2D } from './Element2D'
-import { Point } from './Point'
+import { Point, PointStyle } from './Point'
 import { Segment } from './Segment'
 
 export class Polygon extends Element2D {
+    color: string
     points: Point[]
     fill: string
     parentFigure: Figure
-    constructor (parentFigure: Figure, points: Point[], { color = 'black', stylePoints = '' } : {color?: string, stylePoints?: string} = {}) {
+    constructor (parentFigure: Figure, points: Point[], { color = 'black', stylePoints = '' } : {color?: string, stylePoints?: PointStyle } = {}) {
       super()
       this.parentFigure = parentFigure
       this.points = points

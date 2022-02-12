@@ -1,5 +1,5 @@
 import { Element2D } from './elements/Element2D'
-import { OptionsPoint, Point } from './elements/Point'
+import { PointOptions, Point } from './elements/Point'
 import { Polygon } from './elements/Polygon'
 import { OptionsSegment, Segment } from './elements/Segment'
 
@@ -153,7 +153,7 @@ export class Figure {
      * @param options
      * @returns
      */
-  point (x: number, y: number, options?: OptionsPoint) {
+  point (x: number, y: number, options?: PointOptions) {
     return new Point(this, x, y, options)
   }
 }

@@ -2,7 +2,8 @@ import { Figure } from '../Figure'
 import { Element2D } from './Element2D'
 import { Segment } from './Segment'
 
-export type OptionsPoint = { style?: 'x' | '', size?: number, color?: string, thickness?: number, temp?: boolean }
+export type PointStyle = 'x' | ''
+export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, temp?: boolean }
 
 export class Point extends Element2D {
   x: number
@@ -12,19 +13,18 @@ export class Point extends Element2D {
   g: SVGElement
   parentFigure: Figure
   temp: boolean
+  color: string
   // On définit un point avec ses deux coordonnées
-  constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.2, thickness = 1, color = 'black', temp = false }: OptionsPoint = {}) {
+  constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.2, thickness = 1, color = 'black', temp = false }: PointOptions = {}) {
     super()
     this.x = x
     this.y = y
-    // this.style = style
     this.size = size // Pour la taille de la croix
     this.group = []
     this.parentFigure = svgContainer
     this.thickness = thickness
     this.color = color
     this.temp = temp
-    // this.style = style
     const groupSvg = document.createElementNS('http://www.w3.org/2000/svg', 'g')
     this.g = groupSvg
     this.parentFigure.svg.appendChild(this.g)
@@ -156,4 +156,14 @@ export class Point extends Element2D {
     this.changeStyle(style)
     this._style = style
   }
+
+  // get color () {
+  //   return this.color
+  // }
+
+  // set color (color) {
+  //   for (const e of this.group) {
+  //     e.set
+  //   }
+  // }
 }
