@@ -16,9 +16,10 @@ figure.svg.style.margin = '100'
 // On créé des points à partir de leur coordonnées
 const A = figure.point(-5, 0)
 const B = A.translation(5, 0)
-const C = B.rotation(A, 60)
-const s = figure.segment(B, C)
-// Par défaut le polygone masque les points
-// figure.polygon([A, B, C])
-B.style = 'x'
+B.rotation(A, 60)
+const s = figure.segment(A, B)
 s.color = 'blue'
+A.color = 'green'
+// Par défaut le polygone masque les points
+// const p = figure.polygon([A, B, C])
+// p.color = 'blue'

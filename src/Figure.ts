@@ -138,12 +138,10 @@ export class Figure {
 
   polygon (listPoints: Point[]) {
     // polygon(listPoints: Point[], options: object = {}) {
-    const p = new Polygon(this, listPoints)
+    return new Polygon(this, listPoints)
     // for (const key in options) {
     //     p[key] = options[key]
     // }
-    const polygonElementSvg = p.g
-    this.svg.appendChild(polygonElementSvg)
   }
 
   /**

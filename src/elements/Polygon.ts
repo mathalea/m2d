@@ -4,7 +4,6 @@ import { Point, PointStyle } from './Point'
 import { Segment } from './Segment'
 
 export class Polygon extends Element2D {
-    color: string
     points: Point[]
     fill: string
     parentFigure: Figure
@@ -13,7 +12,6 @@ export class Polygon extends Element2D {
       this.parentFigure = parentFigure
       this.points = points
       this.fill = 'none'
-      this.color = color
 
       const groupSvg = document.createElementNS('http://www.w3.org/2000/svg', 'g')
       for (let i = 0; i < this.points.length - 1; i++) {
@@ -25,9 +23,10 @@ export class Polygon extends Element2D {
       this.g = groupSvg
       this.parentFigure.svg.appendChild(this.g)
 
-      // Masque les sommets
+      // Aplique un style aux sommets (par défaut, on supprime les croix)
       for (const point of this.points) {
         point.style = stylePoints
       }
+      this.color = color
     }
 }

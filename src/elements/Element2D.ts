@@ -14,6 +14,7 @@ export class Element2D {
     group: Segment[]
     g: SVGElement
     dependencies: {element: Element2D, type: string}[]
+    private _color: string
     constructor () {
       this.thickness = 1
       this.group = []
@@ -21,5 +22,20 @@ export class Element2D {
       this.g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
       this.drag = false
       this.parentFigure?.list.push(this)
+    }
+
+    get color () {
+      return this._color
+    }
+
+    set color (color) {
+      if (this.g.children.length > 0) {
+        for (const line of Array.from(this.g.children)) {
+          line.setAttribute('stroke', color)
+        }
+      } else { // Le segment par exemple n'est pas un groupe mais un élément unique sans children
+        this.g.setAttribute('stroke', color)
+      }
+      this._color = color
     }
 }

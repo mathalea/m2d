@@ -13,7 +13,6 @@ export class Point extends Element2D {
   g: SVGElement
   parentFigure: Figure
   temp: boolean
-  color: string
   // On définit un point avec ses deux coordonnées
   constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.2, thickness = 1, color = 'black', temp = false }: PointOptions = {}) {
     super()
@@ -27,10 +26,10 @@ export class Point extends Element2D {
     this.temp = temp
     const groupSvg = document.createElementNS('http://www.w3.org/2000/svg', 'g')
     this.g = groupSvg
-    this.parentFigure.svg.appendChild(this.g)
     if (!this.temp) {
       this.parentFigure.list.push(this)
       this.style = style
+      this.parentFigure.svg.appendChild(this.g)
     }
   }
 
@@ -156,14 +155,4 @@ export class Point extends Element2D {
     this.changeStyle(style)
     this._style = style
   }
-
-  // get color () {
-  //   return this.color
-  // }
-
-  // set color (color) {
-  //   for (const e of this.group) {
-  //     e.set
-  //   }
-  // }
 }
