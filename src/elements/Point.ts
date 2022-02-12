@@ -2,50 +2,36 @@ import { Figure } from '../Figure'
 import { Element2D } from './Element2D'
 import { Segment } from './Segment'
 
-type Binome = { x: number, y: number }
-export type OptionsPoint = { style?: 'x' | '', size?: number, color?: string, thickness?: number }
+export type OptionsPoint = { style?: 'x' | '', size?: number, color?: string, thickness?: number, temp?: boolean }
 
 export class Point extends Element2D {
   x: number
   y: number
-  style: 'x' | ''
+  private _style: 'x' | ''
   size: number
   g: SVGElement
-  svgContainer: Figure
+  parentFigure: Figure
+  temp: boolean
   // On définit un point avec ses deux coordonnées
-  constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.2, thickness = 1, color = 'black' }: OptionsPoint = {}) {
+  constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.2, thickness = 1, color = 'black', temp = false }: OptionsPoint = {}) {
     super()
     this.x = x
     this.y = y
-    this.style = style
+    // this.style = style
     this.size = size // Pour la taille de la croix
     this.group = []
-    this.svgContainer = svgContainer
+    this.parentFigure = svgContainer
     this.thickness = thickness
     this.color = color
-    if (this.style === 'x') {
-      // Croix avec [AB] et [CD]
-      const A = new Point(svgContainer, this.x - this.size, this.y + this.size, { style: '' })
-      const B = new Point(svgContainer, this.x + this.size, this.y - this.size, { style: '' })
-      const C = new Point(svgContainer, this.x - this.size, this.y - this.size, { style: '' })
-      const D = new Point(svgContainer, this.x + this.size, this.y + this.size, { style: '' })
-      const sAB = new Segment(A, B, svgContainer, { color: this.color, thickness: this.thickness })
-      const sCD = new Segment(C, D, svgContainer, { color: this.color, thickness: this.thickness })
-      this.group.push(sAB, sCD)
-      this.svgContainer.list.push(this)
-    }
+    this.temp = temp
+    // this.style = style
     const groupSvg = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-    // Le cercle ne doit pas être stylisés, on n'appelle donc pas super.svg()
-    for (const e of this.group) {
-      e.color = this.color
-      e.thickness = this.thickness
-      groupSvg.appendChild(e.g)
-    }
     this.g = groupSvg
-    // On créé un cercle transparent pour la zone d'effet du clic
-    // const c = new Circle(new Point(this.x, this.y), this.size)
-    // c.thickness = 0
-    // groupSvg.appendChild(c.svgContainer(1)) // Le rayon du cercle est défini par this.size en pixels
+    this.parentFigure.svg.appendChild(this.g)
+    if (!this.temp) {
+      this.parentFigure.list.push(this)
+      this.style = style
+    }
   }
 
   moveTo (x: number, y: number) {
@@ -83,27 +69,31 @@ export class Point extends Element2D {
  * Translation définie par un couple de coordonnées ou un objet possédant des paramètres x et y
  * Renvoie un nouveau point sans modifier le premier
  */
-  translation (arg1: number | Binome, arg2 ?: number) {
-    let xt:number
-    let yt: number
-    if (typeof arg1 === 'number') {
-      xt = arg1
-      yt = arg2 || 0
-    } else {
-      xt = arg1.x
-      yt = arg1.y
-    }
-    return new Point(this.svgContainer, this.x + xt, this.y + yt)
+
+  /**
+   * Translation définie par un couple de coordonnées
+   * puis un booléen clone, lorsqu'il est vrai on créé un nouveau point sinon on le modifie
+   * @param arg1
+   * @param arg2
+   * @param arg3
+   * @returns
+   */
+  translation (xt: number, yt: number, clone = true) {
+    if (clone) return new Point(this.parentFigure, this.x + xt, this.y + yt)
+    this.moveTo(this.x + xt, this.y + yt)
+    return this
   }
 
   /**
  * Rotation définie par un centre et un angle en degrés
  * Renvoie un nouveau point sans modifier le premier
  */
-  rotation (O: Point, angle: number) {
+  rotation (O: Point, angle: number, clone = true) {
     const x = (O.x + (this.x - O.x) * Math.cos((angle * Math.PI) / 180) - (this.y - O.y) * Math.sin((angle * Math.PI) / 180))
     const y = (O.y + (this.x - O.x) * Math.sin((angle * Math.PI) / 180) + (this.y - O.y) * Math.cos((angle * Math.PI) / 180))
-    return new Point(this.svgContainer, x, y)
+    if (clone) return new Point(this.parentFigure, x, y)
+    this.moveTo(x, y)
+    return this
   }
 
   /**
@@ -111,25 +101,59 @@ export class Point extends Element2D {
  * Renvoie un nouveau point sans modifier le premier
  */
 
-  homothetie (O: Point, k: number) {
+  homothetie (O: Point, k: number, clone = true) {
     const x = (O.x + k * (this.x - O.x))
     const y = (O.y + k * (this.y - O.y))
-    return new Point(this.svgContainer, x, y)
+    if (clone) return new Point(this.parentFigure, x, y)
+    this.moveTo(x, y)
+    return this
   }
 
   /**
  * Similitude définie par un centre, un rapport et un angle en degré
  * Renvoie un nouveau point sans modifier le premier
  */
-  similitude (O: Point, k: number, angle: number) {
+  similitude (O: Point, k: number, angle: number, clone = true) {
     const angleRadian = angle * Math.PI / 180
     const x = (O.x + k * (Math.cos(angleRadian) * (this.x - O.x) - Math.sin(angleRadian) * (this.y - O.y)))
     const y = (O.y + k * (Math.cos(angleRadian) * (this.y - O.y) + Math.sin(angleRadian) * (this.x - O.x))
     )
-    return new Point(this.svgContainer, x, y)
+    if (clone) return new Point(this.parentFigure, x, y)
+    this.moveTo(x, y)
+    return this
   }
 
-  notifyDependency (dependency: { element: Element2D, type: string }) {
+  addDependency (dependency: { element: Element2D, type: string }) {
     this.dependencies.push(dependency)
+  }
+
+  private changeStyle (style) {
+    if (style === '') {
+      this.g.innerHTML = ''
+    }
+    if (style === 'x') {
+      // Croix avec [AB] et [CD]
+      const A = new Point(this.parentFigure, this.x - this.size, this.y + this.size, { temp: true })
+      const B = new Point(this.parentFigure, this.x + this.size, this.y - this.size, { temp: true })
+      const C = new Point(this.parentFigure, this.x - this.size, this.y - this.size, { temp: true })
+      const D = new Point(this.parentFigure, this.x + this.size, this.y + this.size, { temp: true })
+      const sAB = new Segment(A, B, this.parentFigure, { color: this.color, thickness: this.thickness })
+      const sCD = new Segment(C, D, this.parentFigure, { color: this.color, thickness: this.thickness })
+      this.group.push(sAB, sCD)
+      for (const e of this.group) {
+        e.color = this.color
+        e.thickness = this.thickness
+        this.g.appendChild(e.g)
+      }
+    }
+  }
+
+  get style () {
+    return this._style
+  }
+
+  set style (style) {
+    this.changeStyle(style)
+    this._style = style
   }
 }

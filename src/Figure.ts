@@ -132,11 +132,8 @@ export class Figure {
      * @param options
      * @returns
      */
-  segment (A: Point, B: Point, options: OptionsSegment) {
-    const s = new Segment(A, B, this, options)
-    const segmentElementSvg = s.g
-    this.svg.appendChild(segmentElementSvg)
-    return s
+  segment (A: Point, B: Point, options?: OptionsSegment) {
+    return new Segment(A, B, this, options)
   }
 
   polygon (listPoints: Point[]) {
@@ -157,9 +154,6 @@ export class Figure {
      * @returns
      */
   point (x: number, y: number, options?: OptionsPoint) {
-    const A = new Point(this, x, y, options)
-    const pointElementSvg = A.g
-    this.svg.appendChild(pointElementSvg)
-    return A
+    return new Point(this, x, y, options)
   }
 }
