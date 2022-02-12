@@ -34,7 +34,6 @@ export class Segment extends Element2D {
       segment.setAttribute('y1', `${y1Svg}`)
       segment.setAttribute('x2', `${x2Svg}`)
       segment.setAttribute('y2', `${y2Svg}`)
-      segment.setAttribute('stroke-width', `${this.thickness}`)
 
       this.g = segment
       // On ajoute le groupe au dom que s'il a des enfants
@@ -42,6 +41,7 @@ export class Segment extends Element2D {
 
       // Les styles ne doivent être appliqués qu'une fois le groupe créé
       this.color = color
+      this.thickness = thickness
 
       // Pour les points de construction pas besoin de gérer les dépendances
       if (!A.temp && !B.temp) {

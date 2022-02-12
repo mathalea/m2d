@@ -9,7 +9,7 @@ export class Point extends Element2D {
   x: number
   y: number
   private _style: 'x' | ''
-  size: number
+  private _size: number // Pour la taille de la croix et utilisé dans changeStyle
   g: SVGElement
   parentFigure: Figure
   temp: boolean
@@ -18,17 +18,17 @@ export class Point extends Element2D {
     super()
     this.x = x
     this.y = y
-    this.size = size // Pour la taille de la croix
     this.group = []
     this.parentFigure = svgContainer
     this.thickness = thickness
+    this._size = size
     this.color = color
     this.temp = temp
     const groupSvg = document.createElementNS('http://www.w3.org/2000/svg', 'g')
     this.g = groupSvg
     if (!this.temp) {
       this.parentFigure.list.push(this)
-      this.style = style
+      this.style = style // Le style initialise aussi size
       this.parentFigure.svg.appendChild(this.g)
     }
   }
@@ -132,17 +132,17 @@ export class Point extends Element2D {
     }
     if (style === 'x') {
       // Croix avec [AB] et [CD]
-      const A = new Point(this.parentFigure, this.x - this.size, this.y + this.size, { temp: true })
-      const B = new Point(this.parentFigure, this.x + this.size, this.y - this.size, { temp: true })
-      const C = new Point(this.parentFigure, this.x - this.size, this.y - this.size, { temp: true })
-      const D = new Point(this.parentFigure, this.x + this.size, this.y + this.size, { temp: true })
+      const A = new Point(this.parentFigure, this.x - this._size, this.y + this._size, { temp: true })
+      const B = new Point(this.parentFigure, this.x + this._size, this.y - this._size, { temp: true })
+      const C = new Point(this.parentFigure, this.x - this._size, this.y - this._size, { temp: true })
+      const D = new Point(this.parentFigure, this.x + this._size, this.y + this._size, { temp: true })
       const sAB = new Segment(A, B, this.parentFigure, { color: this.color, thickness: this.thickness })
       const sCD = new Segment(C, D, this.parentFigure, { color: this.color, thickness: this.thickness })
       this.group.push(sAB, sCD)
       for (const e of this.group) {
+        this.g.appendChild(e.g)
         e.color = this.color
         e.thickness = this.thickness
-        this.g.appendChild(e.g)
       }
     }
   }
@@ -154,5 +154,14 @@ export class Point extends Element2D {
   set style (style) {
     this.changeStyle(style)
     this._style = style
+  }
+
+  get size () {
+    return this._size
+  }
+
+  set size (size) {
+    this._size = size
+    this.changeStyle(this._style)
   }
 }

@@ -29,7 +29,7 @@ Les objets `Element2D` devront avoir plusieurs méthodes :
 
 - moveTo(x, y) : pour les déplacer
 - translation, rotation, homothétie, similitude qui créeront un nouveau point (sauf si on met l'option `clone: false`)
-- changeColor
+- color : pour changer la couleur
 - fill : pour colorier
 - mark : pour ajouter un codage
 
@@ -66,3 +66,7 @@ Il y a 3 systèmes de coordonnées donc la convention suivante est utilisée en 
 - les coordonnées dans notre repère personnalisée ne sont pas préfixées `x` : `x1`, `x2` ...
 
 Le paramètre `pixelsPerUnit` permet de déterminer la conversion des coordonnées du repère vers celle du SVG.
+
+#### Réflexions
+
+- Les polygones sont un ensemble de segments. Facile à manipuler pour les déplacements de points mais l'inconvénient, c'est la jonction entre 2 segments qui n'est pas belle notamment quand l'épaisseur est importante. C'est plus joli avec polyline mais il faudrait recalculer toute la liste de x y 
