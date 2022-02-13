@@ -3,7 +3,7 @@ import { Element2D } from './Element2D'
 import { Segment } from './Segment'
 
 export type PointStyle = 'x' | ''
-export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, temp?: boolean }
+export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, temp?: boolean, dragable?: boolean }
 
 export class Point extends Element2D {
   x: number
@@ -13,8 +13,9 @@ export class Point extends Element2D {
   g: SVGElement
   parentFigure: Figure
   temp: boolean
+  dragable: boolean
   // On définit un point avec ses deux coordonnées
-  constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.2, thickness = 1, color = 'black', temp = false }: PointOptions = {}) {
+  constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.2, thickness = 1, color = 'black', temp = false, dragable = true }: PointOptions = {}) {
     super()
     this.x = x
     this.y = y
@@ -24,6 +25,7 @@ export class Point extends Element2D {
     this._size = size
     this.color = color
     this.temp = temp
+    this.dragable = dragable
     const groupSvg = document.createElementNS('http://www.w3.org/2000/svg', 'g')
     this.g = groupSvg
     if (!this.temp) {
@@ -48,6 +50,10 @@ export class Point extends Element2D {
       if (dependence.type === 'end2') {
         const segment = dependence.element as Segment
         segment.moveEnd(x, y, 2)
+      }
+      if (dependence.type === 'translation') {
+        const point = dependence.element as Point
+        point.moveTo(this.x + dependence.x, this.y + dependence.y)
       }
     }
   }
@@ -77,8 +83,12 @@ export class Point extends Element2D {
    * @param arg3
    * @returns
    */
-  translation (xt: number, yt: number, clone = true) {
-    if (clone) return new Point(this.parentFigure, this.x + xt, this.y + yt)
+  translation (xt: number, yt: number, { clone = true, free = false } = {}) {
+    if (clone) {
+      const B = new Point(this.parentFigure, this.x + xt, this.y + yt, { dragable: free })
+      if (!free) this.addDependency({ element: B, type: 'translation', x: xt, y: yt })
+      return B
+    }
     this.moveTo(this.x + xt, this.y + yt)
     return this
   }
@@ -87,10 +97,14 @@ export class Point extends Element2D {
  * Rotation définie par un centre et un angle en degrés
  * Renvoie un nouveau point sans modifier le premier
  */
-  rotation (O: Point, angle: number, clone = true) {
+  rotation (O: Point, angle: number, { clone = true, free = false } = {}) {
     const x = (O.x + (this.x - O.x) * Math.cos((angle * Math.PI) / 180) - (this.y - O.y) * Math.sin((angle * Math.PI) / 180))
     const y = (O.y + (this.x - O.x) * Math.sin((angle * Math.PI) / 180) + (this.y - O.y) * Math.cos((angle * Math.PI) / 180))
-    if (clone) return new Point(this.parentFigure, x, y)
+    if (clone) {
+      const B = new Point(this.parentFigure, x, y, { dragable: free })
+      if (!free) O.addDependency({ element: B, type: 'translation', x: B.x - O.x, y: B.y - O.y })
+      return B
+    }
     this.moveTo(x, y)
     return this
   }
@@ -122,7 +136,7 @@ export class Point extends Element2D {
     return this
   }
 
-  addDependency (dependency: { element: Element2D, type: string }) {
+  addDependency (dependency: { element: Element2D, type: string, x?: number, y?: number }) {
     this.dependencies.push(dependency)
   }
 

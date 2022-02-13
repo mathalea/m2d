@@ -108,7 +108,8 @@ export class Figure {
     const startDrag = (event: PointerEvent) => {
       const [pointerX, pointerY] = this.getPointerCoord(event)
       for (const e of this.list) {
-        if (e instanceof Point && e.distancePointer(pointerX, pointerY) < 1) {
+        if (e.dragable && e instanceof Point && e.distancePointer(pointerX, pointerY) < 1) {
+          console.log(e)
           this.setInDrag.add(e)
           this.isDraging = true
         }

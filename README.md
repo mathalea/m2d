@@ -26,10 +26,16 @@ const sAB = figure.segment(A, B)
 ```
 
 Les objets `Element2D` devront avoir plusieurs méthodes : 
+- color : pour changer la couleur
+- thickness : pour changer l'épaisseur
+- size : pour la taille des points
 
+Les points ont : 
 - moveTo(x, y) : pour les déplacer
 - translation, rotation, homothétie, similitude qui créeront un nouveau point (sauf si on met l'option `clone: false`)
-- color : pour changer la couleur
+
+
+ToDO : 
 - fill : pour colorier
 - mark : pour ajouter un codage
 

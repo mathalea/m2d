@@ -8,18 +8,19 @@ export type optionsElement2D = { color?: string, thickness?: number, fill?: stri
  */
 export class Element2D {
   drag: boolean
+  dragable: boolean
   parentFigure: Figure
   // Un élément de géométrie peut être composé de plusieurs autres éléments de géométrie (plusieurs segments pour marquer un point ou coder un angle par exemple)
   group: Segment[]
   g: SVGElement
-  dependencies: {element: Element2D, type: string}[]
+  dependencies: {element: Element2D, type: string, x?: number, y?: number}[]
   private _color: string
   private _thickness: number
   constructor () {
     this.group = []
     this.dependencies = []
     this.g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-    this.drag = false
+    this.drag = false // drag en cours
     this.parentFigure?.list.push(this)
   }
 
