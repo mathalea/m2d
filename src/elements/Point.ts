@@ -43,17 +43,20 @@ export class Point extends Element2D {
     this.y = y
 
     for (const dependence of this.dependencies) {
+      const point = dependence.element as Point
+      const segment = dependence.element as Segment
       if (dependence.type === 'end1') {
-        const segment = dependence.element as Segment
         segment.moveEnd(x, y, 1)
       }
       if (dependence.type === 'end2') {
-        const segment = dependence.element as Segment
         segment.moveEnd(x, y, 2)
       }
       if (dependence.type === 'translation') {
-        const point = dependence.element as Point
         point.moveTo(this.x + dependence.x, this.y + dependence.y)
+      }
+      if (dependence.type === 'rotation') {
+        const [x, y] = this.rotationCoord(dependence.previous, dependence.center, dependence.angle)
+        point.moveTo(x, y)
       }
     }
   }
@@ -94,15 +97,33 @@ export class Point extends Element2D {
   }
 
   /**
+   *
+   * @param A Antécédent
+   * @param O Centre
+   * @param angle Image
+   * @returns [x, y] coordonnées de l'image
+   */
+  private rotationCoord (A: Point, O: Point, angle: number) {
+    const x = (O.x + (A.x - O.x) * Math.cos((angle * Math.PI) / 180) - (A.y - O.y) * Math.sin((angle * Math.PI) / 180))
+    const y = (O.y + (A.x - O.x) * Math.sin((angle * Math.PI) / 180) + (A.y - O.y) * Math.cos((angle * Math.PI) / 180))
+    return [x, y]
+  }
+
+  /**
  * Rotation définie par un centre et un angle en degrés
- * Renvoie un nouveau point sans modifier le premier
+ * Renvoie un nouveau point sans modifier le premier avec clone = true ou déplace le point avec clone = false
  */
   rotation (O: Point, angle: number, { clone = true, free = false } = {}) {
-    const x = (O.x + (this.x - O.x) * Math.cos((angle * Math.PI) / 180) - (this.y - O.y) * Math.sin((angle * Math.PI) / 180))
-    const y = (O.y + (this.x - O.x) * Math.sin((angle * Math.PI) / 180) + (this.y - O.y) * Math.cos((angle * Math.PI) / 180))
+    const [x, y] = this.rotationCoord(this, O, angle)
     if (clone) {
       const B = new Point(this.parentFigure, x, y, { dragable: free })
-      if (!free) O.addDependency({ element: B, type: 'translation', x: B.x - O.x, y: B.y - O.y })
+      if (!free) {
+        const dependenceArgs = { element: B, type: 'rotation', angle, previous: this, center: O }
+        // Si le centre est déplacé, on déplace B
+        O.addDependency(dependenceArgs)
+        // Si l'antécédent A est déplacé, on déplace B
+        this.addDependency(dependenceArgs)
+      }
       return B
     }
     this.moveTo(x, y)
@@ -136,7 +157,7 @@ export class Point extends Element2D {
     return this
   }
 
-  addDependency (dependency: { element: Element2D, type: string, x?: number, y?: number }) {
+  addDependency (dependency: { element: Element2D, type: string, x?: number, y?: number, angle?: number, coeff?: number, center?: Point, previous?: Point}) {
     this.dependencies.push(dependency)
   }
 

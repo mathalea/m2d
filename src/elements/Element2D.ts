@@ -1,4 +1,5 @@
 import { Figure } from '../Figure'
+import { Point } from './Point'
 import { Segment } from './Segment'
 
 export type optionsElement2D = { color?: string, thickness?: number, fill?: string}
@@ -13,7 +14,7 @@ export class Element2D {
   // Un élément de géométrie peut être composé de plusieurs autres éléments de géométrie (plusieurs segments pour marquer un point ou coder un angle par exemple)
   group: Segment[]
   g: SVGElement
-  dependencies: {element: Element2D, type: string, x?: number, y?: number}[]
+  dependencies: {element: Element2D, type: string, x?: number, y?: number, center?: Point, angle?: number, previous?: Point, coeff?: number}[]
   private _color: string
   private _thickness: number
   constructor () {
