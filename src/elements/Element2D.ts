@@ -15,7 +15,7 @@ export class Element2D {
   group: Segment[]
   g: SVGElement
   dependencies: {element: Element2D, type: string, x?: number, y?: number, center?: Point, angle?: number, previous?: Point, coeff?: number}[]
-  private _color: string
+  protected _color: string
   private _thickness: number
   constructor () {
     this.group = []
@@ -53,5 +53,9 @@ export class Element2D {
       this.g.setAttribute('stroke-width', `${thickness}`)
     }
     this._thickness = thickness
+  }
+
+  get tex () {
+    return ''
   }
 }

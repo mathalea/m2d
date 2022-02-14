@@ -154,4 +154,16 @@ export class Figure {
   point (x: number, y: number, options?: PointOptions) {
     return new Point(this, x, y, options)
   }
+
+  set tex (txt: string) {
+  }
+
+  get tex () {
+    let tex = '\\begin{tikzpicture}'
+    for (const e of this.list) {
+      tex += e.tex
+    }
+    tex += '\n\\end{tikzpicture}'
+    return tex
+  }
 }

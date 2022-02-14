@@ -23,6 +23,7 @@ export class Segment extends Element2D {
       this.color = color
       this.thickness = thickness
       this.style = style
+      this.parentFigure.list.push(this)
 
       const x1Svg = this.parentFigure.xToSx(this.x1)
       const x2Svg = this.parentFigure.xToSx(this.x2)
@@ -43,22 +44,9 @@ export class Segment extends Element2D {
       this.color = color
       this.thickness = thickness
 
-      // Pour les points de construction pas besoin de gérer les dépendances
-      if (!A.temp && !B.temp) {
-        A.addDependency({ element: this, type: 'end1' })
-        B.addDependency({ element: this, type: 'end2' })
-      }
-    }
-
-    moveTranslation (x: number, y: number) {
-      this.g.setAttribute('x1', this.parentFigure.xToSx(this.x1 + x).toString())
-      this.g.setAttribute('x2', this.parentFigure.xToSx(this.x2 + x).toString())
-      this.g.setAttribute('y1', this.parentFigure.yToSy(this.y1 + y).toString())
-      this.g.setAttribute('y2', this.parentFigure.yToSy(this.y2 + y).toString())
-      this.x1 += x
-      this.x2 += x
-      this.y1 += y
-      this.y2 += y
+      // Si une des extrémités se déplace alors on recalcule les coordonnées de line
+      A.addDependency({ element: this, type: 'end1' })
+      B.addDependency({ element: this, type: 'end2' })
     }
 
     moveEnd (x: number, y: number, n: 1 | 2) {
@@ -66,5 +54,10 @@ export class Segment extends Element2D {
       this.g.setAttribute(`y${n}`, this.parentFigure.yToSy(y).toString())
       this[`x${n}`] = x
       this[`y${n}`] = y
+    }
+
+    get tex () {
+      const txtColor = (this.color === 'black') ? '' : `[color = ${this.color}]`
+      return `\n \t \\draw${txtColor} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
     }
 }

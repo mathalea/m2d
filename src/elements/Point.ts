@@ -28,17 +28,14 @@ export class Point extends Element2D {
     this.dragable = dragable
     const groupSvg = document.createElementNS('http://www.w3.org/2000/svg', 'g')
     this.g = groupSvg
-    if (!this.temp) {
-      this.parentFigure.list.push(this)
-      this.style = style // Le style initialise aussi size
-      this.parentFigure.svg.appendChild(this.g)
-    }
+    // if (!this.temp) {
+    this.parentFigure.list.push(this)
+    this.style = style // Le style initialise aussi size
+    this.parentFigure.svg.appendChild(this.g)
+    // }
   }
 
   moveTo (x: number, y: number) {
-    for (const e of this.group) {
-      e.moveTranslation(x - this.x, y - this.y)
-    }
     this.x = x
     this.y = y
 
@@ -59,10 +56,6 @@ export class Point extends Element2D {
         point.moveTo(x, y)
       }
     }
-  }
-
-  moveTranslation (x: number, y: number) {
-    this.moveTo(this.x + x, this.y + y)
   }
 
   notifyMouseMove (x: number, y: number) {
@@ -86,9 +79,9 @@ export class Point extends Element2D {
    * @param arg3
    * @returns
    */
-  translation (xt: number, yt: number, { clone = true, free = false } = {}) {
+  translation (xt: number, yt: number, { clone = true, free = false, style = this.style, color = this.color, thickness = this.thickness } = {}) {
     if (clone) {
-      const B = new Point(this.parentFigure, this.x + xt, this.y + yt, { dragable: free })
+      const B = new Point(this.parentFigure, this.x + xt, this.y + yt, { dragable: free, style, color, thickness })
       if (!free) this.addDependency({ element: B, type: 'translation', x: xt, y: yt })
       return B
     }
@@ -167,10 +160,10 @@ export class Point extends Element2D {
     }
     if (style === 'x') {
       // Croix avec [AB] et [CD]
-      const A = new Point(this.parentFigure, this.x - this._size, this.y + this._size, { temp: true })
-      const B = new Point(this.parentFigure, this.x + this._size, this.y - this._size, { temp: true })
-      const C = new Point(this.parentFigure, this.x - this._size, this.y - this._size, { temp: true })
-      const D = new Point(this.parentFigure, this.x + this._size, this.y + this._size, { temp: true })
+      const A = this.translation(-this._size, this._size, { style: '' })
+      const B = this.translation(this._size, -this._size, { style: '' })
+      const C = this.translation(-this._size, -this._size, { style: '' })
+      const D = this.translation(this._size, this._size, { style: '' })
       const sAB = new Segment(A, B, this.parentFigure, { color: this.color, thickness: this.thickness })
       const sCD = new Segment(C, D, this.parentFigure, { color: this.color, thickness: this.thickness })
       this.group.push(sAB, sCD)
