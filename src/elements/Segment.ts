@@ -1,28 +1,22 @@
 import { Point } from './Point'
 import { Element2D } from './Element2D'
-import { Figure } from '../Figure'
 
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
-export type OptionsSegment = { color?: string, style?: SegmentStyle, thickness?: number }
+export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string }
 
 export class Segment extends Element2D {
     x1: number
     y1: number
     x2: number
     y2: number
-    parentFigure: Figure
-    g: SVGElement
     style : SegmentStyle
-    constructor (A: Point, B: Point, parentFigure: Figure, { color = 'black', thickness = 1, style = '' }: OptionsSegment = {}) {
+    constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '' }: OptionsGraphiques = {}) {
       super()
       this.x1 = A.x
       this.y1 = A.y
       this.x2 = B.x
       this.y2 = B.y
-      this.parentFigure = parentFigure
-      this.color = color
-      this.thickness = thickness
-      this.style = style
+      this.parentFigure = A.parentFigure
       this.parentFigure.list.push(this)
 
       const x1Svg = this.parentFigure.xToSx(this.x1)
@@ -37,12 +31,12 @@ export class Segment extends Element2D {
       segment.setAttribute('y2', `${y2Svg}`)
 
       this.g = segment
-      // On ajoute le groupe au dom que s'il a des enfants
       this.parentFigure.svg.appendChild(this.g)
 
       // Les styles ne doivent être appliqués qu'une fois le groupe créé
       this.color = color
       this.thickness = thickness
+      this.style = style
 
       // Si une des extrémités se déplace alors on recalcule les coordonnées de line
       A.addDependency({ element: this, type: 'end1' })

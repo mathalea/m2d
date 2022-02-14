@@ -15,7 +15,8 @@ export class Element2D {
   group: Segment[]
   g: SVGElement
   dependencies: {element: Element2D, type: string, x?: number, y?: number, center?: Point, angle?: number, previous?: Point, coeff?: number}[]
-  protected _color: string
+  private _color: string
+  private _fill: string
   private _thickness: number
   constructor () {
     this.group = []
@@ -53,6 +54,21 @@ export class Element2D {
       this.g.setAttribute('stroke-width', `${thickness}`)
     }
     this._thickness = thickness
+  }
+
+  get fill () {
+    return this._fill
+  }
+
+  set fill (fill) {
+    if (this.g.children.length > 0) {
+      for (const line of Array.from(this.g.children)) {
+        line.setAttribute('fill', `${fill}`)
+      }
+    } else { // Le segment par exemple n'est pas un groupe mais un élément unique sans children
+      this.g.setAttribute('fill', `${fill}`)
+    }
+    this._fill = fill
   }
 
   get tex () {

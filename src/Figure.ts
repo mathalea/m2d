@@ -1,7 +1,8 @@
+import { Circle } from './elements/Circle'
 import { Element2D } from './elements/Element2D'
 import { PointOptions, Point } from './elements/Point'
 import { Polygon } from './elements/Polygon'
-import { OptionsSegment, Segment } from './elements/Segment'
+import { OptionsGraphiques, Segment } from './elements/Segment'
 
 export class Figure {
   width: number
@@ -132,8 +133,12 @@ export class Figure {
      * @param options
      * @returns
      */
-  segment (A: Point, B: Point, options?: OptionsSegment) {
-    return new Segment(A, B, this, options)
+  segment (A: Point, B: Point, options?: OptionsGraphiques) {
+    return new Segment(A, B, options)
+  }
+
+  circle (O: Point, radius: number, options?: OptionsGraphiques) {
+    return new Circle(O, radius, options)
   }
 
   polygon (listPoints: Point[]) {
@@ -153,6 +158,10 @@ export class Figure {
      */
   point (x: number, y: number, options?: PointOptions) {
     return new Point(this, x, y, options)
+  }
+
+  static translation (A: Point, x: number, y: number) {
+    return A.translation(x, y)
   }
 
   set tex (txt: string) {

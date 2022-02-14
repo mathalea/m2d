@@ -1,9 +1,10 @@
 import { Figure } from '../Figure'
 import { Element2D } from './Element2D'
 import { Segment } from './Segment'
+import { Circle } from './Circle'
 
 export type PointStyle = 'x' | ''
-export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, temp?: boolean, dragable?: boolean }
+export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, dragable?: boolean }
 
 export class Point extends Element2D {
   x: number
@@ -12,10 +13,9 @@ export class Point extends Element2D {
   private _size: number // Pour la taille de la croix et utilisé dans changeStyle
   g: SVGElement
   parentFigure: Figure
-  temp: boolean
   dragable: boolean
   // On définit un point avec ses deux coordonnées
-  constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.2, thickness = 1, color = 'black', temp = false, dragable = true }: PointOptions = {}) {
+  constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.2, thickness = 1, color = 'black', dragable = true }: PointOptions = {}) {
     super()
     this.x = x
     this.y = y
@@ -24,17 +24,19 @@ export class Point extends Element2D {
     this.thickness = thickness
     this._size = size
     this.color = color
-    this.temp = temp
     this.dragable = dragable
     const groupSvg = document.createElementNS('http://www.w3.org/2000/svg', 'g')
     this.g = groupSvg
-    // if (!this.temp) {
     this.parentFigure.list.push(this)
     this.style = style // Le style initialise aussi size
-    this.parentFigure.svg.appendChild(this.g)
-    // }
+    if (this.g.childElementCount > 0) this.parentFigure.svg.appendChild(this.g)
   }
 
+  /**
+   * Déplace l'élément et ses dépendances
+   * @param x nouvelle abscisse
+   * @param y nouvelle ordonnée
+   */
   moveTo (x: number, y: number) {
     this.x = x
     this.y = y
@@ -42,6 +44,7 @@ export class Point extends Element2D {
     for (const dependence of this.dependencies) {
       const point = dependence.element as Point
       const segment = dependence.element as Segment
+      const circle = dependence.element as Circle
       if (dependence.type === 'end1') {
         segment.moveEnd(x, y, 1)
       }
@@ -54,6 +57,9 @@ export class Point extends Element2D {
       if (dependence.type === 'rotation') {
         const [x, y] = this.rotationCoord(dependence.previous, dependence.center, dependence.angle)
         point.moveTo(x, y)
+      }
+      if (dependence.type === 'centerCircle') {
+        circle.moveCenter(this.x, this.y)
       }
     }
   }
@@ -164,8 +170,8 @@ export class Point extends Element2D {
       const B = this.translation(this._size, -this._size, { style: '' })
       const C = this.translation(-this._size, -this._size, { style: '' })
       const D = this.translation(this._size, this._size, { style: '' })
-      const sAB = new Segment(A, B, this.parentFigure, { color: this.color, thickness: this.thickness })
-      const sCD = new Segment(C, D, this.parentFigure, { color: this.color, thickness: this.thickness })
+      const sAB = new Segment(A, B, { color: this.color, thickness: this.thickness })
+      const sCD = new Segment(C, D, { color: this.color, thickness: this.thickness })
       this.group.push(sAB, sCD)
       for (const e of this.group) {
         this.g.appendChild(e.g)

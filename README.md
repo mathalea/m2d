@@ -25,18 +25,18 @@ const B = figure.point(x, y)
 const sAB = figure.segment(A, B)
 ```
 
-Les objets `Element2D` devront avoir plusieurs méthodes : 
+Les objets `Element2D` devront avoir plusieurs set/get : 
 - color : pour changer la couleur
 - thickness : pour changer l'épaisseur
 - size : pour la taille des points
 
-Les points ont : 
+Les points et les cercles ont : 
 - moveTo(x, y) : pour les déplacer
 - translation, rotation, homothétie, similitude qui créeront un nouveau point (sauf si on met l'option `clone: false`)
+- fill : pour colorier
 
 
 ToDO : 
-- fill : pour colorier
 - mark : pour ajouter un codage
 
 
@@ -47,9 +47,6 @@ const B = A.translation(x, y)
 const C = A.symetrie(B)
 ```
 
-#### Temp
-
-Pour les constructions on a souvent besoin de points intermédiaires, mais ceux-ci ne sont pas affichés et n'ont pas d'interactivité. Un objet créé avec le paramètre d'options `temp: true` ne sera pas ajouté à la figure. 
 
 
 #### Les dépendances
