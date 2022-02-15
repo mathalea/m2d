@@ -17,8 +17,11 @@ figure.svg.style.backgroundColor = 'lightcyan'
 
 // On créé des points à partir de leur coordonnées
 
-const A = figure.point(0, 0)
+const A = figure.point(0, 0, { color: 'green' })
 const B = figure.point(-2, -1)
 const C = A.homothetie(B, -2)
-figure.circle(A, B)
+const D = figure.circle(A, B)
 figure.circle(B, C)
+D.thickness = 3
+D.color = 'orange'
+console.log(figure.tex)

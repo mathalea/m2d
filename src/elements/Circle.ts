@@ -10,6 +10,7 @@ export class Circle extends Element2D {
       super()
       this.parentFigure = O.parentFigure
       this.O = O
+      this.parentFigure.list.push(this)
 
       const xSvg = this.parentFigure.xToSx(this.O.x)
       const ySvg = this.parentFigure.yToSy(this.O.y)
@@ -93,5 +94,12 @@ export class Circle extends Element2D {
       )
       const O2 = new Point(this.parentFigure, x, y)
       return new Circle(O2, this.radius * k)
+    }
+
+    get tex () {
+      const txtColor = (this.color === 'black') ? '' : `color = ${this.color}`
+      const txtThickness = (this.thickness === 1) ? '' : `line width = ${this.thickness}`
+      const txtOptions = (txtColor + txtThickness) ? `[${txtColor}${txtColor ? ' ,' : ''}${txtThickness}]` : ''
+      return `\n \t \\draw${txtOptions} (${this.O.x}, ${this.O.y}) circle(${this.radius});`
     }
 }

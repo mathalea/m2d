@@ -51,7 +51,9 @@ export class Segment extends Element2D {
     }
 
     get tex () {
-      const txtColor = (this.color === 'black') ? '' : `[color = ${this.color}]`
-      return `\n \t \\draw${txtColor} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
+      const txtColor = (this.color === 'black') ? '' : `color = ${this.color}`
+      const txtThickness = (this.thickness === 1) ? '' : `line width = ${this.thickness}`
+      const txtOptions = (txtColor + txtThickness) ? `[${txtColor}${txtColor ? ' ,' : ''}${txtThickness}]` : ''
+      return `\n \t \\draw${txtOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
     }
 }

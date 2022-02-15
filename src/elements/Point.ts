@@ -17,7 +17,7 @@ export class Point extends Element2D {
   parentFigure: Figure
   dragable: boolean
   // On définit un point avec ses deux coordonnées
-  constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.2, thickness = 1, color = 'black', dragable = true }: PointOptions = {}) {
+  constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.15, thickness = 3, color, dragable = true }: PointOptions = {}) {
     super()
     this.x = x
     this.y = y
@@ -25,7 +25,8 @@ export class Point extends Element2D {
     this.parentFigure = svgContainer
     this.thickness = thickness
     this._size = size
-    this.color = color
+    // Les points que l'on peut déplacer sont bleus par défaut
+    this.color = color || (dragable ? 'blue' : 'black')
     this.dragable = dragable
     const groupSvg = document.createElementNS('http://www.w3.org/2000/svg', 'g')
     this.g = groupSvg
