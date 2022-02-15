@@ -97,9 +97,12 @@ export class Circle extends Element2D {
     }
 
     get tex () {
-      const txtColor = (this.color === 'black') ? '' : `color = ${this.color}`
-      const txtThickness = (this.thickness === 1) ? '' : `line width = ${this.thickness}`
-      const txtOptions = (txtColor + txtThickness) ? `[${txtColor}${txtColor ? ' ,' : ''}${txtThickness}]` : ''
+      const arrayOptions : string[] = []
+      if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
+      if (this.thickness === 1) arrayOptions.push(`line width = ${this.thickness}`)
+      if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
+      let txtOptions = ''
+      if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
       return `\n \t \\draw${txtOptions} (${this.O.x}, ${this.O.y}) circle(${this.radius});`
     }
 }

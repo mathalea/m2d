@@ -4,7 +4,7 @@ import { Segment } from './Segment'
 import { Circle } from './Circle'
 import { distance } from '../calcul'
 
-export type PointStyle = 'x' | ''
+export type PointStyle = 'x' | 'o' | ''
 export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, dragable?: boolean }
 export type StringDependence = 'end1' | 'end2' | 'translation' | 'rotation' | 'homothetie' | 'similitude' | 'centerCircle' | 'pointOnCircle'
 
@@ -234,6 +234,15 @@ export class Point extends Element2D {
         e.color = this.color
         e.thickness = this.thickness
       }
+    }
+    if (style === 'o') {
+      // Rond
+      const C = new Circle(this, this.size)
+      this.group.push(C)
+      C.color = this.color
+      C.fill = this.color
+      C.thickness = this.thickness
+      this.g.appendChild(C.g)
     }
   }
 

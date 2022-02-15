@@ -57,7 +57,7 @@ export class Element2D {
   }
 
   get fill () {
-    return this._fill
+    return this._fill || 'none'
   }
 
   set fill (fill) {

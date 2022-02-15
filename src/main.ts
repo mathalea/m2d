@@ -17,7 +17,7 @@ figure.svg.style.backgroundColor = 'lightcyan'
 
 // On créé des points à partir de leur coordonnées
 
-const A = figure.point(0, 0, { color: 'green' })
+const A = figure.point(0, 0, { style: 'o' })
 const B = figure.point(-2, -1)
 const C = A.homothetie(B, -2)
 const D = figure.circle(A, B)
