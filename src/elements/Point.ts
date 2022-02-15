@@ -2,9 +2,11 @@ import { Figure } from '../Figure'
 import { Element2D } from './Element2D'
 import { Segment } from './Segment'
 import { Circle } from './Circle'
+import { distance } from '../calcul'
 
 export type PointStyle = 'x' | ''
 export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, dragable?: boolean }
+export type StringDependence = 'end1' | 'end2' | 'translation' | 'rotation' | 'homothetie' | 'centerCircle' | 'pointOnCircle'
 
 export class Point extends Element2D {
   x: number
@@ -60,6 +62,10 @@ export class Point extends Element2D {
       }
       if (dependence.type === 'centerCircle') {
         circle.moveCenter(this.x, this.y)
+        if (dependence.pointOnCircle) circle.radius = (distance(dependence.pointOnCircle, this))
+      }
+      if (dependence.type === 'pointOnCircle') {
+        circle.radius = (distance(dependence.center, this))
       }
     }
   }
@@ -117,11 +123,10 @@ export class Point extends Element2D {
     if (clone) {
       const B = new Point(this.parentFigure, x, y, { dragable: free })
       if (!free) {
-        const dependenceArgs = { element: B, type: 'rotation', angle, previous: this, center: O }
         // Si le centre est déplacé, on déplace B
-        O.addDependency(dependenceArgs)
+        O.addDependency({ element: B, type: 'rotation', angle, previous: this, center: O })
         // Si l'antécédent A est déplacé, on déplace B
-        this.addDependency(dependenceArgs)
+        this.addDependency({ element: B, type: 'rotation', angle, previous: this, center: O })
       }
       return B
     }
@@ -156,7 +161,7 @@ export class Point extends Element2D {
     return this
   }
 
-  addDependency (dependency: { element: Element2D, type: string, x?: number, y?: number, angle?: number, coeff?: number, center?: Point, previous?: Point}) {
+  addDependency (dependency: { element: Element2D, type: StringDependence, x?: number, y?: number, angle?: number, coeff?: number, center?: Point, previous?: Point, pointOnCircle?: Point}) {
     this.dependencies.push(dependency)
   }
 

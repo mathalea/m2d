@@ -1,30 +1,34 @@
+import { distance } from '../calcul'
 import { Element2D } from './Element2D'
 import { Point } from './Point'
 import { OptionsGraphiques } from './Segment'
 
 export class Circle extends Element2D {
     O: Point
-    radius: number
-    constructor (O: Point, radius: number, { color = 'black', thickness = 1, fill = 'none' } : OptionsGraphiques = {}) {
+    private _radius: number
+    constructor (O: Point, arg2: number | Point, { color = 'black', thickness = 1, fill = 'none' } : OptionsGraphiques = {}) {
       super()
-      this.O = O
-      this.radius = radius
       this.parentFigure = O.parentFigure
+      this.O = O
 
       const xSvg = this.parentFigure.xToSx(this.O.x)
       const ySvg = this.parentFigure.yToSy(this.O.y)
       const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
       circle.setAttribute('cx', `${xSvg}`)
       circle.setAttribute('cy', `${ySvg}`)
-      circle.setAttribute('r', `${this.radius * this.parentFigure.pixelsPerUnit}`)
       this.g = circle
       this.parentFigure.svg.appendChild(this.g)
+
+      this.radius = (typeof arg2 === 'number') ? arg2 : this.radius = distance(O, arg2)
 
       this.fill = fill
       this.color = color
       this.thickness = thickness
 
-      O.addDependency({ element: this, type: 'centerCircle' })
+      if (arg2 instanceof Point) {
+        O.addDependency({ element: this, type: 'centerCircle', pointOnCircle: arg2 })
+        arg2.addDependency({ element: this, type: 'pointOnCircle', center: O })
+      } else O.addDependency({ element: this, type: 'centerCircle', pointOnCircle: null })
     }
 
     /**
@@ -44,6 +48,15 @@ export class Circle extends Element2D {
     moveCenter (x: number, y: number) {
       this.g.setAttribute('cx', `${this.parentFigure.xToSx(x)}`)
       this.g.setAttribute('cy', `${this.parentFigure.yToSy(y)}`)
+    }
+
+    get radius () {
+      return this._radius
+    }
+
+    set radius (radius: number) {
+      this._radius = radius
+      this.g.setAttribute('r', `${this._radius * this.parentFigure.pixelsPerUnit}`)
     }
 
     /**

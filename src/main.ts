@@ -17,7 +17,7 @@ figure.svg.style.margin = '100'
 // On créé des points à partir de leur coordonnées
 
 const A = figure.point(0, 0)
-const B = translation(A, 3, 5)
+const B = figure.point(3, 5)
 figure.segment(A, B, { thickness: 2, color: 'blue' })
-figure.circle(B, 2, { thickness: 2, color: 'blue' })
-// C.color = 'blue'
+figure.circle(B, A)
+const C = figure.circle(A, 2)

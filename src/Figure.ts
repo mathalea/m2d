@@ -137,8 +137,8 @@ export class Figure {
     return new Segment(A, B, options)
   }
 
-  circle (O: Point, radius: number, options?: OptionsGraphiques) {
-    return new Circle(O, radius, options)
+  circle (O: Point, arg2: number | Point, options?: OptionsGraphiques) {
+    return new Circle(O, arg2, options)
   }
 
   polygon (listPoints: Point[]) {
