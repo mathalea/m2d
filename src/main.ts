@@ -1,7 +1,5 @@
 import { Figure } from './Figure'
 
-const translation = Figure.translation
-
 /**
  * Script qui permet de tester M2D
  */
@@ -12,12 +10,15 @@ const figure = new Figure()
 // On l'ajoute au dom
 const body = document.querySelector('body')
 if (body) body.appendChild(figure.svg)
-figure.svg.style.margin = '100'
+figure.svg.style.margin = 'auto'
+figure.svg.style.display = 'block'
+figure.svg.style.border = 'solid'
+figure.svg.style.backgroundColor = 'lightcyan'
 
 // On créé des points à partir de leur coordonnées
 
 const A = figure.point(0, 0)
-const B = figure.point(3, 5)
-figure.segment(A, B, { thickness: 2, color: 'blue' })
-figure.circle(B, A)
-const C = figure.circle(A, 2)
+const B = figure.point(-2, -1)
+const C = A.homothetie(B, -2)
+figure.circle(A, B)
+figure.circle(B, C)
