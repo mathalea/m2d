@@ -1,4 +1,5 @@
-import { distance } from '../calcul'
+import { intersectionLC } from '../calculus/intersection'
+import { distance } from '../calculus/random'
 import { Element2D } from './Element2D'
 import { Point } from './Point'
 import { OptionsGraphiques } from './Segment'
@@ -67,15 +68,21 @@ export class Circle extends Element2D {
     }
 
     private changing () {
-      console.log(this.O.x, this.O.y, this.radius)
       for (const dependence of this.dependencies) {
         if (dependence.type === 'onCircle') {
-          console.log(dependence.element)
           const angleRadian = dependence.angle * Math.PI / 180
           const C = this
           const x = C.O.x + C.radius * Math.cos(angleRadian)
           const y = C.O.y + C.radius * Math.sin(angleRadian)
           dependence.element.moveTo(x, y)
+        }
+        if (dependence.type === 'intersectionLC') {
+          const [x1, y1] = intersectionLC(dependence.L, dependence.C)
+          const [x2, y2] = intersectionLC(dependence.L, dependence.C, 2)
+          // On cherche le point d'intersection le plus proche de l'actuel
+          if ((dependence.element.x - x1) ** 2 + (dependence.element.y - y1) ** 2 < (dependence.element.x - x2) ** 2 + (dependence.element.y - y2) ** 2) {
+            dependence.element.moveTo(x1, y1)
+          } else dependence.element.moveTo(x2, y2)
         }
       }
     }

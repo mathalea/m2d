@@ -1,9 +1,10 @@
-import { distance, randint } from './calcul'
+import { intersectionLC } from './calculus/intersection'
 import { Circle } from './elements/Circle'
 import { Element2D } from './elements/Element2D'
 import { PointOptions, Point } from './elements/Point'
 import { Polygon } from './elements/Polygon'
 import { OptionsGraphiques, Segment } from './elements/Segment'
+import { pointOnSegment } from './macros/pointOn'
 
 export class Figure {
   width: number
@@ -109,7 +110,7 @@ export class Figure {
     const startDrag = (event: PointerEvent) => {
       const [pointerX, pointerY] = this.getPointerCoord(event)
       for (const e of this.list) {
-        if (e.dragable && e instanceof Point && e.distancePointer(pointerX, pointerY) < 1) {
+        if (e.dragable && e instanceof Point && e.distancePointer(pointerX, pointerY) * this.pixelsPerUnit < 15) {
           this.setInDrag.add(e)
           this.isDraging = true
         }
@@ -149,8 +150,8 @@ export class Figure {
    * @returns
    */
   line (A: Point, B: Point, { add1 = 50, add2 = 50, color = 'black', thickness = 1 } = {}) {
-    const M = this.pointOnSegment(A, B, -add1)
-    const N = this.pointOnSegment(B, A, -add2)
+    const M = pointOnSegment(A, B, -add1)
+    const N = pointOnSegment(B, A, -add2)
     M.style = ''
     N.style = ''
     return this.segment(M, N, { color, thickness })
@@ -175,34 +176,15 @@ export class Figure {
     return new Point(this, x, y, options)
   }
 
+  pointIntersectionLC (L: Segment, C: Circle, n: 1 | 2 =1, options?: PointOptions) {
+    const [x, y] = intersectionLC(L, C, n)
+    const M = new Point(this, x, y, options)
+    C.addDependency({ element: M, type: 'intersectionLC', L, C })
+    return M
+  }
+
   static translation (A: Point, x: number, y: number) {
     return A.translation(x, y)
-  }
-
-  /**
-   *
-   * @param A Origine
-   * @param B Extrémité
-   * @param l Distance à laquelle placer le point par rapport à l'origine et dans la direction inverse à celle de B
-   * La distance est dans l'unité du repère mais lorsque les points sont déplacés seul le ratio est conservé et non la distance
-   * @returns Point
-   */
-  pointOnSegment (A: Point, B: Point, l?: number, { style = A.style, color = 'black', thickness = A.thickness } = {}) {
-    // ToFix le rapport de l'homothétie est fixe alors que l'on voulait une distance fixe
-    const k = (l === undefined) ? (randint(15, 85) / 100) : l / distance(A, B)
-    if (distance(A, B)) {
-      return B.homothetie(A, k, { style, color, thickness })
-    }
-  }
-
-  pointOnCircle (C: Circle, angle?: number) {
-    if (angle === undefined) angle = randint(-180, 180)
-    const angleRadian = angle * Math.PI / 180
-    const x = C.O.x + C.radius * Math.cos(angleRadian)
-    const y = C.O.y + C.radius * Math.sin(angleRadian)
-    const M = new Point(this, x, y)
-    C.addDependency({ element: M, type: 'onCircle', angle })
-    return M
   }
 
   set tex (txt: string) {

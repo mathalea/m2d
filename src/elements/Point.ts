@@ -2,11 +2,12 @@ import { Figure } from '../Figure'
 import { Element2D } from './Element2D'
 import { Segment } from './Segment'
 import { Circle } from './Circle'
-import { distance } from '../calcul'
+import { distance } from '../calculus/random'
+import { homothetieCoord, rotationCoord, similitudeCoord } from '../calculus/transformation'
 
 export type PointStyle = 'x' | 'o' | ''
-export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, dragable?: boolean }
-export type StringDependence = 'end1' | 'end2' | 'translation' | 'rotation' | 'homothetie' | 'similitude' | 'centerCircle' | 'pointOnCircle'
+export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, dragable?: boolean | Circle | Segment }
+export type StringDependence = 'end1' | 'end2' | 'translation' | 'rotation' | 'homothetie' | 'similitude' | 'centerCircle' | 'pointOnCircle' | 'intersectionLC' | 'intersectionLL' | 'intersectionCC'
 
 export class Point extends Element2D {
   x: number
@@ -15,7 +16,7 @@ export class Point extends Element2D {
   private _size: number // Pour la taille de la croix et utilisé dans changeStyle
   g: SVGElement
   parentFigure: Figure
-  dragable: boolean
+  dragable: true | false | Circle | Segment
   // On définit un point avec ses deux coordonnées
   constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.15, thickness = 3, color, dragable = true }: PointOptions = {}) {
     super()
@@ -58,15 +59,15 @@ export class Point extends Element2D {
         point.moveTo(this.x + dependence.x, this.y + dependence.y)
       }
       if (dependence.type === 'rotation') {
-        const [x, y] = this.rotationCoord(dependence.previous, dependence.center, dependence.angle)
+        const [x, y] = rotationCoord(dependence.previous, dependence.center, dependence.angle)
         point.moveTo(x, y)
       }
       if (dependence.type === 'homothetie') {
-        const [x, y] = this.homothetieCoord(dependence.previous, dependence.center, dependence.k)
+        const [x, y] = homothetieCoord(dependence.previous, dependence.center, dependence.k)
         point.moveTo(x, y)
       }
       if (dependence.type === 'similitude') {
-        const [x, y] = this.similitudeCoord(dependence.previous, dependence.center, dependence.k, dependence.angle)
+        const [x, y] = similitudeCoord(dependence.previous, dependence.center, dependence.k, dependence.angle)
         point.moveTo(x, y)
       }
       if (dependence.type === 'centerCircle') {
@@ -80,7 +81,13 @@ export class Point extends Element2D {
   }
 
   notifyMouseMove (x: number, y: number) {
-    this.moveTo(x, y)
+    if (this.dragable instanceof Segment) {
+      const [a, b] = this.dragable.affine
+      const [A, B] = this.dragable.ends
+      if (x > Math.min(A.x, B.x) && x < Math.max(A.x, B.x)) {
+        this.moveTo(x, a * x + b)
+      }
+    } else this.moveTo(x, y)
   }
 
   public distancePointer (pointerX: number, pointerY: number) {
@@ -111,52 +118,11 @@ export class Point extends Element2D {
   }
 
   /**
-   *
-   * @param A Antécédent
-   * @param O Centre
-   * @param angle Image
-   * @returns [x, y] coordonnées de l'image
-   */
-  private rotationCoord (A: Point, O: Point, angle: number) {
-    const x = (O.x + (A.x - O.x) * Math.cos((angle * Math.PI) / 180) - (A.y - O.y) * Math.sin((angle * Math.PI) / 180))
-    const y = (O.y + (A.x - O.x) * Math.sin((angle * Math.PI) / 180) + (A.y - O.y) * Math.cos((angle * Math.PI) / 180))
-    return [x, y]
-  }
-
-  /**
-   *
-   * @param A Antécédent
-   * @param O Centre
-   * @param k Coefficient
-   * @returns [x, y] coordonnées de l'image
-   */
-  private homothetieCoord (A: Point, O: Point, k: number) {
-    const x = (O.x + k * (A.x - O.x))
-    const y = (O.y + k * (A.y - O.y))
-    return [x, y]
-  }
-
-  /**
-   *
-   * @param A Antécédent
-   * @param O Centre
-   * @param k Coefficient
-   * @param angle Angle en degrés
-   * @returns [x, y] coordonnées de l'image
-   */
-  private similitudeCoord (A: Point, O: Point, k: number, angle: number) {
-    const angleRadian = angle * Math.PI / 180
-    const x = (O.x + k * (Math.cos(angleRadian) * (this.x - O.x) - Math.sin(angleRadian) * (this.y - O.y)))
-    const y = (O.y + k * (Math.cos(angleRadian) * (this.y - O.y) + Math.sin(angleRadian) * (this.x - O.x)))
-    return [x, y]
-  }
-
-  /**
  * Rotation définie par un centre et un angle en degrés
  * Renvoie un nouveau point sans modifier le premier avec clone = true ou déplace le point avec clone = false
  */
   rotation (O: Point, angle: number, { clone = true, free = false, color = O.color, style = O.style, thickness = O.thickness } = {}) {
-    const [x, y] = this.rotationCoord(this, O, angle)
+    const [x, y] = rotationCoord(this, O, angle)
     if (clone) {
       const B = new Point(this.parentFigure, x, y, { dragable: free, color, style, thickness })
       if (!free) {
@@ -176,16 +142,15 @@ export class Point extends Element2D {
  * Renvoie un nouveau point sans modifier le premier
  */
 
-  homothetie (O: Point, k: number, { clone = true, free = false, style = this.style, color = 'black', thickness = this.thickness } = {}) {
-    const [x, y] = this.homothetieCoord(this, O, k)
+  homothetie (O: Point, k: number, { clone = true, dragable = false, style = this.style, color = 'black', thickness = this.thickness } : {clone?: boolean, dragable?: boolean | Segment | Circle, color?: string, style?: PointStyle, thickness?: number} = {}) {
+    const [x, y] = homothetieCoord(this, O, k)
     if (clone) {
-      const B = new Point(this.parentFigure, x, y, { dragable: free, style, color, thickness })
-      if (!free) {
-        // Si le centre est déplacé, on déplace B
-        O.addDependency({ element: B, type: 'homothetie', k, previous: this, center: O })
-        // Si l'antécédent A est déplacé, on déplace B
-        this.addDependency({ element: B, type: 'homothetie', k, previous: this, center: O })
-      }
+      const B = new Point(this.parentFigure, x, y, { dragable, style, color, thickness })
+
+      // Si le centre est déplacé, on déplace B
+      O.addDependency({ element: B, type: 'homothetie', k, previous: this, center: O })
+      // Si l'antécédent A est déplacé, on déplace B
+      this.addDependency({ element: B, type: 'homothetie', k, previous: this, center: O })
       return B
     }
     this.moveTo(x, y)
@@ -197,7 +162,7 @@ export class Point extends Element2D {
  * Renvoie un nouveau point sans modifier le premier
  */
   similitude (O: Point, k: number, angle: number, { clone = true, free = false } = {}) {
-    const [x, y] = this.similitudeCoord(this, O, k, angle)
+    const [x, y] = similitudeCoord(this, O, k, angle)
     if (clone) {
       const B = new Point(this.parentFigure, x, y, { dragable: free })
       if (!free) {
@@ -212,7 +177,7 @@ export class Point extends Element2D {
     return this
   }
 
-  addDependency (dependency: { element: Element2D, type: StringDependence, x?: number, y?: number, angle?: number, k?: number, center?: Point, previous?: Point, pointOnCircle?: Point}) {
+  addDependency (dependency: { element: Element2D, type: StringDependence, x?: number, y?: number, angle?: number, k?: number, center?: Point, previous?: Point, pointOnCircle?: Point, L?: Segment, C?: Circle}) {
     this.dependencies.push(dependency)
   }
 

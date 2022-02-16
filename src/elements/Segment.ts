@@ -1,8 +1,9 @@
 import { Point } from './Point'
 import { Element2D } from './Element2D'
+import { pointOnSegment } from '../macros/pointOn'
 
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
-export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number }
+export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number, temp?: boolean }
 
 export class Segment extends Element2D {
     x1: number
@@ -10,9 +11,11 @@ export class Segment extends Element2D {
     x2: number
     y2: number
     ends: [Point, Point]
+    temp: boolean
     private _style: string
-    constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', add1 = 0, add2 = 0 }: OptionsGraphiques = {}) {
+    constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', temp = false }: OptionsGraphiques = {}) {
       super()
+      this.temp = temp
       this.x1 = A.x
       this.y1 = A.y
       this.x2 = B.x
@@ -33,7 +36,7 @@ export class Segment extends Element2D {
       segment.setAttribute('y2', `${y2Svg}`)
 
       this.g = segment
-      this.parentFigure.svg.appendChild(this.g)
+      if (!temp) this.parentFigure.svg.appendChild(this.g)
 
       // Les styles ne doivent être appliqués qu'une fois le groupe créé
       this.color = color
@@ -66,13 +69,33 @@ export class Segment extends Element2D {
       return this._style
     }
 
+    /**
+     * Renvoie [a, b] tels que la droite est définie par y = ax + b
+     * ToFiX gestion des droites verticales et du cas où les 2 extrémités sont confondues
+     */
+    get affine () {
+      const [a, b, c] = this.equation
+      return [-a / b, -c / b]
+    }
+
+    /**
+     * Renvoie [a, b, c] tels que ax +y + c = 0
+     */
+    get equation () {
+      const [A, B] = this.ends
+      const a = A.y - B.y
+      const b = B.x - A.x
+      const c = (A.x - B.x) * A.y + (B.y - A.y) * A.x
+      return [a, b, c]
+    }
+
     set style (style: string) {
       this._style = style
       const [A, B] = this.ends
       const h = 0.2
       const addBorder1 = () => {
         A.style = ''
-        const M = this.parentFigure.pointOnSegment(A, B, h, { style: '' })
+        const M = pointOnSegment(A, B, h, { style: '' })
         const A1 = M.rotation(A, 90, { style: '' })
         const A2 = M.rotation(A, -90, { style: '' })
         const s = new Segment(A1, A2, { color: this.color, thickness: this.thickness })
@@ -80,7 +103,7 @@ export class Segment extends Element2D {
       }
       const addBorder2 = () => {
         B.style = ''
-        const M = this.parentFigure.pointOnSegment(B, A, h, { style: '' })
+        const M = pointOnSegment(B, A, h, { style: '' })
         const B1 = M.rotation(B, 90, { style: '' })
         const B2 = M.rotation(B, -90, { style: '' })
         const s = new Segment(B1, B2, { color: this.color, thickness: this.thickness })

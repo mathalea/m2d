@@ -18,6 +18,8 @@ figure.svg.style.backgroundColor = 'lightcyan'
 // On créé des points à partir de leur coordonnées
 
 const A = figure.point(0, 0)
-const B = figure.point(-5, 0)
-const s = figure.segment(A,B)
-s.style = '-|'
+const B = figure.point(1, 1)
+const C = figure.circle(A, 4)
+const l = figure.line(A, B)
+const M = figure.pointIntersectionLC(l, C)
+const N = figure.pointIntersectionLC(l, C, 2)
