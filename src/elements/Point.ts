@@ -14,7 +14,7 @@ export class Point extends Element2D {
   x: number
   y: number
   private _style: PointStyle
-  private _size: number // Pour la taille de la croix et utilisé dans changeStyle
+  protected _size: number // Pour la taille de la croix et utilisé dans changeStyle
   g: SVGElement
   parentFigure: Figure
   dragable: true | false | Circle | Segment
@@ -119,9 +119,9 @@ export class Point extends Element2D {
    * @param arg3
    * @returns
    */
-  translation (xt: number, yt: number, { clone = true, free = false, style = this.style, color = this.color, thickness = this.thickness } = {}) {
+  translation (xt: number, yt: number, { clone = true, free = false, style = this.style, color = this.color, thickness = this.thickness, temp = false } = {}) {
     if (clone) {
-      const B = new Point(this.parentFigure, this.x + xt, this.y + yt, { dragable: free, style, color, thickness })
+      const B = new Point(this.parentFigure, this.x + xt, this.y + yt, { dragable: free, style, color, thickness, temp })
       if (!free) this.addDependency({ element: B, type: 'translation', x: xt, y: yt })
       return B
     }
@@ -133,10 +133,10 @@ export class Point extends Element2D {
  * Rotation définie par un centre et un angle en degrés
  * Renvoie un nouveau point sans modifier le premier avec clone = true ou déplace le point avec clone = false
  */
-  rotation (O: Point, angle: number, { clone = true, free = false, color = O.color, style = O.style, thickness = O.thickness } = {}) {
+  rotation (O: Point, angle: number, { clone = true, free = false, color = O.color, style = O.style, thickness = O.thickness, temp = false } = {}) {
     const [x, y] = rotationCoord(this, O, angle)
     if (clone) {
-      const B = new Point(this.parentFigure, x, y, { dragable: free, color, style, thickness })
+      const B = new Point(this.parentFigure, x, y, { dragable: free, color, style, thickness, temp })
       if (!free) {
         // Si le centre est déplacé, on déplace B
         O.addDependency({ element: B, type: 'rotation', angle, previous: this, center: O })
@@ -154,7 +154,7 @@ export class Point extends Element2D {
  * Renvoie un nouveau point sans modifier le premier
  */
 
-  homothetie (O: Point, k: number, { clone = true, dragable = false, style = this.style, color = 'black', thickness = this.thickness } : {clone?: boolean, dragable?: boolean | Segment | Circle, color?: string, style?: PointStyle, thickness?: number} = {}) {
+  homothetie (O: Point, k: number, { clone = true, dragable = false, style = this.style, color = 'black', thickness = this.thickness, temp = false } : {clone?: boolean, dragable?: boolean | Segment | Circle, color?: string, style?: PointStyle, thickness?: number, temp?: boolean} = {}) {
     const [x, y] = homothetieCoord(this, O, k)
     if (clone) {
       const B = new Point(this.parentFigure, x, y, { dragable, style, color, thickness })
@@ -173,10 +173,10 @@ export class Point extends Element2D {
  * Similitude définie par un centre, un rapport et un angle en degré
  * Renvoie un nouveau point sans modifier le premier
  */
-  similitude (O: Point, k: number, angle: number, { clone = true, free = false } = {}) {
+  similitude (O: Point, k: number, angle: number, { clone = true, free = false, temp = false } = {}) {
     const [x, y] = similitudeCoord(this, O, k, angle)
     if (clone) {
-      const B = new Point(this.parentFigure, x, y, { dragable: free })
+      const B = new Point(this.parentFigure, x, y, { dragable: free, temp })
       if (!free) {
         // Si le centre est déplacé, on déplace B
         O.addDependency({ element: B, type: 'similitude', k, previous: this, center: O, angle })

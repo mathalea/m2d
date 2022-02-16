@@ -1,5 +1,6 @@
+import { angle, angleOriented } from './calculus/trigonometry'
+import { PointOnCircle } from './elements/PointOnCircle'
 import { Figure } from './Figure'
-import { pointOnCircle, pointOnSegment } from './macros/pointOn'
 
 /**
  * Script qui permet de tester M2D
@@ -19,8 +20,11 @@ figure.svg.style.backgroundColor = 'lightcyan'
 // On créé des points à partir de leur coordonnées
 
 const A = figure.point(0, 0)
-const B = figure.point(4,4)
-const C = figure.circle(A,B)
-const s = figure.segment(C.center, B)
-const M = pointOnCircle(C)
-const N = pointOnSegment(C.center, B)
+const B = figure.point(4, 0)
+const C = figure.circle(A, B)
+const M = new PointOnCircle(figure, C, 93)
+figure.segment(B, M)
+console.log(angle(M, A, B))
+console.log(angleOriented(M, A, B))
+const s = figure.segment(A, M)
+console.log(s.angleWithHorizontal)

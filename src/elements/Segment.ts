@@ -3,6 +3,8 @@ import { Element2D } from './Element2D'
 import { pointOnSegment } from '../macros/pointOn'
 import { intersectionLC } from '../calculus/intersection'
 import { Circle } from './Circle'
+import { Vector } from './Vector'
+import { angleOriented } from '../calculus/trigonometry'
 
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
 export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number, temp?: boolean }
@@ -111,6 +113,23 @@ export class Segment extends Element2D {
       const b = B.x - A.x
       const c = (A.x - B.x) * A.y + (B.y - A.y) * A.x
       return [a, b, c]
+    }
+
+    get normal () {
+      const [a, b] = this.equation
+      return new Vector(a, b)
+    }
+
+    get directeur () {
+      const [a, b] = this.equation
+      return new Vector(b, -a)
+    }
+
+    get angleWithHorizontal () {
+      const O = new Point(this.parentFigure, 0, 0, { temp: true })
+      const A = new Point(this.parentFigure, 1, 0, { temp: true })
+      const M = new Point(this.parentFigure, this.directeur.x, this.directeur.y, { temp: true })
+      return angleOriented(A, O, M)
     }
 
     set style (style: string) {

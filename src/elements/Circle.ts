@@ -2,6 +2,7 @@ import { intersectionLC } from '../calculus/intersection'
 import { distance } from '../calculus/random'
 import { Element2D } from './Element2D'
 import { Point, StringDependence } from './Point'
+import { PointOnCircle } from './PointOnCircle'
 import { OptionsGraphiques, Segment } from './Segment'
 
 export class Circle extends Element2D {
@@ -71,14 +72,12 @@ export class Circle extends Element2D {
 
     private changing () {
       this.M.moveTo(this.center.x + this.radius, this.center.y)
+      console.log(this.dependencies)
       for (const dependence of this.dependencies) {
-        if (dependence.type === 'onCircle') {
-          const M = dependence.element as Point
-          const angleRadian = dependence.angle * Math.PI / 180
-          const C = this
-          const x = C.center.x + C.radius * Math.cos(angleRadian)
-          const y = C.center.y + C.radius * Math.sin(angleRadian)
-          M.moveTo(x, y)
+        if (dependence.type === 'pointOnCircle') {
+          const M = dependence.element as PointOnCircle
+          // On simule un léger déplacement pour qu'il recalcule sa position sur le cercle
+          M.notifyMouseMove(M.x + 0.00001, M.y)
         }
         if (dependence.type === 'intersectionLC') {
           const M = dependence.element as Point
