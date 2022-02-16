@@ -4,9 +4,10 @@ import { Segment } from './Segment'
 import { Circle } from './Circle'
 import { distance } from '../calculus/random'
 import { homothetieCoord, rotationCoord, similitudeCoord } from '../calculus/transformation'
+import { intersectionLC } from '../calculus/intersection'
 
 export type PointStyle = 'x' | 'o' | ''
-export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, dragable?: boolean | Circle | Segment }
+export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, dragable?: boolean | Circle | Segment, temp?: boolean }
 export type StringDependence = 'end1' | 'end2' | 'translation' | 'rotation' | 'homothetie' | 'similitude' | 'centerCircle' | 'pointOnCircle' | 'intersectionLC' | 'intersectionLL' | 'intersectionCC'
 
 export class Point extends Element2D {
@@ -17,14 +18,16 @@ export class Point extends Element2D {
   g: SVGElement
   parentFigure: Figure
   dragable: true | false | Circle | Segment
+  temp: boolean // Pour les points qui ne servent qu'à faire des calculs
   // On définit un point avec ses deux coordonnées
-  constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.15, thickness = 3, color, dragable = true }: PointOptions = {}) {
+  constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.15, thickness = 3, color, dragable = true, temp = false }: PointOptions = {}) {
     super()
     this.x = x
     this.y = y
     this.group = []
     this.parentFigure = svgContainer
     this.thickness = thickness
+    this.temp = temp
     this._size = size
     // Les points que l'on peut déplacer sont bleus par défaut
     this.color = color || (dragable ? 'blue' : 'black')
@@ -33,7 +36,7 @@ export class Point extends Element2D {
     this.g = groupSvg
     this.parentFigure.list.push(this)
     this.style = style // Le style initialise aussi size
-    if (this.g.childElementCount > 0) this.parentFigure.svg.appendChild(this.g)
+    if (this.g.childElementCount > 0 && !this.temp) this.parentFigure.svg.appendChild(this.g)
   }
 
   /**
@@ -87,7 +90,16 @@ export class Point extends Element2D {
       if (x > Math.min(A.x, B.x) && x < Math.max(A.x, B.x)) {
         this.moveTo(x, a * x + b)
       }
-    } else this.moveTo(x, y)
+    } else if (this.dragable instanceof Circle) {
+      const C = this.dragable
+      const O = C.center
+      const P = new Point(C.parentFigure, x, y, { temp: true })
+      const L = new Segment(O, P, { temp: true })
+      const [xM, yM] = intersectionLC(L, C, (P.y > O.y) ? 1 : 2)
+      this.moveTo(xM, yM)
+    } else {
+      this.moveTo(x, y)
+    }
   }
 
   public distancePointer (pointerX: number, pointerY: number) {

@@ -10,7 +10,7 @@ import { Segment } from '../elements/Segment'
  * @author Jean-Claude Lhote
  */
 export function intersectionLC (D: Segment, C: Circle, n: 1 | 2 = 1) {
-  const O = C.O
+  const O = C.center
   const r = C.radius
   const [a, b, c] = D.equation
   const xO = O.x

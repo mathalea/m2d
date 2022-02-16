@@ -9,7 +9,6 @@ export type optionsElement2D = { color?: string, thickness?: number, fill?: stri
  * Classe parente de tous les éléments de géométrie
  */
 export class Element2D {
-  drag: boolean
   dragable: any
   parentFigure: Figure
   // Un élément de géométrie peut être composé de plusieurs autres éléments de géométrie (plusieurs segments pour marquer un point ou coder un angle par exemple)
@@ -23,8 +22,6 @@ export class Element2D {
     this.group = []
     this.dependencies = []
     this.g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-    this.drag = false // drag en cours
-    this.parentFigure?.list.push(this)
   }
 
   get color () {
@@ -36,7 +33,7 @@ export class Element2D {
       for (const line of Array.from(this.g.children)) {
         line.setAttribute('stroke', color)
       }
-    } else { // Le segment par exemple n'est pas un groupe mais un élément unique sans children
+    } else { // Le segment ou le cercle ne sont pas des groupes, ce sont des éléments uniques sans children
       this.g.setAttribute('stroke', color)
     }
     this._color = color

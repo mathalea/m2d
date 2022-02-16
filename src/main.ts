@@ -1,4 +1,5 @@
 import { Figure } from './Figure'
+import { pointOnCircle, pointOnSegment } from './macros/pointOn'
 
 /**
  * Script qui permet de tester M2D
@@ -18,8 +19,8 @@ figure.svg.style.backgroundColor = 'lightcyan'
 // On créé des points à partir de leur coordonnées
 
 const A = figure.point(0, 0)
-const B = figure.point(1, 1)
-const C = figure.circle(A, 4)
-const l = figure.line(A, B)
-const M = figure.pointIntersectionLC(l, C)
-const N = figure.pointIntersectionLC(l, C, 2)
+const B = figure.point(4,4)
+const C = figure.circle(A,B)
+const s = figure.segment(C.center, B)
+const M = pointOnCircle(C)
+const N = pointOnSegment(C.center, B)

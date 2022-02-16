@@ -41,10 +41,15 @@ export function pointOnLine (A: Point, B: Point, l?: number, { style = A.style, 
 
 export function pointOnCircle (C: Circle, angle?: number) {
   if (angle === undefined) angle = randint(-180, 180)
-  const angleRadian = angle * Math.PI / 180
-  const x = C.O.x + C.radius * Math.cos(angleRadian)
-  const y = C.O.y + C.radius * Math.sin(angleRadian)
-  const M = new Point(this, x, y)
-  C.addDependency({ element: M, type: 'onCircle', angle })
-  return M
+  // const angleRadian = angle * Math.PI / 180
+  // const x = C.O.x + C.radius * Math.cos(angleRadian)
+  // const y = C.O.y + C.radius * Math.sin(angleRadian)
+  // const M = new Point(C.parentFigure, x, y)
+  // C.addDependency({ element: M, type: 'pointOnCircle', angle })
+  const O = C.center
+  const M = C.M
+  const A = M.rotation(O, angle)
+  C.addDependency({ element: A, type: 'pointOnCircle' })
+  A.dragable = C
+  return A
 }

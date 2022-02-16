@@ -176,10 +176,12 @@ export class Figure {
     return new Point(this, x, y, options)
   }
 
-  pointIntersectionLC (L: Segment, C: Circle, n: 1 | 2 =1, options?: PointOptions) {
+  pointIntersectionLC (L: Segment, C: Circle, n: 1 | 2 = 1, options?: PointOptions) {
     const [x, y] = intersectionLC(L, C, n)
     const M = new Point(this, x, y, options)
+    M.dragable = false
     C.addDependency({ element: M, type: 'intersectionLC', L, C })
+    L.addDependency({ element: M, type: 'intersectionLC', L, C })
     return M
   }
 

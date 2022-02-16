@@ -1,6 +1,8 @@
-import { Point } from './Point'
+import { Point, StringDependence } from './Point'
 import { Element2D } from './Element2D'
 import { pointOnSegment } from '../macros/pointOn'
+import { intersectionLC } from '../calculus/intersection'
+import { Circle } from './Circle'
 
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
 export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number, temp?: boolean }
@@ -49,10 +51,32 @@ export class Segment extends Element2D {
     }
 
     moveEnd (x: number, y: number, n: 1 | 2) {
-      this.g.setAttribute(`x${n}`, this.parentFigure.xToSx(x).toString())
-      this.g.setAttribute(`y${n}`, this.parentFigure.yToSy(y).toString())
-      this[`x${n}`] = x
-      this[`y${n}`] = y
+      // ToFix NaN ?
+      if (!isNaN(x) && !isNaN(y)) {
+        this.g.setAttribute(`x${n}`, this.parentFigure.xToSx(x).toString())
+        this.g.setAttribute(`y${n}`, this.parentFigure.yToSy(y).toString())
+        this[`x${n}`] = x
+        this[`y${n}`] = y
+        this.changing()
+      }
+    }
+
+    private changing () {
+      for (const dependence of this.dependencies) {
+        if (dependence.type === 'intersectionLC') {
+          const M = dependence.element as Point
+          const [x1, y1] = intersectionLC(dependence.L, dependence.C)
+          const [x2, y2] = intersectionLC(dependence.L, dependence.C, 2)
+          // On cherche le point d'intersection le plus proche de l'actuel
+          if ((M.x - x1) ** 2 + (M.y - y1) ** 2 < (M.x - x2) ** 2 + (M.y - y2) ** 2) {
+            M.moveTo(x1, y1)
+          } else M.moveTo(x2, y2)
+        }
+      }
+    }
+
+    addDependency (dependency: { element: Element2D, type: StringDependence, x?: number, y?: number, angle?: number, k?: number, center?: Point, previous?: Point, pointOnCircle?: Point, L?: Segment, C?: Circle}) {
+      this.dependencies.push(dependency)
     }
 
     get tex () {
