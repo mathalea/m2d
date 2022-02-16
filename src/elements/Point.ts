@@ -11,7 +11,7 @@ export type StringDependence = 'end1' | 'end2' | 'translation' | 'rotation' | 'h
 export class Point extends Element2D {
   x: number
   y: number
-  private _style: 'x' | ''
+  private _style: PointStyle
   private _size: number // Pour la taille de la croix et utilisé dans changeStyle
   g: SVGElement
   parentFigure: Figure
@@ -155,10 +155,10 @@ export class Point extends Element2D {
  * Rotation définie par un centre et un angle en degrés
  * Renvoie un nouveau point sans modifier le premier avec clone = true ou déplace le point avec clone = false
  */
-  rotation (O: Point, angle: number, { clone = true, free = false } = {}) {
+  rotation (O: Point, angle: number, { clone = true, free = false, color = O.color, style = O.style, thickness = O.thickness } = {}) {
     const [x, y] = this.rotationCoord(this, O, angle)
     if (clone) {
-      const B = new Point(this.parentFigure, x, y, { dragable: free })
+      const B = new Point(this.parentFigure, x, y, { dragable: free, color, style, thickness })
       if (!free) {
         // Si le centre est déplacé, on déplace B
         O.addDependency({ element: B, type: 'rotation', angle, previous: this, center: O })
@@ -176,10 +176,10 @@ export class Point extends Element2D {
  * Renvoie un nouveau point sans modifier le premier
  */
 
-  homothetie (O: Point, k: number, { clone = true, free = false } = {}) {
+  homothetie (O: Point, k: number, { clone = true, free = false, style = this.style, color = 'black', thickness = this.thickness } = {}) {
     const [x, y] = this.homothetieCoord(this, O, k)
     if (clone) {
-      const B = new Point(this.parentFigure, x, y, { dragable: free })
+      const B = new Point(this.parentFigure, x, y, { dragable: free, style, color, thickness })
       if (!free) {
         // Si le centre est déplacé, on déplace B
         O.addDependency({ element: B, type: 'homothetie', k, previous: this, center: O })

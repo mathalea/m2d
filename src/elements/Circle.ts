@@ -32,6 +32,10 @@ export class Circle extends Element2D {
       } else O.addDependency({ element: this, type: 'centerCircle', pointOnCircle: null })
     }
 
+    addDependency (dependency: { element: Element2D, type: string, x?: number, y?: number, angle?: number, k?: number, center?: Point, previous?: Point, pointOnCircle?: Point}) {
+      this.dependencies.push(dependency)
+    }
+
     /**
      * Translation définie par un couple de coordonnées ou un objet possédant des paramètres x et y
      * Renvoie un nouveau cercle sans modifier le premier
@@ -49,6 +53,7 @@ export class Circle extends Element2D {
     moveCenter (x: number, y: number) {
       this.g.setAttribute('cx', `${this.parentFigure.xToSx(x)}`)
       this.g.setAttribute('cy', `${this.parentFigure.yToSy(y)}`)
+      this.changing()
     }
 
     get radius () {
@@ -58,6 +63,21 @@ export class Circle extends Element2D {
     set radius (radius: number) {
       this._radius = radius
       this.g.setAttribute('r', `${this._radius * this.parentFigure.pixelsPerUnit}`)
+      this.changing()
+    }
+
+    private changing () {
+      console.log(this.O.x, this.O.y, this.radius)
+      for (const dependence of this.dependencies) {
+        if (dependence.type === 'onCircle') {
+          console.log(dependence.element)
+          const angleRadian = dependence.angle * Math.PI / 180
+          const C = this
+          const x = C.O.x + C.radius * Math.cos(angleRadian)
+          const y = C.O.y + C.radius * Math.sin(angleRadian)
+          dependence.element.moveTo(x, y)
+        }
+      }
     }
 
     /**

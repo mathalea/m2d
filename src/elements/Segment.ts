@@ -2,15 +2,16 @@ import { Point } from './Point'
 import { Element2D } from './Element2D'
 
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
-export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string }
+export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number }
 
 export class Segment extends Element2D {
     x1: number
     y1: number
     x2: number
     y2: number
-    style : SegmentStyle
-    constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '' }: OptionsGraphiques = {}) {
+    ends: [Point, Point]
+    private _style: string
+    constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', add1 = 0, add2 = 0 }: OptionsGraphiques = {}) {
       super()
       this.x1 = A.x
       this.y1 = A.y
@@ -18,6 +19,7 @@ export class Segment extends Element2D {
       this.y2 = B.y
       this.parentFigure = A.parentFigure
       this.parentFigure.list.push(this)
+      this.ends = [A, B]
 
       const x1Svg = this.parentFigure.xToSx(this.x1)
       const x2Svg = this.parentFigure.xToSx(this.x2)
@@ -58,5 +60,37 @@ export class Segment extends Element2D {
       let txtOptions = ''
       if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
       return `\n \t \\draw${txtOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
+    }
+
+    get style () {
+      return this._style
+    }
+
+    set style (style: string) {
+      this._style = style
+      const [A, B] = this.ends
+      const h = 0.2
+      const addBorder1 = () => {
+        A.style = ''
+        const M = this.parentFigure.pointOnSegment(A, B, h, { style: '' })
+        const A1 = M.rotation(A, 90, { style: '' })
+        const A2 = M.rotation(A, -90, { style: '' })
+        const s = new Segment(A1, A2, { color: this.color, thickness: this.thickness })
+        this.group.push(s)
+      }
+      const addBorder2 = () => {
+        B.style = ''
+        const M = this.parentFigure.pointOnSegment(B, A, h, { style: '' })
+        const B1 = M.rotation(B, 90, { style: '' })
+        const B2 = M.rotation(B, -90, { style: '' })
+        const s = new Segment(B1, B2, { color: this.color, thickness: this.thickness })
+        this.group.push(s)
+      }
+      if (style === '|-') addBorder1()
+      if (style === '-|') addBorder2()
+      if (style === '|-|') {
+        addBorder1()
+        addBorder2()
+      }
     }
 }
