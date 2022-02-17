@@ -1,5 +1,5 @@
-import { angle, angleOriented } from './calculus/trigonometry'
 import { PointOnCircle } from './elements/PointOnCircle'
+import { PointOnLine } from './elements/PointOnLine'
 import { Figure } from './Figure'
 
 /**
@@ -20,11 +20,7 @@ figure.svg.style.backgroundColor = 'lightcyan'
 // On créé des points à partir de leur coordonnées
 
 const A = figure.point(0, 0)
-const B = figure.point(4, 0)
-const C = figure.circle(A, B)
-const M = new PointOnCircle(figure, C, 93)
-figure.segment(B, M)
-console.log(angle(M, A, B))
-console.log(angleOriented(M, A, B))
-const s = figure.segment(A, M)
-console.log(s.angleWithHorizontal)
+const B = figure.point(6, 4)
+const s = figure.segment(A, B)
+//const M = new PointOnLine(s)
+s.style = '|-|'

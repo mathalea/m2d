@@ -1,4 +1,4 @@
-import { intersectionLC } from '../calculus/intersection'
+import { intersectionLCCoord } from '../calculus/intersection'
 import { distance } from '../calculus/random'
 import { Element2D } from './Element2D'
 import { Point, StringDependence } from './Point'
@@ -7,13 +7,15 @@ import { OptionsGraphiques, Segment } from './Segment'
 
 export class Circle extends Element2D {
     center: Point
+    temp: boolean
     M: Point // Point du cercle de même ordonnée que le centre et d'abscisse supérieure
     private _radius: number
-    constructor (O: Point, arg2: number | Point, { color = 'black', thickness = 1, fill = 'none' } : OptionsGraphiques = {}) {
+    constructor (O: Point, arg2: number | Point, { color = 'black', thickness = 1, fill = 'none', temp = false } : OptionsGraphiques = {}) {
       super()
       this.parentFigure = O.parentFigure
       this.center = O
-      this.parentFigure.list.push(this)
+      this.temp = temp
+      if (!this.temp) this.parentFigure.list.push(this)
 
       const xSvg = this.parentFigure.xToSx(this.center.x)
       const ySvg = this.parentFigure.yToSy(this.center.y)
@@ -21,7 +23,7 @@ export class Circle extends Element2D {
       circle.setAttribute('cx', `${xSvg}`)
       circle.setAttribute('cy', `${ySvg}`)
       this.g = circle
-      this.parentFigure.svg.appendChild(this.g)
+      if (!this.temp) this.parentFigure.svg.appendChild(this.g)
 
       this.M = new Point(this.parentFigure, 100, 100, { style: '' }) // Point temporaire qui sera placé quand on connaitra le rayon
       this.radius = (typeof arg2 === 'number') ? arg2 : this.radius = distance(O, arg2)
@@ -72,21 +74,33 @@ export class Circle extends Element2D {
 
     private changing () {
       this.M.moveTo(this.center.x + this.radius, this.center.y)
-      console.log(this.dependencies)
       for (const dependence of this.dependencies) {
         if (dependence.type === 'pointOnCircle') {
           const M = dependence.element as PointOnCircle
           // On simule un léger déplacement pour qu'il recalcule sa position sur le cercle
-          M.notifyMouseMove(M.x + 0.00001, M.y)
+          M.notifyPointerMove(M.x + 0.000001 * ((Math.random() > 0.5) ? 1 : -1), M.y)
         }
         if (dependence.type === 'intersectionLC') {
           const M = dependence.element as Point
-          const [x1, y1] = intersectionLC(dependence.L, dependence.C)
-          const [x2, y2] = intersectionLC(dependence.L, dependence.C, 2)
+          const [x1, y1] = intersectionLCCoord(dependence.L, dependence.C)
+          const [x2, y2] = intersectionLCCoord(dependence.L, dependence.C, 2)
           // On cherche le point d'intersection le plus proche de l'actuel
           if ((M.x - x1) ** 2 + (M.y - y1) ** 2 < (M.x - x2) ** 2 + (M.y - y2) ** 2) {
             M.moveTo(x1, y1)
           } else M.moveTo(x2, y2)
+        }
+        if (dependence.type === 'intersectionSC') {
+          const M = dependence.element as Point
+          const [x1, y1] = intersectionLCCoord(dependence.L, dependence.C)
+          const [x2, y2] = intersectionLCCoord(dependence.L, dependence.C, 2)
+          // On cherche le point d'intersection le plus proche de l'actuel
+          if ((M.x - x1) ** 2 + (M.y - y1) ** 2 < (M.x - x2) ** 2 + (M.y - y2) ** 2) {
+            M.moveTo(x1, y1)
+          } else M.moveTo(x2, y2)
+          const [A, B] = dependence.L.ends
+          if (M.x > Math.max(A.x, B.x) || M.x < Math.min(A.x, B.x) || M.y > Math.max(A.y, B.y) || M.y < Math.min(A.y, B.y)) {
+            M.style = ''
+          } else M.style = 'x'
         }
       }
     }

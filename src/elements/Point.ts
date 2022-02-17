@@ -4,11 +4,11 @@ import { Segment } from './Segment'
 import { Circle } from './Circle'
 import { distance } from '../calculus/random'
 import { homothetieCoord, rotationCoord, similitudeCoord } from '../calculus/transformation'
-import { intersectionLC } from '../calculus/intersection'
+import { intersectionLCCoord } from '../calculus/intersection'
 
 export type PointStyle = 'x' | 'o' | ''
-export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, dragable?: boolean | Circle | Segment, temp?: boolean }
-export type StringDependence = 'end1' | 'end2' | 'translation' | 'rotation' | 'homothetie' | 'similitude' | 'centerCircle' | 'pointOnCircle' | 'intersectionLC' | 'intersectionLL' | 'intersectionCC'
+export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, dragable?: boolean, temp?: boolean }
+export type StringDependence = 'end1' | 'end2' | 'translation' | 'rotation' | 'homothetie' | 'similitude' | 'centerCircle' | 'pointOnCircle' | 'pointOnLine' | 'pointOnSegment' | 'intersectionLC' | 'intersectionSC' | 'intersectionLL' | 'intersectionCC'
 
 export class Point extends Element2D {
   x: number
@@ -34,8 +34,12 @@ export class Point extends Element2D {
     this.dragable = dragable
     const groupSvg = document.createElementNS('http://www.w3.org/2000/svg', 'g')
     this.g = groupSvg
-    this.parentFigure.list.push(this)
-    this.style = style // Le style initialise aussi size
+    if (!this.temp) {
+      this.parentFigure.list.push(this)
+      this.style = style // Le style initialise aussi size
+    } else {
+      this.style = ''
+    }
     if (this.g.childElementCount > 0 && !this.temp) this.parentFigure.svg.appendChild(this.g)
   }
 
@@ -48,6 +52,7 @@ export class Point extends Element2D {
     this.x = x
     this.y = y
 
+    // Déplace tous les éléments qui dépendent de ce point
     for (const dependence of this.dependencies) {
       const point = dependence.element as Point
       const segment = dependence.element as Segment
@@ -83,40 +88,48 @@ export class Point extends Element2D {
     }
   }
 
-  notifyMouseMove (x: number, y: number) {
+  /**
+   * Quand le pointeur se déplace en mode drag, le point va aussi se déplacer
+   * @param x coordonnées dans notre repère
+   * @param y
+   */
+  notifyPointerMove (x: number, y: number) {
+    // Se déplace le long d'un segment
     if (this.dragable instanceof Segment) {
       const [a, b] = this.dragable.affine
       const [A, B] = this.dragable.ends
       if (x > Math.min(A.x, B.x) && x < Math.max(A.x, B.x)) {
         this.moveTo(x, a * x + b)
-      }
+      } // Sinon autour d'un cercle en prenant le point d'intersection entre le rayon entre
+      // le pointeur et le centre du cercle et le cercle
     } else if (this.dragable instanceof Circle) {
       const C = this.dragable
       const O = C.center
       const P = new Point(C.parentFigure, x, y, { temp: true })
       const L = new Segment(O, P, { temp: true })
-      const [xM, yM] = intersectionLC(L, C, (P.y > O.y) ? 1 : 2)
+      const [xM, yM] = intersectionLCCoord(L, C, (P.y > O.y) ? 1 : 2)
       this.moveTo(xM, yM)
     } else {
       this.moveTo(x, y)
     }
   }
 
+  /**
+   * Détermine la distance entre les points et le pointeur pour déterminer lequel va passer en drag
+   * @param pointerX
+   * @param pointerY
+   * @returns distance entre le point et le pointeur
+   */
   public distancePointer (pointerX: number, pointerY: number) {
     return Math.sqrt((this.x - pointerX) ** 2 + (this.y - pointerY) ** 2)
   }
 
   /**
- * Translation définie par un couple de coordonnées ou un objet possédant des paramètres x et y
- * Renvoie un nouveau point sans modifier le premier
- */
-
-  /**
    * Translation définie par un couple de coordonnées
-   * puis un booléen clone, lorsqu'il est vrai on créé un nouveau point sinon on le modifie
-   * @param arg1
-   * @param arg2
-   * @param arg3
+   * Lorsque clone est vrai on créé un nouveau point sinon on modifie this
+   * @param xt
+   * @param yt
+   * @param Options graphiques
    * @returns
    */
   translation (xt: number, yt: number, { clone = true, free = false, style = this.style, color = this.color, thickness = this.thickness, temp = false } = {}) {
@@ -154,7 +167,7 @@ export class Point extends Element2D {
  * Renvoie un nouveau point sans modifier le premier
  */
 
-  homothetie (O: Point, k: number, { clone = true, dragable = false, style = this.style, color = 'black', thickness = this.thickness, temp = false } : {clone?: boolean, dragable?: boolean | Segment | Circle, color?: string, style?: PointStyle, thickness?: number, temp?: boolean} = {}) {
+  homothetie (O: Point, k: number, { clone = true, dragable = false, style = this.style, color = 'black', thickness = this.thickness, temp = false } : {clone?: boolean, dragable?: boolean, color?: string, style?: PointStyle, thickness?: number, temp?: boolean} = {}) {
     const [x, y] = homothetieCoord(this, O, k)
     if (clone) {
       const B = new Point(this.parentFigure, x, y, { dragable, style, color, thickness })
@@ -189,20 +202,28 @@ export class Point extends Element2D {
     return this
   }
 
+  /**
+   * Permet d'indiquer au point que sa position dépend d'autres éléments
+   * @param dependency
+   */
   addDependency (dependency: { element: Element2D, type: StringDependence, x?: number, y?: number, angle?: number, k?: number, center?: Point, previous?: Point, pointOnCircle?: Point, L?: Segment, C?: Circle}) {
     this.dependencies.push(dependency)
   }
 
+  /**
+   * Fonction qui dessine la marque du point
+   * @param style 'x' | 'o' | ''
+   */
   private changeStyle (style) {
     if (style === '') {
       this.g.innerHTML = ''
     }
     if (style === 'x') {
       // Croix avec [AB] et [CD]
-      const A = this.translation(-this._size, this._size, { style: '' })
-      const B = this.translation(this._size, -this._size, { style: '' })
-      const C = this.translation(-this._size, -this._size, { style: '' })
-      const D = this.translation(this._size, this._size, { style: '' })
+      const A = this.translation(-this._size, this._size, { temp: true, style: '' })
+      const B = this.translation(this._size, -this._size, { temp: true, style: '' })
+      const C = this.translation(-this._size, -this._size, { temp: true, style: '' })
+      const D = this.translation(this._size, this._size, { temp: true, style: '' })
       const sAB = new Segment(A, B, { color: this.color, thickness: this.thickness })
       const sCD = new Segment(C, D, { color: this.color, thickness: this.thickness })
       this.group.push(sAB, sCD)

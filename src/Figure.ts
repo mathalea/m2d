@@ -1,10 +1,11 @@
-import { intersectionLC } from './calculus/intersection'
+import { intersectionLCCoord } from './calculus/intersection'
+import { distance } from './calculus/random'
 import { Circle } from './elements/Circle'
 import { Element2D } from './elements/Element2D'
 import { PointOptions, Point } from './elements/Point'
+import { PointOnLine } from './elements/PointOnLine'
 import { Polygon } from './elements/Polygon'
 import { OptionsGraphiques, Segment } from './elements/Segment'
-import { pointOnSegment } from './macros/pointOn'
 
 export class Figure {
   width: number
@@ -103,7 +104,7 @@ export class Figure {
       if (!this.isDraging) return
       const [pointerX, pointerY] = this.getPointerCoord(event)
       for (const e of this.setInDrag) {
-        e.notifyMouseMove(pointerX, pointerY)
+        e.notifyPointerMove(pointerX, pointerY)
       }
     })
 
@@ -150,8 +151,10 @@ export class Figure {
    * @returns
    */
   line (A: Point, B: Point, { add1 = 50, add2 = 50, color = 'black', thickness = 1 } = {}) {
-    const M = pointOnSegment(A, B, -add1)
-    const N = pointOnSegment(B, A, -add2)
+    const L = this.segment(A, B, { temp: true })
+    const M = new PointOnLine(L, { length: -add1, temp: true })
+    const L2 = this.segment(B, A, { temp: true })
+    const N = new PointOnLine(L2, { length: -add2, temp: true })
     M.style = ''
     N.style = ''
     return this.segment(M, N, { color, thickness })
@@ -177,12 +180,36 @@ export class Figure {
   }
 
   pointIntersectionLC (L: Segment, C: Circle, n: 1 | 2 = 1, options?: PointOptions) {
-    const [x, y] = intersectionLC(L, C, n)
-    const M = new Point(this, x, y, options)
-    M.dragable = false
-    C.addDependency({ element: M, type: 'intersectionLC', L, C })
-    L.addDependency({ element: M, type: 'intersectionLC', L, C })
-    return M
+    const [x, y] = intersectionLCCoord(L, C, n)
+    if (x !== undefined && y !== undefined) {
+      const M = new Point(this, x, y, options)
+      M.dragable = false
+      M.color = 'black'
+      C.addDependency({ element: M, type: 'intersectionLC', L, C })
+      L.addDependency({ element: M, type: 'intersectionLC', L, C })
+      return M
+    }
+  }
+
+  pointIntersectionSC (L: Segment, C: Circle, options?: PointOptions) {
+    const [x] = intersectionLCCoord(L, C, 1)
+    const [A, B] = L.ends
+    if (x !== undefined && distance(A, B) > C.radius) {
+      let M: Point
+      if (x < Math.max(A.x, B.x) && x > Math.min(A.x, B.x)) {
+        M = this.pointIntersectionLC(L, C, 1, options)
+      } else {
+        M = this.pointIntersectionLC(L, C, 2, options)
+      }
+      C.addDependency({ element: M, type: 'intersectionSC', L, C })
+      L.addDependency({ element: M, type: 'intersectionSC', L, C })
+      return M
+    }
+  }
+
+  pointOnSegmentAtD (L: Segment, d: number) {
+    const C = new Circle(L.ends[0], d, { temp: true })
+    return (this.pointIntersectionSC(L, C))
   }
 
   static translation (A: Point, x: number, y: number) {

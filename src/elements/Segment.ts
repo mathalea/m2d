@@ -1,10 +1,10 @@
 import { Point, StringDependence } from './Point'
 import { Element2D } from './Element2D'
-import { pointOnSegment } from '../macros/pointOn'
-import { intersectionLC } from '../calculus/intersection'
+import { intersectionLCCoord, intersectionSCCoord } from '../calculus/intersection'
 import { Circle } from './Circle'
 import { Vector } from './Vector'
 import { angleOriented } from '../calculus/trigonometry'
+import { PointOnLine } from './PointOnLine'
 
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
 export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number, temp?: boolean }
@@ -25,7 +25,7 @@ export class Segment extends Element2D {
       this.x2 = B.x
       this.y2 = B.y
       this.parentFigure = A.parentFigure
-      this.parentFigure.list.push(this)
+      if (!temp) this.parentFigure.list.push(this)
       this.ends = [A, B]
 
       const x1Svg = this.parentFigure.xToSx(this.x1)
@@ -67,12 +67,39 @@ export class Segment extends Element2D {
       for (const dependence of this.dependencies) {
         if (dependence.type === 'intersectionLC') {
           const M = dependence.element as Point
-          const [x1, y1] = intersectionLC(dependence.L, dependence.C)
-          const [x2, y2] = intersectionLC(dependence.L, dependence.C, 2)
+          const [x1, y1] = intersectionLCCoord(dependence.L, dependence.C)
+          const [x2, y2] = intersectionLCCoord(dependence.L, dependence.C, 2)
           // On cherche le point d'intersection le plus proche de l'actuel
           if ((M.x - x1) ** 2 + (M.y - y1) ** 2 < (M.x - x2) ** 2 + (M.y - y2) ** 2) {
             M.moveTo(x1, y1)
           } else M.moveTo(x2, y2)
+        }
+        if (dependence.type === 'intersectionSC') {
+          const M = dependence.element as Point
+          const [x1, y1] = intersectionLCCoord(dependence.L, dependence.C)
+          const [x2, y2] = intersectionLCCoord(dependence.L, dependence.C, 2)
+          // On cherche le point d'intersection le plus proche de l'actuel
+          if ((M.x - x1) ** 2 + (M.y - y1) ** 2 < (M.x - x2) ** 2 + (M.y - y2) ** 2) {
+            M.moveTo(x1, y1)
+          } else M.moveTo(x2, y2)
+          const [A, B] = dependence.L.ends
+          if (M.x > Math.max(A.x, B.x) || M.x < Math.min(A.x, B.x) || M.y > Math.max(A.y, B.y) || M.y < Math.min(A.y, B.y)) {
+            M.style = ''
+          } else M.style = 'x'
+        }
+        if (dependence.type === 'pointOnLine') {
+          const M = dependence.element as PointOnLine
+          // On simule un léger déplacement pour qu'il recalcule sa position sur le cercle
+          // M.notifyMouseMove(M.x + 0.00001 * ((Math.random() > 0.5) ? 1 : -1), M.y)
+          const [x, y] = intersectionSCCoord(this, dependence.C)
+          if (x === undefined) {
+            // ToFix cacher la croix
+            M.style = ''
+          } else {
+            M.moveTo(x, y)
+            // ToFiX cela créé 2 segments à chaque fois, il faudrait toucher le style visibility plutôt
+            if (M.style === '') M.style = 'x'
+          }
         }
       }
     }
@@ -115,11 +142,18 @@ export class Segment extends Element2D {
       return [a, b, c]
     }
 
+    /**
+     * Vecteur normal à la droite
+     */
     get normal () {
       const [a, b] = this.equation
       return new Vector(a, b)
     }
 
+    /**
+     * Vecteur directeur à la droite
+     * ToFiX Anglicisation ?
+     */
     get directeur () {
       const [a, b] = this.equation
       return new Vector(b, -a)
@@ -134,29 +168,31 @@ export class Segment extends Element2D {
 
     set style (style: string) {
       this._style = style
-      const [A, B] = this.ends
-      const h = 0.2
-      const addBorder1 = () => {
-        A.style = ''
-        const M = pointOnSegment(A, B, h, { style: '' })
-        const A1 = M.rotation(A, 90, { style: '' })
-        const A2 = M.rotation(A, -90, { style: '' })
-        const s = new Segment(A1, A2, { color: this.color, thickness: this.thickness })
-        this.group.push(s)
-      }
-      const addBorder2 = () => {
-        B.style = ''
-        const M = pointOnSegment(B, A, h, { style: '' })
-        const B1 = M.rotation(B, 90, { style: '' })
-        const B2 = M.rotation(B, -90, { style: '' })
-        const s = new Segment(B1, B2, { color: this.color, thickness: this.thickness })
-        this.group.push(s)
-      }
-      if (style === '|-') addBorder1()
-      if (style === '-|') addBorder2()
-      if (style === '|-|') {
-        addBorder1()
-        addBorder2()
-      }
+      // const [A, B] = this.ends
+      // const h = 0.2
+      // const addBorder1 = () => {
+      //   A.style = ''
+      //   const L = new Segment(A, B, { temp: true })
+      //   const M = new PointOnLine(L, { length: h, style: '' })
+      //   const A1 = M.rotation(A, 90, { style: '' })
+      //   const A2 = M.rotation(A, -90, { style: '' })
+      //   const s = new Segment(A1, A2, { color: this.color, thickness: this.thickness })
+      //   this.group.push(s)
+      // }
+      // const addBorder2 = () => {
+      //   B.style = ''
+      //   const L = new Segment(B, A, { temp: true })
+      //   const M = new PointOnLine(L, { length: h, style: '' })
+      //   const B1 = M.rotation(B, 90, { style: '' })
+      //   const B2 = M.rotation(B, -90, { style: '' })
+      //   const s = new Segment(B1, B2, { color: this.color, thickness: this.thickness })
+      //   this.group.push(s)
+      // }
+      // if (style === '|-') addBorder1()
+      // if (style === '-|') addBorder2()
+      // if (style === '|-|') {
+      //   addBorder1()
+      //   addBorder2()
+      // }
     }
 }

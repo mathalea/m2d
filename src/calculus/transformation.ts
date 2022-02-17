@@ -1,4 +1,5 @@
 import { Point } from '../elements/Point'
+import { Segment } from '../elements/Segment'
 
 /**
    *
@@ -38,5 +39,29 @@ export function similitudeCoord (A: Point, O: Point, k: number, angle: number) {
   const angleRadian = angle * Math.PI / 180
   const x = (O.x + k * (Math.cos(angleRadian) * (this.x - O.x) - Math.sin(angleRadian) * (this.y - O.y)))
   const y = (O.y + k * (Math.cos(angleRadian) * (this.y - O.y) + Math.sin(angleRadian) * (this.x - O.x)))
+  return [x, y]
+}
+
+/**
+ *
+ * @param M Point
+ * @param d Droite
+ * @returns [x, y] coordonnées du projeté orthogonale sur d
+ * @author Jean-Claude Lhote
+ */
+export function orthogonalProjectionCoord (M: Point, d: Segment) {
+  const [a, b, c] = d.equation
+  const k = 1 / (a * a + b * b)
+  let x, y
+  if (a === 0) {
+    x = M.x
+    y = -c / b
+  } else if (b === 0) {
+    y = M.y
+    x = -c / a
+  } else {
+    x = k * (b * b * M.x - a * b * M.y - a * c)
+    y = k * (-a * b * M.x + a * a * M.y + (a * a * c) / b) - c / b
+  }
   return [x, y]
 }

@@ -1,5 +1,6 @@
 import { Circle } from '../elements/Circle'
 import { Segment } from '../elements/Segment'
+import { distance } from './random'
 
 /**
  * @param {Droite} d la droite qui intecepte (ou pas le cercle)
@@ -9,7 +10,7 @@ import { Segment } from '../elements/Segment'
  * @example I = pointItersectionLC(d,c,'I',1) // I est le premier point d'intersection si il existe de la droite (d) et du cercle (c)
  * @author Jean-Claude Lhote
  */
-export function intersectionLC (D: Segment, C: Circle, n: 1 | 2 = 1) {
+export function intersectionLCCoord (D: Segment, C: Circle, n: 1 | 2 = 1) {
   const O = C.center
   const r = C.radius
   const [a, b, c] = D.equation
@@ -85,4 +86,16 @@ export function intersectionLC (D: Segment, C: Circle, n: 1 | 2 = 1) {
       return [xiPrime, yiPrime]
     }
   }
+}
+
+export function intersectionSCCoord (L: Segment, C: Circle) {
+  const [x] = intersectionLCCoord(L, C, 1)
+  const [A, B] = L.ends
+  if (x !== undefined && distance(A, B) > C.radius) {
+    if (x < Math.max(A.x, B.x) && x > Math.min(A.x, B.x)) {
+      return intersectionLCCoord(L, C, 1)
+    } else {
+      return intersectionLCCoord(L, C, 2)
+    }
+  } else return [undefined, undefined]
 }
