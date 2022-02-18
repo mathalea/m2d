@@ -5,7 +5,7 @@ import { Segment } from './Segment'
 
 export class PointOnSegment extends PointOnLine {
   constructor (L: Segment, { length, style = 'x', size = 0.15, thickness = 3, color = 'Gray', dragable = true, temp = false }: {length?: number} & PointOptions = {}) {
-    super(L)
+    super(L, { length, style, size, thickness, color, dragable, temp })
     this.length = length
     this.style = style
     this.size = size

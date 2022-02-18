@@ -1,5 +1,6 @@
-import { PointOnCircle } from './elements/PointOnCircle'
+import { PointIntersectionCC } from './elements/PointIntersectionCC'
 import { PointOnLine } from './elements/PointOnLine'
+import { PointOnSegment } from './elements/PointOnSegment'
 import { Figure } from './Figure'
 
 /**
@@ -22,5 +23,9 @@ figure.svg.style.backgroundColor = 'lightcyan'
 const A = figure.point(0, 0)
 const B = figure.point(6, 4)
 const s = figure.segment(A, B)
-//const M = new PointOnLine(s)
-s.style = '|-|'
+const C1 = figure.circle(A, 4)
+const C2 = figure.circle(B, A)
+const M = new PointIntersectionCC(C1, C2)
+const N = new PointIntersectionCC(C1, C2, 2)
+const M1 = new PointOnLine(s)
+const M2 = new PointOnSegment(s)

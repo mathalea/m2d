@@ -19,11 +19,13 @@ export class Point extends Element2D {
   parentFigure: Figure
   dragable: true | false | Circle | Segment
   temp: boolean // Pour les points qui ne servent qu'à faire des calculs
+  isHidden : boolean
   // On définit un point avec ses deux coordonnées
   constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.15, thickness = 3, color, dragable = true, temp = false }: PointOptions = {}) {
     super()
     this.x = x
     this.y = y
+    this.isHidden = false
     this.group = []
     this.parentFigure = svgContainer
     this.thickness = thickness
@@ -206,7 +208,7 @@ export class Point extends Element2D {
    * Permet d'indiquer au point que sa position dépend d'autres éléments
    * @param dependency
    */
-  addDependency (dependency: { element: Element2D, type: StringDependence, x?: number, y?: number, angle?: number, k?: number, center?: Point, previous?: Point, pointOnCircle?: Point, L?: Segment, C?: Circle}) {
+  addDependency (dependency: { element: Element2D, type: StringDependence, x?: number, y?: number, angle?: number, k?: number, center?: Point, previous?: Point, pointOnCircle?: Point, L?: Segment, C?: Circle, C2?: Circle, n?: 1 | 2}) {
     this.dependencies.push(dependency)
   }
 
@@ -241,6 +243,18 @@ export class Point extends Element2D {
       C.fill = this.color
       C.thickness = this.thickness
       this.g.appendChild(C.g)
+    }
+  }
+
+  hide () {
+    for (const segment of this.group) {
+      segment.g.setAttribute('visibility', 'hidden')
+    }
+  }
+
+  show () {
+    for (const segment of this.group) {
+      segment.g.setAttribute('visibility', 'visible')
     }
   }
 

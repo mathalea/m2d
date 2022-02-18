@@ -14,7 +14,7 @@ export class Element2D {
   // Un élément de géométrie peut être composé de plusieurs autres éléments de géométrie (plusieurs segments pour marquer un point ou coder un angle par exemple)
   group: Element2D[]
   g: SVGElement
-  dependencies: {element: Element2D, type: string, x?: number, y?: number, center?: Point, angle?: number, previous?: Point, pointOnCircle?: Point, k?: number, L?: Segment, C?: Circle}[]
+  dependencies: {element: Element2D, type: string, x?: number, y?: number, center?: Point, angle?: number, previous?: Point, pointOnCircle?: Point, k?: number, L?: Segment, C?: Circle, C2?: Circle, n?: 1 | 2}[]
   private _color: string
   private _fill: string
   private _thickness: number

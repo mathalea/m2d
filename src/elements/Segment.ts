@@ -104,7 +104,7 @@ export class Segment extends Element2D {
       }
     }
 
-    addDependency (dependency: { element: Element2D, type: StringDependence, x?: number, y?: number, angle?: number, k?: number, center?: Point, previous?: Point, pointOnCircle?: Point, L?: Segment, C?: Circle}) {
+    addDependency (dependency: { element: Element2D, type: StringDependence, x?: number, y?: number, angle?: number, k?: number, center?: Point, previous?: Point, pointOnCircle?: Point, L?: Segment, C?: Circle, C2?: Circle, n?: 1 | 2}) {
       this.dependencies.push(dependency)
     }
 

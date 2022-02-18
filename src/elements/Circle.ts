@@ -1,4 +1,4 @@
-import { intersectionLCCoord } from '../calculus/intersection'
+import { intersectionCCCoord, intersectionLCCoord } from '../calculus/intersection'
 import { distance } from '../calculus/random'
 import { Element2D } from './Element2D'
 import { Point, StringDependence } from './Point'
@@ -38,7 +38,7 @@ export class Circle extends Element2D {
       } else O.addDependency({ element: this, type: 'centerCircle', pointOnCircle: null })
     }
 
-    addDependency (dependency: { element: Element2D, type: StringDependence, x?: number, y?: number, angle?: number, k?: number, center?: Point, previous?: Point, pointOnCircle?: Point, L?: Segment, C?: Circle}) {
+    addDependency (dependency: { element: Element2D, type: StringDependence, x?: number, y?: number, angle?: number, k?: number, center?: Point, previous?: Point, pointOnCircle?: Point, L?: Segment, C?: Circle, C2?: Circle, n?: 1 | 2}) {
       this.dependencies.push(dependency)
     }
 
@@ -101,6 +101,17 @@ export class Circle extends Element2D {
           if (M.x > Math.max(A.x, B.x) || M.x < Math.min(A.x, B.x) || M.y > Math.max(A.y, B.y) || M.y < Math.min(A.y, B.y)) {
             M.style = ''
           } else M.style = 'x'
+        }
+        if (dependence.type === 'intersectionCC') {
+          const M = dependence.element as Point
+          const [x, y] = intersectionCCCoord(dependence.C, dependence.C2, dependence.n)
+          if (x) {
+            if (M.x === undefined) M.show()
+            M.moveTo(x, y)
+          } else {
+            M.hide()
+            ;[M.x, M.y] = [x, y]
+          }
         }
       }
     }

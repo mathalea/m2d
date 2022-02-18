@@ -99,3 +99,53 @@ export function intersectionSCCoord (L: Segment, C: Circle) {
     }
   } else return [undefined, undefined]
 }
+
+/**
+ * M = pointIntersectionCC(c1,c2,'M') // M est le point d'intersection le plus haut des cercles c1 et c2
+ * M = pointIntersectionCC(c1,c2,'M',2) // M est le point d'intersection le plus bas des cercles c1 et c2
+ * La fonction ne renvoie rien si les cercles n'ont pas de points d'intersection
+ * @author Rémi Angot
+ * @Source https://stackoverflow.com/questions/12219802/a-javascript-function-that-returns-the-x-y-points-of-intersection-between-two-ci
+ */
+export function intersectionCCCoord (C1: Circle, C2: Circle, n: 1 | 2 = 1) {
+  const O1 = C1.center
+  const O2 = C2.center
+  const r0 = C1.radius
+  const r1 = C2.radius
+  const x0 = O1.x
+  const x1 = O2.x
+  const y0 = O1.y
+  const y1 = O2.y
+  const dx = x1 - x0
+  const dy = y1 - y0
+  const d = Math.sqrt(dy * dy + dx * dx)
+  if (d > r0 + r1) {
+    return [undefined, undefined]
+  }
+  if (d < Math.abs(r0 - r1)) {
+    return [undefined, undefined]
+  }
+  const a = (r0 * r0 - r1 * r1 + d * d) / (2.0 * d)
+  const x2 = x0 + (dx * a) / d
+  const y2 = y0 + (dy * a) / d
+  const h = Math.sqrt(r0 * r0 - a * a)
+  const rx = -dy * (h / d)
+  const ry = dx * (h / d)
+  const xi = x2 + rx
+  const xiPrime = x2 - rx
+  const yi = y2 + ry
+  const yiPrime = y2 - ry
+  if (n === 1) {
+    if (yiPrime > yi) {
+      return [xiPrime, yiPrime]
+    } else {
+      return [xi, yi]
+    }
+  } else {
+    if (yiPrime > yi) {
+      return [xi, yi]
+    } else {
+      return [xiPrime, yiPrime]
+    }
+  }
+}
