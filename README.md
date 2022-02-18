@@ -12,9 +12,9 @@ MathALEA 2D doit permettre de générer toutes les figures de géométrie utiles
 
 ### Principe général
 
-On créé un objet `figure` instance de la classe `Figure` qui stockera toutes les information sur le container SVG et les éléments de ce SVG.
+On créé un objet `figure` instance de la classe `Figure` qui stockera toutes les information sur le container SVG (width, height, xMin, yMin...) et les éléments de ce SVG (sauvegardés dans list pour ceux qui ont besoin d'un tracé). `figure` a notamment 2 propriétés `figure.svg` et `figure.latex` qui permettent de récupérer le code SVG ou TikZ de la figure.
 
-On créé un objet graphique avec `figure.element(...params, ?config)` qui renvoie un objet d'une sous classe de `Element2D` qui a pour paramètre `this.g` qui sera un groupe SVG que l'on pourra insérer dans le DOM
+On créé un objet graphique avec `figure.element(...params, ?config)` qui renvoie un objet d'une sous classe de `Element2D` qui a un paramètre `g` qui sera un groupe SVG ou un simple élément que l'on pourra insérer dans le DOM
 
 
 ```
@@ -36,8 +36,12 @@ Les points et les cercles ont :
 - fill : pour colorier
 
 
-ToDO : 
+ToDo : 
 - mark : pour ajouter un codage
+- pointilles
+- label des points avec un positionnement
+- choix du point à déplacer lorsque le pointeur est à proximité 
+- modifier les actions du clic (au lieu du drag-n-drop on pourrait changer la couleur et l'épaisseur des éléments cliqués)
 
 
 ```
@@ -57,7 +61,7 @@ dependencies: {element: Element2D, type: string}[]
 
 Chaque objet a la liste des autres objets qui dépendent de lui. Par exemple si le point est l'extrémité d'un segment ou si un point est le centre d'un cercle.
 
-À la création d'un segment, on utilise `notifyDependence(A, 'end1)` pour prévenir A que c'est la première extrémité d'un segment et qu'il faudra la modifier si A bouge.
+À la création d'un segment, on utilise `addDependency(A, 'end1)` pour prévenir A que c'est la première extrémité d'un segment et qu'il faudra la modifier si A bouge.
 
 
 
