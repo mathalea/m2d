@@ -4,7 +4,6 @@ import { Segment } from './Segment'
 import { Circle } from './Circle'
 import { distance } from '../calculus/random'
 import { homothetieCoord, rotationCoord, similitudeCoord } from '../calculus/transformation'
-import { intersectionLCCoord } from '../calculus/intersection'
 
 export type PointStyle = 'x' | 'o' | ''
 export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, dragable?: boolean, temp?: boolean }
@@ -84,6 +83,8 @@ export class Point extends Element2D {
         circle.moveCenter(this.x, this.y)
         if (dependence.pointOnCircle) circle.radius = (distance(dependence.pointOnCircle, this))
       }
+      // ToFix ici c'est point sur le cercle dans le cercle défini par un centre et un point
+      // Il reste à faire le point qui se balade sur le cercle et dont ne dépend pas le cercle
       if (dependence.type === 'pointOnCircle') {
         circle.radius = (distance(dependence.center, this))
       }
@@ -96,24 +97,7 @@ export class Point extends Element2D {
    * @param y
    */
   notifyPointerMove (x: number, y: number) {
-    // Se déplace le long d'un segment
-    if (this.dragable instanceof Segment) {
-      const [a, b] = this.dragable.affine
-      const [A, B] = this.dragable.ends
-      if (x > Math.min(A.x, B.x) && x < Math.max(A.x, B.x)) {
-        this.moveTo(x, a * x + b)
-      } // Sinon autour d'un cercle en prenant le point d'intersection entre le rayon entre
-      // le pointeur et le centre du cercle et le cercle
-    } else if (this.dragable instanceof Circle) {
-      const C = this.dragable
-      const O = C.center
-      const P = new Point(C.parentFigure, x, y, { temp: true })
-      const L = new Segment(O, P, { temp: true })
-      const [xM, yM] = intersectionLCCoord(L, C, (P.y > O.y) ? 1 : 2)
-      this.moveTo(xM, yM)
-    } else {
-      this.moveTo(x, y)
-    }
+    this.moveTo(x, y)
   }
 
   /**
@@ -134,7 +118,7 @@ export class Point extends Element2D {
    * @param Options graphiques
    * @returns
    */
-  translation (xt: number, yt: number, { clone = true, free = false, style = this.style, color = this.color, thickness = this.thickness, temp = false } = {}) {
+  translation (xt: number, yt: number, { clone = true, free = false, style = this.style, color = 'black', thickness = this.thickness, temp = false } = {}) {
     if (clone) {
       const B = new Point(this.parentFigure, this.x + xt, this.y + yt, { dragable: free, style, color, thickness, temp })
       if (!free) this.addDependency({ element: B, type: 'translation', x: xt, y: yt })
@@ -148,7 +132,7 @@ export class Point extends Element2D {
  * Rotation définie par un centre et un angle en degrés
  * Renvoie un nouveau point sans modifier le premier avec clone = true ou déplace le point avec clone = false
  */
-  rotation (O: Point, angle: number, { clone = true, free = false, color = O.color, style = O.style, thickness = O.thickness, temp = false } = {}) {
+  rotation (O: Point, angle: number, { clone = true, free = false, color = 'black', style = O.style, thickness = O.thickness, temp = false } = {}) {
     const [x, y] = rotationCoord(this, O, angle)
     if (clone) {
       const B = new Point(this.parentFigure, x, y, { dragable: free, color, style, thickness, temp })
@@ -188,10 +172,10 @@ export class Point extends Element2D {
  * Similitude définie par un centre, un rapport et un angle en degré
  * Renvoie un nouveau point sans modifier le premier
  */
-  similitude (O: Point, k: number, angle: number, { clone = true, free = false, temp = false } = {}) {
+  similitude (O: Point, k: number, angle: number, { clone = true, free = false, temp = false, color = 'black' } = {}) {
     const [x, y] = similitudeCoord(this, O, k, angle)
     if (clone) {
-      const B = new Point(this.parentFigure, x, y, { dragable: free, temp })
+      const B = new Point(this.parentFigure, x, y, { dragable: free, temp, color })
       if (!free) {
         // Si le centre est déplacé, on déplace B
         O.addDependency({ element: B, type: 'similitude', k, previous: this, center: O, angle })

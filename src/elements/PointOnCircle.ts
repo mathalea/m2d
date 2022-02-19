@@ -10,8 +10,10 @@ export class PointOnCircle extends Point {
     const angleRadian = angle * Math.PI / 180
     const x = C.center.x + C.radius * Math.cos(angleRadian)
     const y = C.center.y + C.radius * Math.sin(angleRadian)
-    super(C.parentFigure, x, y)
-    this.circle.addDependency({ element: this, type: 'pointOnCircle' })
+    super(C.parentFigure, x, y, { dragable, style, color, size, thickness, temp })
+    this.circle = C
+    // ToFix nouvelle dépendance à créer
+    // this.circle.addDependency({ element: this, type: 'pointOnCircle' })
   }
 
   /**
