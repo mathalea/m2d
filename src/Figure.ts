@@ -112,8 +112,12 @@ export class Figure {
       const [pointerX, pointerY] = this.getPointerCoord(event)
       for (const e of this.list) {
         if (e.dragable && e instanceof Point && e.distancePointer(pointerX, pointerY) * this.pixelsPerUnit < 15) {
-          this.setInDrag.add(e)
-          this.isDraging = true
+          // ToFix est-ce qu'on garde le fait de pouvoir déplacer plusieurs points en même temps
+          // Un set de taille 1 est inutile autant avoir un unique élément
+          if (this.setInDrag.size < 1) {
+            this.setInDrag.add(e)
+            this.isDraging = true
+          }
         }
       }
     }
