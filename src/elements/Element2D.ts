@@ -1,20 +1,17 @@
 import { Figure } from '../Figure'
-import { Circle } from './Circle'
-import { Point } from './Point'
-import { Segment } from './Segment'
 
 export type optionsElement2D = { color?: string, thickness?: number, fill?: string}
 
 /**
  * Classe parente de tous les éléments de géométrie
  */
-export class Element2D {
+export abstract class Element2D {
   dragable: any
   parentFigure: Figure
   // Un élément de géométrie peut être composé de plusieurs autres éléments de géométrie (plusieurs segments pour marquer un point ou coder un angle par exemple)
   group: Element2D[]
   g: SVGElement
-  dependencies: {element: Element2D, type: string, x?: number, y?: number, center?: Point, angle?: number, previous?: Point, pointOnCircle?: Point, k?: number, L?: Segment, C?: Circle, C2?: Circle, n?: 1 | 2}[]
+  dependencies: Element2D[]
   private _color: string
   private _fill: string
   private _thickness: number
@@ -23,6 +20,22 @@ export class Element2D {
     this.dependencies = []
     this.g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
   }
+
+  /**
+   * Permet d'indiquer au point que sa position dépend d'autres éléments
+   * @param dependency
+   */
+  addDependency (dependency: Element2D) {
+    this.dependencies.push(dependency)
+  }
+
+  notifyAllDependencies () {
+    for (const element of this.dependencies) {
+      element.update()
+    }
+  }
+
+  abstract update ():void
 
   get color () {
     return this._color

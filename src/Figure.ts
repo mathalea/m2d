@@ -189,8 +189,8 @@ export class Figure {
       const M = new Point(this, x, y, options)
       M.dragable = false
       M.color = 'black'
-      C.addDependency({ element: M, type: 'intersectionLC', L, C })
-      L.addDependency({ element: M, type: 'intersectionLC', L, C })
+      C.addDependency(M)
+      L.addDependency(M)
       return M
     }
   }
@@ -205,8 +205,8 @@ export class Figure {
       } else {
         M = this.pointIntersectionLC(L, C, 2, options)
       }
-      C.addDependency({ element: M, type: 'intersectionSC', L, C })
-      L.addDependency({ element: M, type: 'intersectionSC', L, C })
+      C.addDependency(M)
+      L.addDependency(M)
       return M
     }
   }
@@ -216,9 +216,9 @@ export class Figure {
     return (this.pointIntersectionSC(L, C))
   }
 
-  static translation (A: Point, x: number, y: number) {
-    return A.translation(x, y)
-  }
+  // static translation (A: Point, x: number, y: number) {
+  //   return A.translation(x, y)
+  // }
 
   set tex (txt: string) {
   }

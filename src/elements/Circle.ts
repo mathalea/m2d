@@ -1,18 +1,18 @@
-import { intersectionCCCoord, intersectionLCCoord } from '../calculus/intersection'
 import { distance } from '../calculus/random'
 import { Element2D } from './Element2D'
-import { Point, StringDependence } from './Point'
-import { PointOnCircle } from './PointOnCircle'
-import { OptionsGraphiques, Segment } from './Segment'
+import { Point } from './Point'
+import { OptionsGraphiques } from './Segment'
 
 export class Circle extends Element2D {
     center: Point
     temp: boolean
-    M: Point // Point du cercle de même ordonnée que le centre et d'abscisse supérieure
+    M: Point // Point de même ordonnée que le centre et d'abscisse supérieure
+    pointOnCircle: Point | null // Point qui définit le cercle
     private _radius: number
     constructor (O: Point, arg2: number | Point, { color = 'black', thickness = 1, fill = 'none', temp = false } : OptionsGraphiques = {}) {
       super()
       this.parentFigure = O.parentFigure
+      this.pointOnCircle = null
       this.center = O
       this.temp = temp
       if (!this.temp) this.parentFigure.list.push(this)
@@ -33,13 +33,10 @@ export class Circle extends Element2D {
       this.thickness = thickness
 
       if (arg2 instanceof Point) {
-        O.addDependency({ element: this, type: 'centerCircle', pointOnCircle: arg2 })
-        arg2.addDependency({ element: this, type: 'pointOnCircle', center: O })
-      } else O.addDependency({ element: this, type: 'centerCircle', pointOnCircle: null })
-    }
-
-    addDependency (dependency: { element: Element2D, type: StringDependence, x?: number, y?: number, angle?: number, k?: number, center?: Point, previous?: Point, pointOnCircle?: Point, L?: Segment, C?: Circle, C2?: Circle, n?: 1 | 2}) {
-      this.dependencies.push(dependency)
+        this.pointOnCircle = arg2
+        O.addDependency(this)
+        arg2.addDependency(this)
+      } else O.addDependency(this)
     }
 
     /**
@@ -72,48 +69,16 @@ export class Circle extends Element2D {
       this.changing()
     }
 
+    update (): void {
+      this.moveCenter(this.center.x, this.center.y)
+      if (this.pointOnCircle) {
+        this.radius = distance(this.center, this.pointOnCircle)
+      }
+    }
+
     private changing () {
       this.M.moveTo(this.center.x + this.radius, this.center.y)
-      for (const dependence of this.dependencies) {
-        if (dependence.type === 'pointOnCircle') {
-          const M = dependence.element as PointOnCircle
-          // On simule un léger déplacement pour qu'il recalcule sa position sur le cercle
-          M.notifyPointerMove(M.x + 0.000001 * ((Math.random() > 0.5) ? 1 : -1), M.y)
-        }
-        if (dependence.type === 'intersectionLC') {
-          const M = dependence.element as Point
-          const [x1, y1] = intersectionLCCoord(dependence.L, dependence.C)
-          const [x2, y2] = intersectionLCCoord(dependence.L, dependence.C, 2)
-          // On cherche le point d'intersection le plus proche de l'actuel
-          if ((M.x - x1) ** 2 + (M.y - y1) ** 2 < (M.x - x2) ** 2 + (M.y - y2) ** 2) {
-            M.moveTo(x1, y1)
-          } else M.moveTo(x2, y2)
-        }
-        if (dependence.type === 'intersectionSC') {
-          const M = dependence.element as Point
-          const [x1, y1] = intersectionLCCoord(dependence.L, dependence.C)
-          const [x2, y2] = intersectionLCCoord(dependence.L, dependence.C, 2)
-          // On cherche le point d'intersection le plus proche de l'actuel
-          if ((M.x - x1) ** 2 + (M.y - y1) ** 2 < (M.x - x2) ** 2 + (M.y - y2) ** 2) {
-            M.moveTo(x1, y1)
-          } else M.moveTo(x2, y2)
-          const [A, B] = dependence.L.ends
-          if (M.x > Math.max(A.x, B.x) || M.x < Math.min(A.x, B.x) || M.y > Math.max(A.y, B.y) || M.y < Math.min(A.y, B.y)) {
-            M.style = ''
-          } else M.style = 'x'
-        }
-        if (dependence.type === 'intersectionCC') {
-          const M = dependence.element as Point
-          const [x, y] = intersectionCCCoord(dependence.C, dependence.C2, dependence.n)
-          if (x) {
-            if (M.x === undefined) M.show()
-            M.moveTo(x, y)
-          } else {
-            M.hide()
-            ;[M.x, M.y] = [x, y]
-          }
-        }
-      }
+      this.notifyAllDependencies()
     }
 
     /**
