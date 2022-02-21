@@ -28,7 +28,6 @@ export class PointOnLine extends Point {
     const Llength = distance(L.ends[0], L.ends[1])
     this.length = k * Llength
     this.moveTo((1 - k) * L.ends[0].x + k * L.ends[1].x, (1 - k) * L.ends[0].y + k * L.ends[1].y)
-    this.notifyAllDependencies()
   }
 
   moveTo (x: number, y:number) {
