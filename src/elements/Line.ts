@@ -1,13 +1,16 @@
 import { Point } from './Point'
-import { Segment } from './Segment'
+import { PointOnLine } from './PointOnLine'
+import { Segment, SegmentStyle } from './Segment'
 
+/**
+ * Le segment [AB] est prolongé de add1 unités du côté de A et de add2 unités du côté de B
+ */
 export class Line extends Segment {
-  constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '' }: OptionsGraphiques = {}) {
-    super(A, B, { color, thickness })
-    const m = this.parentFigure.pointOnSegment(A, B, -50)
-    const n = this.parentFigure.pointOnSegment(B, A, -50)
-    const s = new Segment(m, n)
-    // this.g = s.g
-    // this.parentFigure.svg.appendChild(this.g)
+  constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', add1 = 50, add2 = 50 }: {color?: string, thickness?: number, style?: SegmentStyle, add1?: number, add2?: number} = {}) {
+    const sAB = new Segment(A, B, { temp: true })
+    const m = new PointOnLine(sAB, { length: -add1, temp: true })
+    const sBA = new Segment(B, A, { temp: true })
+    const n = new PointOnLine(sBA, { length: -add2, temp: true })
+    super(m, n, { color, thickness })
   }
 }

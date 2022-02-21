@@ -1,3 +1,4 @@
+import { Line } from './elements/Line'
 import { PointByRotation } from './elements/PointByRotation'
 import { PointBySimilitude } from './elements/PointBySimilitude'
 import { Figure } from './Figure'
@@ -21,10 +22,4 @@ figure.svg.style.backgroundColor = 'lightcyan'
 
 const A = figure.point(0, 0)
 const B = figure.point(4, 1)
-const C = new PointByRotation(A, B, -30)
-figure.circle(C, A)
-figure.segment(A, B)
-figure.segment(A, C)
-figure.segment(B, C)
-const A2 = new PointBySimilitude(A, B, 2, 30)
-const C2 = new PointBySimilitude(C, B, 2, 30)
+const L = new Line(A,B, {add1: 0})
