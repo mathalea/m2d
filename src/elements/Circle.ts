@@ -72,6 +72,7 @@ export class Circle extends Element2D {
       if (this.pointOnCircle) {
         this.radius = distance(this.center, this.pointOnCircle)
       }
+      this.notifyAllDependencies()
     }
 
     /**
