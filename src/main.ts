@@ -1,7 +1,9 @@
+import { Circle } from './elements/Circle'
 import { Line } from './elements/Line'
 import { PointByReflectionOverLine } from './elements/PointByReflectionOverLine'
 import { PointByRotation } from './elements/PointByRotation'
 import { PointBySimilitude } from './elements/PointBySimilitude'
+import { PointIntersectionLC } from './elements/PointIntersectionLC'
 import { Segment } from './elements/Segment'
 import { Figure } from './Figure'
 
@@ -26,6 +28,5 @@ const A = figure.point(0, 0)
 const B = figure.point(4, 1)
 const L = new Segment(A, B)
 const M = figure.point(2, 6)
-const M2 = new PointByReflectionOverLine(M, L)
-const s = new Segment(M, M2)
-L.style = '|-'
+const C = new Circle(M, 3)
+const N = new PointIntersectionLC(L, C)
