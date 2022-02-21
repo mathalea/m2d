@@ -61,6 +61,7 @@ export class Segment extends Element2D {
         this.g.setAttribute(`y${n}`, this.parentFigure.yToSy(y).toString())
         this[`x${n}`] = x
         this[`y${n}`] = y
+        this.notifyAllDependencies()
         // this.changing()
       }
     }
