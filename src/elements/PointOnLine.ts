@@ -1,23 +1,46 @@
-import { intersectionSCCoord } from '../calculus/intersection'
 import { distance, randint } from '../calculus/random'
 import { orthogonalProjectionCoord } from '../calculus/transformation'
-import { Circle } from './Circle'
+import { Cross } from './cross'
 import { Point, PointOptions } from './Point'
 import { Segment } from './Segment'
 
 export class PointOnLine extends Point {
   line : Segment
-  length: number
+  length: number // valeur signée (mesure algébrique de ends[0] à M)
+  k: number
   constructor (L: Segment, { length, style = 'x', size = 0.15, thickness = 3, color = 'Gray', dragable = true, temp = false }: {length?: number} & PointOptions = {}) {
     const Llength = distance(L.ends[0], L.ends[1])
     length = (length === undefined) ? randint(15, 85) * Llength / 100 : length
-    const C = new Circle(L.ends[0], length, { temp: true })
-    const [Mx, My] = intersectionSCCoord(L, C)
+    const k = length / Llength
+    // const C = new Circle(L.ends[0], length, { temp: true })
+    const [Mx, My] = [(1 - k) * L.ends[0].x + k * L.ends[1].x, (1 - k) * L.ends[0].y + k * L.ends[1].y]// intersectionSCCoord(L, C)
     super(L.parentFigure, Mx, My, { style, size, thickness, color, dragable, temp })
     this.x = Mx
     this.y = My
     this.line = L
-    this.line.addDependency({ element: this, type: 'pointOnLine', C: C })
+    this.k = k
+    this.line.addDependency(this)
+  }
+
+  update () {
+    const L = this.line
+    const k = this.k
+    const Llength = distance(L.ends[0], L.ends[1])
+    this.length = k * Llength
+    this.moveTo((1 - k) * L.ends[0].x + k * L.ends[1].x, (1 - k) * L.ends[0].y + k * L.ends[1].y)
+    this.notifyAllDependencies()
+  }
+
+  moveTo (x: number, y:number) {
+    ;[this.x, this.y] = [x, y]
+    if (this.mark instanceof Cross) {
+      ;[this.mark.x, this.mark.y] = [x, y]
+      this.mark.update()
+    }
+    const L = this.line
+    this.k = (L.ends[1].x - L.ends[0].x) === 0 ? (L.ends[1].y - L.ends[0].y) === 0 ? 0 : (this.y - L.ends[0].y) / (L.ends[1].y - L.ends[0].y) : (this.x - L.ends[0].x) / (L.ends[1].x - L.ends[0].x)
+    this.length = this.k * distance(L.ends[0], L.ends[1])
+    this.notifyAllDependencies()
   }
 
   /**

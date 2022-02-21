@@ -1,5 +1,6 @@
 import { PointByTranslation } from './elements/PointByTranslation'
 import { PointIntersectionCC } from './elements/PointIntersectionCC'
+import { PointOnLine } from './elements/PointOnLine'
 import { Figure } from './Figure'
 
 /**
@@ -20,7 +21,7 @@ figure.svg.style.backgroundColor = 'lightcyan'
 // On créé des points à partir de leur coordonnées
 
 const A = figure.point(0, 0)
-const B = figure.point(4,1)
+const B = figure.point(4, 1)
 const s = figure.segment(A, B)
 s.color = 'blue'
 s.thickness = 4
@@ -28,3 +29,4 @@ const C1 = figure.circle(A, 4)
 const C2 = figure.circle(B, 6)
 const M = new PointIntersectionCC(C1, C2)
 const M2 = new PointIntersectionCC(C1, C2, 2)
+const M3 = new PointOnLine(s, { length: 2 })
