@@ -4,6 +4,8 @@ import { PointByReflectionOverLine } from './elements/PointByReflectionOverLine'
 import { PointByRotation } from './elements/PointByRotation'
 import { PointBySimilitude } from './elements/PointBySimilitude'
 import { PointIntersectionLC } from './elements/PointIntersectionLC'
+import { PointOnCircle } from './elements/PointOnCircle'
+import { PointOnLine } from './elements/PointOnLine'
 import { Segment } from './elements/Segment'
 import { Figure } from './Figure'
 
@@ -27,6 +29,7 @@ figure.svg.style.backgroundColor = 'lightcyan'
 const A = figure.point(0, 0)
 const B = figure.point(4, 1)
 const L = new Segment(A, B)
-const M = figure.point(2, 6)
+const M = figure.point(2, 3)
 const C = new Circle(M, 3)
-const N = new PointIntersectionLC(L, C)
+// const N = new PointIntersectionLC(L, C)
+const P = new PointOnLine(L, { length: 2 })
