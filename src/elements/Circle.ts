@@ -27,6 +27,8 @@ export class Circle extends Element2D {
       this.M = (typeof arg2 !== 'number') ? arg2 : new Point(this.parentFigure, 100, 100, { style: '' }) // Point temporaire qui sera placé quand on connaitra le rayon
       this.radius = (typeof arg2 === 'number') ? arg2 : this.radius = distance(O, arg2)
       if (typeof arg2 === 'number') this.M.moveTo(O.x + this.radius, O.y)
+      // ToFiX quand arg2 est un point, il n'y a pas de raison de changer son style
+      // Il faudrait différencier quand on ajoute un M et quand on a un point qui définit le cercle
       this.M.style = ''
       this.fill = fill
       this.color = color
@@ -56,7 +58,6 @@ export class Circle extends Element2D {
     moveCenter (x: number, y: number) {
       this.g.setAttribute('cx', `${this.parentFigure.xToSx(x)}`)
       this.g.setAttribute('cy', `${this.parentFigure.yToSy(y)}`)
-      this.changing()
     }
 
     get radius () {
@@ -66,7 +67,6 @@ export class Circle extends Element2D {
     set radius (radius: number) {
       this._radius = radius
       this.g.setAttribute('r', `${this._radius * this.parentFigure.pixelsPerUnit}`)
-      this.changing()
     }
 
     update (): void {
@@ -74,11 +74,6 @@ export class Circle extends Element2D {
       if (this.pointOnCircle) {
         this.radius = distance(this.center, this.pointOnCircle)
       }
-    }
-
-    private changing () {
-      this.M.moveTo(this.center.x + this.radius, this.center.y)
-      this.notifyAllDependencies()
     }
 
     /**
