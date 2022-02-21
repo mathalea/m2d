@@ -1,6 +1,8 @@
 import { Line } from './elements/Line'
+import { PointByReflectionOverLine } from './elements/PointByReflectionOverLine'
 import { PointByRotation } from './elements/PointByRotation'
 import { PointBySimilitude } from './elements/PointBySimilitude'
+import { Segment } from './elements/Segment'
 import { Figure } from './Figure'
 
 /**
@@ -22,4 +24,7 @@ figure.svg.style.backgroundColor = 'lightcyan'
 
 const A = figure.point(0, 0)
 const B = figure.point(4, 1)
-const L = new Line(A,B, {add1: 0})
+const L = new Line(A, B)
+const M = figure.point(2, 6)
+const M2 = new PointByReflectionOverLine(M, L)
+const s = new Segment(M, M2)
