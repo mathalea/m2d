@@ -24,7 +24,8 @@ figure.svg.style.backgroundColor = 'lightcyan'
 
 const A = figure.point(0, 0)
 const B = figure.point(4, 1)
-const L = new Line(A, B)
+const L = new Segment(A, B)
 const M = figure.point(2, 6)
 const M2 = new PointByReflectionOverLine(M, L)
 const s = new Segment(M, M2)
+L.style = '|-'
