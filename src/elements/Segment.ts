@@ -178,7 +178,7 @@ export class Segment extends Element2D {
       const addBorder1 = () => {
         A.style = ''
         const L = new Segment(A, B, { temp: true })
-        const M = new PointOnLine (L, { length: h, style: '' })
+        const M = new PointOnLine(L, { length: h, style: '' })
         const A1 = new PointByRotation(M, A, 90, { temp: true, style: '' })
         const A2 = new PointByRotation(M, A, -90, { style: '' })
         const s = new Segment(A1, A2, { color: this.color, thickness: this.thickness })

@@ -74,11 +74,6 @@ export class Circle extends Element2D {
       }
     }
 
-    /*  private changing () {
-      this.M.moveTo(this.center.x + this.radius, this.center.y)
-      this.notifyAllDependencies()
-    }
-*/
     /**
      * Rotation définie par un centre et un angle en degrés
      * Renvoie un nouveau cercle sans modifier le premier
