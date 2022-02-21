@@ -1,6 +1,5 @@
-import { PointByTranslation } from './elements/PointByTranslation'
-import { PointIntersectionCC } from './elements/PointIntersectionCC'
-import { PointOnLine } from './elements/PointOnLine'
+import { PointByRotation } from './elements/PointByRotation'
+import { PointBySimilitude } from './elements/PointBySimilitude'
 import { Figure } from './Figure'
 
 /**
@@ -22,11 +21,10 @@ figure.svg.style.backgroundColor = 'lightcyan'
 
 const A = figure.point(0, 0)
 const B = figure.point(4, 1)
-const s = figure.segment(A, B)
-s.color = 'blue'
-s.thickness = 4
-const C1 = figure.circle(A, 4)
-const C2 = figure.circle(B, 6)
-const M = new PointIntersectionCC(C1, C2)
-const M2 = new PointIntersectionCC(C1, C2, 2)
-const M3 = new PointOnLine(s, { length: 2 })
+const C = new PointByRotation(A, B, -30)
+figure.circle(C, A)
+figure.segment(A, B)
+figure.segment(A, C)
+figure.segment(B, C)
+const A2 = new PointBySimilitude(A, B, 2, 30)
+const C2 = new PointBySimilitude(C, B, 2, 30)
