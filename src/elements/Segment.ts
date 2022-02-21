@@ -2,6 +2,8 @@ import { Point } from './Point'
 import { Element2D } from './Element2D'
 import { Vector } from './Vector'
 import { angleOriented } from '../calculus/trigonometry'
+import { PointOnLine } from './PointOnLine'
+import { PointByRotation } from './PointByRotation'
 
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
 export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number, temp?: boolean }
@@ -171,31 +173,31 @@ export class Segment extends Element2D {
 
     set style (style: string) {
       this._style = style
-      // const [A, B] = this.ends
-      // const h = 0.2
-      // const addBorder1 = () => {
-      //   A.style = ''
-      //   const L = new Segment(A, B, { temp: true })
-      //   const M = new PointOnLine(L, { length: h, style: '' })
-      //   const A1 = M.rotation(A, 90, { style: '' })
-      //   const A2 = M.rotation(A, -90, { style: '' })
-      //   const s = new Segment(A1, A2, { color: this.color, thickness: this.thickness })
-      //   this.group.push(s)
-      // }
-      // const addBorder2 = () => {
-      //   B.style = ''
-      //   const L = new Segment(B, A, { temp: true })
-      //   const M = new PointOnLine(L, { length: h, style: '' })
-      //   const B1 = M.rotation(B, 90, { style: '' })
-      //   const B2 = M.rotation(B, -90, { style: '' })
-      //   const s = new Segment(B1, B2, { color: this.color, thickness: this.thickness })
-      //   this.group.push(s)
-      // }
-      // if (style === '|-') addBorder1()
-      // if (style === '-|') addBorder2()
-      // if (style === '|-|') {
-      //   addBorder1()
-      //   addBorder2()
-      // }
+      const [A, B] = this.ends
+      const h = 0.2
+      const addBorder1 = () => {
+        A.style = ''
+        const L = new Segment(A, B, { temp: true })
+        const M = new PointOnLine (L, { length: h, style: '' })
+        const A1 = new PointByRotation(M, A, 90, { temp: true, style: '' })
+        const A2 = new PointByRotation(M, A, -90, { style: '' })
+        const s = new Segment(A1, A2, { color: this.color, thickness: this.thickness })
+        this.group.push(s)
+      }
+      const addBorder2 = () => {
+        B.style = ''
+        const L = new Segment(B, A, { temp: true })
+        const M = new PointOnLine(L, { length: h, temp: true, style: '' })
+        const B1 = new PointByRotation(M, B, 90, { temp: true, style: '' })
+        const B2 = new PointByRotation(M, B, -90, { temp: true, style: '' })
+        const s = new Segment(B1, B2, { color: this.color, thickness: this.thickness })
+        this.group.push(s)
+      }
+      if (style === '|-') addBorder1()
+      if (style === '-|') addBorder2()
+      if (style === '|-|') {
+        addBorder1()
+        addBorder2()
+      }
     }
 }

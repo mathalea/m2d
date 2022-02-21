@@ -6,7 +6,7 @@ export class PointIntersectionCC extends Point {
   C1: Circle
   C2: Circle
   n: 1 | 2
-  constructor (C1: Circle, C2: Circle, n: 1 | 2 = 1, { style = 'x', size = 0.15, thickness = 3, color = 'Gray', dragable = false, temp = false }: PointOptions = {}) {
+  constructor (C1: Circle, C2: Circle, n: 1 | 2 = 1, { style = 'x', size = 0.15, thickness = 3, color = 'black', dragable = false, temp = false }: PointOptions = {}) {
     const [x, y] = intersectionCCCoord(C1, C2, n)
     super(C1.parentFigure, x, y, { style, size, thickness, color, dragable, temp })
     this.C1 = C1

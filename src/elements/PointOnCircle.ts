@@ -6,7 +6,7 @@ import { Segment } from './Segment'
 
 export class PointOnCircle extends Point {
   circle : Circle
-  constructor (C: Circle, { angle = randint(-180, 180), style = 'x', size = 0.15, thickness = 3, color = 'Gray', dragable = true, temp = false }: PointOptions & {angle?: number} = {}) {
+  constructor (C: Circle, { angle = randint(-180, 180), style = 'x', size = 0.15, thickness = 3, color = 'gray', dragable = true, temp = false }: PointOptions & {angle?: number} = {}) {
     const angleRadian = angle * Math.PI / 180
     const x = C.center.x + C.radius * Math.cos(angleRadian)
     const y = C.center.y + C.radius * Math.sin(angleRadian)
