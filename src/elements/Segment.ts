@@ -26,6 +26,7 @@ export class Segment extends Element2D {
       this.parentFigure = A.parentFigure
       if (!temp) this.parentFigure.list.push(this)
       this.ends = [A, B]
+      if (A.label && B.label) this.label = `[${A.label}${B.label}]`
 
       const x1Svg = this.parentFigure.xToSx(this.x1)
       const x2Svg = this.parentFigure.xToSx(this.x2)
@@ -79,7 +80,9 @@ export class Segment extends Element2D {
       if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
       let txtOptions = ''
       if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
-      return `\n \t \\draw${txtOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
+      let tex = `\n\t% ${this.label ?? 'Droite'}`
+      tex += `\n \t \\draw${txtOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
+      return tex
     }
 
     get style () {

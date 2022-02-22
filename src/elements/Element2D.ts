@@ -15,6 +15,7 @@ export abstract class Element2D {
   private _color: string
   private _fill: string
   private _thickness: number
+  label: string
   constructor () {
     this.group = []
     this.dependencies = []
