@@ -1,5 +1,4 @@
 
-import { LineParallelByPoint } from './elements/LineParallelByPoint'
 import { LinePerpendicularByPoint } from './elements/LinePerpendicularlByPoint'
 import { Segment } from './elements/Segment'
 import { Figure } from './Figure'
@@ -13,7 +12,19 @@ const figure = new Figure()
 
 // On l'ajoute au dom
 const body = document.querySelector('body')
-if (body) body.appendChild(figure.svg)
+const btn = document.createElement('button')
+btn.innerHTML = 'Obtenir LaTeX'
+const texteLatex = document.createElement('pre')
+if (body) {
+  body.appendChild(figure.svg)
+  body.appendChild(btn)
+  body.appendChild(texteLatex)
+}
+
+btn.addEventListener('click', () => {
+  texteLatex.innerHTML = figure.tex
+})
+
 figure.svg.style.margin = 'auto'
 figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'

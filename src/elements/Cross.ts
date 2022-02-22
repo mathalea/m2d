@@ -22,6 +22,7 @@ export class Cross extends Element2D {
       this.update()
       this.color = color
       this.thickness = thickness
+      this.parentFigure.list.push(this)
     }
 
     update (): void {
@@ -43,5 +44,17 @@ export class Cross extends Element2D {
       this.segment2.setAttribute('y1', `${y12Svg}`)
       this.segment2.setAttribute('x2', `${x22Svg}`)
       this.segment2.setAttribute('y2', `${y22Svg}`)
+    }
+
+    get tex () {
+      const arrayOptions : string[] = []
+      if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
+      if (this.thickness !== 1) arrayOptions.push(`line width = ${this.thickness}`)
+      if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
+      let txtOptions = ''
+      if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
+      let tex = `\n \t \\draw${txtOptions} (${this.x - this.size}, ${this.y + this.size}) -- (${this.x + this.size}, ${this.y - this.size});`
+      tex += `\n \t \\draw${txtOptions} (${this.x - this.size}, ${this.y - this.size}) -- (${this.x + this.size}, ${this.y + this.size});`
+      return tex
     }
 }

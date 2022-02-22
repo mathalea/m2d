@@ -225,6 +225,7 @@ export class Figure {
 
   get tex () {
     let tex = '\\begin{tikzpicture}'
+    tex += `\n\t\\clip(${this.xMin}, ${this.yMin}) rectangle (${this.xMax}, ${this.yMax});`
     for (const e of this.list) {
       tex += e.tex
     }
