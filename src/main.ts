@@ -1,5 +1,6 @@
 
 import { LineParallelByPoint } from './elements/LineParallelByPoint'
+import { LinePerpendicularByPoint } from './elements/LinePerpendicularlByPoint'
 import { Segment } from './elements/Segment'
 import { Figure } from './Figure'
 
@@ -25,6 +26,6 @@ const B = figure.point(4, 1)
 const dAB = new Segment(A, B)
 const C = figure.point(0, 3)
 
-const L = new LineParallelByPoint(dAB, C)
+const L = new LinePerpendicularByPoint(dAB, C)
 // const L = new LineByPointVector(C, dAB.directeur)
 // L.vector.y = -3
