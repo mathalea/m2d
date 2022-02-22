@@ -1,13 +1,5 @@
-import { Circle } from './elements/Circle'
-import { Line } from './elements/Line'
-import { Middle } from './elements/Middle'
-import { PointByReflectionOverLine } from './elements/PointByReflectionOverLine'
-import { PointByRotation } from './elements/PointByRotation'
-import { PointBySimilitude } from './elements/PointBySimilitude'
-import { PointIntersectionCC } from './elements/PointIntersectionCC'
-import { PointIntersectionLC } from './elements/PointIntersectionLC'
-import { PointOnCircle } from './elements/PointOnCircle'
-import { PointOnLine } from './elements/PointOnLine'
+
+import { LineParallelByPoint } from './elements/LineParallelByPoint'
 import { Segment } from './elements/Segment'
 import { Figure } from './Figure'
 
@@ -29,12 +21,10 @@ figure.svg.style.backgroundColor = 'lightcyan'
 // On créé des points à partir de leur coordonnées
 
 const A = figure.point(0, 0)
-const B = figure.point(8, 0)
-const L = new Segment(A, B)
-const I = new Middle(L)
-const C = new Circle(I, B)
-const C2 = new Circle(A, 3)
-const M = new PointOnCircle(C, { angle: 45 })
-const N = new PointOnCircle(C2, { angle: 90 })
-const E = new PointIntersectionCC(C, C2, 1)
-const F = new PointIntersectionCC(C, C2, 2)
+const B = figure.point(4, 1)
+const dAB = new Segment(A, B)
+const C = figure.point(0, 3)
+
+const L = new LineParallelByPoint(dAB, C)
+// const L = new LineByPointVector(C, dAB.directeur)
+// L.vector.y = -3

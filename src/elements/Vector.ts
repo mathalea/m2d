@@ -2,14 +2,14 @@ import { Element2D } from './Element2D'
 import { Point } from './Point'
 
 export class Vector extends Element2D {
-    x: number
-    y: number
+    private _x: number
+    private _y: number
 
     constructor (arg1: number | Point, arg2: number | Point) {
       super()
       if (typeof arg1 === 'number' && typeof arg2 === 'number') {
-        this.x = arg1
-        this.y = arg2
+        this._x = arg1
+        this._y = arg2
       } else if (arg1 instanceof Point && arg2 instanceof Point) {
         this.x = arg2.x - arg1.x
         this.y = arg2.y - arg1.y
@@ -24,5 +24,27 @@ export class Vector extends Element2D {
 
     multiply (v: Vector) {
       return (this.x * v.x) + (this.y * v.y)
+    }
+
+    update () {
+      this.notifyAllDependencies()
+    }
+
+    get x () {
+      return this._x
+    }
+
+    set x (n: number) {
+      this._x = n
+      this.update()
+    }
+
+    get y () {
+      return this._y
+    }
+
+    set y (n: number) {
+      this._y = n
+      this.update()
     }
 }

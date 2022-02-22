@@ -28,7 +28,6 @@ export class PointOnCircle extends Point {
     const C = this.circle
     const [x, y] = C.pointOnCircle ? rotationCoord(C.pointOnCircle, C.center, this.angle) : rotationCoord(C.M, C.center, this.angle)
     this.moveTo(x, y)
-    console.log(this.angle)
   }
 
   /**

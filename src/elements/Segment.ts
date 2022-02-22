@@ -68,47 +68,6 @@ export class Segment extends Element2D {
       }
     }
 
-    // private changing () {
-    //   for (const dependence of this.dependencies) {
-    //     if (dependence.type === 'intersectionLC') {
-    //       const M = dependence.element as Point
-    //       const [x1, y1] = intersectionLCCoord(dependence.L, dependence.C)
-    //       const [x2, y2] = intersectionLCCoord(dependence.L, dependence.C, 2)
-    //       // On cherche le point d'intersection le plus proche de l'actuel
-    //       if ((M.x - x1) ** 2 + (M.y - y1) ** 2 < (M.x - x2) ** 2 + (M.y - y2) ** 2) {
-    //         M.moveTo(x1, y1)
-    //       } else M.moveTo(x2, y2)
-    //     }
-    //     if (dependence.type === 'intersectionSC') {
-    //       const M = dependence.element as Point
-    //       const [x1, y1] = intersectionLCCoord(dependence.L, dependence.C)
-    //       const [x2, y2] = intersectionLCCoord(dependence.L, dependence.C, 2)
-    //       // On cherche le point d'intersection le plus proche de l'actuel
-    //       if ((M.x - x1) ** 2 + (M.y - y1) ** 2 < (M.x - x2) ** 2 + (M.y - y2) ** 2) {
-    //         M.moveTo(x1, y1)
-    //       } else M.moveTo(x2, y2)
-    //       const [A, B] = dependence.L.ends
-    //       if (M.x > Math.max(A.x, B.x) || M.x < Math.min(A.x, B.x) || M.y > Math.max(A.y, B.y) || M.y < Math.min(A.y, B.y)) {
-    //         M.style = ''
-    //       } else M.style = 'x'
-    //     }
-    //     if (dependence.type === 'pointOnLine') {
-    //       const M = dependence.element as PointOnLine
-    //       // On simule un léger déplacement pour qu'il recalcule sa position sur le cercle
-    //       // M.notifyMouseMove(M.x + 0.00001 * ((Math.random() > 0.5) ? 1 : -1), M.y)
-    //       const [x, y] = intersectionSCCoord(this, dependence.C)
-    //       if (x === undefined) {
-    //         // ToFix cacher la croix
-    //         M.style = ''
-    //       } else {
-    //         M.moveTo(x, y)
-    //         // ToFiX cela créé 2 segments à chaque fois, il faudrait toucher le style visibility plutôt
-    //         if (M.style === '') M.style = 'x'
-    //       }
-    //     }
-    //   }
-    // }
-
     addDependency (dependency) {
       this.dependencies.push(dependency)
     }
