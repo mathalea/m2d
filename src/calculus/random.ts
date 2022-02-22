@@ -1,7 +1,15 @@
 import { Point } from '../elements/Point'
 
-export function distance (A: Point, B: Point):number {
+export function distance (A: Point, B: Point): number {
   return Math.sqrt((A.x - B.x) ** 2 + (A.y - B.y) ** 2)
+}
+/**
+ *
+ * @param {number} nb  Une coordonnée, un rayon...
+ * @returns {number} Le nombre avec 3 chiffres maximum après la virgule
+ */
+export function texN (nb: number): number {
+  return Math.round(1000 * nb) / 1000
 }
 
 /**

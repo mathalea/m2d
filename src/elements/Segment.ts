@@ -4,6 +4,7 @@ import { Vector } from './Vector'
 import { angleOriented } from '../calculus/trigonometry'
 import { PointOnLine } from './PointOnLine'
 import { PointByRotation } from './PointByRotation'
+import { texN } from '../calculus/random'
 
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
 export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number, temp?: boolean }
@@ -81,7 +82,7 @@ export class Segment extends Element2D {
       let txtOptions = ''
       if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
       let tex = `\n\t% ${this.label ?? 'Droite'}`
-      tex += `\n \t \\draw${txtOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
+      tex += `\n \t \\draw${txtOptions} (${texN(this.x1)}, ${texN(this.y1)}) -- (${texN(this.x2)}, ${texN(this.y2)});`
       return tex
     }
 

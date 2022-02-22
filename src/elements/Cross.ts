@@ -1,3 +1,4 @@
+import { texN } from '../calculus/random'
 import { Figure } from '../Figure'
 import { Element2D } from './Element2D'
 
@@ -54,8 +55,8 @@ export class Cross extends Element2D {
       let txtOptions = ''
       if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
       let tex = `\n\t % Point ${this.label ?? ''}`
-      tex += `\n \t \\draw${txtOptions} (${this.x - this.size}, ${this.y + this.size}) -- (${this.x + this.size}, ${this.y - this.size});`
-      tex += `\n \t \\draw${txtOptions} (${this.x - this.size}, ${this.y - this.size}) -- (${this.x + this.size}, ${this.y + this.size});`
+      tex += `\n \t \\draw${txtOptions} (${texN(this.x - this.size)}, ${texN(this.y + this.size)}) -- (${texN(this.x + this.size)}, ${texN(this.y - this.size)});`
+      tex += `\n \t \\draw${txtOptions} (${texN(this.x - this.size)}, ${texN(this.y - this.size)}) -- (${texN(this.x + this.size)}, ${texN(this.y + this.size)});`
       return tex
     }
 }
