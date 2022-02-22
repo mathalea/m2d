@@ -1,4 +1,5 @@
 import { Point } from '../elements/Point'
+import { PointByRotation } from '../elements/PointByRotation'
 import { Vector } from '../elements/Vector'
 
 /**
@@ -6,7 +7,7 @@ import { Vector } from '../elements/Vector'
  * @author Jean-Claude Lhote
  */
 export function angleOriented (A: Point, O: Point, B: Point) {
-  const A2 = A.rotation(O, 90, { temp: true })
+  const A2 = new PointByRotation(A, O, 90, { temp: true })
   const v = new Vector(O, B)
   const u = new Vector(O, A2)
   const s = ((v.x * u.x + v.y * u.y) > 0) ? 1 : -1
