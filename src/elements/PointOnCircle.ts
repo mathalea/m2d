@@ -20,14 +20,15 @@ export class PointOnCircle extends Point {
     const O = this.circle.center
     const P = new Point(this.circle.parentFigure, x, y, { temp: true })
     const M = new PointByHomothetie(P, O, this.circle.radius / distance(O, P), { temp: true })
-    this.angle = angleOriented(this.circle.M, this.circle.center, M)
+    this.angle = this.circle.pointOnCircle ? angleOriented(this.circle.pointOnCircle, this.circle.center, M) : angleOriented(this.circle.M, this.circle.center, M)
     super.moveTo(M.x, M.y)
   }
 
   update (): void {
     const C = this.circle
-    const [x, y] = rotationCoord(C.M, C.center, this.angle)
+    const [x, y] = C.pointOnCircle ? rotationCoord(C.pointOnCircle, C.center, this.angle) : rotationCoord(C.M, C.center, this.angle)
     this.moveTo(x, y)
+    console.log(this.angle)
   }
 
   /**

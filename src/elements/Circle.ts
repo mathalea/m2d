@@ -12,7 +12,7 @@ export class Circle extends Element2D {
     constructor (O: Point, arg2: number | Point, { color = 'black', thickness = 1, fill = 'none', temp = false } : OptionsGraphiques = {}) {
       super()
       this.parentFigure = O.parentFigure
-      this.pointOnCircle = null
+      this.pointOnCircle = arg2 instanceof Point ? arg2 : null
       this.center = O
       this.temp = temp
       if (!this.temp) this.parentFigure.list.push(this)
@@ -24,10 +24,9 @@ export class Circle extends Element2D {
       circle.setAttribute('cy', `${ySvg}`)
       this.g = circle
       if (!this.temp) this.parentFigure.svg.appendChild(this.g)
-      this.M = (typeof arg2 !== 'number') ? arg2 : new Point(this.parentFigure, 100, 100, { style: '' }) // Point temporaire qui sera placé quand on connaitra le rayon
+      this.M = new Point(this.parentFigure, 100, 100, { style: '' }) // Point temporaire qui sera placé quand on connaitra le rayon
       this.radius = (typeof arg2 === 'number') ? arg2 : this.radius = distance(O, arg2)
-      if (typeof arg2 === 'number') this.M.moveTo(O.x + this.radius, O.y)
-      this.M.style = ''
+      this.M.moveTo(O.x + this.radius, O.y)
       this.fill = fill
       this.color = color
       this.thickness = thickness
@@ -56,7 +55,7 @@ export class Circle extends Element2D {
     moveCenter (x: number, y: number) {
       this.g.setAttribute('cx', `${this.parentFigure.xToSx(x)}`)
       this.g.setAttribute('cy', `${this.parentFigure.yToSy(y)}`)
-      this.changing()
+      this.M.moveTo(this.center.x + this.radius, this.center.y)
     }
 
     get radius () {
@@ -66,7 +65,6 @@ export class Circle extends Element2D {
     set radius (radius: number) {
       this._radius = radius
       this.g.setAttribute('r', `${this._radius * this.parentFigure.pixelsPerUnit}`)
-      this.changing()
     }
 
     update (): void {
@@ -74,10 +72,6 @@ export class Circle extends Element2D {
       if (this.pointOnCircle) {
         this.radius = distance(this.center, this.pointOnCircle)
       }
-    }
-
-    private changing () {
-      this.M.moveTo(this.center.x + this.radius, this.center.y)
       this.notifyAllDependencies()
     }
 
