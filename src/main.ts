@@ -1,6 +1,11 @@
 
 import { LinePerpendicularByPoint } from './elements/LinePerpendicularlByPoint'
+import { PointByRotation } from './elements/PointByRotation'
+import { PointByTranslationVector } from './elements/PointByTranslationVector'
+import { PointIntersectionLL } from './elements/PointIntersectionLL'
+import { PointOnLineAtD } from './elements/PointOnLineAtD'
 import { Segment } from './elements/Segment'
+import { Vector } from './elements/Vector'
 import { Figure } from './Figure'
 
 /**
@@ -38,5 +43,14 @@ const dAB = new Segment(A, B)
 const C = figure.point(0, 3)
 
 const L = new LinePerpendicularByPoint(dAB, C)
+const H = new PointIntersectionLL(dAB, L, { style: 'x' })
+const HB = new Segment(H, B)
+const M1 = new PointOnLineAtD(HB, 0.4, { style: '' })
+const M2 = new PointByRotation(M1, H, 90, { style: '' })
+const v = new Vector(H, M1)
+const M3 = new PointByTranslationVector(M2, v, { style: '' })
+const s1 = new Segment(M1, M3)
+const s2 = new Segment(M3, M2)
+
 // const L = new LineByPointVector(C, dAB.directeur)
 // L.vector.y = -3

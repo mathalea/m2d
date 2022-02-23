@@ -56,6 +56,7 @@ export class Segment extends Element2D {
     update () {
       this.moveEnd(this.ends[0].x, this.ends[0].y, 1)
       this.moveEnd(this.ends[1].x, this.ends[1].y, 2)
+
     }
 
     moveEnd (x: number, y: number, n: 1 | 2) {

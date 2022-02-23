@@ -149,3 +149,29 @@ export function intersectionCCCoord (C1: Circle, C2: Circle, n: 1 | 2 = 1) {
     }
   }
 }
+/**
+ * Renvoie 'M' le point d'intersection des droites d1 et d2
+ * @param {Droite} d1
+ * @param {Droite} d2
+ * @param {string} [M=''] Nom du point d'intersection. Facultatif, vide par défaut.
+ * @param {string} [positionLabel='above'] Facultatif, 'above' par défaut.
+ * @return {Point} Point 'M' d'intersection de d1 et de d2
+ * @author Jean-Claude Lhote
+ */
+export function intersectionLLCoord (d: Segment, f: Segment) {
+  const [da, db, dc] = d.equation
+  const [fa, fb, fc] = f.equation
+  //  console.log([da, db, dc], [fa, fb, fc])
+  let x: number, y:number
+  if (fa * db - fb * da === 0) {
+    return [undefined, undefined]
+  } else {
+    y = (fc * da - dc * fa) / (fa * db - fb * da)
+  }
+  if (da === 0) { // si d est horizontale alors f ne l'est pas donc fa<>0
+    x = (-fc - fb * y) / fa
+  } else { // d n'est pas horizontale donc ...
+    x = (-dc - db * y) / da
+  }
+  return [x, y]
+}
