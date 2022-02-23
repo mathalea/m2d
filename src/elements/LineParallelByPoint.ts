@@ -7,7 +7,7 @@ export class LineParallelByPoint extends LineByPointVector {
   line : Line // La droite à laquelle il faut être parallèle
   A: Point // Le point par lequel passe la droite
   constructor (L: Line, A: Point, { color = 'black', thickness = 1 }: {color?: string, thickness?: number, add1?: number, add2?: number} = {}) {
-    const v = new Vector(L.directeur.x, L.directeur.y)
+    const v = new Vector(L.parentFigure, L.directeur.x, L.directeur.y)
     super(A, v, { color, thickness })
     this.line = L
     L.addDependency(this)

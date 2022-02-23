@@ -8,8 +8,8 @@ import { Vector } from '../elements/Vector'
  */
 export function angleOriented (A: Point, O: Point, B: Point) {
   const A2 = new PointByRotation(A, O, 90, { temp: true })
-  const v = new Vector(O, B)
-  const u = new Vector(O, A2)
+  const v = new Vector(O.parentFigure, O, B)
+  const u = new Vector(O.parentFigure, O, A2)
   const s = ((v.x * u.x + v.y * u.y) > 0) ? 1 : -1
   return s * angle(A, O, B)
 }
@@ -22,8 +22,8 @@ export function angleOriented (A: Point, O: Point, B: Point) {
  * @returns Angle AOB
  */
 export function angle (A: Point, O: Point, B: Point) {
-  const OA = new Vector(O, A)
-  const OB = new Vector(O, B)
+  const OA = new Vector(O.parentFigure, O, A)
+  const OB = new Vector(O.parentFigure, O, B)
   const scalaire = OA.multiply(OB)
   const angleRadian = (Math.acos(scalaire / (OA.norme * OB.norme)))
   return angleRadian * 180 / Math.PI

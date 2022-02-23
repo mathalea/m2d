@@ -56,7 +56,6 @@ export class Segment extends Element2D {
     update () {
       this.moveEnd(this.ends[0].x, this.ends[0].y, 1)
       this.moveEnd(this.ends[1].x, this.ends[1].y, 2)
-
     }
 
     moveEnd (x: number, y: number, n: 1 | 2) {
@@ -67,6 +66,8 @@ export class Segment extends Element2D {
         this[`x${n}`] = x
         this[`y${n}`] = y
         this.notifyAllDependencies()
+        this.ends[n - 1].x = x
+        this.ends[n - 1].y = y
         // this.changing()
       }
     }
@@ -116,7 +117,7 @@ export class Segment extends Element2D {
      */
     get normal () {
       const [a, b] = this.equation
-      return new Vector(a, b)
+      return new Vector(this.parentFigure, a, b)
     }
 
     /**
@@ -125,7 +126,7 @@ export class Segment extends Element2D {
      */
     get directeur () {
       const [a, b] = this.equation
-      return new Vector(b, -a)
+      return new Vector(this.parentFigure, b, -a)
     }
 
     get angleWithHorizontal () {

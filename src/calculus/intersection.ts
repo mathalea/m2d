@@ -161,7 +161,6 @@ export function intersectionCCCoord (C1: Circle, C2: Circle, n: 1 | 2 = 1) {
 export function intersectionLLCoord (d: Segment, f: Segment) {
   const [da, db, dc] = d.equation
   const [fa, fb, fc] = f.equation
-  //  console.log([da, db, dc], [fa, fb, fc])
   let x: number, y:number
   if (fa * db - fb * da === 0) {
     return [undefined, undefined]
