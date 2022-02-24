@@ -52,6 +52,10 @@ const P = new Polygon(A, B, C, D)
 const G = new Barycenter([A, B, C, D], { style: 'x' })
 P.color = 'blue'
 P.thickness = 2
+// const p = new Polygon(A, B, C)
+window.t = new Text(figure, -4, 0, 'test')
+t.text = 'ok'
+
 // p.style = 'o'
 console.log(figure.set) // ToFix la liste est trop importante, il faut supprimer les croix non utilisés et voir si le cercle ne créé pas des points draggable
 

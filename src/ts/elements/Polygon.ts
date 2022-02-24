@@ -1,9 +1,16 @@
 import { Figure } from '../Figure'
+import { Barycenter } from './Barycenter'
 import { Element2D } from './Element2D'
 import { Point, PointStyle } from './Point'
+import { PointOnLineAtD } from './PointOnLineAtD'
+import { Segment } from './Segment'
+import { TextByPoint } from './TextByPoint'
 
 export class Polygon extends Element2D {
-    points: Point[]
+  points: Point[]
+  labelsPoints: Point[]
+  barycenter: Point
+  labels: TextByPoint[]
     parentFigure: Figure
     private _style: PointStyle
     constructor (...points: Point[]) {
@@ -11,6 +18,8 @@ export class Polygon extends Element2D {
       this.parentFigure = points[0].parentFigure
       this.points = points
       this.fill = 'none'
+      this.labels = []
+      this.labelsPoints = []
 
       this.g = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
       this.g.setAttribute('points', listeXY(this.points))
@@ -19,7 +28,12 @@ export class Polygon extends Element2D {
       this.parentFigure.svg.appendChild(this.g)
       this.parentFigure.set.add(this)
 
+      this.barycenter = new Barycenter(this.points, { temp: true })
       for (const point of points) {
+        this.labelsPoints.push(new PointOnLineAtD(new Segment(point, this.barycenter, { temp: true }), -0.5, { temp: true, style: '' }))
+        const name = point.label
+        point.label = ''
+        this.labels.push(new TextByPoint(this.labelsPoints[this.labelsPoints.length - 1], name, { dx: -0.2, dy: -0.2 }))
         point.addDependency(this)
       }
 
