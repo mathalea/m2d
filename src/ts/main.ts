@@ -10,6 +10,7 @@ import { Figure } from './Figure'
 import { renderMathInDocument } from 'mathlive'
 import { Text } from './elements/Text'
 import { Polygon } from './elements/Polygon'
+import { TextByPoint } from './elements/TextByPoint'
 
 /**
  * Script qui permet de tester M2D
@@ -47,6 +48,8 @@ const A = figure.point(0, 0)
 const B = figure.point(4, 1)
 const C = new PointByRotation(A, B, 60)
 const p = new Polygon(A, B, C)
+const t = new TextByPoint(A, 'test')
+t.text = 'ok'
 
 p.color = 'blue'
 p.thickness = 3

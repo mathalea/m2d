@@ -11,6 +11,7 @@ export class Point extends Element2D {
   x: number
   y: number
   private _style: PointStyle
+  private _label: string
   protected _size: number // Pour la taille de la croix et utilisé dans changeStyle
   g: SVGElement
   mark: Element2D
@@ -122,6 +123,14 @@ export class Point extends Element2D {
     }
     this.isVisible = true
   }
+
+  // get label () {
+  //   return this._label
+  // }
+
+  // set label (label) {
+  //   this._label = label
+  // }
 
   get style () {
     return this._style
