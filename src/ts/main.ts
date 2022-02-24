@@ -49,7 +49,6 @@ const B = figure.point(4, 1, { label: 'B' })
 const C = figure.point(7, 3, { label: 'C' })
 const D = figure.point(2, 5, { label: 'D' })
 const P = new Polygon(A, B, C, D)
-const G = new Barycenter([A, B, C, D], { style: 'x' })
 // const p = new Polygon(A, B, C)
 window.t = new Text(figure, -4, 0, 'test')
 t.text = 'ok'
