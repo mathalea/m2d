@@ -2,7 +2,9 @@ import { distance } from '../calculus/random'
 import { Point, PointOptions } from './Point'
 import { PointByHomothetie } from './PointByHomothetie'
 import { Segment } from './Segment'
-
+/**
+ * Place un point sur un Line (Segment) à une distance D fixe du point Line.ends[0]
+ */
 export class PointOnLineAtD extends Point {
   line : Segment
   length: number // valeur signée (mesure algébrique de ends[0] à M)
