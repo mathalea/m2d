@@ -9,11 +9,11 @@ export class Circle extends Element2D {
     M: Point // Point de même ordonnée que le centre et d'abscisse supérieure
     pointOnCircle: Point | null // Point qui définit le cercle
     private _radius: number
-    constructor (O: Point, arg2: number | Point, { color = 'black', thickness = 1, fill = 'none', temp = false } : OptionsGraphiques = {}) {
+    constructor (center: Point, arg2: number | Point, { color = 'black', thickness = 1, fill = 'none', temp = false } : OptionsGraphiques = {}) {
       super()
-      this.parentFigure = O.parentFigure
+      this.parentFigure = center.parentFigure
       this.pointOnCircle = arg2 instanceof Point ? arg2 : null
-      this.center = O
+      this.center = center
       this.temp = temp
       if (!this.temp) this.parentFigure.list.push(this)
 
@@ -25,17 +25,17 @@ export class Circle extends Element2D {
       this.g = circle
       if (!this.temp) this.parentFigure.svg.appendChild(this.g)
       this.M = new Point(this.parentFigure, 100, 100, { style: '' }) // Point temporaire qui sera placé quand on connaitra le rayon
-      this.radius = (typeof arg2 === 'number') ? arg2 : this.radius = distance(O, arg2)
-      this.M.moveTo(O.x + this.radius, O.y)
+      this.radius = (typeof arg2 === 'number') ? arg2 : this.radius = distance(center, arg2)
+      this.M.moveTo(center.x + this.radius, center.y)
       this.fill = fill
       this.color = color
       this.thickness = thickness
 
       if (arg2 instanceof Point) {
         this.pointOnCircle = arg2
-        O.addDependency(this)
+        center.addDependency(this)
         arg2.addDependency(this)
-      } else O.addDependency(this)
+      } else center.addDependency(this)
     }
 
     /**

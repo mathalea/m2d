@@ -3,7 +3,7 @@ import { Element2D } from './Element2D'
 import { Point } from './Point'
 
 export class Vector extends Element2D {
-    private _x: number
+  private _x: number
   private _y: number
   origin: Point
   end: Point

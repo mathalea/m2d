@@ -9,6 +9,7 @@ import { Vector } from './elements/Vector'
 import { Figure } from './Figure'
 import { renderMathInDocument } from 'mathlive'
 import { Text } from './elements/Text'
+import { Polygon } from './elements/Polygon'
 
 /**
  * Script qui permet de tester M2D
@@ -42,27 +43,36 @@ figure.svg.style.backgroundColor = 'lightcyan'
 
 // On créé des points à partir de leur coordonnées
 
-const t = new Text(figure, -3, 0, '$\\pi$')
-const A = figure.point(4, 0)
+const A = figure.point(0, 0)
 const B = figure.point(4, 1)
-const dAB = new Segment(A, B)
-const C = figure.point(0, 3)
+const C = new PointByRotation(A, B, 60)
+const p = new Polygon(A, B, C)
 
-const L = new LinePerpendicularByPoint(dAB, C)
-const H = new PointIntersectionLL(dAB, L, { style: 'x' })
-const HB = new Segment(H, B)
-const M1 = new PointOnLineAtD(HB, 0.4, { style: '' })
-const M2 = new PointByRotation(M1, H, 90, { style: '' })
-const v = new Vector(H.parentFigure, H, M1)
-const M3 = new PointByTranslationVector(M2, v, { style: '' })
-const s1 = new Segment(M1, M3)
-const s2 = new Segment(M3, M2)
-const t2 = new Text(figure, -5, 0, '$\\pi$')
-renderMathInDocument({ TeX: { delimiters: { display: [['\\[', '\\]$']], inline: [['$', '$']] } } })
+p.color = 'blue'
+p.thickness = 3
+p.style = 'o'
 
-math.style.position = 'absolute'
+// const t = new Text(figure, -3, 0, '$\\pi$')
+// const A = figure.point(4, 0)
+// const B = figure.point(4, 1)
+// const dAB = new Segment(A, B)
+// const C = figure.point(0, 3)
 
-const rect = figure.svg.getBoundingClientRect()
+// const L = new LinePerpendicularByPoint(dAB, C)
+// const H = new PointIntersectionLL(dAB, L, { style: 'x' })
+// const HB = new Segment(H, B)
+// const M1 = new PointOnLineAtD(HB, 0.4, { style: '' })
+// const M2 = new PointByRotation(M1, H, 90, { style: '' })
+// const v = new Vector(H.parentFigure, H, M1)
+// const M3 = new PointByTranslationVector(M2, v, { style: '' })
+// const s1 = new Segment(M1, M3)
+// const s2 = new Segment(M3, M2)
+// const t2 = new Text(figure, -5, 0, '$\\pi$')
+// renderMathInDocument({ TeX: { delimiters: { display: [['\\[', '\\]$']], inline: [['$', '$']] } } })
 
-math.style.left = `${rect.x + 30 * 5}px`
-math.style.top = `${rect.y + 30 * 5}px`
+// math.style.position = 'absolute'
+
+// const rect = figure.svg.getBoundingClientRect()
+
+// math.style.left = `${rect.x + 30 * 5}px`
+// math.style.top = `${rect.y + 30 * 5}px`
