@@ -5,11 +5,11 @@ export class PointBySimilitude extends Point {
     angle: number // Angle en degré
     k: number // Coefficient
     previous: Point
-    constructor (A: Point, center: Point, k: number, angle: number, { style = 'x', size = 0.15, thickness = 3, color = 'black', dragable = false, temp = false }: {style?: '' | 'x' | 'o', size?: number, thickness?: number, color?: string, dragable?: boolean, temp?: boolean} = {}) {
+    constructor (A: Point, center: Point, k: number, angle: number, { style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: {style?: '' | 'x' | 'o', size?: number, thickness?: number, color?: string, draggable?: boolean, temp?: boolean} = {}) {
       const angleRadian = angle * Math.PI / 180
       const x = (center.x + k * (Math.cos(angleRadian) * (A.x - center.x) - Math.sin(angleRadian) * (A.y - center.y)))
       const y = (center.y + k * (Math.cos(angleRadian) * (A.y - center.y) + Math.sin(angleRadian) * (A.x - center.x)))
-      super(A.parentFigure, x, y, { style, size, thickness, color, dragable, temp })
+      super(A.parentFigure, x, y, { style, size, thickness, color, draggable, temp })
       this.center = center
       this.k = k
       this.angle = angle

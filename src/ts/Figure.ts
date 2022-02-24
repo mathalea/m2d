@@ -113,7 +113,7 @@ export class Figure {
     const startDrag = (event: PointerEvent) => {
       const [pointerX, pointerY] = this.getPointerCoord(event)
       for (const e of this.set) {
-        if (e.dragable && (e instanceof Point || e instanceof Text) && e.distancePointer(pointerX, pointerY) * this.pixelsPerUnit < 15) {
+        if (e.draggable && (e instanceof Point || e instanceof Text) && e.distancePointer(pointerX, pointerY) * this.pixelsPerUnit < 15) {
           // ToFix est-ce qu'on garde le fait de pouvoir déplacer plusieurs points en même temps
           // Un set de taille 1 est inutile autant avoir un unique élément
           if (this.setInDrag.size < 1) {
@@ -182,7 +182,7 @@ export class Figure {
     const [x, y] = intersectionLCCoord(L, C, n)
     if (x !== undefined && y !== undefined) {
       const M = new Point(this, x, y, options)
-      M.dragable = false
+      M.draggable = false
       M.color = 'black'
       C.addDependency(M)
       L.addDependency(M)

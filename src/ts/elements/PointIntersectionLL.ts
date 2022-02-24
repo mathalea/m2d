@@ -6,9 +6,9 @@ export class PointIntersectionLL extends Point {
   L1: Segment
   L2: Segment
   n: 1 | 2
-  constructor (L1: Segment, L2: Segment, { style = 'x', size = 0.15, thickness = 3, color = 'black', dragable = false, temp = false }: PointOptions = {}) {
+  constructor (L1: Segment, L2: Segment, { style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
     const [x, y] = intersectionLLCoord(L1, L2)
-    super(L1.parentFigure, x, y, { style, size, thickness, color, dragable, temp })
+    super(L1.parentFigure, x, y, { style, size, thickness, color, draggable, temp })
     this.L1 = L1
     this.L2 = L2
     L1.addDependency(this)

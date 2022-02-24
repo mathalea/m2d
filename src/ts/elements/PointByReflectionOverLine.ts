@@ -4,7 +4,7 @@ import { Segment } from './Segment'
 export class PointByReflectionOverLine extends Point {
     line: Segment
     previous: Point
-    constructor (A: Point, line: Segment, { style = 'x', size = 0.15, thickness = 3, color = 'black', dragable = false, temp = false }: {style?: '' | 'x' | 'o', size?: number, thickness?: number, color?: string, dragable?: boolean, temp?: boolean} = {}) {
+    constructor (A: Point, line: Segment, { style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: {style?: '' | 'x' | 'o', size?: number, thickness?: number, color?: string, draggable?: boolean, temp?: boolean} = {}) {
       let x, y
       const [a, b, c] = line.equation
       const k = 1 / (a * a + b * b)
@@ -18,7 +18,7 @@ export class PointByReflectionOverLine extends Point {
         x = k * ((b * b - a * a) * A.x - 2 * a * b * A.y - 2 * a * c)
         y = k * ((a * a - b * b) * A.y - 2 * a * b * A.x + (a * a * c) / b - b * c) - c / b
       }
-      super(A.parentFigure, x, y, { style, size, thickness, color, dragable, temp })
+      super(A.parentFigure, x, y, { style, size, thickness, color, draggable, temp })
       this.line = line
       this.previous = A
       A.addDependency(this)

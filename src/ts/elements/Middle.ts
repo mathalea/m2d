@@ -3,8 +3,8 @@ import { Segment } from './Segment'
 
 export class Middle extends Point {
     line: Segment
-    constructor (s:Segment, { style = 'x', size = 0.15, thickness = 3, color = 'black', dragable = false, temp = false }: {style?: '' | 'x' | 'o', size?: number, thickness?: number, color?: string, dragable?: boolean, temp?: boolean} = {}) {
-      super(s.parentFigure, (s.ends[0].x + s.ends[1].x) / 2, (s.ends[0].y + s.ends[1].y) / 2, { style, size, thickness, color, dragable, temp })
+    constructor (s:Segment, { style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: {style?: '' | 'x' | 'o', size?: number, thickness?: number, color?: string, draggable?: boolean, temp?: boolean} = {}) {
+      super(s.parentFigure, (s.ends[0].x + s.ends[1].x) / 2, (s.ends[0].y + s.ends[1].y) / 2, { style, size, thickness, color, draggable, temp })
       s.addDependency(this)
       this.line = s
     }

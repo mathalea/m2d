@@ -5,7 +5,7 @@ import { Circle } from './Circle'
 import { Cross } from './cross'
 
 export type PointStyle = 'x' | 'o' | ''
-export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, dragable?: boolean, temp?: boolean }
+export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean }
 
 export class Point extends Element2D {
   x: number
@@ -16,11 +16,11 @@ export class Point extends Element2D {
   g: SVGElement
   mark: Element2D
   parentFigure: Figure
-  dragable: true | false | Circle | Segment
+  draggable: true | false | Circle | Segment
   temp: boolean // Pour les points qui ne servent qu'à faire des calculs
   isVisible : boolean
   // On définit un point avec ses deux coordonnées
-  constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.15, thickness = 3, color, dragable = true, temp = false }: PointOptions = {}) {
+  constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false }: PointOptions = {}) {
     super()
     this.x = x
     this.y = y
@@ -31,8 +31,8 @@ export class Point extends Element2D {
     this.temp = temp
     this._size = size
     // Les points que l'on peut déplacer sont bleus par défaut
-    this.color = color || (dragable ? 'blue' : 'black')
-    this.dragable = dragable
+    this.color = color || (draggable ? 'blue' : 'black')
+    this.draggable = draggable
     if (!this.temp) {
       this.parentFigure.set.add(this)
       this.style = style // Le style initialise aussi size
@@ -41,7 +41,7 @@ export class Point extends Element2D {
     }
     if (this.g.childElementCount > 0 && !this.temp) {
       this.parentFigure.svg.appendChild(this.g)
-      if (this.dragable) this.g.style.cursor = 'move'
+      if (this.draggable) this.g.style.cursor = 'move'
     }
   }
 

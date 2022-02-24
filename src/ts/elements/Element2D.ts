@@ -6,7 +6,7 @@ export type optionsElement2D = { color?: string, thickness?: number, fill?: stri
  * Classe parente de tous les éléments de géométrie
  */
 export abstract class Element2D {
-  dragable: any
+  draggable: any
   parentFigure: Figure
   // Un élément de géométrie peut être composé de plusieurs autres éléments de géométrie (plusieurs segments pour marquer un point ou coder un angle par exemple)
   group: Element2D[]

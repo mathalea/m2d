@@ -6,7 +6,7 @@ export class Text extends Element2D {
     private _y: number
     private _text: string
     alignment: string
-    constructor (figure: Figure, x: number, y: number, text: string, { alignment = '', temp = false }: {alignment?: string, temp?: boolean} = {}) {
+    constructor (figure: Figure, x: number, y: number, text: string, { alignment = '', temp = false, draggable = true }: {alignment?: string, temp?: boolean, draggable?: boolean} = {}) {
       super()
       this.parentFigure = figure
       this.alignment = alignment
@@ -14,11 +14,11 @@ export class Text extends Element2D {
       this.x = x
       this.y = y
       this.text = text
-      this.dragable = true
+      this.draggable = draggable
       this.g.setAttribute('stroke', 'black')
       this.g.style.overflow = 'visible'
       this.g.style.lineHeight = '0'
-      this.g.style.cursor = 'move'
+      this.g.style.cursor = this.draggable ? 'move' : 'default'
       if (!temp) {
         this.parentFigure.svg.appendChild(this.g)
         this.parentFigure.set.add(this)

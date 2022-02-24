@@ -8,9 +8,9 @@ import { PointByHomothetie } from './PointByHomothetie'
 export class PointOnCircle extends Point {
   circle: Circle
   angle: number
-  constructor (C: Circle, { angle = randint(-180, 180), style = 'x', size = 0.15, thickness = 3, color = 'Gray', dragable = true, temp = false }: PointOptions & {angle?: number} = {}) {
+  constructor (C: Circle, { angle = randint(-180, 180), style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: PointOptions & {angle?: number} = {}) {
     const [x, y] = rotationCoord(C.M, C.center, angle)
-    super(C.parentFigure, x, y, { dragable, style, color, size, thickness, temp })
+    super(C.parentFigure, x, y, { draggable, style, color, size, thickness, temp })
     this.circle = C
     this.angle = angle
     C.addDependency(this)
@@ -36,7 +36,7 @@ export class PointOnCircle extends Point {
    * @param y ordonnée du pointeur
    */
   notifyPointerMove (x: number, y: number) {
-    if (this.dragable) {
+    if (this.draggable) {
       this.moveTo(x, y)
     }
   }

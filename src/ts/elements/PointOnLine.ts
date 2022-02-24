@@ -7,12 +7,12 @@ export class PointOnLine extends Point {
   line : Segment
   length: number // valeur signée (mesure algébrique de ends[0] à M)
   k: number
-  constructor (L: Segment, { k, length, style = 'x', size = 0.15, thickness = 3, color = 'Gray', dragable = true, temp = false }: {length?: number, k?: number} & PointOptions = {}) {
+  constructor (L: Segment, { k, length, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: {length?: number, k?: number} & PointOptions = {}) {
     const Llength = distance(L.ends[0], L.ends[1])
     length = (length === undefined) ? randint(15, 85) * Llength / 100 : length
     k = k || Llength === 0 ? 0.5 : length / Llength // Evitons la division par zéro avec le milieu d'un segment nul.
     const [Mx, My] = [(1 - k) * L.ends[0].x + k * L.ends[1].x, (1 - k) * L.ends[0].y + k * L.ends[1].y]
-    super(L.parentFigure, Mx, My, { style, size, thickness, color, dragable, temp })
+    super(L.parentFigure, Mx, My, { style, size, thickness, color, draggable, temp })
     this.x = Mx
     this.y = My
     this.line = L
@@ -43,7 +43,7 @@ export class PointOnLine extends Point {
    * @param y
    */
   notifyPointerMove (x: number, y: number) {
-    if (this.dragable) {
+    if (this.draggable) {
       this.moveTo(x, y)
     }
   }
