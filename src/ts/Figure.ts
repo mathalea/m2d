@@ -4,8 +4,8 @@ import { Circle } from './elements/Circle'
 import { Element2D } from './elements/Element2D'
 import { PointOptions, Point } from './elements/Point'
 import { PointOnLine } from './elements/PointOnLine'
-import { Polygon } from './elements/Polygon'
 import { OptionsGraphiques, Segment } from './elements/Segment'
+import { Text } from './elements/Text'
 
 export class Figure {
   width: number
@@ -13,7 +13,7 @@ export class Figure {
   pixelsPerUnit: number
   list: Element2D[]
   isDynamic: boolean
-  setInDrag: Set<Point>
+  setInDrag: Set<Point | Text>
   isDraging: boolean
   xMin: number
   xMax: number
@@ -90,6 +90,7 @@ export class Figure {
      * @returns
      */
   private getPointerCoord (event: PointerEvent) {
+    event.preventDefault()
     const rect = this.svg.getBoundingClientRect()
     const pointerX = (event.clientX - rect.x) / this.pixelsPerUnit + this.xMin
     const pointerY = -(event.clientY - rect.y) / this.pixelsPerUnit + this.yMax
@@ -102,6 +103,7 @@ export class Figure {
   private listenPointer () {
     this.svg.addEventListener('pointermove', (event) => {
       if (!this.isDraging) return
+      document.querySelector('body').style.cursor = 'move'
       const [pointerX, pointerY] = this.getPointerCoord(event)
       for (const e of this.setInDrag) {
         e.notifyPointerMove(pointerX, pointerY)
@@ -111,7 +113,7 @@ export class Figure {
     const startDrag = (event: PointerEvent) => {
       const [pointerX, pointerY] = this.getPointerCoord(event)
       for (const e of this.list) {
-        if (e.dragable && e instanceof Point && e.distancePointer(pointerX, pointerY) * this.pixelsPerUnit < 15) {
+        if (e.dragable && (e instanceof Point || e instanceof Text) && e.distancePointer(pointerX, pointerY) * this.pixelsPerUnit < 15) {
           // ToFix est-ce qu'on garde le fait de pouvoir déplacer plusieurs points en même temps
           // Un set de taille 1 est inutile autant avoir un unique élément
           if (this.setInDrag.size < 1) {
@@ -125,6 +127,7 @@ export class Figure {
     const stopDrag = () => {
       this.isDraging = false
       this.setInDrag.clear()
+      document.querySelector('body').style.cursor = 'default'
     }
 
     this.svg.addEventListener('pointerdown', startDrag)
@@ -162,14 +165,6 @@ export class Figure {
     M.style = ''
     N.style = ''
     return this.segment(M, N, { color, thickness })
-  }
-
-  polygon (listPoints: Point[]) {
-    // polygon(listPoints: Point[], options: object = {}) {
-    return new Polygon(this, listPoints)
-    // for (const key in options) {
-    //     p[key] = options[key]
-    // }
   }
 
   /**

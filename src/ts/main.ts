@@ -40,7 +40,6 @@ btn.addEventListener('click', () => {
 figure.svg.style.margin = 'auto'
 figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
-figure.svg.style.backgroundColor = 'lightcyan'
 
 // On créé des points à partir de leur coordonnées
 
@@ -48,7 +47,8 @@ const A = figure.point(0, 0)
 const B = figure.point(4, 1)
 const C = new PointByRotation(A, B, 60)
 const p = new Polygon(A, B, C)
-const t = new TextByPoint(A, 'test')
+console.log(figure.list) // ToFix la liste est trop importante, il faut supprimer les croix non utilisés et voir si le cercle ne créé pas des points dragable
+window.t = new Text(figure, -4, 0, 'test')
 t.text = 'ok'
 
 p.color = 'blue'

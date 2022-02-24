@@ -39,7 +39,10 @@ export class Point extends Element2D {
     } else {
       this.style = ''
     }
-    if (this.g.childElementCount > 0 && !this.temp) this.parentFigure.svg.appendChild(this.g)
+    if (this.g.childElementCount > 0 && !this.temp) {
+      this.parentFigure.svg.appendChild(this.g)
+      if (this.dragable) this.g.style.cursor = 'move'
+    }
   }
 
   /**
