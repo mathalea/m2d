@@ -5,8 +5,8 @@ import { Point } from './Point'
 export class Vector extends Element2D {
   private _x: number
   private _y: number
-  origin: Point
-  end: Point
+  origin: Point // ToFix ? arg1 ou Point(0,0)
+  end: Point // ToFix ? arg2 ou Point(arg1,arg2)
   parentFigure: Figure
 
   constructor (svgContainer: Figure, arg1: number | Point, arg2: number | Point) {

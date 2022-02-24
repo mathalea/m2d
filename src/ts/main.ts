@@ -11,6 +11,7 @@ import { renderMathInDocument } from 'mathlive'
 import { Text } from './elements/Text'
 import { Polygon } from './elements/Polygon'
 import { TextByPoint } from './elements/TextByPoint'
+import { Barycenter } from './elements/Barycenter'
 
 /**
  * Script qui permet de tester M2D
@@ -43,14 +44,17 @@ figure.svg.style.border = 'solid'
 
 // On créé des points à partir de leur coordonnées
 
-const A = figure.point(0, 0, {label: 'ABC'})
-const B = figure.point(4, 1)
-const C = new PointByRotation(A, B, 60, {label: 'Z'})
-//const p = new Polygon(A, B, C)
+const A = figure.point(0, 0, { label: 'A' })
+const B = figure.point(4, 1, { label: 'B' })
+const C = figure.point(7, 3, { label: 'C' })
+const D = figure.point(2, 5, { label: 'D' })
+const P = new Polygon(A, B, C, D)
+const G = new Barycenter([A, B, C, D], { style: 'x' })
+// const p = new Polygon(A, B, C)
 window.t = new Text(figure, -4, 0, 'test')
 t.text = 'ok'
 
-//p.style = 'o'
+// p.style = 'o'
 console.log(figure.set) // ToFix la liste est trop importante, il faut supprimer les croix non utilisés et voir si le cercle ne créé pas des points draggable
 
 // const t = new Text(figure, -3, 0, '$\\pi$')
