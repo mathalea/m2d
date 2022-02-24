@@ -1,9 +1,9 @@
-import { Figure } from '../Figure'
-import { Element2D } from './Element2D'
-import { Segment } from './Segment'
-import { Circle } from './Circle'
-import { Cross } from './cross'
-import { TextByPoint } from './TextByPoint'
+import { Figure } from '../../Figure'
+import { Element2D } from '../Element2D'
+import { Segment } from '../lines/Segment'
+import { Circle } from '../lines/Circle'
+import { Cross } from '../others/cross'
+import { TextByPoint } from '../texts/TextByPoint'
 
 export type PointStyle = 'x' | 'o' | ''
 export type PointOptions = { label?: string, style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean }

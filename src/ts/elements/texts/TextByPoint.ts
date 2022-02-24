@@ -1,5 +1,10 @@
+<<<<<<< Updated upstream:src/ts/elements/TextByPoint.ts
 import { Point } from './Point'
 import { TextByPosition } from './Text'
+=======
+import { Point } from '../points/Point'
+import { Text } from './Text'
+>>>>>>> Stashed changes:src/ts/elements/texts/TextByPoint.ts
 
 export class TextByPoint extends TextByPosition {
   A: Point

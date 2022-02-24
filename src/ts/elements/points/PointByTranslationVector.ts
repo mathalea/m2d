@@ -1,5 +1,5 @@
 import { Point, PointOptions } from './Point'
-import { Vector } from './Vector'
+import { Vector } from '../others/Vector'
 
 export class PointByTranslationVector extends Point {
     previous: Point

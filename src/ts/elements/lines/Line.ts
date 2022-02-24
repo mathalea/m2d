@@ -1,5 +1,5 @@
-import { Point } from './Point'
-import { PointOnLine } from './PointOnLine'
+import { Point } from '../points/Point'
+import { PointOnLine } from '../points/PointOnLine'
 import { Segment, SegmentStyle } from './Segment'
 
 /**

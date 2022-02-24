@@ -1,5 +1,5 @@
-import { Point } from '../elements/Point'
-import { Segment } from '../elements/Segment'
+import { Point } from '../elements/points/Point'
+import { Segment } from '../elements/lines/Segment'
 
 /**
    *

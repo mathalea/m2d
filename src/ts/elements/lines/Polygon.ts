@@ -1,10 +1,10 @@
-import { Figure } from '../Figure'
-import { Barycenter } from './Barycenter'
-import { Element2D } from './Element2D'
-import { Point, PointStyle } from './Point'
-import { PointOnLineAtD } from './PointOnLineAtD'
+import { Figure } from '../../Figure'
+import { Barycenter } from '../points/Barycenter'
+import { Element2D } from '../Element2D'
+import { Point, PointStyle } from '../points/Point'
+import { PointOnLineAtD } from '../points/PointOnLineAtD'
 import { Segment } from './Segment'
-import { TextByPoint } from './TextByPoint'
+import { TextByPoint } from '../texts/TextByPoint'
 
 export class Polygon extends Element2D {
   points: Point[]

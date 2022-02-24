@@ -1,6 +1,6 @@
-import { intersectionLLCoord } from '../calculus/intersection'
+import { intersectionLLCoord } from '../../calculus/intersection'
 import { Point, PointOptions } from './Point'
-import { Segment } from './Segment'
+import { Segment } from '../lines/Segment'
 
 export class PointIntersectionLL extends Point {
   L1: Segment

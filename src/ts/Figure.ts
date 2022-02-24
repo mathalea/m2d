@@ -1,11 +1,18 @@
 import { intersectionLCCoord } from './calculus/intersection'
 import { distance } from './calculus/random'
-import { Circle } from './elements/Circle'
+import { Circle } from './elements/lines/Circle'
 import { Element2D } from './elements/Element2D'
+<<<<<<< Updated upstream
 import { PointOptions, Point } from './elements/Point'
 import { PointOnLine } from './elements/PointOnLine'
 import { OptionsGraphiques, Segment } from './elements/Segment'
 import { TextByPosition } from './elements/Text'
+=======
+import { PointOptions, Point } from './elements/points/Point'
+import { PointOnLine } from './elements/points/PointOnLine'
+import { OptionsGraphiques, Segment } from './elements/lines/Segment'
+import { Text } from './elements/texts/Text'
+>>>>>>> Stashed changes
 
 export class Figure {
   width: number

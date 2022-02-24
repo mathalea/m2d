@@ -1,7 +1,7 @@
-import { distance, randint } from '../calculus/random'
-import { orthogonalProjectionCoord } from '../calculus/transformation'
+import { distance, randint } from '../../calculus/random'
+import { orthogonalProjectionCoord } from '../../calculus/transformation'
 import { Point, PointOptions } from './Point'
-import { Segment } from './Segment'
+import { Segment } from '../lines/Segment'
 
 export class PointOnLine extends Point {
   line : Segment

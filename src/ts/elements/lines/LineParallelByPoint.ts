@@ -1,7 +1,7 @@
 import { Line } from './Line'
 import { LineByPointVector } from './LineByPointVector'
-import { Point } from './Point'
-import { Vector } from './Vector'
+import { Point } from '../points/Point'
+import { Vector } from '../Vector'
 
 export class LineParallelByPoint extends LineByPointVector {
   line : Line // La droite à laquelle il faut être parallèle

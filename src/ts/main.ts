@@ -1,11 +1,4 @@
 
-import { LinePerpendicularByPoint } from './elements/LinePerpendicularlByPoint'
-import { PointByRotation } from './elements/PointByRotation'
-import { PointByTranslationVector } from './elements/PointByTranslationVector'
-import { PointIntersectionLL } from './elements/PointIntersectionLL'
-import { PointOnLineAtD } from './elements/PointOnLineAtD'
-import { Segment } from './elements/Segment'
-import { Vector } from './elements/Vector'
 import { Figure } from './Figure'
 import { renderMathInDocument } from 'mathlive'
 import { TextByPosition } from './elements/Text'
@@ -53,8 +46,8 @@ const G = new Barycenter([A, B, C, D], { style: 'x' })
 P.color = 'blue'
 P.thickness = 2
 // const p = new Polygon(A, B, C)
-window.t = new Text(figure, -4, 0, 'test')
-t.text = 'ok'
+// window.t = new Text(figure, -4, 0, 'test')
+// t.text = 'ok'
 
 // p.style = 'o'
 console.log(figure.set) // ToFix la liste est trop importante, il faut supprimer les croix non utilisés et voir si le cercle ne créé pas des points draggable

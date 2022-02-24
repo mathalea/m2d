@@ -1,7 +1,7 @@
-import { distance, randint } from '../calculus/random'
-import { rotationCoord } from '../calculus/transformation'
-import { angleOriented } from '../calculus/trigonometry'
-import { Circle } from './Circle'
+import { distance, randint } from '../../calculus/random'
+import { rotationCoord } from '../../calculus/transformation'
+import { angleOriented } from '../../calculus/trigonometry'
+import { Circle } from '../lines/Circle'
 import { Point, PointOptions } from './Point'
 import { PointByHomothetie } from './PointByHomothetie'
 
