@@ -14,7 +14,8 @@ export class Segment extends Element2D {
     x2: number
     y2: number
     ends: [Point, Point]
-    temp: boolean
+  temp: boolean
+  label: string
     private _style: string
     constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', temp = false }: OptionsGraphiques = {}) {
       super()

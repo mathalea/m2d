@@ -1,10 +1,7 @@
 
 import { Figure } from './Figure'
-import { renderMathInDocument } from 'mathlive'
-import { TextByPosition } from './elements/Text'
-import { Polygon } from './elements/Polygon'
-import { TextByPoint } from './elements/TextByPoint'
-import { Barycenter } from './elements/Barycenter'
+import { Polygon } from './elements/lines/Polygon'
+import { Barycenter } from './elements/points/Barycenter'
 
 /**
  * Script qui permet de tester M2D
