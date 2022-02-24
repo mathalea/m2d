@@ -82,7 +82,7 @@ export abstract class Element2D {
     this._fill = fill
   }
 
-  get tex () {
+  get latex () {
     return ''
   }
 }

@@ -1,7 +1,7 @@
 import { Figure } from '../Figure'
 import { Element2D } from './Element2D'
 
-export class Text extends Element2D {
+export class TextByPosition extends Element2D {
     private _x: number
     private _y: number
     private _text: string
@@ -18,6 +18,8 @@ export class Text extends Element2D {
       this.g.setAttribute('stroke', 'black')
       this.g.style.overflow = 'visible'
       this.g.style.lineHeight = '0'
+      this.g.style.dominantBaseline = 'middle'
+      this.g.style.textAnchor = 'middle'
       this.g.style.cursor = this.draggable ? 'move' : 'default'
       if (!temp) {
         this.parentFigure.svg.appendChild(this.g)
@@ -55,6 +57,10 @@ export class Text extends Element2D {
     update (): void {
     }
 
+    get latex () {
+      return `\n\t\\draw (${this.x},${this.y}) node[anchor = center] {${this.text}};`
+    }
+
     /**
    * Quand le pointeur se déplace en mode drag, le point va aussi se déplacer
    * @param x coordonnées dans notre repère
@@ -75,7 +81,7 @@ export class Text extends Element2D {
       return Math.sqrt((this.x - pointerX) ** 2 + (this.y - pointerY) ** 2)
     }
 
-  // get tex () {
+  // get latex () {
 
   // }
 }

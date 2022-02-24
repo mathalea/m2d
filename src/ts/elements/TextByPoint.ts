@@ -1,11 +1,11 @@
 import { Point } from './Point'
-import { Text } from './Text'
+import { TextByPosition } from './Text'
 
-export class TextByPoint extends Text {
+export class TextByPoint extends TextByPosition {
   A: Point
   private _dx: number
   private _dy: number
-  constructor (A: Point, text: string, { dx = -0.3, dy = 0.3 }: {dx?:number, dy?: number} = {}) {
+  constructor (A: Point, text: string, { dx = 0, dy = 0 }: {dx?:number, dy?: number} = {}) {
     super(A.parentFigure, A.x + dx, A.y + dy, text)
     this.A = A
     this._dx = dx

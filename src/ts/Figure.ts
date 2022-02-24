@@ -5,7 +5,7 @@ import { Element2D } from './elements/Element2D'
 import { PointOptions, Point } from './elements/Point'
 import { PointOnLine } from './elements/PointOnLine'
 import { OptionsGraphiques, Segment } from './elements/Segment'
-import { Text } from './elements/Text'
+import { TextByPosition } from './elements/Text'
 
 export class Figure {
   width: number
@@ -13,7 +13,7 @@ export class Figure {
   pixelsPerUnit: number
   set: Set<Element2D>
   isDynamic: boolean
-  setInDrag: Set<Point | Text>
+  setInDrag: Set<Point | TextByPosition>
   isDraging: boolean
   xMin: number
   xMax: number
@@ -110,7 +110,7 @@ export class Figure {
     const startDrag = (event: PointerEvent) => {
       const [pointerX, pointerY] = this.getPointerCoord(event)
       for (const e of this.set) {
-        if (e.draggable && (e instanceof Point || e instanceof Text) && e.distancePointer(pointerX, pointerY) * this.pixelsPerUnit < 15) {
+        if (e.draggable && (e instanceof Point || e instanceof TextByPosition) && e.distancePointer(pointerX, pointerY) * this.pixelsPerUnit < 15) {
           // ToFix est-ce qu'on garde le fait de pouvoir déplacer plusieurs points en même temps
           // Un set de taille 1 est inutile autant avoir un unique élément
           if (this.setInDrag.size < 1) {
@@ -212,17 +212,17 @@ export class Figure {
   //   return A.translation(x, y)
   // }
 
-  set tex (txt: string) {
+  set latex (txt: string) {
   }
 
-  get tex () {
-    let tex = '\\begin{tikzpicture}'
-    tex += `\n\t\\clip(${this.xMin}, ${this.yMin}) rectangle (${this.xMax}, ${this.yMax});`
+  get latex () {
+    let latex = '\\begin{tikzpicture}'
+    latex += `\n\t\\clip(${this.xMin}, ${this.yMin}) rectangle (${this.xMax}, ${this.yMax});`
     for (const e of this.set) {
-      tex += e.tex
+      latex += e.latex
     }
-    tex += '\n\\end{tikzpicture}'
-    tex = tex.replace(/\d+\.\d+/g, (number: string) => (Math.round(1000 * parseFloat(number)) / 1000).toString())
-    return tex
+    latex += '\n\\end{tikzpicture}'
+    latex = latex.replace(/\d+\.\d+/g, (number: string) => (Math.round(1000 * parseFloat(number)) / 1000).toString())
+    return latex
   }
 }

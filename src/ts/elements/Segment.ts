@@ -75,16 +75,16 @@ export class Segment extends Element2D {
       this.dependencies.push(dependency)
     }
 
-    get tex () {
+    get latex () {
       const arrayOptions : string[] = []
       if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
       if (this.thickness !== 1) arrayOptions.push(`line width = ${this.thickness}`)
       if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
       let txtOptions = ''
       if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
-      let tex = `\n\t% ${this.label ?? 'Droite'}`
-      tex += `\n \t \\draw${txtOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
-      return tex
+      let latex = `\n\t% ${this.label ?? 'Droite'}`
+      latex += `\n \t \\draw${txtOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
+      return latex
     }
 
     get style () {
