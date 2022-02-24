@@ -17,12 +17,11 @@ export class Cross extends Element2D {
       this.segment2 = document.createElementNS('http://www.w3.org/2000/svg', 'line')
       this.g.appendChild(this.segment1)
       this.g.appendChild(this.segment2)
-      this.parentFigure.list.push(this)
       this.parentFigure.svg.appendChild(this.g)
       this.update()
       this.color = color
       this.thickness = thickness
-      this.parentFigure.list.push(this)
+      this.parentFigure.set.add(this)
     }
 
     update (): void {

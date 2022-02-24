@@ -9,8 +9,8 @@ export class PointOnSegment extends PointOnLine {
     const Llength = distance(L.ends[0], L.ends[1])
     length = length === undefined ? length = Llength / 2 : length < 0 ? 0 : Math.min(length, Llength)
     super(L, { length, style, size, thickness, color, dragable, temp })
+    this._size = size
     this.style = style
-    this.size = size
     this.thickness = thickness
     this.length = length
     this.color = color

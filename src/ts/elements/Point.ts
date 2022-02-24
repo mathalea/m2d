@@ -34,7 +34,7 @@ export class Point extends Element2D {
     this.color = color || (dragable ? 'blue' : 'black')
     this.dragable = dragable
     if (!this.temp) {
-      this.parentFigure.list.push(this)
+      this.parentFigure.set.add(this)
       this.style = style // Le style initialise aussi size
     } else {
       this.style = ''
@@ -90,6 +90,7 @@ export class Point extends Element2D {
    * @param style 'x' | 'o' | ''
    */
   private changeStyle (style) {
+    if (this.parentFigure.set.has(this.mark)) this.parentFigure.set.delete(this.mark)
     if (style === '') {
       this.g.innerHTML = ''
     }

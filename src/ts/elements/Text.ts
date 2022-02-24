@@ -21,7 +21,7 @@ export class Text extends Element2D {
       this.g.style.cursor = 'move'
       if (!temp) {
         this.parentFigure.svg.appendChild(this.g)
-        this.parentFigure.list.push(this)
+        this.parentFigure.set.add(this)
       }
     }
 

@@ -11,7 +11,7 @@ export class Figure {
   width: number
   height: number
   pixelsPerUnit: number
-  list: Element2D[]
+  set: Set<Element2D>
   isDynamic: boolean
   setInDrag: Set<Point | Text>
   isDraging: boolean
@@ -31,7 +31,7 @@ export class Figure {
     this.yMin = yMin
     this.yMax = yMin + height / pixelsPerUnit
     this.isDynamic = isDynamic
-    this.list = []
+    this.set = new Set()
     this.setInDrag = new Set()
     this.isDraging = false
 
@@ -112,7 +112,7 @@ export class Figure {
 
     const startDrag = (event: PointerEvent) => {
       const [pointerX, pointerY] = this.getPointerCoord(event)
-      for (const e of this.list) {
+      for (const e of this.set) {
         if (e.dragable && (e instanceof Point || e instanceof Text) && e.distancePointer(pointerX, pointerY) * this.pixelsPerUnit < 15) {
           // ToFix est-ce qu'on garde le fait de pouvoir déplacer plusieurs points en même temps
           // Un set de taille 1 est inutile autant avoir un unique élément
@@ -221,7 +221,7 @@ export class Figure {
   get tex () {
     let tex = '\\begin{tikzpicture}'
     tex += `\n\t\\clip(${this.xMin}, ${this.yMin}) rectangle (${this.xMax}, ${this.yMax});`
-    for (const e of this.list) {
+    for (const e of this.set) {
       tex += e.tex
     }
     tex += '\n\\end{tikzpicture}'

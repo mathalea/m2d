@@ -15,7 +15,7 @@ export class Circle extends Element2D {
       this.pointOnCircle = arg2 instanceof Point ? arg2 : null
       this.center = center
       this.temp = temp
-      if (!this.temp) this.parentFigure.list.push(this)
+      if (!this.temp) this.parentFigure.set.add(this)
 
       const xSvg = this.parentFigure.xToSx(this.center.x)
       const ySvg = this.parentFigure.yToSy(this.center.y)
@@ -24,7 +24,7 @@ export class Circle extends Element2D {
       circle.setAttribute('cy', `${ySvg}`)
       this.g = circle
       if (!this.temp) this.parentFigure.svg.appendChild(this.g)
-      this.M = new Point(this.parentFigure, 100, 100, { style: '' }) // Point temporaire qui sera placé quand on connaitra le rayon
+      this.M = new Point(this.parentFigure, 100, 100, { style: '', temp: true }) // Point temporaire qui sera placé quand on connaitra le rayon
       this.radius = (typeof arg2 === 'number') ? arg2 : this.radius = distance(center, arg2)
       this.M.moveTo(center.x + this.radius, center.y)
       this.fill = fill

@@ -24,7 +24,7 @@ export class Segment extends Element2D {
       this.x2 = B.x
       this.y2 = B.y
       this.parentFigure = A.parentFigure
-      if (!temp) this.parentFigure.list.push(this)
+      if (!temp) this.parentFigure.set.add(this)
       this.ends = [A, B]
       if (A.label && B.label) this.label = `[${A.label}${B.label}]`
 

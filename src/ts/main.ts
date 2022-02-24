@@ -47,13 +47,13 @@ const A = figure.point(0, 0)
 const B = figure.point(4, 1)
 const C = new PointByRotation(A, B, 60)
 const p = new Polygon(A, B, C)
-console.log(figure.list) // ToFix la liste est trop importante, il faut supprimer les croix non utilisés et voir si le cercle ne créé pas des points dragable
 window.t = new Text(figure, -4, 0, 'test')
 t.text = 'ok'
 
 p.color = 'blue'
 p.thickness = 3
-p.style = 'o'
+//p.style = 'o'
+console.log(figure.set) // ToFix la liste est trop importante, il faut supprimer les croix non utilisés et voir si le cercle ne créé pas des points dragable
 
 // const t = new Text(figure, -3, 0, '$\\pi$')
 // const A = figure.point(4, 0)
