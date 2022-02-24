@@ -1,4 +1,4 @@
-import { distance, texN } from '../calculus/random'
+import { distance } from '../calculus/random'
 import { Element2D } from './Element2D'
 import { Point } from './Point'
 import { OptionsGraphiques } from './Segment'
@@ -118,6 +118,6 @@ export class Circle extends Element2D {
       if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
       let txtOptions = ''
       if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
-      return `\n \t \\draw${txtOptions} (${texN(this.center.x)}, ${texN(this.center.y)}) circle(${texN(this.radius)});`
+      return `\n \t \\draw${txtOptions} (${this.center.x}, ${this.center.y}) circle(${this.radius});`
     }
 }

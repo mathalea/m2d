@@ -1,5 +1,5 @@
 import { intersectionLCCoord } from './calculus/intersection'
-import { distance, texN } from './calculus/random'
+import { distance } from './calculus/random'
 import { Circle } from './elements/Circle'
 import { Element2D } from './elements/Element2D'
 import { PointOptions, Point } from './elements/Point'
@@ -225,11 +225,12 @@ export class Figure {
 
   get tex () {
     let tex = '\\begin{tikzpicture}'
-    tex += `\n\t\\clip(${texN(this.xMin)}, ${texN(this.yMin)}) rectangle (${texN(this.xMax)}, ${texN(this.yMax)});`
+    tex += `\n\t\\clip(${this.xMin}, ${this.yMin}) rectangle (${this.xMax}, ${this.yMax});`
     for (const e of this.list) {
       tex += e.tex
     }
     tex += '\n\\end{tikzpicture}'
+    tex = tex.replace(/\d+\.\d+/g, (number: string) => (Math.round(1000 * parseFloat(number)) / 1000).toString())
     return tex
   }
 }
