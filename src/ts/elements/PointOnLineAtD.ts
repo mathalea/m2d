@@ -8,13 +8,14 @@ export class PointOnLineAtD extends Point {
   length: number // valeur signée (mesure algébrique de ends[0] à M)
   d: number
 
-  constructor (L: Segment, d: number, { style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = false, temp = false }: {length?: number, k?: number} & PointOptions = {}) {
+  constructor (L: Segment, d: number, { label, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = false, temp = false }: {length?: number, k?: number} & PointOptions = {}) {
     const M = new PointByHomothetie(L.ends[1], L.ends[0], d / distance(L.ends[0], L.ends[1]), { temp: true })
     super(L.parentFigure, M.x, M.y, { style, size, thickness, color, draggable, temp })
     this.x = M.x
     this.y = M.y
     this.line = L
     this.d = d
+    if (label !== undefined) this.label = label
     this.line.addDependency(this)
   }
 

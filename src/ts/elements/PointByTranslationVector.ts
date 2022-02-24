@@ -1,13 +1,14 @@
-import { Point } from './Point'
+import { Point, PointOptions } from './Point'
 import { Vector } from './Vector'
 
 export class PointByTranslationVector extends Point {
     previous: Point
     vector: Vector
-    constructor (A: Point, v: Vector, { style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: {style?: '' | 'x' | 'o', size?: number, thickness?: number, color?: string, draggable?: boolean, temp?: boolean} = {}) {
+    constructor (A: Point, v: Vector, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
       super(A.parentFigure, A.x + v.x, A.y + v.y, { style, size, thickness, color, draggable, temp })
       this.previous = A
       this.vector = v
+      if (label !== undefined) this.label = label
       A.addDependency(this)
       v.addDependency(this)
     }

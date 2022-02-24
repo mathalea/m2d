@@ -13,6 +13,18 @@ export class TextByPoint extends Text {
     A.addDependency(this)
   }
 
+  /**
+   * Quand le pointeur se déplace en mode drag, le point va aussi se déplacer
+   * @param x coordonnées dans notre repère
+   * @param y
+   */
+  notifyPointerMove (x: number, y: number) {
+    this.x = x
+    this.y = y
+    this._dx = this.x - this.A.x
+    this._dy = this.y - this.A.y
+  }
+
   update (): void {
     this.x = this.A.x + this._dx
     this.y = this.A.y + this._dy

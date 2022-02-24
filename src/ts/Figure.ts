@@ -97,9 +97,6 @@ export class Figure {
     return [pointerX, pointerY]
   }
 
-  /**
-     *
-     */
   private listenPointer () {
     this.svg.addEventListener('pointermove', (event) => {
       if (!this.isDraging) return

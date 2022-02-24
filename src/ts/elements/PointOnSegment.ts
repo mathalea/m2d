@@ -5,7 +5,7 @@ import { PointOnLine } from './PointOnLine'
 import { Segment } from './Segment'
 
 export class PointOnSegment extends PointOnLine {
-  constructor (L: Segment, { length, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: {length?: number} & PointOptions = {}) {
+  constructor (L: Segment, { label, length, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: {length?: number} & PointOptions = {}) {
     const Llength = distance(L.ends[0], L.ends[1])
     length = length === undefined ? length = Llength / 2 : length < 0 ? 0 : Math.min(length, Llength)
     super(L, { length, style, size, thickness, color, draggable, temp })
@@ -16,6 +16,7 @@ export class PointOnSegment extends PointOnLine {
     this.color = color
     this.draggable = draggable
     this.temp = temp
+    if (label !== undefined) this.label = label
     this.k = this.length / Llength
   }
 

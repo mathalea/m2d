@@ -7,7 +7,7 @@ export class PointOnLine extends Point {
   line : Segment
   length: number // valeur signée (mesure algébrique de ends[0] à M)
   k: number
-  constructor (L: Segment, { k, length, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: {length?: number, k?: number} & PointOptions = {}) {
+  constructor (L: Segment, { label, k, length, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: {length?: number, k?: number} & PointOptions = {}) {
     const Llength = distance(L.ends[0], L.ends[1])
     length = (length === undefined) ? randint(15, 85) * Llength / 100 : length
     k = k || Llength === 0 ? 0.5 : length / Llength // Evitons la division par zéro avec le milieu d'un segment nul.
@@ -17,6 +17,7 @@ export class PointOnLine extends Point {
     this.y = My
     this.line = L
     this.k = k
+    if (label !== undefined) this.label = label
     this.line.addDependency(this)
   }
 

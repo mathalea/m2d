@@ -3,9 +3,10 @@ import { Element2D } from './Element2D'
 import { Segment } from './Segment'
 import { Circle } from './Circle'
 import { Cross } from './cross'
+import { TextByPoint } from './TextByPoint'
 
 export type PointStyle = 'x' | 'o' | ''
-export type PointOptions = { style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean }
+export type PointOptions = { label?: string, style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean }
 
 export class Point extends Element2D {
   x: number
@@ -15,12 +16,13 @@ export class Point extends Element2D {
   protected _size: number // Pour la taille de la croix et utilisé dans changeStyle
   g: SVGElement
   mark: Element2D
+  labelElement : Element2D
   parentFigure: Figure
   draggable: true | false | Circle | Segment
   temp: boolean // Pour les points qui ne servent qu'à faire des calculs
   isVisible : boolean
   // On définit un point avec ses deux coordonnées
-  constructor (svgContainer: Figure, x: number, y: number, { style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false }: PointOptions = {}) {
+  constructor (svgContainer: Figure, x: number, y: number, { label, style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false }: PointOptions = {}) {
     super()
     this.x = x
     this.y = y
@@ -43,6 +45,7 @@ export class Point extends Element2D {
       this.parentFigure.svg.appendChild(this.g)
       if (this.draggable) this.g.style.cursor = 'move'
     }
+    if (label !== undefined) this.label = label
   }
 
   /**
@@ -92,7 +95,7 @@ export class Point extends Element2D {
   private changeStyle (style) {
     if (this.parentFigure.set.has(this.mark)) this.parentFigure.set.delete(this.mark)
     if (style === '') {
-      this.g.innerHTML = ''
+      this.g.remove()
     }
     if (style === 'x') {
       const X = new Cross(this.parentFigure, this.x, this.y)
@@ -128,13 +131,21 @@ export class Point extends Element2D {
     this.isVisible = true
   }
 
-  // get label () {
-  //   return this._label
-  // }
+  get label () {
+    return this._label
+  }
 
-  // set label (label) {
-  //   this._label = label
-  // }
+  set label (label) {
+    if (this.labelElement) {
+      this.labelElement.g.remove()
+      this.parentFigure.set.delete(this.labelElement)
+    }
+    if (label !== '') {
+      this.labelElement = new TextByPoint(this, label)
+      this.parentFigure.svg.appendChild(this.labelElement.g)
+    }
+    this._label = label
+  }
 
   get style () {
     return this._style
