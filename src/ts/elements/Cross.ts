@@ -45,16 +45,16 @@ export class Cross extends Element2D {
       this.segment2.setAttribute('y2', `${y22Svg}`)
     }
 
-    get tex () {
+    get latex () {
       const arrayOptions : string[] = []
       if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
       if (this.thickness !== 1) arrayOptions.push(`line width = ${this.thickness}`)
       if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
       let txtOptions = ''
       if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
-      let tex = `\n\t % Point ${this.label ?? ''}`
-      tex += `\n \t \\draw${txtOptions} (${this.x - this.size}, ${this.y + this.size}) -- (${this.x + this.size}, ${this.y - this.size});`
-      tex += `\n \t \\draw${txtOptions} (${this.x - this.size}, ${this.y - this.size}) -- (${this.x + this.size}, ${this.y + this.size});`
-      return tex
+      let latex = `\n\t % Point ${this.label ?? ''}`
+      latex += `\n \t \\draw${txtOptions} (${this.x - this.size}, ${this.y + this.size}) -- (${this.x + this.size}, ${this.y - this.size});`
+      latex += `\n \t \\draw${txtOptions} (${this.x - this.size}, ${this.y - this.size}) -- (${this.x + this.size}, ${this.y + this.size});`
+      return latex
     }
 }

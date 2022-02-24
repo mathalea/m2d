@@ -17,6 +17,7 @@ export class Polygon extends Element2D {
       this.g.setAttribute('fill', 'none')
       this.g.setAttribute('stroke', 'black')
       this.parentFigure.svg.appendChild(this.g)
+      this.parentFigure.set.add(this)
 
       for (const point of points) {
         point.addDependency(this)
@@ -41,6 +42,16 @@ export class Polygon extends Element2D {
       }
       this._style = style
     }
+
+    get latex (): string {
+      const arrayOptions : string[] = []
+      if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
+      if (this.thickness !== 1) arrayOptions.push(`line width = ${this.thickness}`)
+      if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
+      let txtOptions = ''
+      if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
+      return `\n\t\\draw${txtOptions} ${listeXYLatex(this.points)};`
+    }
 }
 
 function listeXY (points: Point[]) {
@@ -49,5 +60,14 @@ function listeXY (points: Point[]) {
   for (const point of points) {
     liste += `${parentFigure.xToSx(point.x)}, ${parentFigure.yToSy(point.y)} `
   }
+  return liste
+}
+
+function listeXYLatex (points: Point[]) {
+  let liste = ''
+  for (const point of points) {
+    liste += `(${point.x}, ${point.y})--`
+  }
+  liste += 'cycle'
   return liste
 }

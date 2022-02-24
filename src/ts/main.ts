@@ -8,7 +8,7 @@ import { Segment } from './elements/Segment'
 import { Vector } from './elements/Vector'
 import { Figure } from './Figure'
 import { renderMathInDocument } from 'mathlive'
-import { Text } from './elements/Text'
+import { TextByPosition } from './elements/Text'
 import { Polygon } from './elements/Polygon'
 import { TextByPoint } from './elements/TextByPoint'
 import { Barycenter } from './elements/Barycenter'
@@ -35,7 +35,7 @@ if (body) {
 }
 
 btn.addEventListener('click', () => {
-  texteLatex.innerHTML = figure.tex
+  texteLatex.innerHTML = figure.latex
 })
 
 figure.svg.style.margin = 'auto'
@@ -50,10 +50,8 @@ const C = figure.point(7, 3, { label: 'C' })
 const D = figure.point(2, 5, { label: 'D' })
 const P = new Polygon(A, B, C, D)
 const G = new Barycenter([A, B, C, D], { style: 'x' })
-// const p = new Polygon(A, B, C)
-window.t = new Text(figure, -4, 0, 'test')
-t.text = 'ok'
-
+P.color = 'blue'
+P.thickness = 2
 // p.style = 'o'
 console.log(figure.set) // ToFix la liste est trop importante, il faut supprimer les croix non utilisés et voir si le cercle ne créé pas des points draggable
 
@@ -73,7 +71,7 @@ console.log(figure.set) // ToFix la liste est trop importante, il faut supprimer
 // const s1 = new Segment(M1, M3)
 // const s2 = new Segment(M3, M2)
 // const t2 = new Text(figure, -5, 0, '$\\pi$')
-// renderMathInDocument({ TeX: { delimiters: { display: [['\\[', '\\]$']], inline: [['$', '$']] } } })
+// renderMathInDocument({ latex: { delimiters: { display: [['\\[', '\\]$']], inline: [['$', '$']] } } })
 
 // math.style.position = 'absolute'
 

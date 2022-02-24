@@ -111,7 +111,7 @@ export class Circle extends Element2D {
       return new Circle(O2, this.radius * k)
     }
 
-    get tex () {
+    get latex () {
       const arrayOptions : string[] = []
       if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
       if (this.thickness === 1) arrayOptions.push(`line width = ${this.thickness}`)
