@@ -8,12 +8,15 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.11.0",
-    "@typescript-eslint/parser": "^5.11.0",
+    "@typescript-eslint/eslint-plugin": "^5.12.1",
+    "@typescript-eslint/parser": "^5.12.1",
     "eslint": "^7.32.0",
     "husky": "^7.0.4",
     "standard": "^16.0.4",
     "typescript": "^4.5.5",
-    "vite": "^2.7.13"
+    "vite": "^2.8.4"
+  },
+  "dependencies": {
+    "mathlive": "^0.69.10"
   }
 }
