@@ -4,6 +4,8 @@ import { Polygon } from './elements/lines/Polygon'
 import { Barycenter } from './elements/points/Barycenter'
 import { LinePerpendicularByPoint } from './elements/lines/LinePerpendicularlByPoint'
 import { Segment } from './elements/lines/Segment'
+import { PointByProjection } from './elements/points/PointByProjection'
+import { Line } from './elements/lines/Line'
 
 /**
  * Script qui permet de tester M2D
@@ -38,7 +40,8 @@ const B = figure.point(4, 1) //{ label: 'B' })
 const C = figure.point(7, 3) //{ label: 'C' })
 const D = figure.point(2, 5) //{ label: 'D' })
 const P = new Polygon(A, B, C, D)
-const G = new Barycenter([A, B, C, D], { style: 'x' })
+const M = new PointByProjection(A, new Line(C, D))
+
 P.color = 'blue'
 P.thickness = 2
 // const p = new Polygon(A, B, C)

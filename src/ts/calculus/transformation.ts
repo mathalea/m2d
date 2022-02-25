@@ -52,7 +52,7 @@ export function similitudeCoord (A: Point, O: Point, k: number, angle: number) {
 export function orthogonalProjectionCoord (M: Point, d: Segment) {
   const [a, b, c] = d.equation
   const k = 1 / (a * a + b * b)
-  let x, y
+  let x: number, y: number
   if (a === 0) {
     x = M.x
     y = -c / b
