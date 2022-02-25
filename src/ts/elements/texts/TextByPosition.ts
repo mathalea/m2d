@@ -13,7 +13,7 @@ export class TextByPosition extends Element2D {
       this.g = document.createElementNS('http://www.w3.org/2000/svg', 'text')
       this.x = x
       this.y = y
-      this.text = text
+      this.text = text ?? ''
       this.draggable = draggable
       this.g.setAttribute('stroke', 'black')
       this.g.style.overflow = 'visible'

@@ -1,5 +1,5 @@
 import { Point } from '../points/Point'
-import { TextByPosition } from './Text'
+import { TextByPosition } from './TextByPosition'
 
 export class TextByPoint extends TextByPosition {
   A: Point

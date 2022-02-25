@@ -33,7 +33,7 @@ export class Polygon extends Element2D {
         this.labelsPoints.push(new PointOnLineAtD(new Segment(point, this.barycenter, { temp: true }), -0.5, { temp: true, style: '' }))
         const name = point.label
         point.label = ''
-        this.labels.push(new TextByPoint(this.labelsPoints[this.labelsPoints.length - 1], name, { dx: -0.2, dy: -0.2 }))
+        this.labels.push(new TextByPoint(this.labelsPoints[this.labelsPoints.length - 1], name))
         point.addDependency(this)
       }
 

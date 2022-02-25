@@ -2,6 +2,8 @@
 import { Figure } from './Figure'
 import { Polygon } from './elements/lines/Polygon'
 import { Barycenter } from './elements/points/Barycenter'
+import { LinePerpendicularByPoint } from './elements/lines/LinePerpendicularlByPoint'
+import { Segment } from './elements/lines/Segment'
 
 /**
  * Script qui permet de tester M2D
@@ -15,10 +17,7 @@ const body = document.querySelector('body')
 const btn = document.createElement('button')
 btn.innerHTML = 'Obtenir LaTeX'
 const texteLatex = document.createElement('pre')
-const math = document.createElement('div')
-math.innerHTML = '$\\dfrac{3}{4}$'
 if (body) {
-  body.appendChild(math)
   body.appendChild(figure.svg)
   body.appendChild(btn)
   body.appendChild(texteLatex)
@@ -34,10 +33,10 @@ figure.svg.style.border = 'solid'
 
 // On créé des points à partir de leur coordonnées
 
-const A = figure.point(0, 0, { label: 'A' })
-const B = figure.point(4, 1, { label: 'B' })
-const C = figure.point(7, 3, { label: 'C' })
-const D = figure.point(2, 5, { label: 'D' })
+const A = figure.point(0, 0) //{ label: 'A' })
+const B = figure.point(4, 1) //{ label: 'B' })
+const C = figure.point(7, 3) //{ label: 'C' })
+const D = figure.point(2, 5) //{ label: 'D' })
 const P = new Polygon(A, B, C, D)
 const G = new Barycenter([A, B, C, D], { style: 'x' })
 P.color = 'blue'
