@@ -6,6 +6,7 @@ import { LinePerpendicularByPoint } from './elements/lines/LinePerpendicularlByP
 import { Segment } from './elements/lines/Segment'
 import { PointByProjection } from './elements/points/PointByProjection'
 import { Line } from './elements/lines/Line'
+import { Mediatrice } from './elements/lines/Mediatrice'
 
 /**
  * Script qui permet de tester M2D
@@ -40,7 +41,7 @@ const B = figure.point(4, 1) //{ label: 'B' })
 const C = figure.point(7, 3) //{ label: 'C' })
 const D = figure.point(2, 5) //{ label: 'D' })
 const P = new Polygon(A, B, C, D)
-const M = new PointByProjection(A, new Line(C, D))
+const s = new Mediatrice(new Segment(A, B), {color: 'orange', thickness: 3})
 
 P.color = 'blue'
 P.thickness = 2

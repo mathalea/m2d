@@ -34,13 +34,12 @@ Les points et les cercles ont :
 - moveTo(x, y) : pour les déplacer
 - translation, rotation, homothétie, similitude qui créeront un nouveau point (sauf si on met l'option `clone: false`)
 - fill : pour colorier
+- label des points avec un positionnement
 
 
 ToDo : 
 - mark : pour ajouter un codage
 - pointilles
-- label des points avec un positionnement
-- choix du point à déplacer lorsque le pointeur est à proximité 
 - modifier les actions du clic (au lieu du drag-n-drop on pourrait changer la couleur et l'épaisseur des éléments cliqués)
 
 
@@ -50,6 +49,17 @@ const A = figure.point(x, y, {labelPosition: 'above left', style: 'x'})
 const B = A.translation(x, y)
 const C = A.symetrie(B)
 ```
+
+#### Feuille de route
+
+- AngleMark
+- ~PointByOrthongonalProjection~
+- Bspline
+- Mediatrice
+- Bissectrice
+- SegmentCode
+- Cube
+- DemiDroite
 
 
 

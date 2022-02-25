@@ -6,9 +6,9 @@ import { Vector } from '../others/Vector'
 export class LinePerpendicularByPoint extends LineByPointVector {
   line : Line // La droite à laquelle il faut être perpendiculaire
   A: Point // Le point par lequel passe la droite
-  constructor (L: Line, A: Point, { color = 'black', thickness = 1 }: {color?: string, thickness?: number, add1?: number, add2?: number} = {}) {
+  constructor (L: Line, A: Point, { color = 'black', thickness = 1, temp = false }: {color?: string, thickness?: number, add1?: number, add2?: number, temp?: boolean} = {}) {
     const v = new Vector(L.parentFigure, L.normal.x, L.normal.y)
-    super(A, v, { color, thickness })
+    super(A, v, { color, thickness, temp })
     this.line = L
     L.addDependency(this)
     A.addDependency(this)
