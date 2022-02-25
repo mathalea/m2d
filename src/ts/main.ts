@@ -1,12 +1,10 @@
 
 import { Figure } from './Figure'
-import { Polygon } from './elements/lines/Polygon'
-import { Barycenter } from './elements/points/Barycenter'
-import { LinePerpendicularByPoint } from './elements/lines/LinePerpendicularlByPoint'
-import { Segment } from './elements/lines/Segment'
-import { PointByProjection } from './elements/points/PointByProjection'
-import { Line } from './elements/lines/Line'
-import { Mediatrice } from './elements/lines/Mediatrice'
+import { Ray } from './elements/lines/Ray'
+import { Bissectrice } from '../../Bissectrice'
+import { Angle } from './elements/measures/Angle'
+import { DisplayMeasure } from './elements/texts/DisplayMeasure'
+import { CalculDynamic } from './elements/measures/CalculDynamic'
 
 /**
  * Script qui permet de tester M2D
@@ -36,43 +34,18 @@ figure.svg.style.border = 'solid'
 
 // On créé des points à partir de leur coordonnées
 
-const A = figure.point(0, 0) //{ label: 'A' })
-const B = figure.point(4, 1) //{ label: 'B' })
-const C = figure.point(7, 3) //{ label: 'C' })
-const D = figure.point(2, 5) //{ label: 'D' })
-const P = new Polygon(A, B, C, D)
-const s = new Mediatrice(new Segment(A, B), {color: 'orange', thickness: 3})
+const A = figure.point(0, 2, { label: 'A' })
+const B = figure.point(4, -2, { label: 'B' })
+const C = figure.point(7, 3, { label: 'C' })
+const angle1 = new Angle(A, B, C)
+const angle2 = new Angle(B, C, A)
+const angle3 = new Angle(C, A, B)
+const b = new Bissectrice(A, B, C, { thickness: 3, color: 'red' })
+const dBA = new Ray(B, A)
+const dBC = new Ray(B, C)
 
-P.color = 'blue'
-P.thickness = 2
-// const p = new Polygon(A, B, C)
-// window.t = new Text(figure, -4, 0, 'test')
-// t.text = 'ok'
-
-// p.style = 'o'
-console.log(figure.set) // ToFix la liste est trop importante, il faut supprimer les croix non utilisés et voir si le cercle ne créé pas des points draggable
-
-// const t = new Text(figure, -3, 0, '$\\pi$')
-// const A = figure.point(4, 0)
-// const B = figure.point(4, 1)
-// const dAB = new Segment(A, B)
-// const C = figure.point(0, 3)
-
-// const L = new LinePerpendicularByPoint(dAB, C)
-// const H = new PointIntersectionLL(dAB, L, { style: 'x' })
-// const HB = new Segment(H, B)
-// const M1 = new PointOnLineAtD(HB, 0.4, { style: '' })
-// const M2 = new PointByRotation(M1, H, 90, { style: '' })
-// const v = new Vector(H.parentFigure, H, M1)
-// const M3 = new PointByTranslationVector(M2, v, { style: '' })
-// const s1 = new Segment(M1, M3)
-// const s2 = new Segment(M3, M2)
-// const t2 = new Text(figure, -5, 0, '$\\pi$')
-// renderMathInDocument({ latex: { delimiters: { display: [['\\[', '\\]$']], inline: [['$', '$']] } } })
-
-// math.style.position = 'absolute'
-
-// const rect = figure.svg.getBoundingClientRect()
-
-// math.style.left = `${rect.x + 30 * 5}px`
-// math.style.top = `${rect.y + 30 * 5}px`
+const halfAngle = new CalculDynamic(a => a[0].value / 2, [angle1])
+const somme = new CalculDynamic(a => a[0].value + a[1].value + a[2].value, [angle1, angle2, angle3])
+const t = new DisplayMeasure(-5, 0, angle1, { textBefore: 'ABC = ', textAfter: '°' })
+const t2 = new DisplayMeasure(-5, -2, halfAngle, { textBefore: 'ABC / 2 = ', textAfter: '°' })
+const t3 = new DisplayMeasure(-5, -3, somme, { textBefore: 'Somme des 3 angles = ', textAfter: '°' })

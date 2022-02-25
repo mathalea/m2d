@@ -14,6 +14,7 @@ export class TextByPosition extends Element2D {
       this.x = x
       this.y = y
       this.text = text ?? ''
+      this.text = text.replace(/\d+\.\d+/g, (number: string) => (Math.round(10 * parseFloat(number)) / 10).toString())
       this.draggable = draggable
       this.g.setAttribute('stroke', 'black')
       this.g.style.overflow = 'visible'

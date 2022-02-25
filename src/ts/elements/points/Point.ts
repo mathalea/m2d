@@ -141,7 +141,7 @@ export class Point extends Element2D {
       this.parentFigure.set.delete(this.labelElement)
     }
     if (label !== '') {
-      this.labelElement = new TextByPoint(this, label)
+      this.labelElement = new TextByPoint(this, label, { dx: -0.3, dy: 0.3 })
       this.parentFigure.svg.appendChild(this.labelElement.g)
     }
     this._label = label
