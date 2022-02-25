@@ -1,9 +1,9 @@
-import { Ray } from './src/ts/elements/lines/Ray'
-import { SegmentStyle } from './src/ts/elements/lines/Segment'
-import { Angle } from './src/ts/elements/measures/Angle'
-import { CalculDynamic } from './src/ts/elements/measures/Calculdynamic'
-import { Point } from './src/ts/elements/points/Point'
-import { PointByRotation } from './src/ts/elements/points/PointByRotation'
+import { Ray } from './Ray'
+import { SegmentStyle } from './Segment'
+import { Angle } from '../measures/Angle'
+import { CalculDynamic } from '../measures/Calculdynamic'
+import { Point } from '../points/Point'
+import { PointByRotation } from '../points/PointByRotation'
 
 export class Bissectrice extends Ray {
     A: Point
