@@ -5,27 +5,37 @@ import { PointByRotation } from '../points/PointByRotation'
 import { Measure } from './Measure'
 
 export class Angle extends Measure {
-    A: Point
-    O: Point
-    B: Point
+    origin: Point
+    top: Point
+  end: Point
     parentFigure: Figure
     valueNonOriented: number
-    constructor (A: Point, O: Point, B: Point) {
-      super(A.parentFigure)
+    constructor (origin: Point, top: Point, end: Point|number) {
+      super(top.parentFigure)
       this.dependencies = []
-      this.value = angleOriented(A, O, B)
-      this.valueNonOriented = angle(A, O, B)
-      A.addDependency(this)
-      O.addDependency(this)
-      B.addDependency(this)
-      this.A = A
-      this.O = O
-      this.B = B
+      if (typeof end === 'number') {
+        this.end = new PointByRotation(origin, top, end, { temp: true })
+        this.value = end
+        top.addDependency(this)
+        origin.addDependency(this)
+      } else if (end instanceof Point) {
+        this.end = end
+        this.value = angleOriented(origin, top, end)
+        top.addDependency(this)
+        origin.addDependency(this)
+        end.addDependency(this)
+      } else {
+        throw new Error('Le troisième paramètre doit être un point ou un nombre.')
+      }
+      this.parentFigure = top.parentFigure
+      this.top = top
+      this.origin = origin
+      this.valueNonOriented = angle(this.origin, this.top, this.end)
     }
 
     update () {
-      this.value = angleOriented(this.A, this.O, this.B)
-      this.valueNonOriented = angle(this.A, this.O, this.B)
+      this.value = angleOriented(this.origin, this.top, this.end)
+      this.valueNonOriented = angle(this.origin, this.top, this.end)
       this.notifyAllDependencies()
     }
 }

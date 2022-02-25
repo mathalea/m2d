@@ -5,6 +5,7 @@ import { Bissectrice } from '../../Bissectrice'
 import { Angle } from './elements/measures/Angle'
 import { DisplayMeasure } from './elements/texts/DisplayMeasure'
 import { CalculDynamic } from './elements/measures/CalculDynamic'
+import { PointByRotation } from './elements/points/PointByRotation'
 
 /**
  * Script qui permet de tester M2D
@@ -40,6 +41,9 @@ const C = figure.point(7, 3, { label: 'C' })
 const angle1 = new Angle(A, B, C)
 const angle2 = new Angle(B, C, A)
 const angle3 = new Angle(C, A, B)
+const angle4 = new Angle(A, B, 60)
+const D = new PointByRotation(A, B, angle4, { temp: true })
+const t4 = new Ray(B, D)
 const b = new Bissectrice(A, B, C, { thickness: 3, color: 'red' })
 const dBA = new Ray(B, A)
 const dBC = new Ray(B, C)
