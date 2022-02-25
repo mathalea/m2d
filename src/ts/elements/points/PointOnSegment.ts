@@ -1,8 +1,8 @@
-import { distance } from '../calculus/random'
-import { orthogonalProjectionCoord } from '../calculus/transformation'
+import { distance } from '../../calculus/random'
+import { orthogonalProjectionCoord } from '../../calculus/transformation'
 import { Point, PointOptions } from './Point'
 import { PointOnLine } from './PointOnLine'
-import { Segment } from './Segment'
+import { Segment } from '../lines/Segment'
 
 export class PointOnSegment extends PointOnLine {
   constructor (L: Segment, { label, length, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: {length?: number} & PointOptions = {}) {

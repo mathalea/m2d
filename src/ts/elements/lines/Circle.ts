@@ -1,6 +1,6 @@
-import { distance } from '../calculus/random'
-import { Element2D } from './Element2D'
-import { Point } from './Point'
+import { distance } from '../../calculus/random'
+import { Element2D } from '../Element2D'
+import { Point } from '../points/Point'
 import { OptionsGraphiques } from './Segment'
 
 export class Circle extends Element2D {

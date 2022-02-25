@@ -1,5 +1,5 @@
-import { intersectionCCCoord } from '../calculus/intersection'
-import { Circle } from './Circle'
+import { intersectionCCCoord } from '../../calculus/intersection'
+import { Circle } from '../lines/Circle'
 import { Point, PointOptions } from './Point'
 
 export class PointIntersectionCC extends Point {

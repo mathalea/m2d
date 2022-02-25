@@ -1,7 +1,7 @@
-import { distance } from '../calculus/random'
+import { distance } from '../../calculus/random'
 import { Point, PointOptions } from './Point'
 import { PointByHomothetie } from './PointByHomothetie'
-import { Segment } from './Segment'
+import { Segment } from '../lines/Segment'
 /**
  * Place un point sur un Line (Segment) à une distance D fixe du point Line.ends[0]
  */

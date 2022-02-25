@@ -1,5 +1,5 @@
 import { Point, PointOptions } from './Point'
-import { Segment } from './Segment'
+import { Segment } from '../lines/Segment'
 
 export class PointByReflectionOverLine extends Point {
     line: Segment

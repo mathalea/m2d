@@ -1,7 +1,7 @@
 import { Line } from './Line'
-import { Point } from './Point'
-import { PointByTranslationVector } from './PointByTranslationVector'
-import { Vector } from './Vector'
+import { Point } from '../points/Point'
+import { PointByTranslationVector } from '../points/PointByTranslationVector'
+import { Vector } from '../others/Vector'
 
 export class LineByPointVector extends Line {
   A: Point

@@ -1,9 +1,9 @@
-import { Point } from './Point'
-import { Element2D } from './Element2D'
-import { Vector } from './Vector'
-import { angleOriented } from '../calculus/trigonometry'
-import { PointOnLine } from './PointOnLine'
-import { PointByRotation } from './PointByRotation'
+import { Point } from '../points/Point'
+import { Element2D } from '../Element2D'
+import { Vector } from '../others/Vector'
+import { angleOriented } from '../../calculus/trigonometry'
+import { PointOnLine } from '../points/PointOnLine'
+import { PointByRotation } from '../points/PointByRotation'
 
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
 export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number, temp?: boolean }
@@ -14,7 +14,8 @@ export class Segment extends Element2D {
     x2: number
     y2: number
     ends: [Point, Point]
-    temp: boolean
+  temp: boolean
+  label: string
     private _style: string
     constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', temp = false }: OptionsGraphiques = {}) {
       super()

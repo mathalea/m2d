@@ -1,5 +1,5 @@
 import { Point } from './Point'
-import { Segment } from './Segment'
+import { Segment } from '../lines/Segment'
 
 export class Middle extends Point {
     line: Segment

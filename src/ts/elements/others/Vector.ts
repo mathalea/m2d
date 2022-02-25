@@ -1,6 +1,6 @@
-import { Figure } from '../Figure'
-import { Element2D } from './Element2D'
-import { Point } from './Point'
+import { Figure } from '../../Figure'
+import { Element2D } from '../Element2D'
+import { Point } from '../points/Point'
 
 export class Vector extends Element2D {
   private _x: number

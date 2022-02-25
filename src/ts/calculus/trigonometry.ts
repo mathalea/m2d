@@ -1,6 +1,6 @@
-import { Point } from '../elements/Point'
-import { PointByRotation } from '../elements/PointByRotation'
-import { Vector } from '../elements/Vector'
+import { Point } from '../elements/points/Point'
+import { PointByRotation } from '../elements/points/PointByRotation'
+import { Vector } from '../elements/others/Vector'
 
 /**
  * Retourne la valeur signée de l'angle AOB en degré.

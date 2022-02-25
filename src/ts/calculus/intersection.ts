@@ -1,5 +1,5 @@
-import { Circle } from '../elements/Circle'
-import { Segment } from '../elements/Segment'
+import { Circle } from '../elements/lines/Circle'
+import { Segment } from '../elements/lines/Segment'
 import { distance } from './random'
 
 /**

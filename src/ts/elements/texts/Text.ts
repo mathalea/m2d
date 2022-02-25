@@ -1,5 +1,5 @@
-import { Figure } from '../Figure'
-import { Element2D } from './Element2D'
+import { Figure } from '../../Figure'
+import { Element2D } from '../Element2D'
 
 export class TextByPosition extends Element2D {
     private _x: number

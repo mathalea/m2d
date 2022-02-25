@@ -1,7 +1,7 @@
-import { intersectionLCCoord } from '../calculus/intersection'
-import { Circle } from './Circle'
+import { intersectionLCCoord } from '../../calculus/intersection'
+import { Circle } from '../lines/Circle'
 import { Point, PointOptions } from './Point'
-import { Segment } from './Segment'
+import { Segment } from '../lines/Segment'
 
 export class PointIntersectionLC extends Point {
   L: Segment
