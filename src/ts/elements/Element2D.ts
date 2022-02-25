@@ -1,5 +1,7 @@
 import { Figure } from '../Figure'
 import { Angle } from './measures/Angle'
+import { CalculDynamic } from './measures/Calculdynamic'
+import { Distance } from './measures/Distance'
 import { Measure } from './measures/Measure'
 
 export type optionsElement2D = { color?: string, thickness?: number, fill?: string}
@@ -27,7 +29,7 @@ export abstract class Element2D {
    * Permet d'indiquer au point que sa position dépend d'autres éléments
    * @param dependency
    */
-  addDependency (dependency: Element2D | Angle) {
+  addDependency (dependency: Element2D | Angle | Distance | CalculDynamic | Measure) {
     this.dependencies.push(dependency)
   }
 

@@ -52,6 +52,8 @@ function angle (A: Point, O: Point, B: Point) {
   const OA = new Vector(O.parentFigure, O, A)
   const OB = new Vector(O.parentFigure, O, B)
   const scalaire = OA.multiply(OB)
-  const angleRadian = (Math.acos(scalaire / (OA.norme * OB.norme)))
-  return angleRadian * 180 / Math.PI
+  if (OA.norme * OB.norme === 0) {
+    return 0 // On évite de retouner un angle NaN, zéro, c'est toujours mieux que NaN.
+  }
+  return (Math.acos(scalaire / (OA.norme * OB.norme))) * 180 / Math.PI
 }

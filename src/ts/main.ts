@@ -1,7 +1,7 @@
 
 import { Figure } from './Figure'
 import { Ray } from './elements/lines/Ray'
-import { Bissectrice } from '../../Bissectrice'
+import { Bissectrice } from './elements/lines/Bissectrice'
 import { Angle } from './elements/measures/Angle'
 import { DisplayMeasure } from './elements/texts/DisplayMeasure'
 import { CalculDynamic } from './elements/measures/CalculDynamic'
