@@ -55,11 +55,12 @@ const C = A.symetrie(B)
 - AngleMark
 - ~PointByOrthongonalProjection~
 - Bspline
-- Mediatrice
-- Bissectrice
+- ~Mediatrice~
+- ~Bissectrice~
 - SegmentCode
 - Cube
-- DemiDroite
+- ~DemiDroite (Ray)~
+- Grille aimantée pour placer les points
 
 
 
@@ -84,6 +85,8 @@ Il y a 3 systèmes de coordonnées donc la convention suivante est utilisée en 
 
 Le paramètre `pixelsPerUnit` permet de déterminer la conversion des coordonnées du repère vers celle du SVG.
 
-#### Réflexions
+#### Les arrondis
 
-- Les polygones sont un ensemble de segments. Facile à manipuler pour les déplacements de points mais l'inconvénient, c'est la jonction entre 2 segments qui n'est pas belle notamment quand l'épaisseur est importante. C'est plus joli avec polyline mais il faudrait recalculer toute la liste de x y 
+On travaille avec les décimaux de JS. Pour l'affichage LaTeX dans `Figure.ts > get latex` on arrondit à 3 chiffres après la virgule.
+
+Dans textByPosition.ts, on arrondit à un chiffre après la virgule.

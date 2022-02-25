@@ -1,4 +1,6 @@
 import { Figure } from '../Figure'
+import { Angle } from './measures/Angle'
+import { Measure } from './measures/Measure'
 
 export type optionsElement2D = { color?: string, thickness?: number, fill?: string}
 
@@ -11,7 +13,7 @@ export abstract class Element2D {
   // Un élément de géométrie peut être composé de plusieurs autres éléments de géométrie (plusieurs segments pour marquer un point ou coder un angle par exemple)
   group: Element2D[]
   g: SVGElement
-  dependencies: Element2D[]
+  dependencies: (Element2D | Measure)[]
   private _color: string
   private _fill: string
   private _thickness: number
@@ -25,7 +27,7 @@ export abstract class Element2D {
    * Permet d'indiquer au point que sa position dépend d'autres éléments
    * @param dependency
    */
-  addDependency (dependency: Element2D) {
+  addDependency (dependency: Element2D | Angle) {
     this.dependencies.push(dependency)
   }
 
