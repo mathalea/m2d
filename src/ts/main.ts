@@ -6,6 +6,8 @@ import { Angle } from './elements/measures/Angle'
 import { DisplayMeasure } from './elements/texts/DisplayMeasure'
 import { CalculDynamic } from './elements/measures/CalculDynamic'
 import { PointByRotation } from './elements/points/PointByRotation'
+import { Vector } from './elements/others/Vector'
+import { PointByTranslationVector } from './elements/points/PointByTranslationVector'
 
 /**
  * Script qui permet de tester M2D
@@ -55,4 +57,6 @@ const halfAngle = new CalculDynamic(a => a[0].value / 2, [angle1])
 const somme = new CalculDynamic(a => a[0].value + a[1].value + a[2].value, [angle1, angle2, angle3])
 const t = new DisplayMeasure(-5, -1, angle1, { textBefore: 'ABC = ', textAfter: '°' })
 const t2 = new DisplayMeasure(-5, -2, halfAngle, { textBefore: 'ABC / 2 = ', textAfter: '°' })
-const t3 = new DisplayMeasure(-5, -3, somme, { textBefore: 'Somme des 3 angles = ', textAfter: '°'})
+const t3 = new DisplayMeasure(-5, -3, somme, { textBefore: 'Somme des 3 angles = ', textAfter: '°' })
+const v = new Vector(figure, 3, -3)
+const M = new PointByTranslationVector(B, v)
