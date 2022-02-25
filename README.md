@@ -70,6 +70,8 @@ const C = A.symetrie(B)
 
 
 
+
+
 #### Les dépendances
 
 ```
