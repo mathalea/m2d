@@ -5,9 +5,10 @@ export class DisplayMeasure extends TextByPosition {
     measure: Measure
     textBefore: string
     textAfter: string
-    constructor (x: number, y: number, measure: Measure, { textBefore = '', textAfter = '' }: {textBefore?: string, textAfter?: string} = {}) {
+    constructor (x: number, y: number, measure: Measure, { textBefore = '', textAfter = '', anchor = 'start' }: {textBefore?: string, textAfter?: string, anchor?: 'start' | 'middle' | 'end' } = {}) {
       super(measure.parentFigure, x, y, textBefore + measure.value.toString().replace(/\d+\.\d+/g, (number: string) => (Math.round(10 * parseFloat(number)) / 10).toString()) + textAfter)
       measure.addDependency(this)
+      this.anchor = anchor
       this.measure = measure
       this.textBefore = textBefore
       this.textAfter = textAfter

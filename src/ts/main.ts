@@ -32,6 +32,8 @@ figure.svg.style.margin = 'auto'
 figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
+console.log(figure)
+
 // On créé des points à partir de leur coordonnées
 
 const A = figure.point(0, 2, { label: 'A' })
@@ -42,10 +44,11 @@ const angle2 = new Angle(B, C, A)
 const angle3 = new Angle(C, A, B)
 const b = new Bissectrice(A, B, C, { thickness: 3, color: 'red' })
 const dBA = new Ray(B, A)
+dBA.dashed = true
 const dBC = new Ray(B, C)
 
 const halfAngle = new CalculDynamic(a => a[0].value / 2, [angle1])
 const somme = new CalculDynamic(a => a[0].value + a[1].value + a[2].value, [angle1, angle2, angle3])
-const t = new DisplayMeasure(-5, 0, angle1, { textBefore: 'ABC = ', textAfter: '°' })
+const t = new DisplayMeasure(-5, -1, angle1, { textBefore: 'ABC = ', textAfter: '°' })
 const t2 = new DisplayMeasure(-5, -2, halfAngle, { textBefore: 'ABC / 2 = ', textAfter: '°' })
-const t3 = new DisplayMeasure(-5, -3, somme, { textBefore: 'Somme des 3 angles = ', textAfter: '°' })
+const t3 = new DisplayMeasure(-5, -3, somme, { textBefore: 'Somme des 3 angles = ', textAfter: '°'})

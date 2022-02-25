@@ -6,7 +6,7 @@ import { PointOnLine } from '../points/PointOnLine'
 import { PointByRotation } from '../points/PointByRotation'
 
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
-export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number, temp?: boolean }
+export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number, temp?: boolean, dashed?: boolean }
 
 export class Segment extends Element2D {
     x1: number
@@ -14,10 +14,11 @@ export class Segment extends Element2D {
     x2: number
     y2: number
     ends: [Point, Point]
-  temp: boolean
-  label: string
+    temp: boolean
+    label: string
     private _style: string
-    constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', temp = false }: OptionsGraphiques = {}) {
+    private _dashed: boolean
+    constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
       super()
       this.temp = temp
       this.x1 = A.x
@@ -47,6 +48,7 @@ export class Segment extends Element2D {
       this.color = color
       this.thickness = thickness
       this.style = style
+      this.dashed = dashed
 
       // Si une des extrémités se déplace alors on recalcule les coordonnées de line
       A.addDependency(this)
@@ -81,6 +83,7 @@ export class Segment extends Element2D {
       if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
       if (this.thickness !== 1) arrayOptions.push(`line width = ${this.thickness}`)
       if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
+      if (this.dashed) arrayOptions.push('dashed')
       let txtOptions = ''
       if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
       let latex = `\n\t% ${this.label ?? 'Droite'}`
@@ -164,5 +167,18 @@ export class Segment extends Element2D {
         addBorder1()
         addBorder2()
       }
+    }
+
+    get dashed () {
+      return this._dashed
+    }
+
+    set dashed (isDashed) {
+      if (isDashed) {
+        this.g.setAttribute('stroke-dasharray', '4 3')
+      } else {
+        this.g.removeAttribute('stroke-dasharray')
+      }
+      this._dashed = isDashed
     }
 }

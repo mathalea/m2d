@@ -5,11 +5,11 @@ export class TextByPosition extends Element2D {
     private _x: number
     private _y: number
     private _text: string
-    alignment: string
-    constructor (figure: Figure, x: number, y: number, text: string, { alignment = '', temp = false, draggable = true }: {alignment?: string, temp?: boolean, draggable?: boolean} = {}) {
+    private _anchor: 'start' | 'middle' | 'end'
+    constructor (figure: Figure, x: number, y: number, text: string, { anchor = 'middle', temp = false, draggable = true }: {anchor?: 'start' | 'middle' | 'end', temp?: boolean, draggable?: boolean} = {}) {
       super()
       this.parentFigure = figure
-      this.alignment = alignment
+      this.anchor = anchor
       this.g = document.createElementNS('http://www.w3.org/2000/svg', 'text')
       this.x = x
       this.y = y
@@ -20,12 +20,20 @@ export class TextByPosition extends Element2D {
       this.g.style.overflow = 'visible'
       this.g.style.lineHeight = '0'
       this.g.style.dominantBaseline = 'middle'
-      this.g.style.textAnchor = 'middle'
       this.g.style.cursor = this.draggable ? 'move' : 'default'
       if (!temp) {
         this.parentFigure.svg.appendChild(this.g)
         this.parentFigure.set.add(this)
       }
+    }
+
+    get anchor () {
+      return this._anchor
+    }
+
+    set anchor (anchor) {
+      this._anchor = anchor
+      this.g.style.textAnchor = anchor
     }
 
     get x () {
@@ -59,7 +67,15 @@ export class TextByPosition extends Element2D {
     }
 
     get latex () {
-      return `\n\t\\draw (${this.x},${this.y}) node[anchor = center] {${this.text}};`
+      let anchorLatex: 'east' | 'center' |'west'
+      if (this.anchor === 'start') {
+        anchorLatex = 'west'
+      } else if (this.anchor === 'middle') {
+        anchorLatex = 'center'
+      } else {
+        anchorLatex = 'east'
+      }
+      return `\n\t\\draw (${this.x},${this.y}) node[anchor = ${anchorLatex}] {${this.text}};`
     }
 
     /**
