@@ -60,6 +60,10 @@ const C = A.symetrie(B)
 - SegmentCode
 - Cube
 - DemiDroite
+- Cursor
+- SnapToGrid
+
+
 
 
 
