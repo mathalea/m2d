@@ -66,6 +66,7 @@ export class Point extends Element2D {
       ;[this.mark.x, this.mark.y] = [x, y]
       this.mark.update()
     }
+    if (this.dependencies.length > 20) console.log(`Nombre de dépendances élevée pour ${this.label} : ${this.dependencies.length}`)
     this.notifyAllDependencies()
   }
 

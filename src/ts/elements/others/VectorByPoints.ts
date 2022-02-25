@@ -16,8 +16,9 @@ export class Vector extends Element2D {
         this.end = arg2
         this.x = arg2.x - arg1.x
         this.y = arg2.y - arg1.y
-        arg1.addDependency(this)
-        arg2.addDependency(this)
+        // Si les points servant à définir le vecteur sont temporaires, alors il est inutile de dépendre d'eux.
+        if (!arg1.temp) arg1.addDependency(this)
+        if (!arg2.temp) arg2.addDependency(this)
       } else {
         throw new Error('Les paramètres doivent être 2 points.')
       }

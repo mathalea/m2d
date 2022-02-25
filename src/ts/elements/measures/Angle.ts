@@ -1,6 +1,5 @@
 import { rotationCoord } from '../../calculus/transformation'
 import { Figure } from '../../Figure'
-import { Vector } from '../others/Vector'
 import { Point } from '../points/Point'
 import { PointByRotation } from '../points/PointByRotation'
 import { Measure } from './Measure'
