@@ -8,6 +8,10 @@ import { CalculDynamic } from './elements/measures/CalculDynamic'
 import { PointByRotation } from './elements/points/PointByRotation'
 import { Vector } from './elements/others/Vector'
 import { PointByTranslationVector } from './elements/points/PointByTranslationVector'
+import { Cursor } from './elements/others/Cursor'
+import { VectorByPoints } from './elements/others/VectorByPoints'
+import { PointByHomothetie } from './elements/points/PointByHomothetie'
+import { Polygon } from './elements/lines/Polygon'
 
 /**
  * Script qui permet de tester M2D
@@ -42,21 +46,35 @@ console.log(figure)
 const A = figure.point(0, 2, { label: 'A' })
 const B = figure.point(4, -2, { label: 'B' })
 const C = figure.point(7, 3, { label: 'C' })
-const angle1 = new Angle(A, B, C)
-const angle2 = new Angle(B, C, A)
-const angle3 = new Angle(C, A, B)
-const angle4 = new Angle(A, B, 60)
-const D = new PointByRotation(A, B, angle4, { temp: true })
-const t4 = new Ray(B, D)
-const b = new Bissectrice(A, B, C, { thickness: 3, color: 'red' })
-const dBA = new Ray(B, A)
-dBA.dashed = true
-const dBC = new Ray(B, C)
+const D = figure.point(-1, 2, { label: 'D' })
+const c = new Cursor(figure, -5, 5, { min: -2, max: 2, step: 0.1, length: 3, value: 0 })
+const v = new VectorByPoints(C, A)
+const M = new PointByTranslationVector(B, v, { label: 'M' })
+const P = new Polygon(A, C, B, M)
+P.thickness = 2
+P.color = 'blue'
+P.fill = 'yellow'
+P.opacity = 1
 
-const halfAngle = new CalculDynamic(a => a[0].value / 2, [angle1])
-const somme = new CalculDynamic(a => a[0].value + a[1].value + a[2].value, [angle1, angle2, angle3])
-const t = new DisplayMeasure(-5, -1, angle1, { textBefore: 'ABC = ', textAfter: '°' })
-const t2 = new DisplayMeasure(-5, -2, halfAngle, { textBefore: 'ABC / 2 = ', textAfter: '°' })
-const t3 = new DisplayMeasure(-5, -3, somme, { textBefore: 'Somme des 3 angles = ', textAfter: '°' })
-const v = new Vector(figure, 3, -3)
-const M = new PointByTranslationVector(B, v)
+const N = new PointByHomothetie(A, D, c.algebraic, { label: '' })
+const U = new PointByHomothetie(C, D, c.algebraic, { label: '' })
+const V = new PointByHomothetie(M, D, c.algebraic, { label: '' })
+const W = new PointByHomothetie(B, D, c.algebraic, { label: '' })
+const Q = new Polygon(N, V, W, U)
+Q.thickness = 1
+Q.color = 'red'
+Q.fill = 'orange'
+Q.opacity = 0.5
+
+const DB = new Ray(D, B)
+DB.dashed = true
+const DC = new Ray(D, C)
+DC.dashed = true
+const DA = new Ray(D, A)
+DA.dashed = true
+const DM = new Ray(D, M)
+DM.dashed = true
+DA.opacity = 0.3
+DM.opacity = 0.3
+DB.opacity = 0.3
+DC.opacity = 0.3
