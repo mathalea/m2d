@@ -156,13 +156,7 @@ export class Figure {
    * @returns
    */
   line(A: Point, B: Point, { add1 = 50, add2 = 50, color = 'black', thickness = 1 } = {}) {
-    const L = this.segment(A, B, { temp: true })
-    const M = new PointOnLine(L, { length: -add1, temp: true })
-    const L2 = this.segment(B, A, { temp: true })
-    const N = new PointOnLine(L2, { length: -add2, temp: true })
-    M.style = ''
-    N.style = ''
-    return this.segment(M, N, { color, thickness })
+    return new Line(A, B, { add1, add2, color, thickness })
   }
 
   /**
@@ -177,17 +171,10 @@ export class Figure {
   }
 
   pointIntersectionLC(L: Segment, C: Circle, n: 1 | 2 = 1, options?: PointOptions) {
-    const [x, y] = intersectionLCCoord(L, C, n)
-    if (x !== undefined && y !== undefined) {
-      const M = new Point(this, x, y, options)
-      M.draggable = false
-      M.color = 'black'
-      C.addDependency(M)
-      L.addDependency(M)
-      return M
-    }
+    return new PointIntersectionLC(L, C, n, options)
   }
 
+  // ToFix : Il faudrait que la méthode crée 2 points et que ces points se cachent ou se montrent en fonction de leur appartenance au segment [AB]
   pointIntersectionSC(L: Segment, C: Circle, options?: PointOptions) {
     const [x] = intersectionLCCoord(L, C, 1)
     const [A, B] = [L.A, L.B]
@@ -205,16 +192,15 @@ export class Figure {
   }
 
   pointOnSegmentAtD(L: Segment, d: number) {
-    const C = new Circle(L.A, d, { temp: true })
-    return (this.pointIntersectionSC(L, C))
+    return new PointOnLineAtD(L, d)
   }
 
   // static translation (A: Point, x: number, y: number) {
   //   return A.translation(x, y)
   // }
-
-  set latex(txt: string) {
-  }
+  // ToFix : a-t-on besoin d'un setter pour latex ?
+  // set latex(txt: string) {
+  // }
 
   get latex() {
     let latex = '\\begin{tikzpicture}'
