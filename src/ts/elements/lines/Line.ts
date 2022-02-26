@@ -14,7 +14,7 @@ export class Line extends Segment {
   AB: Distance
   add1: CalculDynamic
   add2: CalculDynamic
-  constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', add1 = 50, add2 = 50, temp = false }: {color?: string, thickness?: number, style?: SegmentStyle, add1?: number, add2?: number, temp?: boolean} = {}) {
+  constructor(A: Point, B: Point, { color = 'black', thickness = 1, style = '', add1 = 50, add2 = 50, temp = false }: { color?: string, thickness?: number, style?: SegmentStyle, add1?: number, add2?: number, temp?: boolean } = {}) {
     const sAB = new Segment(A, B, { temp: true })
     const m = new PointOnLine(sAB, { length: -add1, temp: true })
     const sBA = new Segment(B, A, { temp: true })
@@ -27,10 +27,9 @@ export class Line extends Segment {
     this.AB = new Distance(A, B)
     this.add1 = new CalculDynamic(d => add1 / d[0].value, [this.AB])
     this.add2 = new CalculDynamic(d => add2 / d[0].value, [this.AB])
-    console.log(this)
   }
 
-  update () {
+  update() {
     const [Mx, My] = homothetieCoord(this.B, this.A, -this.add1.value)
     const [Nx, Ny] = homothetieCoord(this.A, this.B, -this.add2.value)
     this.moveEnd(Mx, My, 1)
