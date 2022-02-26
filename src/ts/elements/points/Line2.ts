@@ -9,7 +9,14 @@ export class Line2 extends Element2D {
       this.parentFigure = A.parentFigure
       this.A = A
       this.B = B
-      const [xOut, yOut, xOut2, yOut2] = getCoordsOut(A, B)
+      let xOut: number, yOut: number, xOut2: number, yOut2: number
+      if (A.isOnFigure) {
+        ;[xOut, yOut, xOut2, yOut2] = getCoordsOut(A, B)
+      } else if (B.isOnFigure) {
+        ;[xOut, yOut, xOut2, yOut2] = getCoordsOut(B, A)
+      } else {
+        ;[xOut, yOut, xOut2, yOut2] = [A.x, A.y, B.x, B.y]
+      }
       const x1Svg = this.parentFigure.xToSx(xOut2)
       const x2Svg = this.parentFigure.xToSx(xOut)
       const y1Svg = this.parentFigure.yToSy(yOut2)

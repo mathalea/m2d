@@ -30,8 +30,8 @@ figure.svg.style.border = 'solid'
 
 // On créé des points à partir de leur coordonnées
 
-const A = figure.point(0, 2, { label: 'A' })
-const B = figure.point(4, -2, { label: 'B' })
+const A = figure.point(-4, 2, { label: 'A' })
+const B = figure.point(3, -2, { label: 'B' })
 const L = new Line2(A, B)
 L.color = 'green'
 L.thickness = 2
