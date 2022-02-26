@@ -4,9 +4,11 @@ import { Vector } from '../others/Vector'
 import { Point } from '../points/Point'
 import { PointByRotation } from '../points/PointByRotation'
 import { PointOnLine } from '../points/PointOnLine'
-import { OptionsGraphiques, Segment } from './Segment'
+import { Segment } from './Segment'
 
 export type LineTypes = 'Line' | 'Segment' | 'Ray'
+export type SegmentStyle = '' | '|-' | '-|' | '|-|'
+export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number, temp?: boolean, dashed?: boolean }
 export class Line extends Element2D {
   A: Point
   B: Point

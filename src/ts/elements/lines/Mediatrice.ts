@@ -1,6 +1,7 @@
 import { Middle } from '../points/Middle'
 import { LinePerpendicularByPoint } from './LinePerpendicularlByPoint'
-import { OptionsGraphiques, Segment } from './Segment'
+import { OptionsGraphiques } from './Line'
+import { Segment } from './Segment'
 
 export class Mediatrice extends LinePerpendicularByPoint {
   segment: Segment

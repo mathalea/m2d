@@ -4,8 +4,9 @@ import { Circle } from './elements/lines/Circle'
 import { Element2D } from './elements/Element2D'
 import { PointOptions, Point } from './elements/points/Point'
 import { PointOnLine } from './elements/points/PointOnLine'
-import { OptionsGraphiques, Segment } from './elements/lines/Segment'
+import { OptionsGraphiques } from './elements/lines/Line'
 import { TextByPosition } from './elements/texts/TextByPosition'
+import { Segment } from './elements/lines/Segment'
 
 export class Figure {
   width: number

@@ -1,9 +1,9 @@
 import { Point } from '../points/Point'
-import { Line } from './Line'
-import { SegmentStyle } from './Segment'
+import { Line, OptionsGraphiques } from './Line'
+import { SegmentStyle } from './Line'
 
 export class Ray extends Line {
-  constructor(A: Point, B: Point, { color = 'black', thickness = 1, style = '', temp = false }: { color?: string, thickness?: number, style?: SegmentStyle, temp?: boolean } = {}) {
+  constructor(A: Point, B: Point, { color = 'black', thickness = 1, style = '', temp = false }: OptionsGraphiques = {}) {
     super(A, B, 'Ray', { color, thickness, style, temp })
 
   }
