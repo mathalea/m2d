@@ -34,7 +34,7 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
   this.origin = M
   this.line = new Segment(M, N)
   this.tab = new PointOnSegment(this.line, { draggable: true, style: '', length: length * (Math.max(Math.min(value, max), min) - min) / (max - min) }) // on s'assure que la valeur est comprise entre min et max.
-  this.display = new DisplayMeasure(this.origin.x + this.length + 0.5, this.tab.y, this.algebraic)
+  this.display = new DisplayMeasure(this.origin.x + this.length + 0.5, this.tab.y, this.algebraic, { precision: 2 })
   this.tab.addDependency(this.display)
   this.tab.addDependency(this)
   this.tab.addDependency(this.algebraic)
@@ -42,13 +42,7 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
 }
 
 update () {
-  const x = this.origin.x + (this.algebraic.value - this.min) * this.length / (this.max - this.min)
-  if (x < this.tab.x) {
-    this.tab.x = Math.min(this.origin.x + this.length, this.tab.x + this.step)
-  } else {
-    this.tab.x = Math.max(this.origin.x, this.tab.x - this.step)
-  }
-  this.algebraic.value = (this.tab.x - this.origin.x) * (this.max - this.min) / this.length
+  this.algebraic.value = this.min + (this.tab.x - this.origin.x) * (this.max - this.min) / this.length
   this.notifyAllDependencies()
 }
 }

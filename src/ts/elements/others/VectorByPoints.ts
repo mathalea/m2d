@@ -2,7 +2,7 @@ import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
 import { Point } from '../points/Point'
 
-export class Vector extends Element2D {
+export class VectorByPoints extends Element2D {
   origin: Point // ToFix ? arg1 ou Point(0,0)
   end: Point // ToFix ? arg2 ou Point(arg1,arg2)
   parentFigure: Figure

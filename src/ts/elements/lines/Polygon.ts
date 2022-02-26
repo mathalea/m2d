@@ -18,6 +18,7 @@ export class Polygon extends Element2D {
       this.parentFigure = points[0].parentFigure
       this.points = points
       this.fill = 'none'
+      this.opacity = 1
       this.labels = []
       this.labelsPoints = []
 
@@ -31,7 +32,7 @@ export class Polygon extends Element2D {
       this.barycenter = new Barycenter(this.points, { temp: true })
       for (const point of points) {
         this.labelsPoints.push(new PointOnLineAtD(new Segment(point, this.barycenter, { temp: true }), -0.5, { temp: true, style: '' }))
-        const name = point.label
+        const name = point.label ?? ''
         point.label = ''
         this.labels.push(new TextByPoint(this.labelsPoints[this.labelsPoints.length - 1], name))
         point.addDependency(this)
@@ -62,6 +63,7 @@ export class Polygon extends Element2D {
       if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
       if (this.thickness !== 1) arrayOptions.push(`line width = ${this.thickness}`)
       if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
+      if (this.opacity !== 1) arrayOptions.push(`opacity = ${this.opacity}`)
       let txtOptions = ''
       if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
       return `\n\t\\draw${txtOptions} ${listeXYLatex(this.points)};`

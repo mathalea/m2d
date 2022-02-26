@@ -19,6 +19,7 @@ export abstract class Element2D {
   private _color: string
   private _fill: string
   private _thickness: number
+  private _opacity: number
   constructor () {
     this.group = []
     this.dependencies = []
@@ -84,6 +85,21 @@ export abstract class Element2D {
       this.g.setAttribute('fill', `${fill}`)
     }
     this._fill = fill
+  }
+
+  get opacity () {
+    return this._opacity
+  }
+
+  set opacity (opacity) {
+    if (this.g.children.length > 0) {
+      for (const line of Array.from(this.g.children)) {
+        line.setAttribute('opacity', `${opacity}`)
+      }
+    } else { // Le segment par exemple n'est pas un groupe mais un élément unique sans children
+      this.g.setAttribute('opacity', `${opacity}`)
+    }
+    this._opacity = opacity
   }
 
   get latex () {

@@ -1,15 +1,14 @@
 import { Point } from '../elements/points/Point'
-import { PointByRotation } from '../elements/points/PointByRotation'
-import { Vector } from '../elements/others/Vector'
+import { rotationCoord } from './transformation'
 
 /**
  * Retourne la valeur signée de l'angle AOB en degré.
  * @author Jean-Claude Lhote
  */
 export function angleOriented (A: Point, O: Point, B: Point) {
-  const A2 = new PointByRotation(A, O, 90, { temp: true })
-  const v = new Vector(O.parentFigure, O, B)
-  const u = new Vector(O.parentFigure, O, A2)
+  const A2 = rotationCoord(A, O, 90)
+  const v = { x: B.x - O.x, y: B.y - O.y, norme: 0 }
+  const u = { x: A2[0] - O.x, y: A2[1] - O.y, norme: 0 }
   const s = ((v.x * u.x + v.y * u.y) > 0) ? 1 : -1
   return s * angle(A, O, B)
 }
@@ -22,9 +21,13 @@ export function angleOriented (A: Point, O: Point, B: Point) {
  * @returns Angle AOB
  */
 export function angle (A: Point, O: Point, B: Point) {
-  const OA = new Vector(O.parentFigure, O, A)
-  const OB = new Vector(O.parentFigure, O, B)
-  const scalaire = OA.multiply(OB)
-  const angleRadian = (Math.acos(scalaire / (OA.norme * OB.norme)))
-  return angleRadian * 180 / Math.PI
+  const OA = { x: A.x - O.x, y: A.y - O.y, norme: 0 }
+  OA.norme = Math.sqrt(OA.x ** 2 + OA.y ** 2)
+  const OB = { x: B.x - O.x, y: B.y - O.y, norme: 0 }
+  OB.norme = Math.sqrt(OB.x ** 2 + OB.y ** 2)
+  const scalaire = OA.x * OB.x + OA.y * OB.y
+  if (OA.norme * OB.norme === 0) {
+    return 0 // On évite de retouner un angle NaN, zéro, c'est toujours mieux que NaN.
+  }
+  return (Math.acos(scalaire / (OA.norme * OB.norme))) * 180 / Math.PI
 }
