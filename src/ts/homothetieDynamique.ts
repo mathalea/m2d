@@ -12,8 +12,6 @@ import { Cursor } from './elements/others/Cursor'
 import { VectorByPoints } from './elements/others/VectorByPoints'
 import { PointByHomothetie } from './elements/points/PointByHomothetie'
 import { Polygon } from './elements/lines/Polygon'
-import { Segment } from './elements/lines/Segment'
-import { LinePerpendicularByPoint } from './elements/lines/LinePerpendicularlByPoint'
 
 /**
  * Script qui permet de tester M2D
@@ -48,5 +46,34 @@ const A = figure.point(0, 2, { label: 'A' })
 const B = figure.point(4, -2, { label: 'B' })
 const C = figure.point(7, 3, { label: 'C' })
 const D = figure.point(-1, 2, { label: 'D' })
-const sAB = new Segment(A, B)
-const p = new LinePerpendicularByPoint(sAB, C)
+const c = new Cursor(figure, -5, 5, { min: -2, max: 2, step: 0.1, length: 3, value: 0 })
+const v = new VectorByPoints(C, A)
+const M = new PointByTranslationVector(B, v, { label: 'M' })
+const P = new Polygon(A, C, B, M)
+P.thickness = 2
+P.color = 'blue'
+P.fill = 'yellow'
+P.opacity = 1
+
+const N = new PointByHomothetie(A, D, c.algebraic, { label: '' })
+const U = new PointByHomothetie(C, D, c.algebraic, { label: '' })
+const V = new PointByHomothetie(M, D, c.algebraic, { label: '' })
+const W = new PointByHomothetie(B, D, c.algebraic, { label: '' })
+const Q = new Polygon(N, V, W, U)
+Q.thickness = 1
+Q.color = 'red'
+Q.fill = 'orange'
+Q.opacity = 0.5
+
+const DB = new Ray(D, B)
+DB.dashed = true
+const DC = new Ray(D, C)
+DC.dashed = true
+const DA = new Ray(D, A)
+DA.dashed = true
+const DM = new Ray(D, M)
+DM.dashed = true
+DA.opacity = 0.3
+DM.opacity = 0.3
+DB.opacity = 0.3
+DC.opacity = 0.3

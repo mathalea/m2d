@@ -27,7 +27,7 @@ export class Line extends Segment {
     this.AB = new Distance(A, B)
     this.add1 = new CalculDynamic(d => add1 / d[0].value, [this.AB])
     this.add2 = new CalculDynamic(d => add2 / d[0].value, [this.AB])
-    this.update()
+    console.log(this)
   }
 
   update () {
