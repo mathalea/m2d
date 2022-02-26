@@ -12,6 +12,7 @@ import { PointIntersectionLL } from './elements/points/PointIntersectionLL'
 import { Circle } from './elements/lines/Circle'
 import { Polygon } from './elements/lines/Polygon'
 import { Bissectrice } from './elements/lines/Bissectrice'
+import { Ray } from './elements/lines/Ray'
 /**
  * Script qui permet de tester M2D
  */
@@ -53,6 +54,8 @@ const O = new PointIntersectionLL(mAB, mAC)
 const C1 = new Circle(O, A, { color: 'green', thickness: 2, dashed: true })
 const p = new Polygon(A, B, C)
 const d = new Bissectrice(C, B, A)
+const D = figure.point(0, 0, { label: 'D' })
+const r = new Ray(D, B)
 p.color = 'blue'
 p.thickness = 3
 mAB.dashed = true

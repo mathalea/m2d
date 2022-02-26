@@ -35,15 +35,7 @@ export class Line extends Element2D {
         ;[this.x1, this.y1, this.x2, this.y2] = [A.x, A.y, B.x, B.y]
       }
     } else if (this.type === 'Ray') {
-      if (A.isOnFigure) {
-        let dummy1, dummy2
-          ;[this.x1, this.y1] = [A.x, A.y]
-          ;[dummy1, dummy2, this.x2, this.y2] = getCoordsOut(A, B)
-      } else if (B.isOnFigure) {
-        ;[this.x1, this.y1, this.x2, this.y2] = getCoordsOut(B, A)
-      } else {
-        ;[this.x1, this.y1, this.x2, this.y2] = [A.x, A.y, B.x, B.y]
-      }
+      ;[this.x1, this.y1, this.x2, this.y2] = getRayCoordsOut(A, B)
     } else if (this.type === 'Segment') {
       ;[this.x1, this.y1, this.x2, this.y2] = [A.x, A.y, B.x, B.y]
     } else {
@@ -186,7 +178,8 @@ export class Line extends Element2D {
   }
 }
 
-export function getCoordsOut(A: Point, B: Point) {
+// une droite coupe deux bords, on les détecte ici.
+function getCoordsOut(A: Point, B: Point) {
   const parentFigure = A.parentFigure
   let pente = Infinity
   if (B.x !== A.x) {
@@ -211,4 +204,40 @@ export function getCoordsOut(A: Point, B: Point) {
     if (xOutRight < parentFigure.xMin - 1 || yOutRight > parentFigure.yMax + 1 || yOutRight < parentFigure.yMin - 1) break
   }
   return [xOutLeft, yOutLeft, xOutRight, yOutRight]
+}
+
+// Parce que les demi-droites ne sortent que d'un côté... celui de B.
+function getRayCoordsOut(A: Point, B: Point) {
+  const parentFigure = A.parentFigure
+  let pente = Infinity
+  if (B.x !== A.x) {
+    pente = (B.y - A.y) / (B.x - A.x)
+  }
+  if (pente === Infinity) {
+    if (A.y > B.y) return [A.x, A.y, A.x, parentFigure.yMin] // Si la droite est verticale on prend l'abscisse de A et le bon bord en ordonnée
+    else[A.x, A.y, A.x, parentFigure.yMax] // Ici on sort par en haut
+  }
+  if (Math.abs(pente) < 10 ** -4) {
+    if (A.x > B.x) return [A.x, A.y, parentFigure.xMin, A.y]
+    else return [A.x, A.y, parentFigure.xMax, A.y]
+  }
+  let xOutLeft: number, yOutLeft: number
+  let n = 0
+  if (B.x > A.x) {
+    while (true) {
+      xOutLeft = A.x + n
+      yOutLeft = A.y + n * pente
+      n++
+      if (xOutLeft > parentFigure.xMax + 1 || yOutLeft > parentFigure.yMax + 1 || yOutLeft < parentFigure.yMin - 1) break
+    }
+    return [A.x, A.y, xOutLeft, yOutLeft]
+  } else {
+    while (true) {
+      xOutLeft = A.x - n
+      yOutLeft = A.y - n * pente
+      n++
+      if (xOutLeft < parentFigure.xMin - 1 || yOutLeft > parentFigure.yMax + 1 || yOutLeft < parentFigure.yMin - 1) break
+    }
+    return [A.x, A.y, xOutLeft, yOutLeft]
+  }
 }
