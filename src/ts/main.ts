@@ -13,6 +13,7 @@ import { Circle } from './elements/lines/Circle'
 import { Polygon } from './elements/lines/Polygon'
 import { Bissectrice } from './elements/lines/Bissectrice'
 import { Ray } from './elements/lines/Ray'
+import { LineParallelByPoint } from './elements/lines/LineParallelByPoint'
 /**
  * Script qui permet de tester M2D
  */
@@ -46,21 +47,15 @@ const B = figure.point(3, -2, { label: 'B' })
 const C = figure.point(2, 5, { label: 'C' })
 const sAB = new Segment(A, B)
 const mAB = new Mediatrice(sAB)
-const sBC = new Segment(B, C)
-const mBC = new Mediatrice(sBC)
-const sAC = new Segment(A, C)
-const mAC = new Mediatrice(sAC)
-const O = new PointIntersectionLL(mAB, mAC)
-const C1 = new Circle(O, A, { color: 'green', thickness: 2, dashed: true })
 const p = new Polygon(A, B, C)
 const d = new Bissectrice(C, B, A)
 const D = figure.point(0, 0, { label: 'D' })
 const r = new Ray(D, B)
+const e = new LineParallelByPoint(mAB, A)
+const E = new PointIntersectionLL(sAB, mAB)
 p.color = 'blue'
 p.thickness = 3
 mAB.dashed = true
-mBC.dashed = true
-mAC.dashed = true
 
 
 //const v = new VectorNormal(L)
