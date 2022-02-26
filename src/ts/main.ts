@@ -11,6 +11,7 @@ import { Mediatrice } from './elements/lines/Mediatrice'
 import { PointIntersectionLL } from './elements/points/PointIntersectionLL'
 import { Circle } from './elements/lines/Circle'
 import { Polygon } from './elements/lines/Polygon'
+import { Bissectrice } from './elements/lines/Bissectrice'
 /**
  * Script qui permet de tester M2D
  */
@@ -41,7 +42,7 @@ figure.svg.style.border = 'solid'
 
 const A = figure.point(-4, 2, { label: 'A' })
 const B = figure.point(3, -2, { label: 'B' })
-const C = figure.point(2, 5, {label: 'C'})
+const C = figure.point(2, 5, { label: 'C' })
 const sAB = new Segment(A, B)
 const mAB = new Mediatrice(sAB)
 const sBC = new Segment(B, C)
@@ -49,8 +50,9 @@ const mBC = new Mediatrice(sBC)
 const sAC = new Segment(A, C)
 const mAC = new Mediatrice(sAC)
 const O = new PointIntersectionLL(mAB, mAC)
-const C1 = new Circle(O, A, {color : 'green', thickness: 2, dashed: true})
+const C1 = new Circle(O, A, { color: 'green', thickness: 2, dashed: true })
 const p = new Polygon(A, B, C)
+const d = new Bissectrice(C, B, A)
 p.color = 'blue'
 p.thickness = 3
 mAB.dashed = true
