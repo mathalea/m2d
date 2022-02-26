@@ -14,14 +14,14 @@ export class Line extends Segment {
   AB: Distance
   add1: CalculDynamic
   add2: CalculDynamic
-  constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', add1 = 50, add2 = 50, temp = false }: {color?: string, thickness?: number, style?: SegmentStyle, add1?: number, add2?: number, temp?: boolean} = {}) {
+  constructor(A: Point, B: Point, { color = 'black', thickness = 1, style = '', add1 = 50, add2 = 50, temp = false }: { color?: string, thickness?: number, style?: SegmentStyle, add1?: number, add2?: number, temp?: boolean } = {}) {
     const sAB = new Segment(A, B, { temp: true })
     const m = new PointOnLine(sAB, { length: -add1, temp: true })
     const sBA = new Segment(B, A, { temp: true })
     const n = new PointOnLine(sBA, { length: -add2, temp: true })
     super(A, B, { color, thickness })
-    this.ends[0] = m
-    this.ends[1] = n
+    this.A = m
+    this.B = n
     this.A = A
     this.B = B
     this.AB = new Distance(A, B)
@@ -30,7 +30,7 @@ export class Line extends Segment {
     this.update()
   }
 
-  update () {
+  update() {
     const [Mx, My] = homothetieCoord(this.B, this.A, -this.add1.value)
     const [Nx, Ny] = homothetieCoord(this.A, this.B, -this.add2.value)
     this.moveEnd(Mx, My, 1)

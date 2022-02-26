@@ -22,7 +22,7 @@ export class Figure {
   svg: SVGElement
   pointerX: number | null
   pointerY: number | null
-  constructor ({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean } = {}) {
+  constructor({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean } = {}) {
     this.width = width
     this.height = height
     this.pixelsPerUnit = pixelsPerUnit
@@ -53,7 +53,7 @@ export class Figure {
      * @param x number
      * @returns number
      */
-  xToSx (x: number) {
+  xToSx(x: number) {
     return x * this.pixelsPerUnit
   }
 
@@ -62,7 +62,7 @@ export class Figure {
      * @param y number
      * @returns number
      */
-  yToSy (y: number) {
+  yToSy(y: number) {
     return -y * this.pixelsPerUnit
   }
 
@@ -71,7 +71,7 @@ export class Figure {
      * @param x number
      * @returns number
      */
-  sxTox (x: number) {
+  sxTox(x: number) {
     return x / this.pixelsPerUnit
   }
 
@@ -80,7 +80,7 @@ export class Figure {
      * @param y number
      * @returns number
      */
-  syToy (y: number) {
+  syToy(y: number) {
     return -y * this.pixelsPerUnit
   }
 
@@ -89,7 +89,7 @@ export class Figure {
      * @param event
      * @returns
      */
-  private getPointerCoord (event: PointerEvent) {
+  private getPointerCoord(event: PointerEvent) {
     event.preventDefault()
     const rect = this.svg.getBoundingClientRect()
     const pointerX = (event.clientX - rect.x) / this.pixelsPerUnit + this.xMin
@@ -97,7 +97,7 @@ export class Figure {
     return [pointerX, pointerY]
   }
 
-  private listenPointer () {
+  private listenPointer() {
     this.svg.addEventListener('pointermove', (event) => {
       if (!this.isDraging) return
       document.querySelector('body').style.cursor = 'move'
@@ -139,11 +139,11 @@ export class Figure {
      * @param options
      * @returns
      */
-  segment (A: Point, B: Point, options?: OptionsGraphiques) {
+  segment(A: Point, B: Point, options?: OptionsGraphiques) {
     return new Segment(A, B, options)
   }
 
-  circle (O: Point, arg2: number | Point, options?: OptionsGraphiques) {
+  circle(O: Point, arg2: number | Point, options?: OptionsGraphiques) {
     return new Circle(O, arg2, options)
   }
 
@@ -154,7 +154,7 @@ export class Figure {
    * @param option add1 contrôle la distance ajoutée du côté de A et add2 celle du côté de B
    * @returns
    */
-  line (A: Point, B: Point, { add1 = 50, add2 = 50, color = 'black', thickness = 1 } = {}) {
+  line(A: Point, B: Point, { add1 = 50, add2 = 50, color = 'black', thickness = 1 } = {}) {
     const L = this.segment(A, B, { temp: true })
     const M = new PointOnLine(L, { length: -add1, temp: true })
     const L2 = this.segment(B, A, { temp: true })
@@ -171,11 +171,11 @@ export class Figure {
      * @param options
      * @returns
      */
-  point (x: number, y: number, options?: PointOptions) {
+  point(x: number, y: number, options?: PointOptions) {
     return new Point(this, x, y, options)
   }
 
-  pointIntersectionLC (L: Segment, C: Circle, n: 1 | 2 = 1, options?: PointOptions) {
+  pointIntersectionLC(L: Segment, C: Circle, n: 1 | 2 = 1, options?: PointOptions) {
     const [x, y] = intersectionLCCoord(L, C, n)
     if (x !== undefined && y !== undefined) {
       const M = new Point(this, x, y, options)
@@ -187,9 +187,9 @@ export class Figure {
     }
   }
 
-  pointIntersectionSC (L: Segment, C: Circle, options?: PointOptions) {
+  pointIntersectionSC(L: Segment, C: Circle, options?: PointOptions) {
     const [x] = intersectionLCCoord(L, C, 1)
-    const [A, B] = L.ends
+    const [A, B] = [L.A, L.B]
     if (x !== undefined && distance(A, B) > C.radius) {
       let M: Point
       if (x < Math.max(A.x, B.x) && x > Math.min(A.x, B.x)) {
@@ -203,8 +203,8 @@ export class Figure {
     }
   }
 
-  pointOnSegmentAtD (L: Segment, d: number) {
-    const C = new Circle(L.ends[0], d, { temp: true })
+  pointOnSegmentAtD(L: Segment, d: number) {
+    const C = new Circle(L.A, d, { temp: true })
     return (this.pointIntersectionSC(L, C))
   }
 
@@ -212,10 +212,10 @@ export class Figure {
   //   return A.translation(x, y)
   // }
 
-  set latex (txt: string) {
+  set latex(txt: string) {
   }
 
-  get latex () {
+  get latex() {
     let latex = '\\begin{tikzpicture}'
     latex += `\n\t\\clip(${this.xMin}, ${this.yMin}) rectangle (${this.xMax}, ${this.yMax});`
     for (const e of this.set) {
