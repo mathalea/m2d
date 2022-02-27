@@ -1,4 +1,5 @@
 import { Circle } from '../elements/lines/Circle'
+import { Line } from '../elements/lines/Line'
 import { Segment } from '../elements/lines/Segment'
 import { distance } from './random'
 
@@ -10,7 +11,7 @@ import { distance } from './random'
  * @example I = pointItersectionLC(d,c,'I',1) // I est le premier point d'intersection si il existe de la droite (d) et du cercle (c)
  * @author Jean-Claude Lhote
  */
-export function intersectionLCCoord(D: Segment, C: Circle, n: 1 | 2 = 1) {
+export function intersectionLCCoord(D: Line, C: Circle, n: 1 | 2 = 1) {
   const O = C.center
   const r = C.radius
   const [a, b, c] = D.equation
@@ -158,7 +159,7 @@ export function intersectionCCCoord(C1: Circle, C2: Circle, n: 1 | 2 = 1) {
  * @return {Point} Point 'M' d'intersection de d1 et de d2
  * @author Jean-Claude Lhote
  */
-export function intersectionLLCoord(d: Segment, f: Segment) {
+export function intersectionLLCoord(d: Line, f: Line) {
   const [da, db, dc] = d.equation
   const [fa, fb, fc] = f.equation
   let x: number, y: number
