@@ -1,9 +1,17 @@
+/*
+ * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
+ *
+ * MathALEA 2D : Software for animating online dynamic mathematics figures
+ * https://coopmaths.fr
+ * @Author Angot Rémi and Lhote Jean-Claude (contact@coopmaths.fr)
+ * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
+ */
+
 import { intersectionLCCoord } from './calculus/intersection'
 import { distance } from './calculus/random'
 import { Circle } from './elements/lines/Circle'
 import { Element2D } from './elements/Element2D'
 import { PointOptions, Point } from './elements/points/Point'
-import { PointOnLine } from './elements/points/PointOnLine'
 import { Line, OptionsGraphiques } from './elements/lines/Line'
 import { TextByPosition } from './elements/texts/TextByPosition'
 import { Segment } from './elements/lines/Segment'
@@ -25,7 +33,7 @@ export class Figure {
   svg: SVGElement
   pointerX: number | null
   pointerY: number | null
-  constructor({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean } = {}) {
+  constructor ({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean } = {}) {
     this.width = width
     this.height = height
     this.pixelsPerUnit = pixelsPerUnit
@@ -56,7 +64,7 @@ export class Figure {
      * @param x number
      * @returns number
      */
-  xToSx(x: number) {
+  xToSx (x: number) {
     return x * this.pixelsPerUnit
   }
 
@@ -65,7 +73,7 @@ export class Figure {
      * @param y number
      * @returns number
      */
-  yToSy(y: number) {
+  yToSy (y: number) {
     return -y * this.pixelsPerUnit
   }
 
@@ -74,7 +82,7 @@ export class Figure {
      * @param x number
      * @returns number
      */
-  sxTox(x: number) {
+  sxTox (x: number) {
     return x / this.pixelsPerUnit
   }
 
@@ -83,7 +91,7 @@ export class Figure {
      * @param y number
      * @returns number
      */
-  syToy(y: number) {
+  syToy (y: number) {
     return -y * this.pixelsPerUnit
   }
 
@@ -92,7 +100,7 @@ export class Figure {
      * @param event
      * @returns
      */
-  private getPointerCoord(event: PointerEvent) {
+  private getPointerCoord (event: PointerEvent) {
     event.preventDefault()
     const rect = this.svg.getBoundingClientRect()
     const pointerX = (event.clientX - rect.x) / this.pixelsPerUnit + this.xMin
@@ -100,7 +108,7 @@ export class Figure {
     return [pointerX, pointerY]
   }
 
-  private listenPointer() {
+  private listenPointer () {
     this.svg.addEventListener('pointermove', (event) => {
       if (!this.isDraging) return
       document.querySelector('body').style.cursor = 'move'
@@ -142,11 +150,11 @@ export class Figure {
      * @param options
      * @returns
      */
-  segment(A: Point, B: Point, options?: OptionsGraphiques) {
+  segment (A: Point, B: Point, options?: OptionsGraphiques) {
     return new Segment(A, B, options)
   }
 
-  circle(O: Point, arg2: number | Point, options?: OptionsGraphiques) {
+  circle (O: Point, arg2: number | Point, options?: OptionsGraphiques) {
     return new Circle(O, arg2, options)
   }
 
@@ -168,16 +176,16 @@ export class Figure {
      * @param options
      * @returns
      */
-  point(x: number, y: number, options?: PointOptions) {
+  point (x: number, y: number, options?: PointOptions) {
     return new Point(this, x, y, options)
   }
 
-  pointIntersectionLC(L: Segment, C: Circle, n: 1 | 2 = 1, options?: PointOptions) {
+  pointIntersectionLC (L: Segment, C: Circle, n: 1 | 2 = 1, options?: PointOptions) {
     return new PointIntersectionLC(L, C, n, options)
   }
 
   // ToFix : Il faudrait que la méthode crée 2 points et que ces points se cachent ou se montrent en fonction de leur appartenance au segment [AB]
-  pointIntersectionSC(L: Segment, C: Circle, options?: PointOptions) {
+  pointIntersectionSC (L: Segment, C: Circle, options?: PointOptions) {
     const [x] = intersectionLCCoord(L, C, 1)
     const [A, B] = [L.A, L.B]
     if (x !== undefined && distance(A, B) > C.radius) {
@@ -193,24 +201,18 @@ export class Figure {
     }
   }
 
-  pointOnSegmentAtD(L: Segment, d: number) {
+  pointOnSegmentAtD (L: Segment, d: number) {
     return new PointOnLineAtD(L, d)
   }
 
-  // static translation (A: Point, x: number, y: number) {
-  //   return A.translation(x, y)
-  // }
-  // ToFix : a-t-on besoin d'un setter pour latex ?
-  // set latex(txt: string) {
-  // }
-
-  get latex() {
+  get latex () {
     let latex = '\\begin{tikzpicture}'
     latex += `\n\t\\clip(${this.xMin}, ${this.yMin}) rectangle (${this.xMax}, ${this.yMax});`
     for (const e of this.set) {
       latex += e.latex
     }
     latex += '\n\\end{tikzpicture}'
+    // ToFix Il peut y avoir un problème si un nombre est en écriture scientifique
     latex = latex.replace(/\d+\.\d+/g, (number: string) => (Math.round(1000 * parseFloat(number)) / 1000).toString())
     return latex
   }

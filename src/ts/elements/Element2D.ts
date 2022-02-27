@@ -1,3 +1,12 @@
+/*
+ * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
+ *
+ * MathALEA 2D : Software for animating online dynamic mathematics figures
+ * https://coopmaths.fr
+ * @Author Angot Rémi and Lhote Jean-Claude (contact@coopmaths.fr)
+ * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
+ */
+
 import { Figure } from '../Figure'
 import { Angle } from './measures/Angle'
 import { CalculDynamic } from './measures/Calculdynamic'
@@ -20,6 +29,7 @@ export abstract class Element2D {
   private _fill: string
   private _thickness: number
   private _opacity: number
+  private _fillOpacity: number
   constructor () {
     this.group = []
     this.dependencies = []
@@ -100,6 +110,21 @@ export abstract class Element2D {
       this.g.setAttribute('opacity', `${opacity}`)
     }
     this._opacity = opacity
+  }
+
+  get fillOpacity () {
+    return this._fillOpacity
+  }
+
+  set fillOpacity (fillOpacity) {
+    if (this.g.children.length > 0) {
+      for (const line of Array.from(this.g.children)) {
+        line.setAttribute('fill-opacity', `${fillOpacity}`)
+      }
+    } else { // Le segment par exemple n'est pas un groupe mais un élément unique sans children
+      this.g.setAttribute('fill-opacity', `${fillOpacity}`)
+    }
+    this._fillOpacity = fillOpacity
   }
 
   get latex () {

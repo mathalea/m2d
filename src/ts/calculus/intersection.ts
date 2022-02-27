@@ -1,3 +1,12 @@
+/*
+ * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
+ *
+ * MathALEA 2D : Software for animating online dynamic mathematics figures
+ * https://coopmaths.fr
+ * @Author Angot Rémi and Lhote Jean-Claude (contact@coopmaths.fr)
+ * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
+ */
+
 import { Circle } from '../elements/lines/Circle'
 import { Line } from '../elements/lines/Line'
 import { Segment } from '../elements/lines/Segment'
@@ -89,7 +98,7 @@ export function intersectionLCCoord(D: Line, C: Circle, n: 1 | 2 = 1) {
   }
 }
 
-export function intersectionSCCoord(L: Segment, C: Circle) {
+export function intersectionSCCoord (L: Segment, C: Circle) {
   const [x] = intersectionLCCoord(L, C, 1)
   const [A, B] = [L.A, L.B]
   if (x !== undefined && distance(A, B) > C.radius) {
@@ -108,7 +117,7 @@ export function intersectionSCCoord(L: Segment, C: Circle) {
  * @author Rémi Angot
  * @Source https://stackoverflow.com/questions/12219802/a-javascript-function-that-returns-the-x-y-points-of-intersection-between-two-ci
  */
-export function intersectionCCCoord(C1: Circle, C2: Circle, n: 1 | 2 = 1) {
+export function intersectionCCCoord (C1: Circle, C2: Circle, n: 1 | 2 = 1) {
   const O1 = C1.center
   const O2 = C2.center
   const r0 = C1.radius
