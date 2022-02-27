@@ -28,10 +28,10 @@ export class Arc extends Element2D {
     this.parentFigure.set.add(this)
     const B = new PointByRotation(A, O, angle, { temp: true })
     this.point2 = B
-    const radius = distance(O, A)
+    const radius = this.parentFigure.xToSx(distance(O, A))
     const [large, sweep] = getLargeSweep(angle)
     this.g = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-    this.g.setAttribute('d', `M${this.parentFigure.xToSx(A.x)} ${this.parentFigure.yToSy(A.y)} A ${this.parentFigure.xToSx(radius)} ${this.parentFigure.xToSx(radius)} 0 ${large} ${sweep} ${this.parentFigure.xToSx(B.x)} ${this.parentFigure.yToSy(B.y)}`)
+    this.g.setAttribute('d', `M${this.parentFigure.xToSx(A.x)} ${this.parentFigure.yToSy(A.y)} A ${radius} ${radius} 0 ${large} ${sweep} ${this.parentFigure.xToSx(B.x)} ${this.parentFigure.yToSy(B.y)}`)
     this.g.setAttribute('d', this.g.getAttribute('d') + `L ${this.parentFigure.xToSx(O.x)} ${this.parentFigure.yToSy(O.y)} Z`)
     this.color = color
     this.fill = 'none'
@@ -43,8 +43,8 @@ export class Arc extends Element2D {
 
   update(): void {
     const [large, sweep] = getLargeSweep(this.angle)
-    const d = distance(this.center, this.point)
-    this.g.setAttribute('d', `M${this.parentFigure.xToSx(this.point.x)} ${this.parentFigure.yToSy(this.point.y)} A ${this.parentFigure.xToSx(d)} ${this.parentFigure.xToSx(d)} 0 ${large} ${sweep} ${this.parentFigure.xToSx(this.point2.x)} ${this.parentFigure.yToSy(this.point2.y)}`)
+    const d = this.parentFigure.xToSx(distance(this.center, this.point))
+    this.g.setAttribute('d', `M${this.parentFigure.xToSx(this.point.x)} ${this.parentFigure.yToSy(this.point.y)} A ${d} ${d} 0 ${large} ${sweep} ${this.parentFigure.xToSx(this.point2.x)} ${this.parentFigure.yToSy(this.point2.y)}`)
     this.g.setAttribute('d', this.g.getAttribute('d') + `L ${this.parentFigure.xToSx(this.center.x)} ${this.parentFigure.yToSy(this.center.y)} Z`)
   }
 
