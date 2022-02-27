@@ -55,6 +55,10 @@ export class Point extends Element2D {
   update (): void {
   }
 
+  isOnFigure () {
+    return (this.x < this.parentFigure.xMax && this.x > this.parentFigure.xMin && this.y < this.parentFigure.yMax && this.y > this.parentFigure.yMin)
+  }
+
   /**
    * Déplace l'élément et ses dépendances
    * @param x nouvelle abscisse

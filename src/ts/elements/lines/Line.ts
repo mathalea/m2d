@@ -1,39 +1,245 @@
-import { homothetieCoord } from '../../calculus/transformation'
-import { CalculDynamic } from '../measures/Calculdynamic'
-import { Distance } from '../measures/Distance'
+import { angleOriented } from '../../calculus/trigonometry'
+import { Element2D } from '../Element2D'
+import { Vector } from '../others/Vector'
 import { Point } from '../points/Point'
+import { PointByRotation } from '../points/PointByRotation'
 import { PointOnLine } from '../points/PointOnLine'
-import { Segment, SegmentStyle } from './Segment'
+import { Segment } from './Segment'
 
-/**
- * Le segment [AB] est prolongé de add1 unités du côté de A et de add2 unités du côté de B
- */
-export class Line extends Segment {
+export type LineTypes = 'Line' | 'Segment' | 'Ray'
+export type SegmentStyle = '' | '|-' | '-|' | '|-|'
+export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number, temp?: boolean, dashed?: boolean }
+export class Line extends Element2D {
   A: Point
   B: Point
-  AB: Distance
-  add1: CalculDynamic
-  add2: CalculDynamic
-  constructor(A: Point, B: Point, { color = 'black', thickness = 1, style = '', add1 = 50, add2 = 50, temp = false }: { color?: string, thickness?: number, style?: SegmentStyle, add1?: number, add2?: number, temp?: boolean } = {}) {
-    const sAB = new Segment(A, B, { temp: true })
-    const m = new PointOnLine(sAB, { length: -add1, temp: true })
-    const sBA = new Segment(B, A, { temp: true })
-    const n = new PointOnLine(sBA, { length: -add2, temp: true })
-    super(A, B, { color, thickness })
-    this.ends[0] = m
-    this.ends[1] = n
+  x1: number
+  y1: number // Coordonnées de l'extrémité la plus à gauche (qui sort légèrement du cadre)
+  x2: number
+  y2: number // Coordonnées de l'extrémité la plus à droite
+  type: LineTypes
+  label: string
+  _style: string
+  _dashed: boolean
+  temp: boolean
+  constructor(A: Point, B: Point, type: LineTypes, { color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
+    super()
+    this.parentFigure = A.parentFigure
     this.A = A
     this.B = B
-    this.AB = new Distance(A, B)
-    this.add1 = new CalculDynamic(d => add1 / d[0].value, [this.AB])
-    this.add2 = new CalculDynamic(d => add2 / d[0].value, [this.AB])
+    this.type = type
+
+    if (this.type === 'Line') {
+      if (A.isOnFigure) {
+        ;[this.x1, this.y1, this.x2, this.y2] = getCoordsOut(A, B)
+      } else if (B.isOnFigure) {
+        ;[this.x1, this.y1, this.x2, this.y2] = getCoordsOut(B, A)
+      } else {
+        ;[this.x1, this.y1, this.x2, this.y2] = [A.x, A.y, B.x, B.y]
+      }
+    } else if (this.type === 'Ray') {
+      ;[this.x1, this.y1, this.x2, this.y2] = getRayCoordsOut(A, B)
+    } else if (this.type === 'Segment') {
+      ;[this.x1, this.y1, this.x2, this.y2] = [A.x, A.y, B.x, B.y]
+    } else {
+      throw new Error("Le type doit être l'un des trois suivants : Line ou Segment ou Ray")
+    }
+    const x1Svg = this.parentFigure.xToSx(this.x1)
+    const x2Svg = this.parentFigure.xToSx(this.x2)
+    const y1Svg = this.parentFigure.yToSy(this.y1)
+    const y2Svg = this.parentFigure.yToSy(this.y2)
+
+    this.g = document.createElementNS('http://www.w3.org/2000/svg', 'line')
+    this.g.setAttribute('x1', `${x1Svg}`)
+    this.g.setAttribute('y1', `${y1Svg}`)
+    this.g.setAttribute('x2', `${x2Svg}`)
+    this.g.setAttribute('y2', `${y2Svg}`)
+
+    this.temp = temp
+    this.color = color
+    this.thickness = thickness
+    this.dashed = dashed
+    this.style = style
+    if (!temp) this.parentFigure.svg.appendChild(this.g)
+    A.addDependency(this)
+    B.addDependency(this)
   }
 
   update() {
-    const [Mx, My] = homothetieCoord(this.B, this.A, -this.add1.value)
-    const [Nx, Ny] = homothetieCoord(this.A, this.B, -this.add2.value)
-    this.moveEnd(Mx, My, 1)
-    this.moveEnd(Nx, Ny, 2)
-    super.update()
+    const [xOutLeft, yOutLeft, xOutRight, yOutRight] = getCoordsOut(this.A, this.B)
+    const x1Svg = this.parentFigure.xToSx(xOutRight)
+    const x2Svg = this.parentFigure.xToSx(xOutLeft)
+    const y1Svg = this.parentFigure.yToSy(yOutRight)
+    const y2Svg = this.parentFigure.yToSy(yOutLeft)
+    this.g.setAttribute('x1', `${x1Svg}`)
+    this.g.setAttribute('y1', `${y1Svg}`)
+    this.g.setAttribute('x2', `${x2Svg}`)
+    this.g.setAttribute('y2', `${y2Svg}`)
+    this.notifyAllDependencies()
+  }
+
+  get latex() {
+    const arrayOptions: string[] = []
+    if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
+    if (this.thickness !== 1) arrayOptions.push(`line width = ${this.thickness}`)
+    if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
+    if (this.dashed) arrayOptions.push('dashed')
+    let txtOptions = ''
+    if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
+    let latex = `\n\t% ${this.label ?? 'Droite'}`
+    latex += `\n \t \\draw${txtOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
+    return latex
+  }
+
+  get style() {
+    return this._style
+  }
+
+  /**
+   * Renvoie [a, b] tels que la droite est définie par y = ax + b
+   * ToFiX gestion des droites verticales et du cas où les 2 extrémités sont confondues
+   */
+  get affine() {
+    const [a, b, c] = this.equation
+    return [-a / b, -c / b]
+  }
+
+  /**
+   * Renvoie [a, b, c] tels que ax +y + c = 0
+   */
+  get equation() {
+    const a = this.A.y - this.B.y
+    const b = this.B.x - this.A.x
+    const c = (this.A.x - this.B.x) * this.A.y + (this.B.y - this.A.y) * this.A.x
+    return [a, b, c]
+  }
+
+  /**
+   * Vecteur normal à la droite
+   */
+  get normal() {
+    const [a, b] = this.equation
+    return new Vector(this.parentFigure, a, b)
+  }
+
+  /**
+   * Vecteur directeur à la droite
+   * ToFiX Anglicisation ?
+   */
+  get directeur() {
+    const [a, b] = this.equation
+    return new Vector(this.parentFigure, b, -a)
+  }
+
+  get angleWithHorizontal() {
+    const O = new Point(this.parentFigure, 0, 0, { temp: true })
+    const A = new Point(this.parentFigure, 1, 0, { temp: true })
+    const M = new Point(this.parentFigure, this.directeur.x, this.directeur.y, { temp: true })
+    return angleOriented(A, O, M)
+  }
+
+  set style(style: string) {
+    this._style = style
+    const h = 0.2
+    const addBorder1 = () => {
+      this.A.style = ''
+      const L = new Segment(this.A, this.B, { temp: true })
+      const M = new PointOnLine(L, { length: h, style: '' })
+      const A1 = new PointByRotation(M, this.A, 90, { temp: true, style: '' })
+      const A2 = new PointByRotation(M, this.A, -90, { style: '' })
+      const s = new Segment(A1, A2, { color: this.color, thickness: this.thickness })
+      this.group.push(s)
+    }
+    const addBorder2 = () => {
+      this.B.style = ''
+      const L = new Segment(this.B, this.A, { temp: true })
+      const M = new PointOnLine(L, { length: h, temp: true, style: '' })
+      const B1 = new PointByRotation(M, this.B, 90, { temp: true, style: '' })
+      const B2 = new PointByRotation(M, this.B, -90, { temp: true, style: '' })
+      const s = new Segment(B1, B2, { color: this.color, thickness: this.thickness })
+      this.group.push(s)
+    }
+    if (style === '|-') addBorder1()
+    if (style === '-|') addBorder2()
+    if (style === '|-|') {
+      addBorder1()
+      addBorder2()
+    }
+  }
+
+  get dashed() {
+    return this._dashed
+  }
+
+  set dashed(isDashed) {
+    if (isDashed) {
+      this.g.setAttribute('stroke-dasharray', '4 3')
+    } else {
+      this.g.removeAttribute('stroke-dasharray')
+    }
+    this._dashed = isDashed
+  }
+}
+
+// une droite coupe deux bords, on les détecte ici.
+function getCoordsOut(A: Point, B: Point) {
+  const parentFigure = A.parentFigure
+  let pente = Infinity
+  if (B.x !== A.x) {
+    pente = (B.y - A.y) / (B.x - A.x)
+  }
+  if (pente === Infinity) return [A.x, parentFigure.yMax, A.x, parentFigure.yMin]
+  if (Math.abs(pente) < 10 ** -4) return [parentFigure.xMin, A.y, parentFigure.xMax, A.y]
+  let xOutLeft: number, yOutLeft: number
+  let n = 0
+  while (true) {
+    xOutLeft = A.x + n
+    yOutLeft = A.y + n * pente
+    n++
+    if (xOutLeft > parentFigure.xMax + 1 || yOutLeft > parentFigure.yMax + 1 || yOutLeft < parentFigure.yMin - 1) break
+  }
+  let xOutRight: number, yOutRight: number
+  n = 0
+  while (true) {
+    xOutRight = A.x + n
+    yOutRight = A.y + n * pente
+    n--
+    if (xOutRight < parentFigure.xMin - 1 || yOutRight > parentFigure.yMax + 1 || yOutRight < parentFigure.yMin - 1) break
+  }
+  return [xOutLeft, yOutLeft, xOutRight, yOutRight]
+}
+
+// Parce que les demi-droites ne sortent que d'un côté... celui de B.
+function getRayCoordsOut(A: Point, B: Point) {
+  const parentFigure = A.parentFigure
+  let pente = Infinity
+  if (B.x !== A.x) {
+    pente = (B.y - A.y) / (B.x - A.x)
+  }
+  if (pente === Infinity) {
+    if (A.y > B.y) return [A.x, A.y, A.x, parentFigure.yMin] // Si la droite est verticale on prend l'abscisse de A et le bon bord en ordonnée
+    else[A.x, A.y, A.x, parentFigure.yMax] // Ici on sort par en haut
+  }
+  if (Math.abs(pente) < 10 ** -4) {
+    if (A.x > B.x) return [A.x, A.y, parentFigure.xMin, A.y]
+    else return [A.x, A.y, parentFigure.xMax, A.y]
+  }
+  let xOutLeft: number, yOutLeft: number
+  let n = 0
+  if (B.x > A.x) {
+    while (true) {
+      xOutLeft = A.x + n
+      yOutLeft = A.y + n * pente
+      n++
+      if (xOutLeft > parentFigure.xMax + 1 || yOutLeft > parentFigure.yMax + 1 || yOutLeft < parentFigure.yMin - 1) break
+    }
+    return [A.x, A.y, xOutLeft, yOutLeft]
+  } else {
+    while (true) {
+      xOutLeft = A.x - n
+      yOutLeft = A.y - n * pente
+      n++
+      if (xOutLeft < parentFigure.xMin - 1 || yOutLeft > parentFigure.yMax + 1 || yOutLeft < parentFigure.yMin - 1) break
+    }
+    return [A.x, A.y, xOutLeft, yOutLeft]
   }
 }

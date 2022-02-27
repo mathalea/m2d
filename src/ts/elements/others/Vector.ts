@@ -39,7 +39,7 @@ export class Vector extends Element2D {
 
   set x (n: number) {
     this._x = n
-    this.update()
+    // this.update()
   }
 
   get y () {
@@ -48,6 +48,6 @@ export class Vector extends Element2D {
 
   set y (n: number) {
     this._y = n
-    this.update()
+    // this.update()
   }
 }

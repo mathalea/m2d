@@ -10,7 +10,7 @@ import { distance } from './random'
  * @example I = pointItersectionLC(d,c,'I',1) // I est le premier point d'intersection si il existe de la droite (d) et du cercle (c)
  * @author Jean-Claude Lhote
  */
-export function intersectionLCCoord (D: Segment, C: Circle, n: 1 | 2 = 1) {
+export function intersectionLCCoord(D: Segment, C: Circle, n: 1 | 2 = 1) {
   const O = C.center
   const r = C.radius
   const [a, b, c] = D.equation
@@ -50,15 +50,15 @@ export function intersectionLCCoord (D: Segment, C: Circle, n: 1 | 2 = 1) {
   } else {
     // cas général
     Delta = (2 * ((a * c) / (b * b) + (yO * a) / b - xO)) ** 2 -
-        4 *
-        (1 + (a / b) ** 2) *
-        (xO * xO + yO * yO + (c / b) ** 2 + (2 * yO * c) / b - r * r)
+      4 *
+      (1 + (a / b) ** 2) *
+      (xO * xO + yO * yO + (c / b) ** 2 + (2 * yO * c) / b - r * r)
     if (Delta < 0) return [undefined, undefined]
     else if (Math.abs(Delta) < 10 ** (-6)) {
       // un seul point d'intersection
       delta = Math.sqrt(Delta)
       xi = (-2 * ((a * c) / (b * b) + (yO * a) / b - xO) - delta) /
-          (2 * (1 + (a / b) ** 2))
+        (2 * (1 + (a / b) ** 2))
       xiPrime = xi
       yi = (-a * xi - c) / b
       yiPrime = yi
@@ -66,9 +66,9 @@ export function intersectionLCCoord (D: Segment, C: Circle, n: 1 | 2 = 1) {
       // deux points d'intersection
       delta = Math.sqrt(Delta)
       xi = (-2 * ((a * c) / (b * b) + (yO * a) / b - xO) - delta) /
-          (2 * (1 + (a / b) ** 2))
+        (2 * (1 + (a / b) ** 2))
       xiPrime = (-2 * ((a * c) / (b * b) + (yO * a) / b - xO) + delta) /
-          (2 * (1 + (a / b) ** 2))
+        (2 * (1 + (a / b) ** 2))
       yi = (-a * xi - c) / b
       yiPrime = (-a * xiPrime - c) / b
     }
@@ -88,9 +88,9 @@ export function intersectionLCCoord (D: Segment, C: Circle, n: 1 | 2 = 1) {
   }
 }
 
-export function intersectionSCCoord (L: Segment, C: Circle) {
+export function intersectionSCCoord(L: Segment, C: Circle) {
   const [x] = intersectionLCCoord(L, C, 1)
-  const [A, B] = L.ends
+  const [A, B] = [L.A, L.B]
   if (x !== undefined && distance(A, B) > C.radius) {
     if (x < Math.max(A.x, B.x) && x > Math.min(A.x, B.x)) {
       return intersectionLCCoord(L, C, 1)
@@ -107,7 +107,7 @@ export function intersectionSCCoord (L: Segment, C: Circle) {
  * @author Rémi Angot
  * @Source https://stackoverflow.com/questions/12219802/a-javascript-function-that-returns-the-x-y-points-of-intersection-between-two-ci
  */
-export function intersectionCCCoord (C1: Circle, C2: Circle, n: 1 | 2 = 1) {
+export function intersectionCCCoord(C1: Circle, C2: Circle, n: 1 | 2 = 1) {
   const O1 = C1.center
   const O2 = C2.center
   const r0 = C1.radius
@@ -158,10 +158,10 @@ export function intersectionCCCoord (C1: Circle, C2: Circle, n: 1 | 2 = 1) {
  * @return {Point} Point 'M' d'intersection de d1 et de d2
  * @author Jean-Claude Lhote
  */
-export function intersectionLLCoord (d: Segment, f: Segment) {
+export function intersectionLLCoord(d: Segment, f: Segment) {
   const [da, db, dc] = d.equation
   const [fa, fb, fc] = f.equation
-  let x: number, y:number
+  let x: number, y: number
   if (fa * db - fb * da === 0) {
     return [undefined, undefined]
   } else {

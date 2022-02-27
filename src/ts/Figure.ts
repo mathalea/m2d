@@ -3,11 +3,10 @@ import { distance } from './calculus/random'
 import { Circle } from './elements/lines/Circle'
 import { Element2D } from './elements/Element2D'
 import { PointOptions, Point } from './elements/points/Point'
-import { OptionsGraphiques, Segment } from './elements/lines/Segment'
+import { PointOnLine } from './elements/points/PointOnLine'
+import { OptionsGraphiques } from './elements/lines/Line'
 import { TextByPosition } from './elements/texts/TextByPosition'
-import { Line } from './elements/lines/Line'
-import { PointIntersectionLC } from './elements/points/PointIntersectionLC'
-import { PointOnLineAtD } from './elements/points/PointOnLineAtD'
+import { Segment } from './elements/lines/Segment'
 
 export class Figure {
   width: number
@@ -178,7 +177,7 @@ export class Figure {
   // ToFix : Il faudrait que la méthode crée 2 points et que ces points se cachent ou se montrent en fonction de leur appartenance au segment [AB]
   pointIntersectionSC(L: Segment, C: Circle, options?: PointOptions) {
     const [x] = intersectionLCCoord(L, C, 1)
-    const [A, B] = L.ends
+    const [A, B] = [L.A, L.B]
     if (x !== undefined && distance(A, B) > C.radius) {
       let M: Point
       if (x < Math.max(A.x, B.x) && x > Math.min(A.x, B.x)) {
