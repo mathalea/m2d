@@ -2,13 +2,10 @@ import { angleOriented } from '../../calculus/trigonometry'
 import { Element2D } from '../Element2D'
 import { Vector } from '../others/Vector'
 import { Point } from '../points/Point'
-import { PointByRotation } from '../points/PointByRotation'
-import { PointOnLine } from '../points/PointOnLine'
-import { Segment } from './Segment'
 
-export type LineTypes = 'Line' | 'Segment' | 'Ray'
+export type LineType = 'Line' | 'Segment' | 'Ray'
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
-export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number, temp?: boolean, dashed?: boolean }
+export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number, temp?: boolean, dashed?: boolean, lineType?: LineType }
 export class Line extends Element2D {
   A: Point
   B: Point
@@ -16,12 +13,12 @@ export class Line extends Element2D {
   y1: number // Coordonnées de l'extrémité la plus à gauche (qui sort légèrement du cadre)
   x2: number
   y2: number // Coordonnées de l'extrémité la plus à droite
-  type: LineTypes
+  type: LineType
   label: string
   _style: string
   _dashed: boolean
   temp: boolean
-  constructor(A: Point, B: Point, type: LineTypes, { color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
+  constructor (A: Point, B: Point, { lineType: type = 'Line', color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
     super()
     this.parentFigure = A.parentFigure
     this.A = A
@@ -58,13 +55,12 @@ export class Line extends Element2D {
     this.color = color
     this.thickness = thickness
     this.dashed = dashed
-    this.style = style
     if (!temp) this.parentFigure.svg.appendChild(this.g)
     A.addDependency(this)
     B.addDependency(this)
   }
 
-  update() {
+  update () {
     const [xOutLeft, yOutLeft, xOutRight, yOutRight] = getCoordsOut(this.A, this.B)
     const x1Svg = this.parentFigure.xToSx(xOutRight)
     const x2Svg = this.parentFigure.xToSx(xOutLeft)
@@ -77,7 +73,7 @@ export class Line extends Element2D {
     this.notifyAllDependencies()
   }
 
-  get latex() {
+  get latex () {
     const arrayOptions: string[] = []
     if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
     if (this.thickness !== 1) arrayOptions.push(`line width = ${this.thickness}`)
@@ -90,7 +86,7 @@ export class Line extends Element2D {
     return latex
   }
 
-  get style() {
+  get style () {
     return this._style
   }
 
@@ -98,7 +94,7 @@ export class Line extends Element2D {
    * Renvoie [a, b] tels que la droite est définie par y = ax + b
    * ToFiX gestion des droites verticales et du cas où les 2 extrémités sont confondues
    */
-  get affine() {
+  get affine () {
     const [a, b, c] = this.equation
     return [-a / b, -c / b]
   }
@@ -106,7 +102,7 @@ export class Line extends Element2D {
   /**
    * Renvoie [a, b, c] tels que ax +y + c = 0
    */
-  get equation() {
+  get equation () {
     const a = this.A.y - this.B.y
     const b = this.B.x - this.A.x
     const c = (this.A.x - this.B.x) * this.A.y + (this.B.y - this.A.y) * this.A.x
@@ -116,7 +112,7 @@ export class Line extends Element2D {
   /**
    * Vecteur normal à la droite
    */
-  get normal() {
+  get normal () {
     const [a, b] = this.equation
     return new Vector(this.parentFigure, a, b)
   }
@@ -125,52 +121,23 @@ export class Line extends Element2D {
    * Vecteur directeur à la droite
    * ToFiX Anglicisation ?
    */
-  get directeur() {
+  get directeur () {
     const [a, b] = this.equation
     return new Vector(this.parentFigure, b, -a)
   }
 
-  get angleWithHorizontal() {
+  get angleWithHorizontal () {
     const O = new Point(this.parentFigure, 0, 0, { temp: true })
     const A = new Point(this.parentFigure, 1, 0, { temp: true })
     const M = new Point(this.parentFigure, this.directeur.x, this.directeur.y, { temp: true })
     return angleOriented(A, O, M)
   }
 
-  set style(style: string) {
-    this._style = style
-    const h = 0.2
-    const addBorder1 = () => {
-      this.A.style = ''
-      const L = new Segment(this.A, this.B, { temp: true })
-      const M = new PointOnLine(L, { length: h, style: '' })
-      const A1 = new PointByRotation(M, this.A, 90, { temp: true, style: '' })
-      const A2 = new PointByRotation(M, this.A, -90, { style: '' })
-      const s = new Segment(A1, A2, { color: this.color, thickness: this.thickness })
-      this.group.push(s)
-    }
-    const addBorder2 = () => {
-      this.B.style = ''
-      const L = new Segment(this.B, this.A, { temp: true })
-      const M = new PointOnLine(L, { length: h, temp: true, style: '' })
-      const B1 = new PointByRotation(M, this.B, 90, { temp: true, style: '' })
-      const B2 = new PointByRotation(M, this.B, -90, { temp: true, style: '' })
-      const s = new Segment(B1, B2, { color: this.color, thickness: this.thickness })
-      this.group.push(s)
-    }
-    if (style === '|-') addBorder1()
-    if (style === '-|') addBorder2()
-    if (style === '|-|') {
-      addBorder1()
-      addBorder2()
-    }
-  }
-
-  get dashed() {
+  get dashed () {
     return this._dashed
   }
 
-  set dashed(isDashed) {
+  set dashed (isDashed) {
     if (isDashed) {
       this.g.setAttribute('stroke-dasharray', '4 3')
     } else {
@@ -181,7 +148,7 @@ export class Line extends Element2D {
 }
 
 // une droite coupe deux bords, on les détecte ici.
-function getCoordsOut(A: Point, B: Point) {
+function getCoordsOut (A: Point, B: Point) {
   const parentFigure = A.parentFigure
   let pente = Infinity
   if (B.x !== A.x) {
@@ -209,7 +176,7 @@ function getCoordsOut(A: Point, B: Point) {
 }
 
 // Parce que les demi-droites ne sortent que d'un côté... celui de B.
-function getRayCoordsOut(A: Point, B: Point) {
+function getRayCoordsOut (A: Point, B: Point) {
   const parentFigure = A.parentFigure
   let pente = Infinity
   if (B.x !== A.x) {
@@ -217,7 +184,7 @@ function getRayCoordsOut(A: Point, B: Point) {
   }
   if (pente === Infinity) {
     if (A.y > B.y) return [A.x, A.y, A.x, parentFigure.yMin] // Si la droite est verticale on prend l'abscisse de A et le bon bord en ordonnée
-    else[A.x, A.y, A.x, parentFigure.yMax] // Ici on sort par en haut
+    else return [A.x, A.y, A.x, parentFigure.yMax] // Ici on sort par en haut
   }
   if (Math.abs(pente) < 10 ** -4) {
     if (A.x > B.x) return [A.x, A.y, parentFigure.xMin, A.y]

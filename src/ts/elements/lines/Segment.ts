@@ -1,10 +1,11 @@
 import { Point } from '../points/Point'
+import { PointByRotation } from '../points/PointByRotation'
+import { PointOnLineAtD } from '../points/PointOnLineAtD'
 import { Line, OptionsGraphiques } from './Line'
 
-
 export class Segment extends Line {
-  constructor(A: Point, B: Point, { color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
-    super(A, B, 'Segment', { color, thickness, style, temp, dashed })
+  constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
+    super(A, B, { lineType: 'Segment', color, thickness, style, temp, dashed })
     this.parentFigure = A.parentFigure
     if (!temp) this.parentFigure.set.add(this)
     if (A.label && B.label) this.label = `[${A.label}${B.label}]`
@@ -21,7 +22,7 @@ export class Segment extends Line {
     B.addDependency(this)
   }
 
-  update() {
+  update () {
     [this.x1, this.y1, this.x2, this.y2] = [this.A.x, this.A.y, this.B.x, this.B.y]
     const x1Svg = this.parentFigure.xToSx(this.x1)
     const x2Svg = this.parentFigure.xToSx(this.x2)
@@ -34,11 +35,11 @@ export class Segment extends Line {
     this.notifyAllDependencies()
   }
 
-  addDependency(dependency) {
+  addDependency (dependency) {
     this.dependencies.push(dependency)
   }
 
-  get latex() {
+  get latex () {
     const arrayOptions: string[] = []
     if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
     if (this.thickness !== 1) arrayOptions.push(`line width = ${this.thickness}`)
@@ -49,5 +50,38 @@ export class Segment extends Line {
     let latex = `\n\t% ${this.label ?? 'Droite'}`
     latex += `\n \t \\draw${txtOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
     return latex
+  }
+
+  get style () {
+    return this._style
+  }
+
+  set style (style: string) {
+    this._style = style
+    const h = 0.2
+    const addBorder1 = () => {
+      this.A.style = ''
+      const L = new Line(this.A, this.B, { lineType: 'Segment', temp: true })
+      const M = new PointOnLineAtD(L, h, { style: '' })
+      const A1 = new PointByRotation(M, this.A, 90, { temp: true, style: '' })
+      const A2 = new PointByRotation(M, this.A, -90, { style: '' })
+      const s = new Segment(A1, A2, { color: this.color, thickness: this.thickness })
+      this.group.push(s)
+    }
+    const addBorder2 = () => {
+      this.B.style = ''
+      const L = new Line(this.B, this.A, { lineType: 'Segment', temp: true })
+      const M = new PointOnLineAtD(L, h, { temp: true, style: '' })
+      const B1 = new PointByRotation(M, this.B, 90, { temp: true, style: '' })
+      const B2 = new PointByRotation(M, this.B, -90, { temp: true, style: '' })
+      const s = new Segment(B1, B2, { color: this.color, thickness: this.thickness })
+      this.group.push(s)
+    }
+    if (style === '|-') addBorder1()
+    if (style === '-|') addBorder2()
+    if (style === '|-|') {
+      addBorder1()
+      addBorder2()
+    }
   }
 }

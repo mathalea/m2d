@@ -1,17 +1,11 @@
 
 import { Figure } from './Figure'
 import { Ray } from './elements/lines/Ray'
-import { Bissectrice } from './elements/lines/Bissectrice'
-import { Angle } from './elements/measures/Angle'
-import { DisplayMeasure } from './elements/texts/DisplayMeasure'
-import { CalculDynamic } from './elements/measures/CalculDynamic'
-import { PointByRotation } from './elements/points/PointByRotation'
-import { Vector } from './elements/others/Vector'
-import { PointByTranslationVector } from './elements/points/PointByTranslationVector'
 import { Cursor } from './elements/others/Cursor'
 import { VectorByPoints } from './elements/others/VectorByPoints'
 import { PointByHomothetie } from './elements/points/PointByHomothetie'
 import { Polygon } from './elements/lines/Polygon'
+import { PointByTranslationVector } from './elements/points/PointByTranslationVector'
 
 /**
  * Script qui permet de tester M2D
@@ -38,7 +32,6 @@ btn.addEventListener('click', () => {
 figure.svg.style.margin = 'auto'
 figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
-
 
 // On créé des points à partir de leur coordonnées
 

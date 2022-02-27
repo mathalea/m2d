@@ -11,7 +11,7 @@ export class PointOnLineAtD extends Point {
   length: number // valeur signée (mesure algébrique de A à M)
   d: number
 
-  constructor(L: Segment, d: number, { label, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = false, temp = false }: { length?: number, k?: number } & PointOptions = {}) {
+  constructor (L: Segment, d: number, { label, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = false, temp = false }: { length?: number, k?: number } & PointOptions = {}) {
     const length = distance(L.A, L.B)
     const M = new PointByHomothetie(L.B, L.A, d / (length === 0 ? 1 : length), { temp: true })
     super(L.parentFigure, M.x, M.y, { style, size, thickness, color, draggable, temp })
@@ -23,7 +23,7 @@ export class PointOnLineAtD extends Point {
     this.line.addDependency(this)
   }
 
-  update() {
+  update () {
     const L = this.line
     const Llength = distance(L.A, L.B)
     const [Mx, My] = homothetieCoord(L.B, L.A, this.d / (Llength === 0 ? 1 : Llength))

@@ -5,7 +5,7 @@ import { PointOnLine } from './PointOnLine'
 import { Segment } from '../lines/Segment'
 
 export class PointOnSegment extends PointOnLine {
-  constructor(L: Segment, { label, length, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: { length?: number } & PointOptions = {}) {
+  constructor (L: Segment, { label, length, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: { length?: number } & PointOptions = {}) {
     const Llength = distance(L.A, L.B)
     length = length === undefined ? length = Llength / 2 : length < 0 ? 0 : Math.min(length, Llength)
     super(L, { length, style, size, thickness, color, draggable, temp })
@@ -20,7 +20,7 @@ export class PointOnSegment extends PointOnLine {
     this.k = this.length / Llength
   }
 
-  notifyPointerMove(x: number, y: number) {
+  notifyPointerMove (x: number, y: number) {
     if (this.draggable) {
       const P = new Point(this.line.parentFigure, x, y, { temp: true })
       const [xM, yM] = orthogonalProjectionCoord(P, this.line)
