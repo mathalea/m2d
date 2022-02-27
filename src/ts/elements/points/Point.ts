@@ -1,3 +1,12 @@
+/*
+ * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
+ *
+ * MathALEA 2D : Software for animating online dynamic mathematics figures
+ * https://coopmaths.fr
+ * @Author Angot Rémi and Lhote Jean-Claude (contact@coopmaths.fr)
+ * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
+ */
+
 import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
 import { Segment } from '../lines/Segment'
@@ -70,6 +79,7 @@ export class Point extends Element2D {
       ;[this.mark.x, this.mark.y] = [x, y]
       this.mark.update()
     }
+    // ToFix ce console.log est là qu'en phase de développement
     if (this.dependencies.length > 20) console.log(`Nombre de dépendances élevée pour ${this.label} : ${this.dependencies.length}`)
     this.notifyAllDependencies()
   }

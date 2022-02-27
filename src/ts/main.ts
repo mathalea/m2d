@@ -1,3 +1,12 @@
+/*
+ * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
+ *
+ * MathALEA 2D : Software for animating online dynamic mathematics figures
+ * https://coopmaths.fr
+ * @Author Angot Rémi and Lhote Jean-Claude (contact@coopmaths.fr)
+ * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
+ */
+
 
 import { Figure } from './Figure'
 import { Segment } from './elements/lines/Segment'
@@ -7,6 +16,7 @@ import { Polygon } from './elements/lines/Polygon'
 import { Bissectrice } from './elements/lines/Bissectrice'
 import { Ray } from './elements/lines/Ray'
 import { LineParallelByPoint } from './elements/lines/LineParallelByPoint'
+import { Arc } from './elements/lines/Arc'
 /**
  * Script qui permet de tester M2D
  */
@@ -36,7 +46,10 @@ figure.svg.style.border = 'solid'
 // On créé des points à partir de leur coordonnées
 
 const A = figure.point(-4, 2, { label: 'A' })
-const B = figure.point(3, -2, { label: 'B' })
+const B = figure.point(3, -2, { label: 'O' })
+const arc = new Arc(B, A, 30)
+arc.color = 'red'
+arc.thickness = 3
 const C = figure.point(2, 5, { label: 'C' })
 const sAB = new Segment(A, B)
 sAB.style = '|-|'
@@ -53,9 +66,9 @@ mAB.dashed = true
 p.fill = 'yellow'
 p.fillOpacity = 0.1
 
-// const v = new VectorNormal(L)
+// // const v = new VectorNormal(L)
 
-// const A = new Point(figure, 0, 0)
-// const v = new Vector(figure, 3, 1)
-// const L = new LineByPointVector(A, v)
-// L.vector.y = -5
+// // const A = new Point(figure, 0, 0)
+// // const v = new Vector(figure, 3, 1)
+// // const L = new LineByPointVector(A, v)
+// // L.vector.y = -5

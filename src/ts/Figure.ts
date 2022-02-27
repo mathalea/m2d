@@ -1,3 +1,12 @@
+/*
+ * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
+ *
+ * MathALEA 2D : Software for animating online dynamic mathematics figures
+ * https://coopmaths.fr
+ * @Author Angot Rémi and Lhote Jean-Claude (contact@coopmaths.fr)
+ * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
+ */
+
 import { intersectionLCCoord } from './calculus/intersection'
 import { distance } from './calculus/random'
 import { Circle } from './elements/lines/Circle'
@@ -196,13 +205,6 @@ export class Figure {
     return new PointOnLineAtD(L, d)
   }
 
-  // static translation (A: Point, x: number, y: number) {
-  //   return A.translation(x, y)
-  // }
-  // ToFix : a-t-on besoin d'un setter pour latex ?
-  // set latex(txt: string) {
-  // }
-
   get latex () {
     let latex = '\\begin{tikzpicture}'
     latex += `\n\t\\clip(${this.xMin}, ${this.yMin}) rectangle (${this.xMax}, ${this.yMax});`
@@ -210,6 +212,7 @@ export class Figure {
       latex += e.latex
     }
     latex += '\n\\end{tikzpicture}'
+    // ToFix Il peut y avoir un problème si un nombre est en écriture scientifique
     latex = latex.replace(/\d+\.\d+/g, (number: string) => (Math.round(1000 * parseFloat(number)) / 1000).toString())
     return latex
   }
