@@ -1,6 +1,7 @@
 import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
 import { Point } from '../points/Point'
+import { Vector } from './Vector'
 
 export class VectorByPoints extends Element2D {
   origin: Point // ToFix ? arg1 ou Point(0,0)

@@ -4,9 +4,11 @@ import { Circle } from './elements/lines/Circle'
 import { Element2D } from './elements/Element2D'
 import { PointOptions, Point } from './elements/points/Point'
 import { PointOnLine } from './elements/points/PointOnLine'
-import { OptionsGraphiques } from './elements/lines/Line'
+import { Line, OptionsGraphiques } from './elements/lines/Line'
 import { TextByPosition } from './elements/texts/TextByPosition'
 import { Segment } from './elements/lines/Segment'
+import { PointOnLineAtD } from './elements/points/PointOnLineAtD'
+import { PointIntersectionLC } from './elements/points/PointIntersectionLC'
 
 export class Figure {
   width: number
@@ -155,8 +157,8 @@ export class Figure {
    * @param option add1 contrôle la distance ajoutée du côté de A et add2 celle du côté de B
    * @returns
    */
-  line(A: Point, B: Point, { add1 = 50, add2 = 50, color = 'black', thickness = 1 } = {}) {
-    return new Line(A, B, { add1, add2, color, thickness })
+  line(A: Point, B: Point, { color = 'black', thickness = 1 } = {}) {
+    return new Line(A, B, 'Line', { color, thickness })
   }
 
   /**
