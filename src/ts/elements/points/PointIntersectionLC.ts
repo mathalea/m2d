@@ -10,13 +10,13 @@
 import { intersectionLCCoord } from '../../calculus/intersection'
 import { Circle } from '../lines/Circle'
 import { Point, PointOptions } from './Point'
-import { Segment } from '../lines/Segment'
+import { Line } from '../lines/Line'
 
 export class PointIntersectionLC extends Point {
-  L: Segment
+  L: Line
   C: Circle
   n: 1 | 2
-  constructor (L: Segment, C: Circle, n: 1 | 2 = 1, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
+  constructor (L: Line, C: Circle, n: 1 | 2 = 1, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
     const [x, y] = intersectionLCCoord(L, C, n)
     super(L.parentFigure, x, y, { style, size, thickness, color, draggable, temp })
     this.L = L
