@@ -26,17 +26,31 @@ const figure = new Figure()
 
 // On l'ajoute au dom
 const body = document.querySelector('body')
-const btn = document.createElement('button')
-btn.innerHTML = 'Obtenir LaTeX'
+const btnLatex = document.createElement('button')
+btnLatex.innerHTML = 'Obtenir LaTeX'
+const btnDrag = document.createElement('button')
+btnDrag.innerHTML = 'Drag'
+const btnNewPoint = document.createElement('button')
+btnNewPoint.innerHTML = 'Nouveau point'
 const texteLatex = document.createElement('pre')
 if (body) {
   body.appendChild(figure.svg)
-  body.appendChild(btn)
+  body.appendChild(btnLatex)
+  body.appendChild(btnDrag)
+  body.appendChild(btnNewPoint)
   body.appendChild(texteLatex)
 }
 
-btn.addEventListener('click', () => {
+btnLatex.addEventListener('click', () => {
   texteLatex.innerHTML = figure.latex
+})
+btnDrag.addEventListener('click', () => {
+  figure.pointerAction = 'drag'
+  figure.listenPointer()
+})
+btnNewPoint.addEventListener('click', () => {
+  figure.pointerAction = 'newPoint'
+  figure.listenPointer()
 })
 
 figure.svg.style.margin = 'auto'

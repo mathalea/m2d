@@ -17,6 +17,8 @@ import { TextByPosition } from './elements/texts/TextByPosition'
 import { Segment } from './elements/lines/Segment'
 import { PointOnLineAtD } from './elements/points/PointOnLineAtD'
 import { PointIntersectionLC } from './elements/points/PointIntersectionLC'
+import { handleDrag } from './pointerAction/drag'
+import { handleAction } from './pointerAction/newPoint'
 
 export class Figure {
   width: number
@@ -33,6 +35,7 @@ export class Figure {
   svg: SVGElement
   pointerX: number | null
   pointerY: number | null
+  pointerAction: 'drag' | 'newPoint'
   constructor ({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean } = {}) {
     this.width = width
     this.height = height
@@ -43,6 +46,7 @@ export class Figure {
     this.yMax = yMin + height / pixelsPerUnit
     this.isDynamic = isDynamic
     this.set = new Set()
+    this.pointerAction = 'drag'
     this.setInDrag = new Set()
     this.isDraging = false
 
@@ -100,7 +104,7 @@ export class Figure {
      * @param event
      * @returns
      */
-  private getPointerCoord (event: PointerEvent) {
+  getPointerCoord (event: PointerEvent) {
     event.preventDefault()
     const rect = this.svg.getBoundingClientRect()
     const pointerX = (event.clientX - rect.x) / this.pixelsPerUnit + this.xMin
@@ -108,39 +112,10 @@ export class Figure {
     return [pointerX, pointerY]
   }
 
-  private listenPointer () {
-    this.svg.addEventListener('pointermove', (event) => {
-      if (!this.isDraging) return
-      document.querySelector('body').style.cursor = 'move'
-      const [pointerX, pointerY] = this.getPointerCoord(event)
-      for (const e of this.setInDrag) {
-        e.notifyPointerMove(pointerX, pointerY)
-      }
-    })
-
-    const startDrag = (event: PointerEvent) => {
-      const [pointerX, pointerY] = this.getPointerCoord(event)
-      for (const e of this.set) {
-        if (e.draggable && (e instanceof Point || e instanceof TextByPosition) && e.distancePointer(pointerX, pointerY) * this.pixelsPerUnit < 15) {
-          // ToFix est-ce qu'on garde le fait de pouvoir déplacer plusieurs points en même temps
-          // Un set de taille 1 est inutile autant avoir un unique élément
-          if (this.setInDrag.size < 1) {
-            this.setInDrag.add(e)
-            this.isDraging = true
-          }
-        }
-      }
-    }
-
-    const stopDrag = () => {
-      this.isDraging = false
-      this.setInDrag.clear()
-      document.querySelector('body').style.cursor = 'default'
-    }
-
-    this.svg.addEventListener('pointerdown', startDrag)
-    this.svg.addEventListener('pointerup', stopDrag)
-    // this.svg.addEventListener('pointerout', stopDrag)
+  listenPointer () {
+    // ToFix ça serait peut-être mieux de tuer les listenners
+    if (this.pointerAction === 'drag') handleDrag(this)
+    else if (this.pointerAction === 'newPoint') handleAction(this)
   }
 
   /**
