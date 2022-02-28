@@ -141,7 +141,7 @@ export class Figure {
    * @returns
    */
   line (A: Point, B: Point, { color = 'black', thickness = 1 } = {}) {
-    return new Line(A, B, { color, thickness })
+    return new Line(A, B, { lineType: 'Line', color, thickness })
   }
 
   /**
