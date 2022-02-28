@@ -46,11 +46,9 @@ btnLatex.addEventListener('click', () => {
 })
 btnDrag.addEventListener('click', () => {
   figure.pointerAction = 'drag'
-  figure.listenPointer()
 })
 btnNewPoint.addEventListener('click', () => {
   figure.pointerAction = 'newPoint'
-  figure.listenPointer()
 })
 
 figure.svg.style.margin = 'auto'

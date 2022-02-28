@@ -17,7 +17,7 @@ import { TextByPosition } from './elements/texts/TextByPosition'
 import { Segment } from './elements/lines/Segment'
 import { PointOnLineAtD } from './elements/points/PointOnLineAtD'
 import { PointIntersectionLC } from './elements/points/PointIntersectionLC'
-import { handleDrag } from './pointerAction/drag'
+import { moveDrag, startDrag, stopDrag } from './pointerAction/drag'
 import { handleAction } from './pointerAction/newPoint'
 
 export class Figure {
@@ -113,9 +113,21 @@ export class Figure {
   }
 
   listenPointer () {
-    // ToFix ça serait peut-être mieux de tuer les listenners
-    if (this.pointerAction === 'drag') handleDrag(this)
-    else if (this.pointerAction === 'newPoint') handleAction(this)
+    // On créé des listenners et on change leur attitude suivant l'action en cours sauvegardée dans this.pointerAction
+    this.svg.addEventListener('pointerdown', (event) => {
+      const [pointerX, pointerY] = this.getPointerCoord(event)
+      if (this.pointerAction === 'newPoint') handleAction(this, pointerX, pointerY)
+      else if (this.pointerAction === 'drag') startDrag(this, pointerX, pointerY)
+    })
+
+    this.svg.addEventListener('pointerup', (event) => {
+      if (this.pointerAction === 'drag' && this.isDraging) stopDrag(this)
+    })
+
+    this.svg.addEventListener('pointermove', (event) => {
+      const [pointerX, pointerY] = this.getPointerCoord(event)
+      if (this.pointerAction === 'drag') moveDrag(this, pointerX, pointerY)
+    })
   }
 
   /**
