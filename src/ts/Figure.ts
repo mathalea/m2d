@@ -19,12 +19,14 @@ import { PointOnLineAtD } from './elements/points/PointOnLineAtD'
 import { PointIntersectionLC } from './elements/points/PointIntersectionLC'
 import { moveDrag, startDrag, stopDrag } from './pointerAction/drag'
 import { handleAction } from './pointerAction/newPoint'
+import { clickNewSegment } from './pointerAction/newPointSegment'
 
 export class Figure {
   width: number
   height: number
   pixelsPerUnit: number
   set: Set<Element2D>
+  setSelectedElements: Set<Element2D>
   isDynamic: boolean
   setInDrag: Set<Point | TextByPosition>
   isDraging: boolean
@@ -35,7 +37,7 @@ export class Figure {
   svg: SVGElement
   pointerX: number | null
   pointerY: number | null
-  pointerAction: 'drag' | 'newPoint'
+  pointerAction: 'drag' | 'newPoint' | 'newSegment'
   constructor ({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean } = {}) {
     this.width = width
     this.height = height
@@ -46,7 +48,8 @@ export class Figure {
     this.yMax = yMin + height / pixelsPerUnit
     this.isDynamic = isDynamic
     this.set = new Set()
-    this.pointerAction = 'drag'
+    this.setSelectedElements = new Set()
+    this.pointerAction = 'newSegment'
     this.setInDrag = new Set()
     this.isDraging = false
 
@@ -118,6 +121,7 @@ export class Figure {
       const [pointerX, pointerY] = this.getPointerCoord(event)
       if (this.pointerAction === 'newPoint') handleAction(this, pointerX, pointerY)
       else if (this.pointerAction === 'drag') startDrag(this, pointerX, pointerY)
+      else if (this.pointerAction === 'newSegment') clickNewSegment(this, pointerX, pointerY)
     })
 
     this.svg.addEventListener('pointerup', (event) => {
