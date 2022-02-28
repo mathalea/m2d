@@ -35,7 +35,7 @@ export class PointOnLineAtD extends Point {
   update () {
     const L = this.line
     const Llength = distance(L.A, L.B)
-    const [Mx, My] = homothetieCoord(L.B, L.A, this.d / (Llength === 0 ? 1 : Llength))
-    this.moveTo(Mx, My)
+    const { x, y } = homothetieCoord(L.B, L.A, this.d / (Llength === 0 ? 1 : Llength))
+    this.moveTo(x, y)
   }
 }

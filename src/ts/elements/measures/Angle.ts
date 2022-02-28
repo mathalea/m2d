@@ -52,7 +52,7 @@ export class Angle extends Measure {
 function angleOriented (A: Point, O: Point, B: Point) {
   const A2 = rotationCoord(A, O, 90)
   const v = { x: B.x - O.x, y: B.y - O.y, norme: 0 }
-  const u = { x: A2[0] - O.x, y: A2[1] - O.y, norme: 0 }
+  const u = { x: A2.x - O.x, y: A2.y - O.y, norme: 0 }
   const s = ((v.x * u.x + v.y * u.y) > 0) ? 1 : -1
   return s * angle(A, O, B)
 }

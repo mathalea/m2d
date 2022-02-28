@@ -41,10 +41,10 @@ export class PointOnLine extends Point {
   moveTo (x: number, y: number) {
     const L = this.line
     const P = new Point(L.parentFigure, x, y, { temp: true })
-    const [xM, yM] = orthogonalProjectionCoord(P, L)
-    this.k = (L.B.x - L.A.x) === 0 ? (L.B.y - L.A.y) === 0 ? this.k : (yM - L.A.y) / (L.B.y - L.A.y) : (xM - L.A.x) / (L.B.x - L.A.x)
+    const M = orthogonalProjectionCoord(P, L)
+    this.k = (L.B.x - L.A.x) === 0 ? (L.B.y - L.A.y) === 0 ? this.k : (M.y - L.A.y) / (L.B.y - L.A.y) : (M.x - L.A.x) / (L.B.x - L.A.x)
     this.length = this.k * distance(L.A, L.B)
-    super.moveTo(xM, yM)
+    super.moveTo(M.x, M.y)
   }
 
   /**

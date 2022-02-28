@@ -13,7 +13,11 @@ import { CalculDynamic } from './measures/Calculdynamic'
 import { Distance } from './measures/Distance'
 import { Measure } from './measures/Measure'
 
-export type optionsElement2D = { color?: string, thickness?: number, fill?: string}
+export type optionsElement2D = { color?: string, thickness?: number, fill?: string }
+export type Coords = {
+  x: number
+  y: number
+}
 
 /**
  * Classe parente de tous les éléments de géométrie
@@ -30,7 +34,7 @@ export abstract class Element2D {
   private _thickness: number
   private _opacity: number
   private _fillOpacity: number
-  constructor () {
+  constructor() {
     this.group = []
     this.dependencies = []
     this.g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
@@ -40,23 +44,23 @@ export abstract class Element2D {
    * Permet d'indiquer au point que sa position dépend d'autres éléments
    * @param dependency
    */
-  addDependency (dependency: Element2D | Angle | Distance | CalculDynamic | Measure) {
+  addDependency(dependency: Element2D | Angle | Distance | CalculDynamic | Measure) {
     this.dependencies.push(dependency)
   }
 
-  notifyAllDependencies () {
+  notifyAllDependencies() {
     for (const element of this.dependencies) {
       element.update()
     }
   }
 
-  abstract update ():void
+  abstract update(): void
 
-  get color () {
+  get color() {
     return this._color
   }
 
-  set color (color) {
+  set color(color) {
     if (this.g.children.length > 0) {
       for (const line of Array.from(this.g.children)) {
         line.setAttribute('stroke', color)
@@ -67,11 +71,11 @@ export abstract class Element2D {
     this._color = color
   }
 
-  get thickness () {
+  get thickness() {
     return this._thickness
   }
 
-  set thickness (thickness) {
+  set thickness(thickness) {
     if (this.g.children.length > 0) {
       for (const line of Array.from(this.g.children)) {
         line.setAttribute('stroke-width', `${thickness}`)
@@ -82,11 +86,11 @@ export abstract class Element2D {
     this._thickness = thickness
   }
 
-  get fill () {
+  get fill() {
     return this._fill || 'none'
   }
 
-  set fill (fill) {
+  set fill(fill) {
     if (this.g.children.length > 0) {
       for (const line of Array.from(this.g.children)) {
         line.setAttribute('fill', `${fill}`)
@@ -97,11 +101,11 @@ export abstract class Element2D {
     this._fill = fill
   }
 
-  get opacity () {
+  get opacity() {
     return this._opacity
   }
 
-  set opacity (opacity) {
+  set opacity(opacity) {
     if (this.g.children.length > 0) {
       for (const line of Array.from(this.g.children)) {
         line.setAttribute('opacity', `${opacity}`)
@@ -112,11 +116,11 @@ export abstract class Element2D {
     this._opacity = opacity
   }
 
-  get fillOpacity () {
+  get fillOpacity() {
     return this._fillOpacity
   }
 
-  set fillOpacity (fillOpacity) {
+  set fillOpacity(fillOpacity) {
     if (this.g.children.length > 0) {
       for (const line of Array.from(this.g.children)) {
         line.setAttribute('fill-opacity', `${fillOpacity}`)
@@ -127,7 +131,7 @@ export abstract class Element2D {
     this._fillOpacity = fillOpacity
   }
 
-  get latex () {
+  get latex() {
     return ''
   }
 }

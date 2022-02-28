@@ -8,26 +8,28 @@
  */
 
 import { distance } from '../../calculus/random'
+import { rotationCoord } from '../../calculus/transformation'
 import { angleOriented } from '../../calculus/trigonometry'
-import { Element2D } from '../Element2D'
+import { Coords, Element2D } from '../Element2D'
 import { Point } from '../points/Point'
-import { PointByRotation } from '../points/PointByRotation'
 import { OptionsGraphiques } from './Line'
 
 export class Arc extends Element2D {
   center: Point
   point: Point
-  point2: Point
+  point2: Coords
   angle: number
-  constructor(O: Point, A: Point, angle: number, { color = 'black' }: OptionsGraphiques = {}) {
+  horiz: Coords
+  constructor (O: Point, A: Point, angle: number, { color = 'black' }: OptionsGraphiques = {}) {
     super()
     this.center = O
     this.point = A
     this.angle = angle
     this.parentFigure = O.parentFigure
     this.parentFigure.set.add(this)
-    const B = new PointByRotation(A, O, angle, { temp: true })
+    const B = rotationCoord(A, O, angle)
     this.point2 = B
+    this.horiz = { x: this.center.x + 1, y: this.center.y }
     const radius = this.parentFigure.xToSx(distance(O, A))
     const [large, sweep] = getLargeSweep(angle)
     this.g = document.createElementNS('http://www.w3.org/2000/svg', 'path')
@@ -41,17 +43,18 @@ export class Arc extends Element2D {
     // ToDo : Ajouter dépendance à l'angle s'il est dynamique
   }
 
-  update(): void {
+  update (): void {
     const [large, sweep] = getLargeSweep(this.angle)
+    this.point2 = rotationCoord(this.point, this.center, this.angle)
     const d = this.parentFigure.xToSx(distance(this.center, this.point))
     this.g.setAttribute('d', `M${this.parentFigure.xToSx(this.point.x)} ${this.parentFigure.yToSy(this.point.y)} A ${d} ${d} 0 ${large} ${sweep} ${this.parentFigure.xToSx(this.point2.x)} ${this.parentFigure.yToSy(this.point2.y)}`)
     this.g.setAttribute('d', this.g.getAttribute('d') + `L ${this.parentFigure.xToSx(this.center.x)} ${this.parentFigure.yToSy(this.center.y)} Z`)
   }
 
   // ToFix !!! Pas le même qu'en SVG
-  get latex(): string {
+  get latex (): string {
     const radius = distance(this.center, this.point)
-    const azimut = angleOriented(this.point, this.center, this.point2)
+    const azimut = angleOriented(this.horiz, this.center, this.point)
     const anglefin = azimut + this.angle
     const arrayOptions: string[] = []
     if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
@@ -63,7 +66,7 @@ export class Arc extends Element2D {
   }
 }
 
-function getLargeSweep(angle) {
+function getLargeSweep (angle) {
   let large: 0 | 1
   let sweep: 0 | 1
   if (angle > 180) {
