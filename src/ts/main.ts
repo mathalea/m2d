@@ -33,7 +33,9 @@ btnDrag.innerHTML = 'Drag'
 const btnNewPoint = document.createElement('button')
 btnNewPoint.innerHTML = 'Nouveau point'
 const btnNewSegment = document.createElement('button')
-btnNewSegment.innerHTML = 'Nouveau segment'
+btnNewSegment.innerHTML = 'Segment'
+const btnColor = document.createElement('button')
+btnColor.innerHTML = 'Rouge'
 const texteLatex = document.createElement('pre')
 if (body) {
   body.appendChild(figure.svg)
@@ -42,6 +44,7 @@ if (body) {
   body.appendChild(btnNewPoint)
   body.appendChild(btnNewSegment)
   body.appendChild(texteLatex)
+  body.appendChild(btnColor)
 }
 
 btnLatex.addEventListener('click', () => {
@@ -55,6 +58,9 @@ btnNewPoint.addEventListener('click', () => {
 })
 btnNewSegment.addEventListener('click', () => {
   figure.pointerAction = 'newSegment'
+})
+btnColor.addEventListener('click', () => {
+  figure.pointerAction = 'setColor'
 })
 
 figure.svg.style.margin = 'auto'

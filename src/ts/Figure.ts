@@ -20,6 +20,7 @@ import { PointIntersectionLC } from './elements/points/PointIntersectionLC'
 import { moveDrag, startDrag, stopDrag } from './pointerAction/drag'
 import { handleAction } from './pointerAction/newPoint'
 import { clickNewSegment } from './pointerAction/newPointSegment'
+import { setColor } from './pointerAction/setColor'
 
 export class Figure {
   width: number
@@ -37,7 +38,7 @@ export class Figure {
   svg: SVGElement
   pointerX: number | null
   pointerY: number | null
-  pointerAction: 'drag' | 'newPoint' | 'newSegment'
+  pointerAction: 'drag' | 'newPoint' | 'newSegment' | 'setColor'
   constructor ({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean } = {}) {
     this.width = width
     this.height = height
@@ -49,7 +50,7 @@ export class Figure {
     this.isDynamic = isDynamic
     this.set = new Set()
     this.setSelectedElements = new Set()
-    this.pointerAction = 'newSegment'
+    this.pointerAction = 'setColor'
     this.setInDrag = new Set()
     this.isDraging = false
 
@@ -122,6 +123,7 @@ export class Figure {
       if (this.pointerAction === 'newPoint') handleAction(this, pointerX, pointerY)
       else if (this.pointerAction === 'drag') startDrag(this, pointerX, pointerY)
       else if (this.pointerAction === 'newSegment') clickNewSegment(this, pointerX, pointerY)
+      else if (this.pointerAction === 'setColor') setColor(this, pointerX, pointerY)
     })
 
     this.svg.addEventListener('pointerup', (event) => {

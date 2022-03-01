@@ -7,9 +7,10 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
+import { Coords } from '../elements/Element2D'
 import { Point } from '../elements/points/Point'
 
-export function distance (A: Point, B: Point): number {
+export function distance (A: Point | Coords, B: Point | Coords): number {
   return Math.sqrt((A.x - B.x) ** 2 + (A.y - B.y) ** 2)
 }
 

@@ -7,6 +7,8 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
+import { distance } from '../../calculus/random'
+import { orthogonalProjectionCoord } from '../../calculus/transformation'
 import { angleOriented } from '../../calculus/trigonometry'
 import { Element2D } from '../Element2D'
 import { Vector } from '../others/Vector'
@@ -153,6 +155,11 @@ export class Line extends Element2D {
       this.g.removeAttribute('stroke-dasharray')
     }
     this._dashed = isDashed
+  }
+
+  public distancePointer (pointerX: number, pointerY: number) {
+    const M = orthogonalProjectionCoord({ x: pointerX, y: pointerY }, this)
+    return distance(M, { x: pointerX, y: pointerY })
   }
 }
 
