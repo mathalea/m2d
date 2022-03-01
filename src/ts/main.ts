@@ -34,8 +34,14 @@ const btnNewPoint = document.createElement('button')
 btnNewPoint.innerHTML = 'Nouveau point'
 const btnNewSegment = document.createElement('button')
 btnNewSegment.innerHTML = 'Segment'
-const btnColor = document.createElement('button')
-btnColor.innerHTML = 'Rouge'
+const btnRed = document.createElement('button')
+btnRed.style.backgroundColor = 'red'
+btnRed.style.width = '20px'
+btnRed.style.height = '20px'
+const btnGreen = document.createElement('button')
+btnGreen.style.backgroundColor = 'green'
+btnGreen.style.width = '20px'
+btnGreen.style.height = '20px'
 const texteLatex = document.createElement('pre')
 if (body) {
   body.appendChild(figure.svg)
@@ -44,7 +50,8 @@ if (body) {
   body.appendChild(btnNewPoint)
   body.appendChild(btnNewSegment)
   body.appendChild(texteLatex)
-  body.appendChild(btnColor)
+  body.appendChild(btnRed)
+  body.appendChild(btnGreen)
 }
 
 btnLatex.addEventListener('click', () => {
@@ -59,8 +66,13 @@ btnNewPoint.addEventListener('click', () => {
 btnNewSegment.addEventListener('click', () => {
   figure.pointerAction = 'newSegment'
 })
-btnColor.addEventListener('click', () => {
+btnRed.addEventListener('click', () => {
   figure.pointerAction = 'setColor'
+  figure.pointerSetOptions.color = 'red'
+})
+btnGreen.addEventListener('click', () => {
+  figure.pointerAction = 'setColor'
+  figure.pointerSetOptions.color = 'green'
 })
 
 figure.svg.style.margin = 'auto'

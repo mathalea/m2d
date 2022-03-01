@@ -17,10 +17,10 @@ import { TextByPosition } from './elements/texts/TextByPosition'
 import { Segment } from './elements/lines/Segment'
 import { PointOnLineAtD } from './elements/points/PointOnLineAtD'
 import { PointIntersectionLC } from './elements/points/PointIntersectionLC'
-import { moveDrag, startDrag, stopDrag } from './pointerAction/drag'
-import { handleAction } from './pointerAction/newPoint'
-import { clickNewSegment } from './pointerAction/newPointSegment'
-import { setColor } from './pointerAction/setColor'
+import { moveDrag, actionStartDrag, stopDrag } from './pointerAction/drag'
+import { actionNewPoint } from './pointerAction/newPoint'
+import { clickNewSegment as actionNewSegment } from './pointerAction/newPointSegment'
+import { actionSetOptions } from './pointerAction/setOptions'
 
 export class Figure {
   width: number
@@ -39,6 +39,7 @@ export class Figure {
   pointerX: number | null
   pointerY: number | null
   pointerAction: 'drag' | 'newPoint' | 'newSegment' | 'setColor'
+  pointerSetOptions: OptionsGraphiques
   constructor ({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean } = {}) {
     this.width = width
     this.height = height
@@ -50,7 +51,8 @@ export class Figure {
     this.isDynamic = isDynamic
     this.set = new Set()
     this.setSelectedElements = new Set()
-    this.pointerAction = 'setColor'
+    this.pointerAction = 'drag'
+    this.pointerSetOptions = { color: 'black', thickness: 3}
     this.setInDrag = new Set()
     this.isDraging = false
 
@@ -120,10 +122,10 @@ export class Figure {
     // On créé des listenners et on change leur attitude suivant l'action en cours sauvegardée dans this.pointerAction
     this.svg.addEventListener('pointerdown', (event) => {
       const [pointerX, pointerY] = this.getPointerCoord(event)
-      if (this.pointerAction === 'newPoint') handleAction(this, pointerX, pointerY)
-      else if (this.pointerAction === 'drag') startDrag(this, pointerX, pointerY)
-      else if (this.pointerAction === 'newSegment') clickNewSegment(this, pointerX, pointerY)
-      else if (this.pointerAction === 'setColor') setColor(this, pointerX, pointerY)
+      if (this.pointerAction === 'newPoint') actionNewPoint(this, pointerX, pointerY)
+      else if (this.pointerAction === 'drag') actionStartDrag(this, pointerX, pointerY)
+      else if (this.pointerAction === 'newSegment') actionNewSegment(this, pointerX, pointerY)
+      else if (this.pointerAction === 'setColor') actionSetOptions(this, pointerX, pointerY, this.pointerSetOptions)
     })
 
     this.svg.addEventListener('pointerup', (event) => {

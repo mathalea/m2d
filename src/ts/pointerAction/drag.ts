@@ -10,7 +10,7 @@ export function moveDrag (figure: Figure, pointerX: number, pointerY: number) {
   }
 }
 
-export function startDrag (figure: Figure, pointerX: number, pointerY: number) {
+export function actionStartDrag (figure: Figure, pointerX: number, pointerY: number) {
   for (const e of figure.set) {
     if (e.draggable && (e instanceof Point || e instanceof TextByPosition) && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
       // ToFix est-ce qu'on garde le fait de pouvoir déplacer plusieurs points en même temps
