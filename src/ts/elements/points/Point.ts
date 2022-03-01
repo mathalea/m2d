@@ -15,7 +15,7 @@ import { Cross } from '../others/cross'
 import { TextByPoint } from '../texts/TextByPoint'
 
 export type PointStyle = 'x' | 'o' | ''
-export type PointOptions = { label?: string, style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean }
+export type PointOptions = { label?: string, style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean, snapToGrid?: boolean }
 
 export class Point extends Element2D {
   x: number
@@ -25,13 +25,14 @@ export class Point extends Element2D {
   protected _size: number // Pour la taille de la croix et utilisé dans changeStyle
   g: SVGElement
   mark: Element2D
-  labelElement : Element2D
+  labelElement: Element2D
   parentFigure: Figure
   draggable: true | false | Circle | Segment
   temp: boolean // Pour les points qui ne servent qu'à faire des calculs
-  isVisible : boolean
+  isVisible: boolean
+  snapToGrid: boolean
   // On définit un point avec ses deux coordonnées
-  constructor (svgContainer: Figure, x: number, y: number, { label, style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false }: PointOptions = {}) {
+  constructor (svgContainer: Figure, x: number, y: number, { label, style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false, snapToGrid = false }: PointOptions = {}) {
     super()
     this.x = x
     this.y = y
@@ -44,6 +45,7 @@ export class Point extends Element2D {
     // Les points que l'on peut déplacer sont bleus par défaut
     this.color = color || (draggable ? 'blue' : 'black')
     this.draggable = draggable
+    this.snapToGrid = snapToGrid
     if (!this.temp) {
       this.parentFigure.set.add(this)
       this.style = style // Le style initialise aussi size

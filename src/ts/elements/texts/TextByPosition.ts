@@ -15,6 +15,7 @@ export class TextByPosition extends Element2D {
     private _y: number
     private _text: string
     private _anchor: 'start' | 'middle' | 'end'
+    snapToGrid: boolean
     constructor (figure: Figure, x: number, y: number, text: string, { anchor = 'middle', temp = false, draggable = true }: {anchor?: 'start' | 'middle' | 'end', temp?: boolean, draggable?: boolean} = {}) {
       super()
       this.parentFigure = figure

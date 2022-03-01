@@ -17,12 +17,13 @@ import { Ray } from './elements/lines/Ray'
 import { LineParallelByPoint } from './elements/lines/LineParallelByPoint'
 import { Arc } from './elements/lines/Arc'
 import { Grid } from './elements/others/Grid'
+import { Point } from './elements/points/Point'
 /**
  * Script qui permet de tester M2D
  */
 
 // On créé un espace de travail avec les réglages par défaut
-const figure = new Figure()
+const figure = new Figure({ dx: 2, dy: 1 })
 
 // On l'ajoute au dom
 const body = document.querySelector('body')
@@ -79,7 +80,9 @@ figure.svg.style.margin = 'auto'
 figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
-const gr = new Grid(figure, { dashed: true, color: 'orange', thickness: 2 })
+const gr = new Grid(figure, { dashed: true, thickness: 2 })
+const A = new Point(figure, 4, 0)
+A.snapToGrid = true
 
 // On créé des points à partir de leur coordonnées
 

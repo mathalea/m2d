@@ -24,6 +24,13 @@ export function actionStartDrag (figure: Figure, pointerX: number, pointerY: num
 }
 
 export function stopDrag (figure: Figure) {
+  for (const e of figure.setInDrag) {
+    if (e.snapToGrid) {
+      const x = Math.round(e.x / figure.dx) * figure.dx
+      const y = Math.round(e.y / figure.dy) * figure.dy
+      e.notifyPointerMove(x, y)
+    }
+  }
   figure.isDraging = false
   figure.setInDrag.clear()
   document.querySelector('body').style.cursor = 'default'

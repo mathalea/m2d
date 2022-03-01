@@ -8,7 +8,7 @@ export class Grid extends Element2D {
   yMax: number
   dx: number
   dy: number
-  constructor (figure: Figure, { xMin = figure.xMin, xMax = figure.xMax, yMin = figure.yMin, yMax = figure.yMax, dx = 1, dy = 1, color = 'gray', opacity = 0.2, dashed = false, thickness = 1 }: {xMin?: number, xMax?: number, yMin?: number, yMax?: number, dx?: number, dy?: number, color?: string, opacity?: number, dashed?: boolean, thickness?: number } = {}) {
+  constructor (figure: Figure, { xMin = figure.xMin, xMax = figure.xMax, yMin = figure.yMin, yMax = figure.yMax, dx = figure.dx, dy = figure.dy, color = 'gray', opacity = 0.2, dashed = false, thickness = 1 }: {xMin?: number, xMax?: number, yMin?: number, yMax?: number, dx?: number, dy?: number, color?: string, opacity?: number, dashed?: boolean, thickness?: number } = {}) {
     super()
     this.parentFigure = figure
     this.xMin = xMin
