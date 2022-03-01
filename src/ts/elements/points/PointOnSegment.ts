@@ -32,10 +32,10 @@ export class PointOnSegment extends PointOnLine {
   notifyPointerMove (x: number, y: number) {
     if (this.draggable) {
       const P = new Point(this.line.parentFigure, x, y, { temp: true })
-      const [xM, yM] = orthogonalProjectionCoord(P, this.line)
+      const M = orthogonalProjectionCoord(P, this.line)
       const [A, B] = [this.line.A, this.line.B]
-      if (xM < Math.min(A.x, B.x) || xM > Math.max(A.x, B.x) || yM < Math.min(A.y, B.y) || yM > Math.max(A.y, B.y)) return
-      this.moveTo(xM, yM)
+      if (M.x < Math.min(A.x, B.x) || M.y > Math.max(A.x, B.x) || M.x < Math.min(A.y, B.y) || M.y > Math.max(A.y, B.y)) return
+      this.moveTo(M.x, M.y)
     }
   }
 }

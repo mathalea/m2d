@@ -15,7 +15,7 @@ export class PointByProjection extends Point {
     previous: Point // Antécédent
     line: Line // Droite sur laquelle s'effectue la projection
     constructor (A: Point, L: Line, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
-      const [x, y] = orthogonalProjectionCoord(A, L)
+      const { x, y } = orthogonalProjectionCoord(A, L)
       super(A.parentFigure, x, y, { label, style, size, thickness, color, draggable, temp })
       this.previous = A
       this.line = L
@@ -24,7 +24,7 @@ export class PointByProjection extends Point {
     }
 
     update (): void {
-      const [x, y] = orthogonalProjectionCoord(this.previous, this.line)
+      const { x, y } = orthogonalProjectionCoord(this.previous, this.line)
       this.moveTo(x, y)
     }
 }
