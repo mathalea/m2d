@@ -79,7 +79,7 @@ figure.svg.style.margin = 'auto'
 figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
-const gr = new Grid(figure, { dashed: true, color: 'orange' })
+const gr = new Grid(figure, { dashed: true, color: 'orange', thickness: 2 })
 
 // On créé des points à partir de leur coordonnées
 
