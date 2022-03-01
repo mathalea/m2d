@@ -7,7 +7,6 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
-
 import { Figure } from './Figure'
 import { Segment } from './elements/lines/Segment'
 import { Mediatrice } from './elements/lines/Mediatrice'
@@ -17,6 +16,7 @@ import { Bissectrice } from './elements/lines/Bissectrice'
 import { Ray } from './elements/lines/Ray'
 import { LineParallelByPoint } from './elements/lines/LineParallelByPoint'
 import { Arc } from './elements/lines/Arc'
+import { Grid } from './elements/others/Grid'
 /**
  * Script qui permet de tester M2D
  */
@@ -78,6 +78,8 @@ btnGreen.addEventListener('click', () => {
 figure.svg.style.margin = 'auto'
 figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
+
+const gr = new Grid(figure, { dashed: true, color: 'orange' })
 
 // On créé des points à partir de leur coordonnées
 

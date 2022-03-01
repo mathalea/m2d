@@ -27,7 +27,6 @@ export class Line extends Element2D {
   type: LineType
   label: string
   _style: string
-  _dashed: boolean
   temp: boolean
   constructor (A: Point, B: Point, { lineType: type = 'Line', color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
     super()
@@ -142,19 +141,6 @@ export class Line extends Element2D {
     const A = new Point(this.parentFigure, 1, 0, { temp: true })
     const M = new Point(this.parentFigure, this.directeur.x, this.directeur.y, { temp: true })
     return angleOriented(A, O, M)
-  }
-
-  get dashed () {
-    return this._dashed
-  }
-
-  set dashed (isDashed) {
-    if (isDashed) {
-      this.g.setAttribute('stroke-dasharray', '4 3')
-    } else {
-      this.g.removeAttribute('stroke-dasharray')
-    }
-    this._dashed = isDashed
   }
 
   public distancePointer (pointerX: number, pointerY: number) {
