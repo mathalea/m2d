@@ -47,6 +47,8 @@ ToDo :
 - mark : pour ajouter un codage
 - pointilles
 - modifier les actions du clic (au lieu du drag-n-drop on pourrait changer la couleur et l'épaisseur des éléments cliqués)
+- ajouter le type Algebraic pour les arguments de PointByRotation(), PointBySimilitude(), PointOnLineAtD(), Vector(), Angle(), ...
+
 
 
 ```
@@ -91,7 +93,7 @@ Avec un fonctionnement en cascade chaque objet prévient ses dépendances pour q
 Il y a 3 systèmes de coordonnées donc la convention suivante est utilisée en interne : 
 - les coordonnées par rapport à la fenêtre (notamment celles de la souris) 
 - les coordonnées à l'intérieur du SVG (avec l'axe y du haut vers le bas) sont préfixées avec `s` : `sx`, `sy` ...
-- les coordonnées dans notre repère personnalisée ne sont pas préfixées `x` : `x1`, `x2` ...
+- les coordonnées dans notre repère personnalisée ne sont pas préfixées `x` : `x1`, `x2` ... (Un type `Coords = { x: number, y: number}` est défini pour manipuler des littéraux adaptés aux calculs et aux transformations sans avoir à créer des points intermédiaires)
 
 Le paramètre `pixelsPerUnit` (par défaut à 30) permet de déterminer la conversion des coordonnées du repère vers celle du SVG. Pour la sortie LaTeX, l'unité correspondra à 1 cm.
 
@@ -104,3 +106,5 @@ Dans textByPosition.ts, on arrondit à un chiffre après la virgule.
 ### Measures
 
 Un objet enfant de `Element2D` peut dépendre d'un autre objet enfant de `Element2D` ou enfant de `Measure` qui est une classe abstraite pour des valeurs numériques dynamiques.
+Parmi les enfant de `Measure` on trouve l'objet `Algebraic` qui peut avoir ses dépendances. Un point peut être défini par homothétie en utilisant un rapport de type `number` ou `Algebraic`. Dans ce dernier cas, on pourra faire varier le rapport d'homothétie dynamiquement avec, par exemple, l'attribut algebraic d'un objet `Cursor`.
+Cette bivalence `number | Algebraic` devrait être ajoutée dans d'autres objet comme `PointByRotation`...++
