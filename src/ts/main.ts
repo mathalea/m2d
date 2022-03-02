@@ -7,6 +7,20 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
+// Gestion de l'éditeur de code
+import CodeMirror from 'codemirror'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/monokai.css'
+import 'codemirror/mode/javascript/javascript.js'
+import 'codemirror/mode/xml/xml.js'
+import 'codemirror/mode/htmlmixed/htmlmixed.js'
+import 'codemirror/mode/stex/stex.js'
+import 'codemirror/addon/hint/javascript-hint.js'
+import 'codemirror/addon/hint/show-hint.js'
+import 'codemirror/addon/hint/show-hint.css'
+import 'codemirror/addon/edit/closebrackets.js'
+//
+
 import { Figure } from './Figure'
 import { Segment } from './elements/lines/Segment'
 import { Mediatrice } from './elements/lines/Mediatrice'
@@ -18,12 +32,15 @@ import { LineParallelByPoint } from './elements/lines/LineParallelByPoint'
 import { Arc } from './elements/lines/Arc'
 import { Grid } from './elements/others/Grid'
 import { Point } from './elements/points/Point'
+import Sval from 'sval'
+import { Line } from './elements/lines/Line'
+import { initEditor } from './gui/initEditor'
 /**
  * Script qui permet de tester M2D
  */
 
 // On créé un espace de travail avec les réglages par défaut
-const figure = new Figure({ dx: 2, dy: 1 })
+const figure = new Figure()
 
 // On l'ajoute au dom
 const body = document.querySelector('body')
@@ -35,6 +52,10 @@ const btnNewPoint = document.createElement('button')
 btnNewPoint.innerHTML = 'Nouveau point'
 const btnNewSegment = document.createElement('button')
 btnNewSegment.innerHTML = 'Segment'
+const btnZoomPlus = document.createElement('button')
+btnZoomPlus.innerHTML = '+'
+const btnZoomMinus = document.createElement('button')
+btnZoomMinus.innerHTML = '-'
 const btnRed = document.createElement('button')
 btnRed.style.backgroundColor = 'red'
 btnRed.style.width = '20px'
@@ -53,6 +74,8 @@ if (body) {
   body.appendChild(texteLatex)
   body.appendChild(btnRed)
   body.appendChild(btnGreen)
+  body.appendChild(btnZoomMinus)
+  body.appendChild(btnZoomPlus)
 }
 
 btnLatex.addEventListener('click', () => {
@@ -67,6 +90,12 @@ btnNewPoint.addEventListener('click', () => {
 btnNewSegment.addEventListener('click', () => {
   figure.pointerAction = 'newSegment'
 })
+btnZoomPlus.addEventListener('click', () => {
+  figure.pixelsPerUnit += 10
+  for (const e of figure.set) {
+    e.update()
+  }
+})
 btnRed.addEventListener('click', () => {
   figure.pointerAction = 'setColor'
   figure.pointerSetOptions.color = 'red'
@@ -79,10 +108,6 @@ btnGreen.addEventListener('click', () => {
 figure.svg.style.margin = 'auto'
 figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
-
-const gr = new Grid(figure, { dashed: true, thickness: 2 })
-const A = new Point(figure, 4, 0)
-A.snapToGrid = true
 
 // On créé des points à partir de leur coordonnées
 
@@ -113,3 +138,36 @@ A.snapToGrid = true
 // // // const v = new Vector(figure, 3, 1)
 // // // const L = new LineByPointVector(A, v)
 // // // L.vector.y = -5
+
+const divEditeur = document.createElement('div')
+const btnRunCode = document.createElement('button')
+btnRunCode.innerHTML = 'Valider'
+body.appendChild(divEditeur)
+body.appendChild(btnRunCode)
+
+const myCodeMirror = CodeMirror(divEditeur, {
+  value: '',
+  mode: 'javascript',
+  lineNumbers: true,
+  autofocus: true,
+  theme: 'monokai',
+  autoCloseBrackets: true,
+  showHint: true,
+  extraKeys: { 'Ctrl-Space': 'autocomplete' },
+  matchBrackets: true,
+  lineWrapping: true
+})
+
+// Autocomplétion
+myCodeMirror.on('inputRead', function onChange (editor, input) {
+  if (input.text[0] === ';' || input.text[0] === ' ') {
+    return
+  }
+  CodeMirror.commands.autocomplete(editor, null, { completeSingle: false })
+})
+
+btnRunCode.addEventListener('click', () => {
+  const interpreter = initEditor(figure)
+  const code = myCodeMirror.getValue()
+  interpreter.run(code)
+})
