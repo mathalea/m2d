@@ -66,6 +66,7 @@ export class Line extends Element2D {
     this.thickness = thickness
     this.dashed = dashed
     if (!temp) this.parentFigure.svg.appendChild(this.g)
+    if (!temp) this.parentFigure.set.add(this)
     A.addDependency(this)
     B.addDependency(this)
   }
@@ -84,15 +85,8 @@ export class Line extends Element2D {
   }
 
   get latex () {
-    const arrayOptions: string[] = []
-    if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
-    if (this.thickness !== 1) arrayOptions.push(`line width = ${this.thickness}`)
-    if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
-    if (this.dashed) arrayOptions.push('dashed')
-    let txtOptions = ''
-    if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
-    let latex = `\n\t% ${this.label ?? 'Droite'}`
-    latex += `\n \t \\draw${txtOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
+    let latex = `\n\n\t% ${this.label ?? 'Droite'}`
+    latex += `\n \t \\draw${this.tikzOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
     return latex
   }
 

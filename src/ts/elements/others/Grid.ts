@@ -47,7 +47,7 @@ export class Grid extends Element2D {
   }
 
   get latex (): string {
-    let latex = '\n\t% Grid'
+    let latex = '\n\n\t% Grid'
     const tikzOptions = this.tikzOptions
     for (let x: number = this.xMin; x <= this.xMax; x += this.dx) {
       latex += `\n\t\\draw${tikzOptions} (${x}, ${this.yMin}) -- (${x}, ${this.yMax});`

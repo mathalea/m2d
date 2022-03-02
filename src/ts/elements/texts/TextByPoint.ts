@@ -14,8 +14,8 @@ export class TextByPoint extends TextByPosition {
   A: Point
   private _dx: number
   private _dy: number
-  constructor (A: Point, text: string, { dx = 0, dy = 0 }: {dx?:number, dy?: number} = {}) {
-    super(A.parentFigure, A.x + dx, A.y + dy, text)
+  constructor (A: Point, text: string, { dx = 0, dy = 0, anchor = 'middle', color = 'black', draggable = true, temp = false }: {dx?:number, dy?: number, anchor?: 'start' | 'middle' | 'end', temp?: boolean, draggable?: boolean, color?: string } = {}) {
+    super(A.parentFigure, A.x + dx, A.y + dy, text, { anchor, color, temp, draggable })
     this.A = A
     this._dx = dx
     this._dy = dy

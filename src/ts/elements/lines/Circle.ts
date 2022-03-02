@@ -18,7 +18,7 @@ export class Circle extends Element2D {
   M: Point // Point de même ordonnée que le centre et d'abscisse supérieure
   pointOnCircle: Point | null // Point qui définit le cercle
   private _radius: number
-  constructor (center: Point, arg2: number | Point, { color = 'black', thickness = 1, fill = 'none', temp = false }: OptionsGraphiques = {}) {
+  constructor (center: Point, arg2: number | Point, { color = 'black', thickness = 1, fill = 'none', temp = false, dashed = false }: OptionsGraphiques = {}) {
     super()
     this.parentFigure = center.parentFigure
     this.pointOnCircle = arg2 instanceof Point ? arg2 : null
@@ -39,6 +39,7 @@ export class Circle extends Element2D {
     this.fill = fill
     this.color = color
     this.thickness = thickness
+    this.dashed = dashed
 
     if (arg2 instanceof Point) {
       this.pointOnCircle = arg2
@@ -121,12 +122,8 @@ export class Circle extends Element2D {
   }
 
   get latex () {
-    const arrayOptions: string[] = []
-    if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
-    if (this.thickness === 1) arrayOptions.push(`line width = ${this.thickness}`)
-    if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
-    let txtOptions = ''
-    if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
-    return `\n \t \\draw${txtOptions} (${this.center.x}, ${this.center.y}) circle(${this.radius});`
+    let latex = `\n\n\t% Circle center : ${this.center.label}, radius ${this._radius}`
+    latex += `\n \t \\draw${this.tikzOptions} (${this.center.x}, ${this.center.y}) circle(${this.radius});`
+    return latex
   }
 }
