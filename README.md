@@ -54,8 +54,8 @@ Les objets `Element2D` peuvent être stylisés
 - Cube
 - ~DemiDroite (Ray)~
 - ~Grille aimantée pour placer les points~
-- Vecteur avec flèche
-- Arc de cercle défini par 3 points
+- ~Vecteur avec flèche~
+- ~Arc de cercle défini par 3 points~
 - Codage segment
 - Codage arc
 - Texte le long d'un segment

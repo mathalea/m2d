@@ -7,6 +7,7 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
+import { ArcBy3Points } from './elements/lines/ArcBy3PointsAndRadius'
 import { Segment } from './elements/lines/Segment'
 import { Figure } from './Figure'
 /**
@@ -71,9 +72,9 @@ figure.svg.style.margin = 'auto'
 figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
-const A = figure.point(-4, 2, { label: 'A' })
+const A = figure.point(-4, 0, { label: 'A' })
 const B = figure.point(3, -2, { label: 'B' })
-const sAB = new Segment(A, B)
-sAB.style = '<->'
-sAB.thickness = 3
-sAB.color = 'blue'
+const C = figure.point(-4, 3, { label: 'C' })
+const a = new ArcBy3Points(A, B, C, { radius: 2, thickness: 3, color: 'orange', dashed: true })
+const sBA = new Segment(B, A)
+const sBC = new Segment(B, C)
