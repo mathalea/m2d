@@ -64,6 +64,10 @@ export abstract class Element2D {
   }
 
   set color (color) {
+    // Tous les membres du groupe auront la même couleur
+    for (const e of this.group) {
+      e.color = color
+    }
     if (this.g.children.length > 0) {
       for (const line of Array.from(this.g.children)) {
         line.setAttribute('stroke', color)
@@ -79,6 +83,9 @@ export abstract class Element2D {
   }
 
   set thickness (thickness) {
+    for (const e of this.group) {
+      e.thickness = thickness
+    }
     if (this.g.children.length > 0) {
       for (const line of Array.from(this.g.children)) {
         line.setAttribute('stroke-width', `${thickness}`)

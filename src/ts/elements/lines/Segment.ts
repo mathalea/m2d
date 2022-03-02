@@ -11,6 +11,7 @@ import { Point } from '../points/Point'
 import { PointByRotation } from '../points/PointByRotation'
 import { PointOnLineAtD } from '../points/PointOnLineAtD'
 import { Line, OptionsGraphiques } from './Line'
+import { Polyline } from './Polyline'
 
 export class Segment extends Line {
   constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
@@ -66,7 +67,7 @@ export class Segment extends Line {
       const L = new Line(this.A, this.B, { lineType: 'Segment', temp: true })
       const M = new PointOnLineAtD(L, h, { style: '' })
       const A1 = new PointByRotation(M, this.A, 90, { temp: true, style: '' })
-      const A2 = new PointByRotation(M, this.A, -90, { style: '' })
+      const A2 = new PointByRotation(M, this.A, -90, { temp: true, style: '' })
       const s = new Segment(A1, A2, { color: this.color, thickness: this.thickness })
       this.group.push(s)
     }
@@ -79,11 +80,38 @@ export class Segment extends Line {
       const s = new Segment(B1, B2, { color: this.color, thickness: this.thickness })
       this.group.push(s)
     }
+    const addArrow1 = () => {
+      this.A.style = ''
+      const L = new Line(this.A, this.B, { lineType: 'Segment', temp: true })
+      const M = new PointOnLineAtD(L, 3 * h, { temp: true, style: '' })
+      const A1 = new PointByRotation(M, this.A, 30, { temp: true, style: '' })
+      const A2 = new PointByRotation(M, this.A, -30, { temp: true, style: '' })
+      const s = new Polyline(A1, this.A, A2)
+      s.color = this.color
+      s.thickness = this.thickness
+      this.group.push(s)
+    }
+    const addArrow2 = () => {
+      this.B.style = ''
+      const L = new Line(this.B, this.A, { lineType: 'Segment', temp: true })
+      const M = new PointOnLineAtD(L, 3 * h, { temp: true, style: '' })
+      const B1 = new PointByRotation(M, this.B, 30, { temp: true, style: '' })
+      const B2 = new PointByRotation(M, this.B, -30, { temp: true, style: '' })
+      const s = new Polyline(B1, this.B, B2)
+      s.color = this.color
+      s.thickness = this.thickness
+      this.group.push(s)
+    }
     if (style === '|-') addBorder1()
-    if (style === '-|') addBorder2()
-    if (style === '|-|') {
+    else if (style === '-|') addBorder2()
+    else if (style === '|-|') {
       addBorder1()
       addBorder2()
+    } else if (style === '<-') addArrow1()
+    else if (style === '->') addArrow2()
+    else if (style === '<->') {
+      addArrow1()
+      addArrow2()
     }
   }
 }
