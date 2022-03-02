@@ -35,12 +35,14 @@ export class Figure {
   xMax: number
   yMin: number
   yMax: number
+  dx: number // Pour l'option snapGrid des points
+  dy: number // Pour l'option snapGrid des points
   svg: SVGElement
   pointerX: number | null
   pointerY: number | null
   pointerAction: 'drag' | 'newPoint' | 'newSegment' | 'setColor'
   pointerSetOptions: OptionsGraphiques
-  constructor ({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean } = {}) {
+  constructor ({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true, dx = 1, dy = 1 }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean, dx?: number, dy?: number } = {}) {
     this.width = width
     this.height = height
     this.pixelsPerUnit = pixelsPerUnit
@@ -48,11 +50,13 @@ export class Figure {
     this.xMax = xMin + width / pixelsPerUnit
     this.yMin = yMin
     this.yMax = yMin + height / pixelsPerUnit
+    this.dx = dx
+    this.dy = dy
     this.isDynamic = isDynamic
     this.set = new Set()
     this.setSelectedElements = new Set()
     this.pointerAction = 'drag'
-    this.pointerSetOptions = { color: 'black', thickness: 3}
+    this.pointerSetOptions = { color: 'black', thickness: 3 }
     this.setInDrag = new Set()
     this.isDraging = false
 

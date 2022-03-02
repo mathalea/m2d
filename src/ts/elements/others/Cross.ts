@@ -56,15 +56,9 @@ export class Cross extends Element2D {
   }
 
   get latex () {
-    const arrayOptions : string[] = []
-    if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
-    if (this.thickness !== 1) arrayOptions.push(`line width = ${this.thickness}`)
-    if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
-    let txtOptions = ''
-    if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
-    let tex = `\n\t % Point ${this.label ?? ''}`
-    tex += `\n \t \\draw${txtOptions} (${this.x - this.size}, ${this.y + this.size}) -- (${this.x + this.size}, ${this.y - this.size});`
-    tex += `\n \t \\draw${txtOptions} (${this.x - this.size}, ${this.y - this.size}) -- (${this.x + this.size}, ${this.y + this.size});`
+    let tex = `\n\n\t % Point ${this.label ?? ''}`
+    tex += `\n \t \\draw${this.tikzOptions} (${this.x - this.size}, ${this.y + this.size}) -- (${this.x + this.size}, ${this.y - this.size});`
+    tex += `\n \t \\draw${this.tikzOptions} (${this.x - this.size}, ${this.y - this.size}) -- (${this.x + this.size}, ${this.y + this.size});`
     return tex
   }
 }

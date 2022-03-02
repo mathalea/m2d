@@ -20,6 +20,7 @@ export class Polygon extends Element2D {
   labelsPoints: Point[]
   barycenter: Point
   labels: TextByPoint[]
+  label: string
     parentFigure: Figure
     private _style: PointStyle
     constructor (...points: Point[]) {
@@ -39,6 +40,7 @@ export class Polygon extends Element2D {
       this.parentFigure.set.add(this)
 
       this.barycenter = new Barycenter(this.points, { temp: true })
+      this.label = this.points.reduce((name, currentLabel) => name + currentLabel.label, '')
       for (const point of points) {
         this.labelsPoints.push(new PointOnLineAtD(new Segment(point, this.barycenter, { temp: true }), -0.5, { temp: true, style: '' }))
         const name = point.label ?? ''
@@ -68,14 +70,11 @@ export class Polygon extends Element2D {
     }
 
     get latex (): string {
-      const arrayOptions : string[] = []
-      if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
-      if (this.thickness !== 1) arrayOptions.push(`line width = ${this.thickness}`)
-      if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
-      if (this.opacity !== 1) arrayOptions.push(`opacity = ${this.opacity}`)
-      let txtOptions = ''
-      if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
-      return `\n\t\\draw${txtOptions} ${listeXYLatex(this.points)};`
+      let latex = `\n\n\t% Polygone ${this.label}`
+      console.log(this.points)
+      console.log(this.points.reduce((name, currentLabel) => name + currentLabel.label, ''))
+      latex += `\n\t\\draw${this.tikzOptions} ${listeXYLatex(this.points)};`
+      return latex
     }
 }
 

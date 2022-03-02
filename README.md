@@ -20,7 +20,7 @@ Le fichier `src/main.ts` permet de faire des tests de constructions/
 
 On créé un objet `figure` instance de la classe `Figure` qui stockera toutes les information sur le container SVG (width, height, xMin, yMin...) et les éléments de ce SVG (sauvegardés dans `figure.set` pour ceux qui ont besoin d'un tracé). `figure` a notamment 2 propriétés `figure.svg` et `figure.latex` qui permettent de récupérer le code SVG ou TikZ de la figure.
 
-Le objets graphiques sont des instances d'objets d'une sous classe de `Element2D` qui ont un paramètre `g` qui sera un groupe SVG ou un simple élément que l'on pourra insérer dans le DOM.
+Le objets graphiques sont des instances d'objets d'une sous classe de `Element2D` qui ont un paramètre `g` qui sera un groupe SVG ou un simple élément qui est automatiquement ajouté au svg de la figure.
 
 
 ```
@@ -30,35 +30,16 @@ const B = figure.point(x, y)
 const sAB = figure.segment(A, B) // ou const sAB = new Segment(A, B)
 ```
 
-Les objets `Element2D` devront avoir plusieurs set/get : 
+Les objets `Element2D` peuvent être stylisés
 - color : pour changer la couleur
 - thickness : pour changer l'épaisseur
+- dashed: booléen pour les pointillés
 - size : pour la taille des points
+- fill : couleur de remplissage
+- opacity : pour l'opacité de tout le groupe
+- fillOpacity : pour l'opacité du remplissage
 
-Les points et les cercles ont : 
-- moveTo(x, y) : pour les déplacer
-- translation, rotation, homothétie, similitude qui créeront un nouveau point (sauf si on met l'option `clone: false`)
-- fill : pour colorier
-- label des points avec un positionnement
-
-
-
-ToDo : 
-- mark : pour ajouter un codage
-- pointilles
-- modifier les actions du clic (au lieu du drag-n-drop on pourrait changer la couleur et l'épaisseur des éléments cliqués)
-- ajouter le type Algebraic pour les arguments de PointByRotation(), PointBySimilitude(), PointOnLineAtD(), Vector(), Angle(), ...
-
-
-
-```
-const figure = new Figure()
-const A = figure.point(x, y, {labelPosition: 'above left', style: 'x'})
-const B = A.translation(x, y)
-const C = A.symetrie(B)
-```
-
-#### Feuille de route
+#### ToDo
 
 - AngleMark
 - ~PointByOrthongonalProjection~
@@ -68,7 +49,17 @@ const C = A.symetrie(B)
 - SegmentCode
 - Cube
 - ~DemiDroite (Ray)~
-- Grille aimantée pour placer les points
+- ~Grille aimantée pour placer les points~
+- ~Vecteur avec flèche~
+- ~Arc de cercle défini par 3 points~
+- Codage segment
+- Codage arc
+- Texte le long d'un segment
+- Repère
+- Courbe représentative de fonctions
+- Calculs d'aires
+- Ajouter le type Algebraic pour les arguments de PointByRotation(), PointBySimilitude(), PointOnLineAtD(), Vector(), Angle(), ...
+- ...
 
 
 

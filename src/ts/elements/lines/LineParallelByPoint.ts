@@ -21,8 +21,4 @@ export class LineParallelByPoint extends LineByPointVector {
     this.line = L
     L.addDependency(this)
   }
-
-  update (): void {
-    super.update()
-  }
 }

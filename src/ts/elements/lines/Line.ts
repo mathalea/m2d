@@ -27,7 +27,6 @@ export class Line extends Element2D {
   type: LineType
   label: string
   _style: string
-  _dashed: boolean
   temp: boolean
   constructor (A: Point, B: Point, { lineType: type = 'Line', color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
     super()
@@ -67,6 +66,7 @@ export class Line extends Element2D {
     this.thickness = thickness
     this.dashed = dashed
     if (!temp) this.parentFigure.svg.appendChild(this.g)
+    if (!temp) this.parentFigure.set.add(this)
     A.addDependency(this)
     B.addDependency(this)
   }
@@ -85,15 +85,8 @@ export class Line extends Element2D {
   }
 
   get latex () {
-    const arrayOptions: string[] = []
-    if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
-    if (this.thickness !== 1) arrayOptions.push(`line width = ${this.thickness}`)
-    if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
-    if (this.dashed) arrayOptions.push('dashed')
-    let txtOptions = ''
-    if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
-    let latex = `\n\t% ${this.label ?? 'Droite'}`
-    latex += `\n \t \\draw${txtOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
+    let latex = `\n\n\t% ${this.label ?? 'Droite'}`
+    latex += `\n \t \\draw${this.tikzOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
     return latex
   }
 
@@ -142,19 +135,6 @@ export class Line extends Element2D {
     const A = new Point(this.parentFigure, 1, 0, { temp: true })
     const M = new Point(this.parentFigure, this.directeur.x, this.directeur.y, { temp: true })
     return angleOriented(A, O, M)
-  }
-
-  get dashed () {
-    return this._dashed
-  }
-
-  set dashed (isDashed) {
-    if (isDashed) {
-      this.g.setAttribute('stroke-dasharray', '4 3')
-    } else {
-      this.g.removeAttribute('stroke-dasharray')
-    }
-    this._dashed = isDashed
   }
 
   public distancePointer (pointerX: number, pointerY: number) {
