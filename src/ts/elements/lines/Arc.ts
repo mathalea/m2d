@@ -29,12 +29,14 @@ export class Arc extends Element2D {
     this.parentFigure.set.add(this)
     const B = rotationCoord(A, O, angle)
     this.point2 = B
+    this.label = (O.label ?? '') + (A.label ?? '') + ' ' + angle.toString() + '°'
     this.horiz = { x: this.center.x + 1, y: this.center.y }
     const radius = this.parentFigure.xToSx(distance(O, A))
     const [large, sweep] = getLargeSweep(angle)
     this.g = document.createElementNS('http://www.w3.org/2000/svg', 'path')
     this.g.setAttribute('d', `M${this.parentFigure.xToSx(A.x)} ${this.parentFigure.yToSy(A.y)} A ${radius} ${radius} 0 ${large} ${sweep} ${this.parentFigure.xToSx(B.x)} ${this.parentFigure.yToSy(B.y)}`)
-    this.g.setAttribute('d', this.g.getAttribute('d') + `L ${this.parentFigure.xToSx(O.x)} ${this.parentFigure.yToSy(O.y)} Z`)
+    // Ajout des segments ?
+    // this.g.setAttribute('d', this.g.getAttribute('d') + `L ${this.parentFigure.xToSx(O.x)} ${this.parentFigure.yToSy(O.y)} Z`)
     this.color = color
     this.fill = 'none'
     this.parentFigure.svg.appendChild(this.g)
@@ -48,7 +50,8 @@ export class Arc extends Element2D {
     this.point2 = rotationCoord(this.point, this.center, this.angle)
     const d = this.parentFigure.xToSx(distance(this.center, this.point))
     this.g.setAttribute('d', `M${this.parentFigure.xToSx(this.point.x)} ${this.parentFigure.yToSy(this.point.y)} A ${d} ${d} 0 ${large} ${sweep} ${this.parentFigure.xToSx(this.point2.x)} ${this.parentFigure.yToSy(this.point2.y)}`)
-    this.g.setAttribute('d', this.g.getAttribute('d') + `L ${this.parentFigure.xToSx(this.center.x)} ${this.parentFigure.yToSy(this.center.y)} Z`)
+    // Ajout des segments ?
+    // this.g.setAttribute('d', this.g.getAttribute('d') + `L ${this.parentFigure.xToSx(this.center.x)} ${this.parentFigure.yToSy(this.center.y)} Z`)
   }
 
   // ToFix !!! Pas le même qu'en SVG
@@ -56,13 +59,9 @@ export class Arc extends Element2D {
     const radius = distance(this.center, this.point)
     const azimut = angleOriented(this.horiz, this.center, this.point)
     const anglefin = azimut + this.angle
-    const arrayOptions: string[] = []
-    if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
-    if (this.thickness !== 1) arrayOptions.push(`line width = ${this.thickness}`)
-    if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
-    let txtOptions = ''
-    if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
-    return `\n\t\\draw${txtOptions} (${this.point.x},${this.point.y}) arc (${azimut}:${anglefin}:${radius}) ;`
+    let latex = `\n\n\t% Arc ${this.label}`
+    latex += `\n\t\\draw${this.tikzOptions} (${this.point.x},${this.point.y}) arc (${azimut}:${anglefin}:${radius}) ;`
+    return latex
   }
 }
 

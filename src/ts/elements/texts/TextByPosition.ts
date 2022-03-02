@@ -16,7 +16,7 @@ export class TextByPosition extends Element2D {
     private _text: string
     private _anchor: 'start' | 'middle' | 'end'
     snapToGrid: boolean
-    constructor (figure: Figure, x: number, y: number, text: string, { anchor = 'middle', temp = false, draggable = true }: {anchor?: 'start' | 'middle' | 'end', temp?: boolean, draggable?: boolean} = {}) {
+    constructor (figure: Figure, x: number, y: number, text: string, { anchor = 'middle', temp = false, draggable = true, color = 'black' }: {anchor?: 'start' | 'middle' | 'end', temp?: boolean, draggable?: boolean, color?: string} = {}) {
       super()
       this.parentFigure = figure
       this.anchor = anchor
@@ -30,11 +30,13 @@ export class TextByPosition extends Element2D {
       this.g.style.overflow = 'visible'
       this.g.style.lineHeight = '0'
       this.g.style.dominantBaseline = 'middle'
+      this.g.style.textAnchor = anchor
       this.g.style.cursor = this.draggable ? 'move' : 'default'
       if (!temp) {
         this.parentFigure.svg.appendChild(this.g)
         this.parentFigure.set.add(this)
       }
+      this.color = color
     }
 
     get anchor () {
@@ -85,7 +87,7 @@ export class TextByPosition extends Element2D {
       } else {
         anchorLatex = 'east'
       }
-      return `\n\t\\draw (${this.x},${this.y}) node[anchor = ${anchorLatex}] {${this.text}};`
+      return `\n\t\\draw${(this.color !== 'black' && this.color !== undefined) ? `[${this.color}]` : ''} (${this.x},${this.y}) node[anchor = ${anchorLatex}] {${this.text}};`
     }
 
     /**

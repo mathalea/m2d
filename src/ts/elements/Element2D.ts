@@ -35,6 +35,7 @@ export abstract class Element2D {
   private _opacity: number
   private _fillOpacity: number
   private _dashed: boolean
+  label: string
 
   constructor () {
     this.group = []
@@ -155,6 +156,8 @@ export abstract class Element2D {
     if (this.color !== 'black') arrayOptions.push(`color = ${this.color}`)
     if (this.thickness !== 1) arrayOptions.push(`line width = ${this.thickness}`)
     if (this.fill !== 'none') arrayOptions.push(`fill = ${this.fill}`)
+    if (this.opacity !== undefined) arrayOptions.push(`opacity = ${this.opacity}`)
+    if (this.fillOpacity !== undefined) arrayOptions.push(`fill opacity = ${this.fillOpacity}`)
     if (this.dashed) arrayOptions.push('dashed')
     let txtOptions = ''
     if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
