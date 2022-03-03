@@ -42,6 +42,7 @@ export class Figure {
   pointerY: number | null
   pointerAction: 'drag' | 'newPoint' | 'newSegment' | 'setColor'
   pointerSetOptions: OptionsGraphiques
+  messageElement: TextByPosition
   constructor ({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true, dx = 1, dy = 1 }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean, dx?: number, dy?: number } = {}) {
     this.width = width
     this.height = height
@@ -140,6 +141,18 @@ export class Figure {
       const [pointerX, pointerY] = this.getPointerCoord(event)
       if (this.pointerAction === 'drag') moveDrag(this, pointerX, pointerY)
     })
+  }
+
+  message (text, { dx = 1, dy = 1 }: {dx?: number, dy?: number} = {}) {
+    if (this.messageElement) {
+      this.messageElement.text = text
+      this.messageElement.x = this.xMin + dx
+      this.messageElement.y = this.yMax - dy
+    } else {
+      const message = new TextByPosition(this, this.xMin + dx, this.yMax - dy, text, { anchor: 'start', draggable: false, color: 'gray' })
+      this.messageElement = message
+      this.set.delete(this.messageElement) // Pour l'exclure de la sortie LaTeX et du drag
+    }
   }
 
   /**
