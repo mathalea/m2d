@@ -19,7 +19,7 @@ import { PointOnLineAtD } from './elements/points/PointOnLineAtD'
 import { PointIntersectionLC } from './elements/points/PointIntersectionLC'
 import { moveDrag, actionStartDrag, stopDrag } from './pointerAction/drag'
 import { actionNewPoint } from './pointerAction/newPoint'
-import { clickNewSegment as actionNewSegment } from './pointerAction/newPointSegment'
+import { actionNewSegment } from './pointerAction/newSegment'
 import { actionSetOptions } from './pointerAction/setOptions'
 
 export class Figure {

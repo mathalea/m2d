@@ -7,74 +7,32 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
-import { ArcBy3Points } from './elements/lines/ArcBy3PointsAndRadius'
-import { Segment } from './elements/lines/Segment'
+// Initialisation
+
 import { Figure } from './Figure'
-/**
- * Script qui permet de tester M2D
- */
+import { addButtons } from './gui/addButtons'
+import { displayEditor } from './gui/displayEditor'
 
-// On créé un espace de travail avec les réglages par défaut
-const figure = new Figure({ dx: 2, dy: 1 })
-
-// On l'ajoute au dom
+const figure = new Figure()
 const body = document.querySelector('body')
-const btnLatex = document.createElement('button')
-btnLatex.innerHTML = 'Obtenir LaTeX'
-const btnDrag = document.createElement('button')
-btnDrag.innerHTML = 'Drag'
-const btnNewPoint = document.createElement('button')
-btnNewPoint.innerHTML = 'Nouveau point'
-const btnNewSegment = document.createElement('button')
-btnNewSegment.innerHTML = 'Segment'
-const btnRed = document.createElement('button')
-btnRed.style.backgroundColor = 'red'
-btnRed.style.width = '20px'
-btnRed.style.height = '20px'
-const btnGreen = document.createElement('button')
-btnGreen.style.backgroundColor = 'green'
-btnGreen.style.width = '20px'
-btnGreen.style.height = '20px'
 const texteLatex = document.createElement('pre')
 if (body) {
   body.appendChild(figure.svg)
-  body.appendChild(btnLatex)
-  body.appendChild(btnDrag)
-  body.appendChild(btnNewPoint)
-  body.appendChild(btnNewSegment)
   body.appendChild(texteLatex)
-  body.appendChild(btnRed)
-  body.appendChild(btnGreen)
 }
-
+const btnLatex = document.createElement('button')
+btnLatex.innerHTML = 'Obtenir LaTeX'
 btnLatex.addEventListener('click', () => {
   texteLatex.innerHTML = figure.latex
-})
-btnDrag.addEventListener('click', () => {
-  figure.pointerAction = 'drag'
-})
-btnNewPoint.addEventListener('click', () => {
-  figure.pointerAction = 'newPoint'
-})
-btnNewSegment.addEventListener('click', () => {
-  figure.pointerAction = 'newSegment'
-})
-btnRed.addEventListener('click', () => {
-  figure.pointerAction = 'setColor'
-  figure.pointerSetOptions.color = 'red'
-})
-btnGreen.addEventListener('click', () => {
-  figure.pointerAction = 'setColor'
-  figure.pointerSetOptions.color = 'green'
 })
 
 figure.svg.style.margin = 'auto'
 figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
-const A = figure.point(-4, 0, { label: 'A' })
-const B = figure.point(3, -2, { label: 'B' })
-const C = figure.point(-4, 3, { label: 'C' })
-const a = new ArcBy3Points(A, B, C, { radius: 2, thickness: 3, color: 'orange', dashed: true })
-const sBA = new Segment(B, A)
-const sBC = new Segment(B, C)
+// Ma figure
+
+// Options
+
+// displayEditor(figure)
+// addButtons(figure)

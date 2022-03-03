@@ -64,6 +64,7 @@ export class Segment extends Line {
     const h = 0.2
     const addBorder1 = () => {
       this.A.style = ''
+      this.B.style = ''
       const L = new Line(this.A, this.B, { lineType: 'Segment', temp: true })
       const M = new PointOnLineAtD(L, h, { style: '' })
       const A1 = new PointByRotation(M, this.A, 90, { temp: true, style: '' })
@@ -72,6 +73,7 @@ export class Segment extends Line {
       this.group.push(s)
     }
     const addBorder2 = () => {
+      this.A.style = ''
       this.B.style = ''
       const L = new Line(this.B, this.A, { lineType: 'Segment', temp: true })
       const M = new PointOnLineAtD(L, h, { temp: true, style: '' })
@@ -82,6 +84,7 @@ export class Segment extends Line {
     }
     const addArrow1 = () => {
       this.A.style = ''
+      this.B.style = ''
       const L = new Line(this.A, this.B, { lineType: 'Segment', temp: true })
       const M = new PointOnLineAtD(L, 3 * h, { temp: true, style: '' })
       const A1 = new PointByRotation(M, this.A, 30, { temp: true, style: '' })
@@ -92,6 +95,7 @@ export class Segment extends Line {
       this.group.push(s)
     }
     const addArrow2 = () => {
+      this.A.style = ''
       this.B.style = ''
       const L = new Line(this.B, this.A, { lineType: 'Segment', temp: true })
       const M = new PointOnLineAtD(L, 3 * h, { temp: true, style: '' })

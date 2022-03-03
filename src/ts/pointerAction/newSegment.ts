@@ -2,7 +2,7 @@ import { Segment } from '../elements/lines/Segment'
 import { Point } from '../elements/points/Point'
 import { Figure } from '../Figure'
 
-export function clickNewSegment (figure: Figure, pointerX: number, pointerY: number) {
+export function actionNewSegment (figure: Figure, pointerX: number, pointerY: number) {
   for (const e of figure.set) {
     if (e instanceof Point && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
       if (figure.setSelectedElements.size === 1) {

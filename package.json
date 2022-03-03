@@ -17,6 +17,8 @@
     "vite": "^2.8.4"
   },
   "dependencies": {
-    "mathlive": "^0.69.10"
+    "codemirror": "^5.65.2",
+    "mathlive": "^0.69.10",
+    "sval": "^0.4.8"
   }
 }
