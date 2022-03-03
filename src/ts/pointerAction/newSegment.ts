@@ -10,7 +10,11 @@ export function actionNewSegment (figure: Figure, pointerX: number, pointerY: nu
         const s = new Segment(A, e)
         figure.set.add(s)
         figure.setSelectedElements.clear()
-      } else figure.setSelectedElements.add(e)
+        figure.message('Cliquer sur les deux extrémités du segment')
+      } else {
+        figure.setSelectedElements.add(e)
+        figure.message('Cliquer sur l\'autre extrémité')
+      } 
     }
   }
 }

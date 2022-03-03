@@ -41,14 +41,8 @@ figure.svg.style.border = 'solid'
 
 // Ma figure
 
-const A = new Point(figure, 0, 0, { label: 'A' })
-const B = new Point(figure, 4, -3, { label: 'B' })
-const M = new Point(figure, 4, 0, { label: 'M' })
-const mark = new MarkAngle(A, M, B, { dashed: true, color: 'blue', thickness: 3 })
-const sMA = new Segment(M, A)
-const sMB = new Segment(M, B)
 
 // Options
 
 // displayEditor(figure)
-// addButtons(figure)
+addButtons(figure)

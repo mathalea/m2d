@@ -21,6 +21,7 @@ import { moveDrag, actionStartDrag, stopDrag } from './pointerAction/drag'
 import { actionNewPoint } from './pointerAction/newPoint'
 import { actionNewSegment } from './pointerAction/newSegment'
 import { actionSetOptions } from './pointerAction/setOptions'
+import { actionNewPerpendicular } from './pointerAction/newPerpendicular'
 
 export class Figure {
   width: number
@@ -28,6 +29,7 @@ export class Figure {
   pixelsPerUnit: number
   set: Set<Element2D>
   setSelectedElements: Set<Element2D>
+  selectedElements: Element2D[]
   isDynamic: boolean
   setInDrag: Set<Point | TextByPosition>
   isDraging: boolean
@@ -40,7 +42,7 @@ export class Figure {
   svg: SVGElement
   pointerX: number | null
   pointerY: number | null
-  pointerAction: 'drag' | 'newPoint' | 'newSegment' | 'setColor'
+  pointerAction: 'drag' | 'newPoint' | 'newSegment' | 'newPerpendicular' | 'setColor'
   pointerSetOptions: OptionsGraphiques
   messageElement: TextByPosition
   constructor ({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true, dx = 1, dy = 1 }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean, dx?: number, dy?: number } = {}) {
@@ -55,7 +57,9 @@ export class Figure {
     this.dy = dy
     this.isDynamic = isDynamic
     this.set = new Set()
+    // ToFix fusionner set et array
     this.setSelectedElements = new Set()
+    this.selectedElements = []
     this.pointerAction = 'drag'
     this.pointerSetOptions = { color: 'black', thickness: 3 }
     this.setInDrag = new Set()
@@ -130,6 +134,7 @@ export class Figure {
       if (this.pointerAction === 'newPoint') actionNewPoint(this, pointerX, pointerY)
       else if (this.pointerAction === 'drag') actionStartDrag(this, pointerX, pointerY)
       else if (this.pointerAction === 'newSegment') actionNewSegment(this, pointerX, pointerY)
+      else if (this.pointerAction === 'newPerpendicular') actionNewPerpendicular(this, pointerX, pointerY)
       else if (this.pointerAction === 'setColor') actionSetOptions(this, pointerX, pointerY, this.pointerSetOptions)
     })
 

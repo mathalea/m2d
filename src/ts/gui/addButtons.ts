@@ -1,3 +1,5 @@
+import { Point } from '../elements/points/Point'
+
 export function addButtons (figure) {
   const body = document.querySelector('body')
   const btnDrag = document.createElement('button')
@@ -6,6 +8,8 @@ export function addButtons (figure) {
   btnNewPoint.innerHTML = 'Nouveau point'
   const btnNewSegment = document.createElement('button')
   btnNewSegment.innerHTML = 'Segment'
+  const btnNewPerpendicular = document.createElement('button')
+  btnNewPerpendicular.innerHTML = 'Perpendicular'
   const btnZoomPlus = document.createElement('button')
   btnZoomPlus.innerHTML = '+'
   const btnZoomMinus = document.createElement('button')
@@ -22,6 +26,7 @@ export function addButtons (figure) {
     body.appendChild(btnDrag)
     body.appendChild(btnNewPoint)
     body.appendChild(btnNewSegment)
+    body.appendChild(btnNewPerpendicular)
     body.appendChild(btnRed)
     body.appendChild(btnGreen)
     body.appendChild(btnZoomMinus)
@@ -30,12 +35,21 @@ export function addButtons (figure) {
 
   btnDrag.addEventListener('click', () => {
     figure.pointerAction = 'drag'
+    figure.message('')
   })
   btnNewPoint.addEventListener('click', () => {
     figure.pointerAction = 'newPoint'
+    figure.message('')
   })
   btnNewSegment.addEventListener('click', () => {
     figure.pointerAction = 'newSegment'
+    if ([...figure.set].filter(element => element instanceof Point).length < 2) {
+      figure.message('Il faut au moins deux points pour tracer un segment')
+    } else figure.message('Cliquer sur les deux extrémités du segment')
+  })
+  btnNewPerpendicular.addEventListener('click', () => {
+    figure.pointerAction = 'newPerpendicular'
+    figure.message('Cliquer sur une droite et sur un point')
   })
   btnZoomPlus.addEventListener('click', () => {
     figure.pixelsPerUnit += 10
@@ -44,10 +58,12 @@ export function addButtons (figure) {
     }
   })
   btnRed.addEventListener('click', () => {
+    figure.message('Cliquer sur l\'élément que vous souhaitez mettre en couleur')
     figure.pointerAction = 'setColor'
     figure.pointerSetOptions.color = 'red'
   })
   btnGreen.addEventListener('click', () => {
+    figure.message('Cliquer sur l\'élément que vous souhaitez mettre en couleur')
     figure.pointerAction = 'setColor'
     figure.pointerSetOptions.color = 'green'
   })
