@@ -6,11 +6,17 @@ import { Figure } from '../Figure'
 
 export function initEditor (figure: Figure) {
   figure.set.clear()
+  figure.svg.innerHTML = ''
+
+  window.Figure = Figure
+  window.Point = Point
+  window.Segment = Segment
+
   const interpreter = new Sval({ ecmaVer: 10, sandBox: true }) // On créé une instance de l'interpréteur JS
-  interpreter.import(Figure)
-  interpreter.import(Line)
-  interpreter.import(Segment)
-  interpreter.import(Point)
+  interpreter.import(window.Figure)
+  interpreter.import(window.Line)
+  interpreter.import(window.Segment)
+  interpreter.import(window.Point)
   interpreter.import({
     figure: figure,
     Figure: Figure,
