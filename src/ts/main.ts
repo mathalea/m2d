@@ -9,6 +9,7 @@
 
 // Initialisation
 
+import { Point } from './elements/points/Point'
 import { Figure } from './Figure'
 import { addButtons } from './gui/addButtons'
 import { displayEditor } from './gui/displayEditor'
@@ -16,21 +17,25 @@ import { displayEditor } from './gui/displayEditor'
 const figure = new Figure()
 const body = document.querySelector('body')
 const texteLatex = document.createElement('pre')
-if (body) {
-  body.appendChild(figure.svg)
-  body.appendChild(texteLatex)
-}
 const btnLatex = document.createElement('button')
 btnLatex.innerHTML = 'Obtenir LaTeX'
 btnLatex.addEventListener('click', () => {
   texteLatex.innerHTML = figure.latex
 })
+if (body) {
+  body.appendChild(figure.svg)
+  body.appendChild(btnLatex)
+  body.appendChild(texteLatex)
+}
 
 figure.svg.style.margin = 'auto'
 figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
 // Ma figure
+
+const A = new Point(figure, 0, 0)
+
 
 // Options
 
