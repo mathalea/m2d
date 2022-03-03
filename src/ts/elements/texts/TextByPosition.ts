@@ -79,6 +79,7 @@ export class TextByPosition extends Element2D {
     }
 
     get latex () {
+      if (!this.isVisible) return ''
       let anchorLatex: 'east' | 'center' |'west'
       if (this.anchor === 'start') {
         anchorLatex = 'west'

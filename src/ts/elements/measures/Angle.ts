@@ -14,37 +14,37 @@ import { PointByRotation } from '../points/PointByRotation'
 import { Measure } from './Measure'
 
 export class Angle extends Measure {
-    origin: Point
-    top: Point
-  end: Point
+    A: Point
+    O: Point
+    B: Point
     parentFigure: Figure
     valueNonOriented: number
-    constructor (origin: Point, top: Point, end: Point|number) {
-      super(top.parentFigure)
+    constructor (A: Point, O: Point, B: Point|number) {
+      super(O.parentFigure)
       this.dependencies = []
-      if (typeof end === 'number') {
-        this.end = new PointByRotation(origin, top, end, { temp: true })
-        this.value = end
-        top.addDependency(this)
-        origin.addDependency(this)
-      } else if (end instanceof Point) {
-        this.end = end
-        this.value = angleOriented(origin, top, end)
-        top.addDependency(this)
-        origin.addDependency(this)
-        end.addDependency(this)
+      if (typeof B === 'number') {
+        this.B = new PointByRotation(A, O, B, { temp: true })
+        this.value = B
+        O.addDependency(this)
+        A.addDependency(this)
+      } else if (B instanceof Point) {
+        this.B = B
+        this.value = angleOriented(A, O, B)
+        O.addDependency(this)
+        A.addDependency(this)
+        B.addDependency(this)
       } else {
         throw new Error('Le troisième paramètre doit être un point ou un nombre.')
       }
-      this.parentFigure = top.parentFigure
-      this.top = top
-      this.origin = origin
-      this.valueNonOriented = angle(this.origin, this.top, this.end)
+      this.parentFigure = O.parentFigure
+      this.O = O
+      this.A = A
+      this.valueNonOriented = angle(this.A, this.O, this.B)
     }
 
     update () {
-      this.value = angleOriented(this.origin, this.top, this.end)
-      this.valueNonOriented = angle(this.origin, this.top, this.end)
+      this.value = angleOriented(this.A, this.O, this.B)
+      this.valueNonOriented = angle(this.A, this.O, this.B)
       this.notifyAllDependencies()
     }
 }

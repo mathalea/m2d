@@ -56,6 +56,7 @@ export class Cross extends Element2D {
   }
 
   get latex () {
+    if (!this.isVisible) return ''
     let tex = `\n\n\t % Point ${this.label ?? ''}`
     tex += `\n \t \\draw${this.tikzOptions} (${this.x - this.size}, ${this.y + this.size}) -- (${this.x + this.size}, ${this.y - this.size});`
     tex += `\n \t \\draw${this.tikzOptions} (${this.x - this.size}, ${this.y - this.size}) -- (${this.x + this.size}, ${this.y + this.size});`

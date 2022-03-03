@@ -122,6 +122,7 @@ export class Circle extends Element2D {
   }
 
   get latex () {
+    if (!this.isVisible) return ''
     let latex = `\n\n\t% Circle center : ${this.center.label}, radius ${this._radius}`
     latex += `\n \t \\draw${this.tikzOptions} (${this.center.x}, ${this.center.y}) circle(${this.radius});`
     return latex

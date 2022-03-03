@@ -70,6 +70,7 @@ export class Polygon extends Element2D {
     }
 
     get latex (): string {
+      if (!this.isVisible) return ''
       let latex = `\n\n\t% Polygone ${this.label}`
       console.log(this.points)
       console.log(this.points.reduce((name, currentLabel) => name + currentLabel.label, ''))

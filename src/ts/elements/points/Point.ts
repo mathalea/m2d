@@ -29,14 +29,12 @@ export class Point extends Element2D {
   parentFigure: Figure
   draggable: true | false | Circle | Segment
   temp: boolean // Pour les points qui ne servent qu'à faire des calculs
-  isVisible: boolean
   snapToGrid: boolean
   // On définit un point avec ses deux coordonnées
   constructor (svgContainer: Figure, x: number, y: number, { label, style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false, snapToGrid = false }: PointOptions = {}) {
     super()
     this.x = x
     this.y = y
-    this.isVisible = true
     this.group = []
     this.parentFigure = svgContainer
     this.thickness = thickness
@@ -134,18 +132,14 @@ export class Point extends Element2D {
     }
   }
 
-  hide () {
-    for (const segment of this.group) {
-      segment.g.setAttribute('visibility', 'hidden')
-    }
-    this.isVisible = false
+  hide (): void {
+    super.hide()
+    this.labelElement.hide()
   }
 
-  show () {
-    for (const segment of this.group) {
-      segment.g.setAttribute('visibility', 'visible')
-    }
-    this.isVisible = true
+  show (): void {
+    super.show()
+    this.labelElement.show()
   }
 
   get label () {

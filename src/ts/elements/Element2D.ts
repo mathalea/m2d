@@ -36,11 +36,13 @@ export abstract class Element2D {
   private _fillOpacity: number
   private _dashed: boolean
   label: string
+  protected isVisible: boolean
 
   constructor () {
     this.group = []
     this.dependencies = []
     this.g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+    this.isVisible = true
   }
 
   /**
@@ -58,6 +60,36 @@ export abstract class Element2D {
   }
 
   abstract update(): void
+
+  hide () {
+    // Tous les membres du groupe auront la même couleur
+    for (const e of this.group) {
+      e.hide()
+    }
+    if (this.g.children.length > 0) {
+      for (const line of Array.from(this.g.children)) {
+        line.setAttribute('visibility', 'hidden')
+      }
+    } else { // Le segment ou le cercle ne sont pas des groupes, ce sont des éléments uniques sans children
+      this.g.setAttribute('visibility', 'hidden')
+    }
+    this.isVisible = false
+  }
+
+  show () {
+    // Tous les membres du groupe auront la même couleur
+    for (const e of this.group) {
+      e.show()
+    }
+    if (this.g.children.length > 0) {
+      for (const line of Array.from(this.g.children)) {
+        line.setAttribute('visibility', 'visible')
+      }
+    } else { // Le segment ou le cercle ne sont pas des groupes, ce sont des éléments uniques sans children
+      this.g.setAttribute('visibility', 'visible')
+    }
+    this.isVisible = true
+  }
 
   get color () {
     return this._color
@@ -146,6 +178,9 @@ export abstract class Element2D {
   }
 
   set dashed (isDashed) {
+    for (const e of this.group) {
+      e.dashed = isDashed
+    }
     if (isDashed) {
       this.g.setAttribute('stroke-dasharray', '4 3')
     } else {

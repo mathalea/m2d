@@ -62,6 +62,7 @@ export class Arc extends Element2D {
 
   // ToFix !!! Pas le même qu'en SVG
   get latex (): string {
+    if (!this.isVisible) return ''
     const angleMeasure = (typeof this.angle === 'number') ? this.angle : this.angle.value
     const radius = distance(this.center, this.point)
     const azimut = angleOriented(this.horiz, this.center, this.point)

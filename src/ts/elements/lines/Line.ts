@@ -85,6 +85,7 @@ export class Line extends Element2D {
   }
 
   get latex () {
+    if (!this.isVisible) return ''
     let latex = `\n\n\t% ${this.label ?? 'Droite'}`
     latex += `\n \t \\draw${this.tikzOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
     return latex

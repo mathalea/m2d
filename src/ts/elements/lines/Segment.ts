@@ -50,6 +50,7 @@ export class Segment extends Line {
   }
 
   get latex () {
+    if (!this.isVisible) return ''
     let latex = `\n\n\t% ${this.label ?? 'Segment'}`
     latex += `\n \t \\draw${this.tikzOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
     return latex
