@@ -148,7 +148,7 @@ export class Figure {
     })
   }
 
-  message (text, { dx = 1, dy = 1 }: {dx?: number, dy?: number} = {}) {
+  message (text: string, { dx = 1, dy = 1 }: {dx?: number, dy?: number} = {}) {
     if (this.messageElement) {
       this.messageElement.text = text
       this.messageElement.x = this.xMin + dx
