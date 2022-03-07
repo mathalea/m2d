@@ -12,7 +12,7 @@ import { LinePerpendicularByPoint } from './LinePerpendicularlByPoint'
 import { OptionsGraphiques } from './Line'
 import { Segment } from './Segment'
 
-export class Mediatrice extends LinePerpendicularByPoint {
+export class PerpendicularBisector extends LinePerpendicularByPoint {
   segment: Segment
   constructor (S: Segment, { color = 'black', thickness = 1, temp = false }: OptionsGraphiques = {}) {
     const M = new Middle(S, { temp: true })

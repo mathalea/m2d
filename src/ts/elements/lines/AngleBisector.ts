@@ -14,7 +14,7 @@ import { CalculDynamic } from '../measures/Calculdynamic'
 import { Point } from '../points/Point'
 import { PointByRotation } from '../points/PointByRotation'
 
-export class Bissectrice extends Ray {
+export class AngleBisector extends Ray {
   A: Point
   B: Point
   O: Point
