@@ -10,16 +10,9 @@
 // Initialisation
 
 import { Circle } from './elements/lines/Circle'
-import { Mediatrice } from './elements/lines/Mediatrice'
-import { Segment } from './elements/lines/Segment'
-import { MarkAngle } from './elements/marks/MarkAngle'
-import { Point } from './elements/points/Point'
-import { PointIntersectionCC } from './elements/points/PointIntersectionCC'
-import { PointIntersectionLC } from './elements/points/PointIntersectionLC'
-import { PointIntersectionLL } from './elements/points/PointIntersectionLL'
+import { Polygon } from './elements/lines/Polygon'
 import { Figure } from './Figure'
 import { addButtons } from './gui/addButtons'
-import { displayEditor } from './gui/displayEditor'
 
 const figure = new Figure()
 const body = document.querySelector('body')
@@ -41,6 +34,11 @@ figure.svg.style.border = 'solid'
 
 // Ma figure
 
+const A = figure.point(0, 0)
+const B = figure.point(3, 0)
+const C = figure.point(2, 5)
+const p = new Polygon(A, B, C)
+p.thickness = 2
 
 // Options
 

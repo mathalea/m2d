@@ -14,9 +14,10 @@ export abstract class Measure {
     parentFigure: Figure
     value: number
     dependencies: (Element2D | Measure)[]
-    constructor (parentFigure) {
+    constructor (parentFigure: Figure) {
       this.parentFigure = parentFigure
       this.dependencies = []
+      this.value = 0
     }
 
     abstract update ():void

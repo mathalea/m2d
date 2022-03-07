@@ -7,6 +7,8 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
+import { Element2D } from '../Element2D'
+import { Measure } from '../measures/Measure'
 import { Point } from '../points/Point'
 import { PointByRotation } from '../points/PointByRotation'
 import { PointOnLineAtD } from '../points/PointOnLineAtD'
@@ -16,9 +18,8 @@ import { Polyline } from './Polyline'
 export class Segment extends Line {
   constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
     super(A, B, { lineType: 'Segment', color, thickness, style, temp, dashed })
-    this.parentFigure = A.parentFigure
     if (!temp) this.parentFigure.set.add(this)
-    if (A.label && B.label) this.label = `[${A.label}${B.label}]`
+    if (A.label && B.label) this._label = `[${A.label}${B.label}]`
     if (!temp) this.parentFigure.svg.appendChild(this.g)
 
     // Les styles ne doivent être appliqués qu'une fois le groupe créé
@@ -45,13 +46,13 @@ export class Segment extends Line {
     this.notifyAllDependencies()
   }
 
-  addDependency (dependency) {
+  addDependency (dependency: Element2D | Measure) {
     this.dependencies.push(dependency)
   }
 
   get latex () {
     if (!this.isVisible) return ''
-    let latex = `\n\n\t% ${this.label ?? 'Segment'}`
+    let latex = `\n\n\t% ${this._label ?? 'Segment'}`
     latex += `\n \t \\draw${this.tikzOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
     return latex
   }

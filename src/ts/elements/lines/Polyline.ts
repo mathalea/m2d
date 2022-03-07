@@ -13,9 +13,8 @@ import { Point } from '../points/Point'
 export class Polyline extends Element2D {
     points: Point[]
     constructor (...points: Point[]) {
-      super()
+      super(points[0].parentFigure)
       this.points = points
-      this.parentFigure = points[0].parentFigure
       this.g = document.createElementNS('http://www.w3.org/2000/svg', 'polyline')
       this.g.setAttribute('points', `${listeXY(this.points)}`)
       this.g.setAttribute('fill', 'none')

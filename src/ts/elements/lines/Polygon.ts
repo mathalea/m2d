@@ -7,7 +7,6 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
-import { Figure } from '../../Figure'
 import { Barycenter } from '../points/Barycenter'
 import { Element2D } from '../Element2D'
 import { Point, PointStyle } from '../points/Point'
@@ -21,12 +20,11 @@ export class Polygon extends Element2D {
   barycenter: Point
   labels: TextByPoint[]
   label: string
-    parentFigure: Figure
     private _style: PointStyle
     constructor (...points: Point[]) {
-      super()
-      this.parentFigure = points[0].parentFigure
+      super(points[0].parentFigure)
       this.points = points
+      this._style = ''
       this.fill = 'none'
       this.opacity = 1
       this.labels = []

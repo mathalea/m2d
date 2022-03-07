@@ -15,12 +15,15 @@ export class TextByPosition extends Element2D {
     private _y: number
     private _text: string
     private _anchor: 'start' | 'middle' | 'end'
-    snapToGrid: boolean
     constructor (figure: Figure, x: number, y: number, text: string, { anchor = 'middle', temp = false, draggable = true, color = 'black' }: {anchor?: 'start' | 'middle' | 'end', temp?: boolean, draggable?: boolean, color?: string} = {}) {
-      super()
-      this.parentFigure = figure
+      super(figure)
       this.anchor = anchor
       this.g = document.createElementNS('http://www.w3.org/2000/svg', 'text')
+      // ToFix est-ce bien nécessaire d'initialiser ainsi ces paramètres ?
+      this._x = x
+      this._y = y
+      this._text = ''
+      this._anchor = anchor
       this.x = x
       this.y = y
       this.text = text ?? ''

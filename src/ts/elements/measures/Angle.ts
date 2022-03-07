@@ -8,7 +8,6 @@
  */
 
 import { rotationCoord } from '../../calculus/transformation'
-import { Figure } from '../../Figure'
 import { Point } from '../points/Point'
 import { PointByRotation } from '../points/PointByRotation'
 import { Measure } from './Measure'
@@ -17,7 +16,6 @@ export class Angle extends Measure {
     A: Point
     O: Point
     B: Point
-    parentFigure: Figure
     valueNonOriented: number
     constructor (A: Point, O: Point, B: Point|number) {
       super(O.parentFigure)
@@ -36,7 +34,6 @@ export class Angle extends Measure {
       } else {
         throw new Error('Le troisième paramètre doit être un point ou un nombre.')
       }
-      this.parentFigure = O.parentFigure
       this.O = O
       this.A = A
       this.valueNonOriented = angle(this.A, this.O, this.B)

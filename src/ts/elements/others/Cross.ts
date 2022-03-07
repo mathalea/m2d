@@ -16,10 +16,8 @@ export class Cross extends Element2D {
     size: number
     segment1: SVGLineElement
   segment2: SVGLineElement
-  label: string
   constructor (svgContainer: Figure, x: number, y: number, { color = 'blue', size = 0.15, thickness = 2 }: {color?: string, size?: number, thickness?: number} = {}) {
-    super()
-    this.parentFigure = svgContainer
+    super(svgContainer)
     this.x = x
     this.y = y
     this.size = size
@@ -57,7 +55,7 @@ export class Cross extends Element2D {
 
   get latex () {
     if (!this.isVisible) return ''
-    let tex = `\n\n\t % Point ${this.label ?? ''}`
+    let tex = `\n\n\t % Point ${this._label ?? ''}`
     tex += `\n \t \\draw${this.tikzOptions} (${this.x - this.size}, ${this.y + this.size}) -- (${this.x + this.size}, ${this.y - this.size});`
     tex += `\n \t \\draw${this.tikzOptions} (${this.x - this.size}, ${this.y - this.size}) -- (${this.x + this.size}, ${this.y + this.size});`
     return tex

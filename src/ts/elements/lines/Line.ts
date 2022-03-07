@@ -25,20 +25,21 @@ export class Line extends Element2D {
   x2: number
   y2: number // Coordonnées de l'extrémité la plus à droite
   type: LineType
-  label: string
+  _label: string
   _style: string
   temp: boolean
   constructor (A: Point, B: Point, { lineType: type = 'Line', color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
-    super()
-    this.parentFigure = A.parentFigure
+    super(A.parentFigure)
     this.A = A
     this.B = B
     this.type = type
+    this._style = ''
+    this._label = (A.label.length > 0 && B.label.length > 0) ? `(${A.label + B.label})` : ''
 
     if (this.type === 'Line') {
-      if (A.isOnFigure) {
+      if (A.isOnFigure()) {
         ;[this.x1, this.y1, this.x2, this.y2] = getCoordsOut(A, B)
-      } else if (B.isOnFigure) {
+      } else if (B.isOnFigure()) {
         ;[this.x1, this.y1, this.x2, this.y2] = getCoordsOut(B, A)
       } else {
         ;[this.x1, this.y1, this.x2, this.y2] = [A.x, A.y, B.x, B.y]
@@ -86,7 +87,7 @@ export class Line extends Element2D {
 
   get latex () {
     if (!this.isVisible) return ''
-    let latex = `\n\n\t% ${this.label ?? 'Droite'}`
+    let latex = `\n\n\t% ${this._label ?? 'Droite'}`
     latex += `\n \t \\draw${this.tikzOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
     return latex
   }

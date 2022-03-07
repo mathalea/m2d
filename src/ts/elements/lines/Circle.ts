@@ -19,8 +19,7 @@ export class Circle extends Element2D {
   pointOnCircle: Point | null // Point qui définit le cercle
   private _radius: number
   constructor (center: Point, arg2: number | Point, { color = 'black', thickness = 1, fill = 'none', temp = false, dashed = false }: OptionsGraphiques = {}) {
-    super()
-    this.parentFigure = center.parentFigure
+    super(center.parentFigure)
     this.pointOnCircle = arg2 instanceof Point ? arg2 : null
     this.center = center
     this.temp = temp
@@ -34,6 +33,7 @@ export class Circle extends Element2D {
     this.g = circle
     if (!this.temp) this.parentFigure.svg.appendChild(this.g)
     this.M = new Point(this.parentFigure, 100, 100, { style: '', temp: true }) // Point temporaire qui sera placé quand on connaitra le rayon
+    this._radius = 0
     this.radius = (typeof arg2 === 'number') ? arg2 : this.radius = distance(center, arg2)
     this.M.moveTo(center.x + this.radius, center.y)
     this.fill = fill

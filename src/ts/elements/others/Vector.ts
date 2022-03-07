@@ -14,14 +14,12 @@ import { Point } from '../points/Point'
 export class Vector extends Element2D {
   private _x: number
   private _y: number
-  parentFigure: Figure
 
-  constructor (svgContainer: Figure, arg1: number | Point, arg2: number | Point) {
-    super()
+  constructor (figure: Figure, arg1: number | Point, arg2: number | Point) {
+    super(figure)
     if (typeof arg1 === 'number' && typeof arg2 === 'number') {
       this._x = arg1
       this._y = arg2
-      this.parentFigure = svgContainer
     } else if (arg1 instanceof Point && arg2 instanceof Point) {
       this._x = arg2.x - arg1.x
       this._y = arg2.y - arg1.y

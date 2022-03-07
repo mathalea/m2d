@@ -17,10 +17,9 @@ export class Barycenter extends Point {
       let Cx: number
       let Cy: number
       super(points[0].parentFigure, 0, 0, { style, size, thickness, color, draggable, temp })
-      this.parentFigure = points[0].parentFigure
       this.points = points
       Cx = 0
-      Cx = 0
+      Cy = 0
       for (const point of points) {
         point.addDependency(this)
         Cx += point.x

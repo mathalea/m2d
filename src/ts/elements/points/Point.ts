@@ -21,22 +21,19 @@ export class Point extends Element2D {
   x: number
   y: number
   private _style: PointStyle
-  private _label: string
   protected _size: number // Pour la taille de la croix et utilisé dans changeStyle
-  g: SVGElement
   mark: Element2D
   labelElement: Element2D
-  parentFigure: Figure
   draggable: true | false | Circle | Segment
   temp: boolean // Pour les points qui ne servent qu'à faire des calculs
   snapToGrid: boolean
   // On définit un point avec ses deux coordonnées
-  constructor (svgContainer: Figure, x: number, y: number, { label, style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false, snapToGrid = false }: PointOptions = {}) {
-    super()
+  constructor (figure: Figure, x: number, y: number, { label, style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false, snapToGrid = false }: PointOptions = {}) {
+    super(figure)
     this.x = x
     this.y = y
     this.group = []
-    this.parentFigure = svgContainer
+    this._style = style
     this.thickness = thickness
     this.temp = temp
     this._size = size
@@ -107,7 +104,7 @@ export class Point extends Element2D {
    * Fonction qui dessine la marque du point
    * @param style 'x' | 'o' | ''
    */
-  private changeStyle (style) {
+  private changeStyle (style: 'x' | 'o' | '') {
     if (this.parentFigure.set.has(this.mark)) this.parentFigure.set.delete(this.mark)
     if (style === '') {
       this.g.remove()

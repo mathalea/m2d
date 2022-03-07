@@ -23,8 +23,8 @@ export type Coords = {
  * Classe parente de tous les éléments de géométrie
  */
 export abstract class Element2D {
-  draggable: any
   parentFigure: Figure
+  draggable: any
   // Un élément de géométrie peut être composé de plusieurs autres éléments de géométrie (plusieurs segments pour marquer un point ou coder un angle par exemple)
   group: Element2D[]
   g: SVGElement
@@ -35,14 +35,22 @@ export abstract class Element2D {
   private _opacity: number
   private _fillOpacity: number
   private _dashed: boolean
-  label: string
-  protected isVisible: boolean
+  _label: string
+  isVisible: boolean
 
-  constructor () {
+  constructor (parentFigure: Figure) {
+    this.parentFigure = parentFigure
     this.group = []
     this.dependencies = []
     this.g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
     this.isVisible = true
+    this._color = 'black'
+    this._fill = 'none'
+    this._thickness = 2
+    this._opacity = 1
+    this._fillOpacity = 1
+    this._dashed = false
+    this._label = ''
   }
 
   /**

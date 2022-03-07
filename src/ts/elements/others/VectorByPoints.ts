@@ -7,7 +7,6 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
-import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
 import { Point } from '../points/Point'
 import { Vector } from './Vector'
@@ -15,13 +14,11 @@ import { Vector } from './Vector'
 export class VectorByPoints extends Element2D {
   origin: Point // ToFix ? arg1 ou Point(0,0)
   end: Point // ToFix ? arg2 ou Point(arg1,arg2)
-  parentFigure: Figure
     x: number
     y: number
     constructor (arg1: Point, arg2: Point) {
-      super()
+      super(arg1.parentFigure)
       if (arg1 instanceof Point && arg2 instanceof Point) {
-        this.parentFigure = arg1.parentFigure
         this.origin = arg1
         this.end = arg2
         this.x = arg2.x - arg1.x

@@ -23,16 +23,15 @@ export class Arc extends Element2D {
   angle: number | Angle
   horiz: Coords
   constructor (O: Point, A: Point, angle: number | Angle, { color = 'black', thickness = 1, dashed = false, fill = 'none' }: OptionsGraphiques = {}) {
-    super()
+    super(O.parentFigure)
     this.center = O
     this.point = A
     this.angle = angle
-    this.parentFigure = O.parentFigure
     this.parentFigure.set.add(this)
     const angleMeasure = (typeof angle === 'number') ? angle : angle.value
     const B = rotationCoord(A, O, angleMeasure)
     this.point2 = B
-    this.label = (O.label ?? '') + (A.label ?? '') + ' ' + angleMeasure.toString() + '°'
+    this._label = (O.label ?? '') + (A.label ?? '') + ' ' + angleMeasure.toString() + '°'
     this.horiz = { x: this.center.x + 1, y: this.center.y }
     const radius = this.parentFigure.xToSx(distance(O, A))
     const [large, sweep] = getLargeSweep(angleMeasure)
@@ -67,13 +66,13 @@ export class Arc extends Element2D {
     const radius = distance(this.center, this.point)
     const azimut = angleOriented(this.horiz, this.center, this.point)
     const anglefin = azimut + angleMeasure
-    let latex = `\n\n\t% Arc ${this.label}`
+    let latex = `\n\n\t% Arc ${this._label}`
     latex += `\n\t\\draw${this.tikzOptions} (${this.point.x},${this.point.y}) arc (${azimut}:${anglefin}:${radius}) ;`
     return latex
   }
 }
 
-function getLargeSweep (angle) {
+function getLargeSweep (angle: number) {
   let large: 0 | 1
   let sweep: 0 | 1
   if (angle > 180) {

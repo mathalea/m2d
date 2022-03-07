@@ -19,7 +19,6 @@ export class Cursor extends Element2D {
   tab: Point
   origin: Point
   length: number
-parentFigure: Figure
 line: Segment
 min: number
 max: number
@@ -28,7 +27,7 @@ algebraic: Algebraic
 display: DisplayMeasure
 
 constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, step = 0.1, length = 2, value = 0 }: {min?: number, max?:number, step?:number, length?:number, value?:number}) {
-  super()
+  super(svgContainer)
   const factor = Math.round(length / step)
   if (!Number.isInteger(length / step)) {
     length = factor * step

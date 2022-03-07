@@ -22,6 +22,7 @@ import { actionNewPoint } from './pointerAction/newPoint'
 import { actionNewSegment } from './pointerAction/newSegment'
 import { actionSetOptions } from './pointerAction/setOptions'
 import { actionNewPerpendicular } from './pointerAction/newPerpendicular'
+import { actionNewLine } from './pointerAction/newLine'
 
 export class Figure {
   width: number
@@ -42,9 +43,9 @@ export class Figure {
   svg: SVGElement
   pointerX: number | null
   pointerY: number | null
-  pointerAction: 'drag' | 'newPoint' | 'newSegment' | 'newPerpendicular' | 'setColor'
+  pointerAction: string
   pointerSetOptions: OptionsGraphiques
-  messageElement: TextByPosition
+  messageElement: TextByPosition | null
   constructor ({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true, dx = 1, dy = 1 }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean, dx?: number, dy?: number } = {}) {
     this.width = width
     this.height = height
@@ -64,6 +65,7 @@ export class Figure {
     this.pointerSetOptions = { color: 'black', thickness: 3 }
     this.setInDrag = new Set()
     this.isDraging = false
+    this.messageElement = null
 
     this.pointerX = null
     this.pointerY = null
@@ -131,10 +133,11 @@ export class Figure {
     // On créé des listenners et on change leur attitude suivant l'action en cours sauvegardée dans this.pointerAction
     this.svg.addEventListener('pointerdown', (event) => {
       const [pointerX, pointerY] = this.getPointerCoord(event)
-      if (this.pointerAction === 'newPoint') actionNewPoint(this, pointerX, pointerY)
+      if (this.pointerAction === 'pointLibre') actionNewPoint(this, pointerX, pointerY)
       else if (this.pointerAction === 'drag') actionStartDrag(this, pointerX, pointerY)
-      else if (this.pointerAction === 'newSegment') actionNewSegment(this, pointerX, pointerY)
-      else if (this.pointerAction === 'newPerpendicular') actionNewPerpendicular(this, pointerX, pointerY)
+      else if (this.pointerAction === 'segment') actionNewSegment(this, pointerX, pointerY)
+      else if (this.pointerAction === 'droite') actionNewLine(this, pointerX, pointerY)
+      else if (this.pointerAction === 'droitePerpendiculaire') actionNewPerpendicular(this, pointerX, pointerY)
       else if (this.pointerAction === 'setColor') actionSetOptions(this, pointerX, pointerY, this.pointerSetOptions)
     })
 
