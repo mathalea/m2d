@@ -22,6 +22,7 @@ export class Arc extends Element2D {
   point2: Coords
   angle: number | Angle
   horiz: Coords
+  private _label: string
   constructor (O: Point, A: Point, angle: number | Angle, { color = 'black', thickness = 1, dashed = false, fill = 'none' }: OptionsGraphiques = {}) {
     super(O.parentFigure)
     this.center = O

@@ -19,6 +19,7 @@ export class LineParallelByPoint extends LineByPointVector {
     const v = new VectorDirector(L)
     super(A, v, { color, thickness })
     this.line = L
+    this.A = A
     L.addDependency(this)
   }
 }

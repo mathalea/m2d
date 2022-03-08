@@ -30,11 +30,11 @@ export function distance (A: Point | Coords, B: Point | Coords): number {
 * @author Rémi Angot
 * @Source https://gist.github.com/pc035860/6546661
 */
-export function randint (min, max, listeAEviter = []) {
+export function randint (min: number, max: number, listeAEviter: number[] | number = []) {
   // Source : https://gist.github.com/pc035860/6546661
   const range = max - min
   let rand = Math.floor(Math.random() * (range + 1))
-  if (Number.isInteger(listeAEviter)) {
+  if (typeof listeAEviter === 'number') {
     listeAEviter = [listeAEviter]
   }
   if (listeAEviter.length > 0) {

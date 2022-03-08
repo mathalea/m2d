@@ -10,6 +10,8 @@
 // Initialisation
 
 import { Polygon } from './elements/lines/Polygon'
+import { Angle } from './elements/measures/Angle'
+import { DisplayMeasure } from './elements/texts/DisplayMeasure'
 import { Figure } from './Figure'
 import { addButtons } from './gui/addButtons'
 
@@ -40,6 +42,8 @@ const p = new Polygon(A, B, C)
 p.thickness = 2
 A.label = "A'"
 console.log(A.label)
+const angle = new Angle(A, B, C)
+const dis = new DisplayMeasure(-3, 0, angle)
 
 // Options
 
