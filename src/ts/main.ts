@@ -38,6 +38,7 @@ const B = figure.point(3, 0)
 const C = figure.point(2, 5)
 const p = new Polygon(A, B, C)
 p.thickness = 2
+A.label = "A'"
 console.log(A.label)
 
 // Options
