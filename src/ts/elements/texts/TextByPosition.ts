@@ -15,7 +15,8 @@ export class TextByPosition extends Element2D {
     private _y: number
     private _text: string
     private _anchor: 'start' | 'middle' | 'end'
-    constructor (figure: Figure, x: number, y: number, text: string, { anchor = 'middle', temp = false, draggable = true, color = 'black' }: {anchor?: 'start' | 'middle' | 'end', temp?: boolean, draggable?: boolean, color?: string} = {}) {
+    snapToGrid: boolean
+    constructor (figure: Figure, x: number, y: number, text: string, { anchor = 'middle', temp = false, draggable = true, color = 'black', snapToGrid = false }: {anchor?: 'start' | 'middle' | 'end', temp?: boolean, draggable?: boolean, color?: string, snapToGrid?: boolean} = {}) {
       super(figure)
       this.anchor = anchor
       this.g = document.createElementNS('http://www.w3.org/2000/svg', 'text')
@@ -29,6 +30,7 @@ export class TextByPosition extends Element2D {
       this.text = text ?? ''
       this.text = text.replace(/\d+\.\d+/g, (number: string) => (Math.round(10 * parseFloat(number)) / 10).toString())
       this.draggable = draggable
+      this.snapToGrid = snapToGrid
       this.g.setAttribute('stroke', 'black')
       this.g.style.overflow = 'visible'
       this.g.style.lineHeight = '0'

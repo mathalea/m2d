@@ -28,6 +28,7 @@ export class PointOnLineAtD extends Point {
     this.y = M.y
     this.line = L
     this.d = d
+    this.length = length
     if (label !== undefined) this.label = label
     this.line.addDependency(this)
   }

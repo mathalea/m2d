@@ -20,6 +20,7 @@ export class Polygon extends Element2D {
   barycenter: Point
   labels: TextByPoint[]
   label: string
+  // ToFix il manque une méthode color mais comment savoir que l'on clique sur un polygone (il faut créer des segments virtuels ?)
     private _style: PointStyle
     constructor (...points: Point[]) {
       super(points[0].parentFigure)

@@ -15,7 +15,6 @@ import { Line } from '../lines/Line'
 export class PointIntersectionLL extends Point {
   L1: Segment
   L2: Segment
-  n: 1 | 2
   constructor (L1: Line, L2: Line, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
     const [x, y] = intersectionLLCoord(L1, L2)
     super(L1.parentFigure, x, y, { style, size, thickness, color, draggable, temp })

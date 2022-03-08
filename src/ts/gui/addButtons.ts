@@ -1,6 +1,7 @@
 import { Point } from '../elements/points/Point'
+import { Figure } from '../Figure'
 
-export function addButtons (figure) {
+export function addButtons (figure: Figure) {
   const body = document.querySelector('body')
   const btnDrag = document.createElement('button')
   btnDrag.innerHTML = 'Drag'

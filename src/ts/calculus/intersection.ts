@@ -32,7 +32,7 @@ export function intersectionLCCoord (D: Line, C: Circle, n: 1 | 2 = 1) {
     xi = -c / a
     xiPrime = xi
     Delta = 4 * (-xO * xO - (c * c) / (a * a) - (2 * xO * c) / a + r * r)
-    if (Delta < 0) return [undefined, undefined]
+    if (Delta < 0) return [D.parentFigure.xMax + 10, D.parentFigure.yMax + 10]
     else if (Math.abs(Delta) < 10 ** (-6)) {
       // un seul point d'intersection
       yi = yO + Math.sqrt(Delta) / 2
@@ -47,7 +47,7 @@ export function intersectionLCCoord (D: Line, C: Circle, n: 1 | 2 = 1) {
     yi = -c / b
     yiPrime = yi
     Delta = 4 * (-yO * yO - (c * c) / (b * b) - (2 * yO * c) / b + r * r)
-    if (Delta < 0) return [undefined, undefined]
+    if (Delta < 0) return [D.parentFigure.xMax + 10, D.parentFigure.yMax + 10]
     else if (Math.abs(Delta) < 10 ** (-6)) {
       // un seul point d'intersection
       xi = xO + Math.sqrt(Delta) / 2
@@ -63,7 +63,7 @@ export function intersectionLCCoord (D: Line, C: Circle, n: 1 | 2 = 1) {
       4 *
       (1 + (a / b) ** 2) *
       (xO * xO + yO * yO + (c / b) ** 2 + (2 * yO * c) / b - r * r)
-    if (Delta < 0) return [undefined, undefined]
+    if (Delta < 0) return [D.parentFigure.xMax + 10, D.parentFigure.yMax + 10]
     else if (Math.abs(Delta) < 10 ** (-6)) {
       // un seul point d'intersection
       delta = Math.sqrt(Delta)
@@ -107,7 +107,7 @@ export function intersectionSCCoord (L: Segment, C: Circle) {
     } else {
       return intersectionLCCoord(L, C, 2)
     }
-  } else return [undefined, undefined]
+  } else return [L.parentFigure.xMax + 10, L.parentFigure.yMax + 10]
 }
 
 /**
@@ -130,10 +130,10 @@ export function intersectionCCCoord (C1: Circle, C2: Circle, n: 1 | 2 = 1) {
   const dy = y1 - y0
   const d = Math.sqrt(dy * dy + dx * dx)
   if (d > r0 + r1) {
-    return [undefined, undefined]
+    return [C1.parentFigure.xMax + 10, C1.parentFigure.yMax + 10]
   }
   if (d < Math.abs(r0 - r1)) {
-    return [undefined, undefined]
+    return [C1.parentFigure.xMax + 10, C1.parentFigure.yMax + 10]
   }
   const a = (r0 * r0 - r1 * r1 + d * d) / (2.0 * d)
   const x2 = x0 + (dx * a) / d
@@ -168,12 +168,12 @@ export function intersectionCCCoord (C1: Circle, C2: Circle, n: 1 | 2 = 1) {
  * @return {Point} Point 'M' d'intersection de d1 et de d2
  * @author Jean-Claude Lhote
  */
-export function intersectionLLCoord (d: Line, f: Line) {
-  const [da, db, dc] = d.equation
-  const [fa, fb, fc] = f.equation
+export function intersectionLLCoord (L1: Line, L2: Line) {
+  const [da, db, dc] = L1.equation
+  const [fa, fb, fc] = L2.equation
   let x: number, y: number
   if (fa * db - fb * da === 0) {
-    return [undefined, undefined]
+    return [L1.parentFigure.xMax + 10, L1.parentFigure.yMax + 10]
   } else {
     y = (fc * da - dc * fa) / (fa * db - fb * da)
   }
