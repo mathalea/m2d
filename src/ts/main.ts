@@ -9,7 +9,6 @@
 
 // Initialisation
 
-import { Circle } from './elements/lines/Circle'
 import { Polygon } from './elements/lines/Polygon'
 import { Figure } from './Figure'
 import { addButtons } from './gui/addButtons'
@@ -34,11 +33,12 @@ figure.svg.style.border = 'solid'
 
 // Ma figure
 
-const A = figure.point(0, 0)
+const A = figure.point(0, 0, { label: 'A', labelDx: 5, labelDy: -2 })
 const B = figure.point(3, 0)
 const C = figure.point(2, 5)
 const p = new Polygon(A, B, C)
 p.thickness = 2
+console.log(A.label)
 
 // Options
 

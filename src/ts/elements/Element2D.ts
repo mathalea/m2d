@@ -29,13 +29,13 @@ export abstract class Element2D {
   group: Element2D[]
   g: SVGElement
   dependencies: (Element2D | Measure)[]
+  // Ces paramètres privés sont mis à jour par les getters équivalents sans le _
   private _color: string
   private _fill: string
   private _thickness: number
   private _opacity: number
   private _fillOpacity: number
   private _dashed: boolean
-  _label: string
   isVisible: boolean
 
   constructor (parentFigure: Figure) {
@@ -50,7 +50,6 @@ export abstract class Element2D {
     this._opacity = 1
     this._fillOpacity = 1
     this._dashed = false
-    this._label = ''
   }
 
   /**

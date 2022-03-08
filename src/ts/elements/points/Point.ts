@@ -15,24 +15,29 @@ import { Cross } from '../others/cross'
 import { TextByPoint } from '../texts/TextByPoint'
 
 export type PointStyle = 'x' | 'o' | ''
-export type PointOptions = { label?: string, style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean, snapToGrid?: boolean }
+export type PointOptions = { label?: string, style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean, snapToGrid?: boolean, labelDx?: number, labelDy?: number }
 
 export class Point extends Element2D {
   x: number
   y: number
   private _style: PointStyle
-  protected _size: number // Pour la taille de la croix et utilisé dans changeStyle
-  mark: Element2D
-  labelElement: Element2D
+  private _label: string
+  private _size: number // Pour la taille de la croix et utilisé dans changeStyle
+  mark: Element2D | null
+  labelElement: Element2D | null
+  labelDx: number // Ecart entre le label et le point en abscisse
+  labelDy: number // Ecart entre le label et le point en ordonnées
   draggable: true | false | Circle | Segment
   temp: boolean // Pour les points qui ne servent qu'à faire des calculs
   snapToGrid: boolean
   // On définit un point avec ses deux coordonnées
-  constructor (figure: Figure, x: number, y: number, { label, style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false, snapToGrid = false }: PointOptions = {}) {
+  constructor (figure: Figure, x: number, y: number, { label, style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false, snapToGrid = false, labelDx = -0.3, labelDy = 0.3 }: PointOptions = {}) {
     super(figure)
     this.x = x
     this.y = y
     this.group = []
+    this.mark = null
+    this.labelElement = null
     this._style = style
     this.thickness = thickness
     this.temp = temp
@@ -51,6 +56,9 @@ export class Point extends Element2D {
       this.parentFigure.svg.appendChild(this.g)
       if (this.draggable) this.g.style.cursor = 'move'
     }
+    this._label = label || ''
+    this.labelDx = labelDx
+    this.labelDy = labelDy
     if (label !== undefined) this.label = label
   }
 
@@ -105,7 +113,7 @@ export class Point extends Element2D {
    * @param style 'x' | 'o' | ''
    */
   private changeStyle (style: 'x' | 'o' | '') {
-    if (this.parentFigure.set.has(this.mark)) this.parentFigure.set.delete(this.mark)
+    if (this.mark !== null) this.parentFigure.set.delete(this.mark)
     if (style === '') {
       this.g.remove()
     }
@@ -131,12 +139,12 @@ export class Point extends Element2D {
 
   hide (): void {
     super.hide()
-    this.labelElement.hide()
+    if (this.labelElement) this.labelElement.hide()
   }
 
   show (): void {
     super.show()
-    this.labelElement.show()
+    if (this.labelElement) this.labelElement.show()
   }
 
   get label () {
@@ -148,8 +156,8 @@ export class Point extends Element2D {
       this.labelElement.g.remove()
       this.parentFigure.set.delete(this.labelElement)
     }
-    if (label !== '') {
-      this.labelElement = new TextByPoint(this, label, { dx: -0.3, dy: 0.3 })
+    if (this._label) {
+      this.labelElement = new TextByPoint(this, label, { dx: this.labelDx, dy: this.labelDy })
       this.parentFigure.svg.appendChild(this.labelElement.g)
     }
     this._label = label

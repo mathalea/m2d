@@ -42,8 +42,12 @@ export class Polygon extends Element2D {
       for (const point of points) {
         this.labelsPoints.push(new PointOnLineAtD(new Segment(point, this.barycenter, { temp: true }), -0.5, { temp: true, style: '' }))
         const name = point.label ?? ''
-        point.label = ''
-        this.labels.push(new TextByPoint(this.labelsPoints[this.labelsPoints.length - 1], name))
+        // Le label du point est effacé pour être rattaché à un nouveau point qui dépend du barycentre
+        if (point.labelElement) {
+          point.labelElement.g.remove()
+          point.parentFigure.set.delete(point.labelElement)
+        }
+        if (name) point.labelElement = (new TextByPoint(this.labelsPoints[this.labelsPoints.length - 1], name))
         point.addDependency(this)
       }
 
@@ -70,8 +74,6 @@ export class Polygon extends Element2D {
     get latex (): string {
       if (!this.isVisible) return ''
       let latex = `\n\n\t% Polygone ${this.label}`
-      console.log(this.points)
-      console.log(this.points.reduce((name, currentLabel) => name + currentLabel.label, ''))
       latex += `\n\t\\draw${this.tikzOptions} ${listeXYLatex(this.points)};`
       return latex
     }
