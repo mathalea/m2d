@@ -36,7 +36,7 @@ export class MarkAngle extends Element2D {
       const B2 = new PointByRotation(A2, O, angle, { temp: true })
       const O2 = new PointBySimilitude(A2, O, 1 / racine2Sur2, this.angleBisector, { temp: true })
       const square = new Polyline(A2, O2, B2)
-      if (Math.abs(angle.value - 90) < 0.2) square.show()
+      if (Math.abs(angle.value - 90) < 0.4) square.show()
       this.square = square
       this.group.push(square, arc)
       this.thickness = thickness
@@ -47,7 +47,7 @@ export class MarkAngle extends Element2D {
 
     update () {
       console.log(this.angle.value)
-      if (Math.abs(Math.abs(this.angle.value) - 90) < 0.2) {
+      if (Math.abs(Math.abs(this.angle.value) - 90) < 0.4) {
         this.arc.hide()
         this.square.show()
       } else {
