@@ -1,3 +1,8 @@
+import { PointByRotation } from './../points/PointByRotation'
+import { CalculDynamic } from './../measures/CalculDynamic'
+import { Distance } from './../measures/Distance'
+import { PointBySimilitude } from './../points/PointBySimilitude'
+import { PointByHomothetie } from './../points/PointByHomothetie'
 import { Element2D } from '../Element2D'
 import { Arc } from '../lines/Arc'
 import { ArcBy3Points } from '../lines/ArcBy3PointsAndRadius'
@@ -9,7 +14,8 @@ import { Measure } from '../measures/Measure'
 import { Point } from '../points/Point'
 import { PointByProjection } from '../points/PointByProjection'
 import { PointOnLineAtD } from '../points/PointOnLineAtD'
-
+import { distance } from '../../calculus/random'
+const racine2Sur2 = 0.707106
 export class MarkAngle extends Element2D {
     angle: Measure
     arc: Arc
@@ -17,18 +23,17 @@ export class MarkAngle extends Element2D {
     constructor (A: Point, O: Point, B: Point, { size = 1, color = 'black', thickness = 1, dashed = false }: {size?: number, color?: string, thickness?: number, dashed?: boolean} = {}) {
       super(A.parentFigure)
       const angle = new Angle(A, O, B)
-      const arc = new ArcBy3Points(A, O, B)
-      if (Math.abs(angle.value - 90) < 0.2) arc.hide()
+      const arc = new ArcBy3Points(A, O, B, { radius: 1 })
+      if (Math.abs(angle.value - 90) < 0.1) arc.hide()
       this.arc = arc
       this.angle = angle
       this.angle.addDependency(this)
       const sOA = new Segment(O, A, { temp: true })
-      const sOB = new Segment(O, B, { temp: true })
-      const bisector = new AngleBisector(A, O, B, { temp: true })
-      const O2 = new PointOnLineAtD(bisector, size, { temp: true })
-      const A2 = new PointByProjection(O2, sOA, { temp: true })
-      const B2 = new PointByProjection(O2, sOB, { temp: true })
+      const A2 = new PointOnLineAtD(sOA, size * racine2Sur2, { temp: true })
+      const B2 = new PointByRotation(A2, O, angle.value, { temp: true })
+      const O2 = new PointBySimilitude(A2, O, 1 / racine2Sur2, angle.value / 2, { temp: true })
       const square = new Polyline(A2, O2, B2)
+      if (Math.abs(angle.value - 90) < 0.1) square.show()
       this.square = square
       this.group.push(square, arc)
       this.thickness = thickness
@@ -37,6 +42,7 @@ export class MarkAngle extends Element2D {
     }
 
     update () {
+      console.log(this.angle.value)
       if (Math.abs(Math.abs(this.angle.value) - 90) < 1) {
         this.arc.hide()
         this.square.show()
