@@ -1,3 +1,4 @@
+import { AngleBisector, AngleBisector, AngleBisector } from './../lines/AngleBisector'
 import { PointByRotation } from './../points/PointByRotation'
 import { CalculDynamic } from './../measures/CalculDynamic'
 import { Distance } from './../measures/Distance'
@@ -20,6 +21,7 @@ export class MarkAngle extends Element2D {
     angle: Measure
     arc: Arc
     square: Polyline
+    angleBisector: Measure
     constructor (A: Point, O: Point, B: Point, { size = 1, color = 'black', thickness = 1, dashed = false }: {size?: number, color?: string, thickness?: number, dashed?: boolean} = {}) {
       super(A.parentFigure)
       const angle = new Angle(A, O, B)
@@ -27,11 +29,12 @@ export class MarkAngle extends Element2D {
       if (Math.abs(angle.value - 90) < 0.1) arc.hide()
       this.arc = arc
       this.angle = angle
+      this.angleBisector = new CalculDynamic((a: Measure[]) => a[0].value / 2, [angle])
       this.angle.addDependency(this)
       const sOA = new Segment(O, A, { temp: true })
       const A2 = new PointOnLineAtD(sOA, size * racine2Sur2, { temp: true })
-      const B2 = new PointByRotation(A2, O, angle.value, { temp: true })
-      const O2 = new PointBySimilitude(A2, O, 1 / racine2Sur2, angle.value / 2, { temp: true })
+      const B2 = new PointByRotation(A2, O, angle, { temp: true })
+      const O2 = new PointBySimilitude(A2, O, 1 / racine2Sur2, this.angleBisector, { temp: true })
       const square = new Polyline(A2, O2, B2)
       if (Math.abs(angle.value - 90) < 0.1) square.show()
       this.square = square
