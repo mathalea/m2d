@@ -1,3 +1,4 @@
+import { MarkAngle } from './elements/marks/MarkAngle'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -35,14 +36,16 @@ figure.svg.style.border = 'solid'
 
 // Ma figure
 
-const A = figure.point(0, 0, { label: 'A', labelDx: 5, labelDy: -2 })
-const B = figure.point(3, 0)
-const C = figure.point(2, 5)
+const A = figure.point(0, 0, { label: 'A', labelDx: 0.5, labelDy: -0.5 })
+const B = figure.point(3, 0, { label: 'B', labelDx: 0.5, labelDy: -0.5 })
+const C = figure.point(3, 5, { label: 'C', labelDx: 0.5, labelDy: -0.5 })
 const sAB = new Segment(A, B)
+const sBC = new Segment(B, C)
 sAB.color = 'orange'
-console.log(A.label)
+sBC.color = 'pink'
 const angle = new Angle(A, B, C)
 const dis = new DisplayMeasure(-3, 0, angle)
+const marque = new MarkAngle(A, B, C)
 figure.pointerAction = 'setColor'
 
 // Options
