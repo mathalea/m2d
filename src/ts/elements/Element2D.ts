@@ -9,7 +9,7 @@
 
 import { Figure } from '../Figure'
 import { Angle } from './measures/Angle'
-import { CalculDynamic } from './measures/Calculdynamic'
+import { CalculDynamic } from './measures/CalculDynamic'
 import { Distance } from './measures/Distance'
 import { Measure } from './measures/Measure'
 

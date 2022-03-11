@@ -1,3 +1,4 @@
+import { MarkAngle } from './elements/marks/MarkAngle'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *

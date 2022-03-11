@@ -10,7 +10,7 @@
 import { Ray } from './Ray'
 import { SegmentStyle } from './Line'
 import { Angle } from '../measures/Angle'
-import { CalculDynamic } from '../measures/Calculdynamic'
+import { CalculDynamic } from '../measures/CalculDynamic'
 import { Point } from '../points/Point'
 import { PointByRotation } from '../points/PointByRotation'
 

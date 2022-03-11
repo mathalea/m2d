@@ -6,7 +6,6 @@
  * @Author Angot Rémi and Lhote Jean-Claude (contact@coopmaths.fr)
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
-
 import { Coords } from '../elements/Element2D'
 import { Point } from '../elements/points/Point'
 
@@ -43,4 +42,8 @@ export function randint (min: number, max: number, listeAEviter: number[] | numb
     }
   }
   return min + rand
+}
+
+export function arrondi (nombre: number, precision: number = 10) {
+  return (Math.round(nombre * 10 ** precision) / 10 ** precision)
 }
