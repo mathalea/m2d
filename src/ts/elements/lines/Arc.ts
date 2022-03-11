@@ -45,9 +45,9 @@ export class Arc extends Element2D {
     this.thickness = thickness
     this.dashed = dashed
     this.parentFigure.svg.appendChild(this.g)
-    A.addDependency(this)
-    O.addDependency(this)
-    if (angle instanceof Measure) angle.addDependency(this)
+    A.addChild(this)
+    O.addChild(this)
+    if (angle instanceof Measure) angle.addChild(this)
   }
 
   update (): void {

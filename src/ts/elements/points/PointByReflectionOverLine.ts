@@ -31,8 +31,8 @@ export class PointByReflectionOverLine extends Point {
       this.line = line
       this.previous = A
       if (label !== undefined) this.label = label
-      A.addDependency(this)
-      line.addDependency(this)
+      A.addChild(this)
+      line.addChild(this)
     }
 
     update (): void {

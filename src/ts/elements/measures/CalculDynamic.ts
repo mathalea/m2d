@@ -21,12 +21,12 @@ export class CalculDynamic extends Measure {
       this.calcul = calcul
       this.args = args
       for (const arg of args) {
-        arg.addDependency(this)
+        arg.addChild(this)
       }
     }
 
     update () {
       this.value = this.calcul(this.args)
-      this.notifyAllDependencies()
+      this.notifyAllChilds()
     }
 }

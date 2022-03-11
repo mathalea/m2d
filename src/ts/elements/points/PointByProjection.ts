@@ -19,8 +19,8 @@ export class PointByProjection extends Point {
       super(A.parentFigure, x, y, { label, style, size, thickness, color, draggable, temp })
       this.previous = A
       this.line = L
-      A.addDependency(this)
-      L.addDependency(this)
+      A.addChild(this)
+      L.addChild(this)
     }
 
     update (): void {

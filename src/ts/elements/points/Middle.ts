@@ -14,7 +14,7 @@ export class Middle extends Point {
   line: Segment
   constructor (s: Segment, { style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: { style?: '' | 'x' | 'o', size?: number, thickness?: number, color?: string, draggable?: boolean, temp?: boolean } = {}) {
     super(s.parentFigure, (s.A.x + s.B.x) / 2, (s.A.y + s.B.y) / 2, { style, size, thickness, color, draggable, temp })
-    s.addDependency(this)
+    s.addChild(this)
     this.line = s
   }
 

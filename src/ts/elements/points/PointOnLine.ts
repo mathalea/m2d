@@ -28,7 +28,7 @@ export class PointOnLine extends Point {
     this.k = k
     this.length = length
     if (label !== undefined) this.label = label
-    this.line.addDependency(this)
+    this.line.addChild(this)
   }
 
   update () {

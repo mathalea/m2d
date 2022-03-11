@@ -16,16 +16,16 @@ export class Distance extends Measure {
     B: Point
     constructor (A: Point, B: Point) {
       super(A.parentFigure)
-      this.dependencies = []
+      this.childs = []
       this.A = A
       this.B = B
-      A.addDependency(this)
-      B.addDependency(this)
+      A.addChild(this)
+      B.addChild(this)
       this.update()
     }
 
     update () {
       this.value = distance(this.A, this.B)
-      this.notifyAllDependencies()
+      this.notifyAllChilds()
     }
 }

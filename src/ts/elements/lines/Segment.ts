@@ -29,8 +29,8 @@ export class Segment extends Line {
     this.dashed = dashed
 
     // Si une des extrémités se déplace alors on recalcule les coordonnées de line
-    A.addDependency(this)
-    B.addDependency(this)
+    A.addChild(this)
+    B.addChild(this)
   }
 
   update () {
@@ -43,11 +43,11 @@ export class Segment extends Line {
     this.g.setAttribute('y1', `${y1Svg}`)
     this.g.setAttribute('x2', `${x2Svg}`)
     this.g.setAttribute('y2', `${y2Svg}`)
-    this.notifyAllDependencies()
+    this.notifyAllChilds()
   }
 
-  addDependency (dependency: Element2D | Measure) {
-    this.dependencies.push(dependency)
+  addChild (child: Element2D | Measure) {
+    this.childs.push(child)
   }
 
   get latex () {

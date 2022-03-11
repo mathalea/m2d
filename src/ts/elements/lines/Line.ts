@@ -68,8 +68,8 @@ export class Line extends Element2D {
     this.dashed = dashed
     if (!temp) this.parentFigure.svg.appendChild(this.g)
     if (!temp) this.parentFigure.set.add(this)
-    A.addDependency(this)
-    B.addDependency(this)
+    A.addChild(this)
+    B.addChild(this)
   }
 
   update () {
@@ -82,7 +82,7 @@ export class Line extends Element2D {
     this.g.setAttribute('y1', `${y1Svg}`)
     this.g.setAttribute('x2', `${x2Svg}`)
     this.g.setAttribute('y2', `${y2Svg}`)
-    this.notifyAllDependencies()
+    this.notifyAllChilds()
   }
 
   get latex () {

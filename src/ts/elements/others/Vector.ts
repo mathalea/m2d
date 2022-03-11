@@ -37,7 +37,7 @@ export class Vector extends Element2D {
   }
 
   update () {
-    this.notifyAllDependencies()
+    this.notifyAllChilds()
   }
 
   get x () {

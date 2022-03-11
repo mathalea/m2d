@@ -21,7 +21,7 @@ export class Barycenter extends Point {
       Cx = 0
       Cy = 0
       for (const point of points) {
-        point.addDependency(this)
+        point.addChild(this)
         Cx += point.x
         Cy += point.y
       }

@@ -22,9 +22,9 @@ export class PointByHomothetie extends Point {
       this.k = k
       this.previous = A
       if (label !== undefined) this.label = label
-      A.addDependency(this)
-      center.addDependency(this)
-      if (k instanceof Algebraic) k.addDependency(this)
+      A.addChild(this)
+      center.addChild(this)
+      if (k instanceof Algebraic) k.addChild(this)
     }
 
     update (): void {

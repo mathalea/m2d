@@ -19,7 +19,7 @@ export class TextByPoint extends TextByPosition {
     this.A = A
     this._dx = dx
     this._dy = dy
-    A.addDependency(this)
+    A.addChild(this)
   }
 
   /**

@@ -22,7 +22,7 @@ export class Polyline extends Element2D {
       this.parentFigure.svg.appendChild(this.g)
       this.parentFigure.set.add(this)
       for (const point of points) {
-        point.addDependency(this)
+        point.addChild(this)
       }
     }
 

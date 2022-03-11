@@ -23,8 +23,8 @@ export class PointIntersectionLC extends Point {
     this.C = C
     this.n = n
     if (label !== undefined) this.label = label
-    L.addDependency(this)
-    C.addDependency(this)
+    L.addChild(this)
+    C.addChild(this)
   }
 
   update (): void {

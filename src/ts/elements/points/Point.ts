@@ -15,7 +15,7 @@ import { Cross } from '../others/cross'
 import { TextByPoint } from '../texts/TextByPoint'
 
 export type PointStyle = 'x' | 'o' | ''
-export type PointOptions = { label?: string, style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean, snapToGrid?: boolean, labelDx?: number, labelDy?: number }
+export type PointOptions = { label?: string, style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean, snapToGrid?: boolean, labelDx?: number, labelDy?: number, exist?: boolean }
 
 export class Point extends Element2D {
   x: number
@@ -31,7 +31,7 @@ export class Point extends Element2D {
   temp: boolean // Pour les points qui ne servent qu'à faire des calculs
   snapToGrid: boolean
   // On définit un point avec ses deux coordonnées
-  constructor (figure: Figure, x: number, y: number, { label, style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false, snapToGrid = false, labelDx = -0.3, labelDy = 0.3 }: PointOptions = {}) {
+  constructor (figure: Figure, x: number, y: number, { label, style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false, snapToGrid = false, labelDx = -0.3, labelDy = 0.3, exist = true }: PointOptions = {}) {
     super(figure)
     this.x = x
     this.y = y
@@ -41,6 +41,7 @@ export class Point extends Element2D {
     this._style = style
     this.thickness = thickness
     this.temp = temp
+    this.exist = exist
     this._size = size
     // Les points que l'on peut déplacer sont bleus par défaut
     this.color = color || (draggable ? 'blue' : 'black')
@@ -85,8 +86,8 @@ export class Point extends Element2D {
       this.mark.update()
     }
     // ToFix ce console.log est là qu'en phase de développement
-    if (this.dependencies.length > 20) console.log(`Nombre de dépendances élevée pour ${this.label} : ${this.dependencies.length}`)
-    this.notifyAllDependencies()
+    if (this.childs.length > 20) console.log(`Nombre de dépendances élevée pour ${this.label} : ${this.childs.length}`)
+    this.notifyAllChilds()
   }
 
   /**

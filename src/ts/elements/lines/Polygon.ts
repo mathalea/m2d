@@ -49,7 +49,7 @@ export class Polygon extends Element2D {
           point.parentFigure.set.delete(point.labelElement)
         }
         if (name) point.labelElement = (new TextByPoint(this.labelsPoints[this.labelsPoints.length - 1], name))
-        point.addDependency(this)
+        point.addChild(this)
       }
 
       // On supprime les marques des points

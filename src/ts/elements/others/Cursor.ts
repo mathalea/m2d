@@ -43,14 +43,14 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
   this.line = new Segment(M, N)
   this.tab = new PointOnSegment(this.line, { draggable: true, style: '', length: length * (Math.max(Math.min(value, max), min) - min) / (max - min) }) // on s'assure que la valeur est comprise entre min et max.
   this.display = new DisplayMeasure(this.origin.x + this.length + 0.5, this.tab.y, this.algebraic, { precision: 2 })
-  this.tab.addDependency(this.display)
-  this.tab.addDependency(this)
-  this.tab.addDependency(this.algebraic)
+  this.tab.addChild(this.display)
+  this.tab.addChild(this)
+  this.tab.addChild(this.algebraic)
   this.tab.style = 'x'
 }
 
 update () {
   this.algebraic.value = this.min + (this.tab.x - this.origin.x) * (this.max - this.min) / this.length
-  this.notifyAllDependencies()
+  this.notifyAllChilds()
 }
 }

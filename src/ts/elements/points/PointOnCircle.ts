@@ -23,7 +23,7 @@ export class PointOnCircle extends Point {
     this.circle = C
     this.angle = angle
     if (label !== undefined) this.label = label
-    C.addDependency(this)
+    C.addChild(this)
   }
 
   moveTo (x: number, y: number) {

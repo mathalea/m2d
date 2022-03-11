@@ -9,9 +9,10 @@
 
 // Initialisation
 
+import { Circle } from './elements/lines/Circle'
 import { Segment } from './elements/lines/Segment'
-import { Angle } from './elements/measures/Angle'
-import { DisplayMeasure } from './elements/texts/DisplayMeasure'
+import { PerpendicularBisector } from './elements/lines/PerpendicularBisector'
+import { PointIntersectionCC } from './elements/points/PointIntersectionCC'
 import { Figure } from './Figure'
 import { addButtons } from './gui/addButtons'
 
@@ -35,16 +36,14 @@ figure.svg.style.border = 'solid'
 
 // Ma figure
 
-const A = figure.point(0, 0, { label: 'A', labelDx: 5, labelDy: -2 })
+const A = figure.point(0, 0, { label: 'A' })
 const B = figure.point(3, 0)
-const C = figure.point(2, 5)
-const sAB = new Segment(A, B)
-sAB.color = 'orange'
-console.log(A.label)
-const angle = new Angle(A, B, C)
-const dis = new DisplayMeasure(-3, 0, angle)
-figure.pointerAction = 'setColor'
-
+const C1 = new Circle(A, 3)
+const C2 = new Circle(B, 3)
+const M = new PointIntersectionCC(C1, C2)
+const sMB = new Segment(M, B)
+const med = new PerpendicularBisector(sMB)
+med.dashed = true
 // Options
 
 // displayEditor(figure)

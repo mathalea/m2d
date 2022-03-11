@@ -26,7 +26,7 @@ export class Ray extends Line {
     this.g.setAttribute('y1', `${y1Svg}`)
     this.g.setAttribute('x2', `${x2Svg}`)
     this.g.setAttribute('y2', `${y2Svg}`)
-    this.notifyAllDependencies()
+    this.notifyAllChilds()
   }
 }
 function getRayCoordsOut (A: Point, B: Point) {

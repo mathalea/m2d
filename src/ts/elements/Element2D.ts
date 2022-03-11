@@ -28,7 +28,7 @@ export abstract class Element2D {
   // Un élément de géométrie peut être composé de plusieurs autres éléments de géométrie (plusieurs segments pour marquer un point ou coder un angle par exemple)
   group: Element2D[]
   g: SVGElement
-  dependencies: (Element2D | Measure)[]
+  childs: (Element2D | Measure)[]
   // Ces paramètres privés sont mis à jour par les getters équivalents sans le _
   private _color: string
   private _fill: string
@@ -36,12 +36,13 @@ export abstract class Element2D {
   private _opacity: number
   private _fillOpacity: number
   private _dashed: boolean
+  private _exist: boolean
   isVisible: boolean
 
   constructor (parentFigure: Figure) {
     this.parentFigure = parentFigure
     this.group = []
-    this.dependencies = []
+    this.childs = []
     this.g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
     this.isVisible = true
     this._color = 'black'
@@ -50,18 +51,19 @@ export abstract class Element2D {
     this._opacity = 1
     this._fillOpacity = 1
     this._dashed = false
+    this._exist = true
   }
 
   /**
    * Permet d'indiquer au point que sa position dépend d'autres éléments
-   * @param dependency
+   * @param child
    */
-  addDependency (dependency: Element2D | Angle | Distance | CalculDynamic | Measure) {
-    this.dependencies.push(dependency)
+  addChild (child: Element2D | Angle | Distance | CalculDynamic | Measure) {
+    this.childs.push(child)
   }
 
-  notifyAllDependencies () {
-    for (const element of this.dependencies) {
+  notifyAllChilds () {
+    for (const element of this.childs) {
       element.update()
     }
   }
@@ -96,6 +98,19 @@ export abstract class Element2D {
       this.g.setAttribute('visibility', 'visible')
     }
     this.isVisible = true
+  }
+
+  set exist (b) {
+    this._exist = b
+    for (const e of this.childs) {
+      // ToFix est-ce qu'on veut qu'ils s'affichent tous ? Il pourrait y avoir des enfants qui veulent rester caché
+      e.exist = b
+      if (e instanceof Element2D) b ? e.show() : e.hide()
+    }
+  }
+
+  get exist () {
+    return this._exist
   }
 
   get color () {

@@ -24,8 +24,8 @@ export class PointBySimilitude extends Point {
       this.angle = angle
       this.previous = A
       if (label !== undefined) this.label = label
-      A.addDependency(this)
-      center.addDependency(this)
+      A.addChild(this)
+      center.addChild(this)
     }
 
     update (): void {

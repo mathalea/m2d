@@ -23,9 +23,9 @@ export class PointByRotation extends Point {
       this.angle = angle
       this.previous = A
       if (label !== undefined) this.label = label
-      A.addDependency(this)
-      center.addDependency(this)
-      if (angle instanceof Measure) angle.addDependency(this)
+      A.addChild(this)
+      center.addChild(this)
+      if (angle instanceof Measure) angle.addChild(this)
     }
 
     update (): void {

@@ -21,8 +21,8 @@ export class PointIntersectionLL extends Point {
     this.L1 = L1
     this.L2 = L2
     if (label !== undefined) this.label = label
-    L1.addDependency(this)
-    L2.addDependency(this)
+    L1.addChild(this)
+    L2.addChild(this)
     this.x = x
     this.y = y
   }

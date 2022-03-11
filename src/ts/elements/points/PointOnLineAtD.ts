@@ -30,7 +30,7 @@ export class PointOnLineAtD extends Point {
     this.d = d
     this.length = length
     if (label !== undefined) this.label = label
-    this.line.addDependency(this)
+    this.line.addChild(this)
   }
 
   update () {

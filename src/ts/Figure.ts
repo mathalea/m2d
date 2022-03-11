@@ -215,8 +215,8 @@ export class Figure {
       } else {
         M = this.pointIntersectionLC(L, C, 2, options)
       }
-      C.addDependency(M)
-      L.addDependency(M)
+      C.addChild(M)
+      L.addChild(M)
       return M
     }
   }

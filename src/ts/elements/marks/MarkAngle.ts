@@ -21,7 +21,7 @@ export class MarkAngle extends Element2D {
       if (Math.abs(angle.value - 90) < 0.2) arc.hide()
       this.arc = arc
       this.angle = angle
-      this.angle.addDependency(this)
+      this.angle.addChild(this)
       const sOA = new Segment(O, A, { temp: true })
       const sOB = new Segment(O, B, { temp: true })
       const bisector = new AngleBisector(A, O, B, { temp: true })

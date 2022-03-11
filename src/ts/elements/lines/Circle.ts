@@ -43,9 +43,9 @@ export class Circle extends Element2D {
 
     if (arg2 instanceof Point) {
       this.pointOnCircle = arg2
-      center.addDependency(this)
-      arg2.addDependency(this)
-    } else center.addDependency(this)
+      center.addChild(this)
+      arg2.addChild(this)
+    } else center.addChild(this)
   }
 
   /**
@@ -82,7 +82,7 @@ export class Circle extends Element2D {
     if (this.pointOnCircle) {
       this.radius = distance(this.center, this.pointOnCircle)
     }
-    this.notifyAllDependencies()
+    this.notifyAllChilds()
   }
 
   /**

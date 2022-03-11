@@ -13,22 +13,35 @@ import { Element2D } from '../Element2D'
 export abstract class Measure {
     parentFigure: Figure
     value: number
-    dependencies: (Element2D | Measure)[]
+    childs: (Element2D | Measure)[]
+    private _exist: boolean
     constructor (parentFigure: Figure) {
       this.parentFigure = parentFigure
-      this.dependencies = []
+      this.childs = []
       this.value = 0
+      this._exist = true
     }
 
     abstract update ():void
 
-    addDependency (dependency: Element2D | Measure) {
-      this.dependencies.push(dependency)
+    addChild (child: Element2D | Measure) {
+      this.childs.push(child)
     }
 
-    notifyAllDependencies () {
-      for (const element of this.dependencies) {
+    notifyAllChilds () {
+      for (const element of this.childs) {
         element.update()
       }
+    }
+
+    set exist (b) {
+      this._exist = b
+      for (const e of this.childs) {
+        e.exist = b
+      }
+    }
+
+    get exist () {
+      return this._exist
     }
 }

@@ -24,7 +24,7 @@ export class AngleBisector extends Ray {
     const halfAngle = new CalculDynamic((a: Angle[]) => a[0].value / 2, [AOB])
     const M = new PointByRotation(A, O, halfAngle, { temp: true })
     super(O, M, { color, thickness, style, temp })
-    B.addDependency(M)
+    B.addChild(M)
     this.A = A
     this.O = O
     this.B = B

@@ -27,6 +27,6 @@ export class Algebraic extends Measure {
   }
 
   update () {
-    this.notifyAllDependencies()
+    this.notifyAllChilds()
   }
 }

@@ -19,18 +19,18 @@ export class Angle extends Measure {
     valueNonOriented: number
     constructor (A: Point, O: Point, B: Point|number) {
       super(O.parentFigure)
-      this.dependencies = []
+      this.childs = []
       if (typeof B === 'number') {
         this.B = new PointByRotation(A, O, B, { temp: true })
         this.value = B
-        O.addDependency(this)
-        A.addDependency(this)
+        O.addChild(this)
+        A.addChild(this)
       } else if (B instanceof Point) {
         this.B = B
         this.value = angleOriented(A, O, B)
-        O.addDependency(this)
-        A.addDependency(this)
-        B.addDependency(this)
+        O.addChild(this)
+        A.addChild(this)
+        B.addChild(this)
       } else {
         throw new Error('Le troisième paramètre doit être un point ou un nombre.')
       }
@@ -42,7 +42,7 @@ export class Angle extends Measure {
     update () {
       this.value = angleOriented(this.A, this.O, this.B)
       this.valueNonOriented = angle(this.A, this.O, this.B)
-      this.notifyAllDependencies()
+      this.notifyAllChilds()
     }
 }
 

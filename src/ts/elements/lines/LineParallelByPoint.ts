@@ -20,6 +20,6 @@ export class LineParallelByPoint extends LineByPointVector {
     super(A, v, { color, thickness })
     this.line = L
     this.A = A
-    L.addDependency(this)
+    L.addChild(this)
   }
 }

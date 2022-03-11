@@ -24,8 +24,8 @@ export class VectorByPoints extends Element2D {
         this.x = arg2.x - arg1.x
         this.y = arg2.y - arg1.y
         // Si les points servant à définir le vecteur sont temporaires, alors il est inutile de dépendre d'eux.
-        if (!arg1.temp) arg1.addDependency(this)
-        if (!arg2.temp) arg2.addDependency(this)
+        if (!arg1.temp) arg1.addChild(this)
+        if (!arg2.temp) arg2.addChild(this)
       } else {
         throw new Error('Les paramètres doivent être 2 points.')
       }
@@ -42,6 +42,6 @@ export class VectorByPoints extends Element2D {
     update () {
       this.x = this.end.x - this.origin.x
       this.y = this.end.y - this.origin.y
-      this.notifyAllDependencies()
+      this.notifyAllChilds()
     }
 }
