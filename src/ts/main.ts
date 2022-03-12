@@ -1,4 +1,3 @@
-import { MarkAngle } from './elements/marks/MarkAngle'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -10,10 +9,6 @@ import { MarkAngle } from './elements/marks/MarkAngle'
 
 // Initialisation
 
-import { Circle } from './elements/lines/Circle'
-import { Segment } from './elements/lines/Segment'
-import { PerpendicularBisector } from './elements/lines/PerpendicularBisector'
-import { PointIntersectionCC } from './elements/points/PointIntersectionCC'
 import { Figure } from './Figure'
 import { addButtons } from './gui/addButtons'
 
@@ -36,20 +31,6 @@ figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
 // Ma figure
-
-const A = figure.point(-4, 0, { label: 'A' })
-const B = figure.point(3, 0)
-const C1 = new Circle(A, 3)
-const C2 = new Circle(B, 3)
-const M = new PointIntersectionCC(C1, C2)
-const sMB = new Segment(M, B)
-const med = new PerpendicularBisector(sMB)
-med.dashed = true
-const c = new MarkAngle(A, B, M)
-const sAB = new Segment(A, B)
-for (const parent of c.parents) {
-  console.log(parent.exist)
-}
 
 // Options
 

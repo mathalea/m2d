@@ -236,4 +236,23 @@ export abstract class Element2D {
     if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
     return txtOptions
   }
+
+  select () {
+    this.parentFigure.selectedElements.push(this)
+    if (this.g.children.length > 0) {
+      for (const line of Array.from(this.g.children)) {
+        line.setAttribute('stroke', 'purple')
+        line.setAttribute('stroke-width', '5')
+      }
+    } else { // Le segment ou le cercle ne sont pas des groupes, ce sont des éléments uniques sans children
+      this.g.setAttribute('stroke', 'purple')
+      this.g.setAttribute('stroke-width', '5')
+    }
+  }
+
+  unSelect () {
+    this.parentFigure.selectedElements = this.parentFigure.selectedElements.filter((e) => e !== this)
+    this.color = this._color
+    this.thickness = this._thickness
+  }
 }
