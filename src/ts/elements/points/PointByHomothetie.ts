@@ -28,8 +28,9 @@ export class PointByHomothetie extends Point {
     }
 
     update (): void {
-      const x = (this.center.x + (this.k instanceof Measure ? this.k.value : this.k) * (this.previous.x - this.center.x))
-      const y = (this.center.y + (this.k instanceof Measure ? this.k.value : this.k) * (this.previous.y - this.center.y))
+      const rapport = this.k instanceof Measure ? this.k.value : this.k
+      const x = (this.center.x + rapport * (this.previous.x - this.center.x))
+      const y = (this.center.y + rapport * (this.previous.y - this.center.y))
       this.moveTo(x, y)
     }
 }

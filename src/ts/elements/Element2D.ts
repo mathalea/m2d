@@ -62,6 +62,17 @@ export abstract class Element2D {
     child.parents.push(this)
   }
 
+  removeChild (child: Element2D | Measure) {
+    const index = this.childs.indexOf(child)
+    if (index > -1) {
+      this.childs.splice(index, 1)
+    }
+    const index2 = child.parents.indexOf(this)
+    if (index2 > -1) {
+      child.parents.splice(index2, 1)
+    }
+  }
+
   notifyAllChilds () {
     for (const element of this.childs) {
       element.update()
