@@ -136,6 +136,10 @@ export class Circle extends Element2D {
     return new Circle(O2, this.radius * k)
   }
 
+  public distancePointer (pointerX: number, pointerY: number) {
+    return Math.abs(distance(this.center, { x: pointerX, y: pointerY }) - this.radius)
+  }
+
   get latex () {
     if (!this.isVisible) return ''
     let latex = `\n\n\t% Circle center : ${this.center.label}, radius ${this._radius}`

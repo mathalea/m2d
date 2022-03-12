@@ -9,7 +9,7 @@ export function newSegment (figure: Figure, pointerX: number, pointerY: number) 
         const A = figure.selectedElements[0] as Point
         const s = new Segment(A, e)
         figure.set.add(s)
-        A.unSelect()
+        figure.clearSelectedElements()
         actionNewSegmentMessage(figure)
       } else {
         e.select()
