@@ -20,8 +20,8 @@ import { MarkAngle } from './elements/marks/MarkAngle'
 
 // Initialisation
 
-import { Figure } from './Figure'
 import { addButtons } from './gui/addButtons'
+import { testAll } from './tests'
 
 const figure = new Figure()
 const body = document.querySelector('body')

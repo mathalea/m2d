@@ -29,7 +29,7 @@ algebraic: CalculDynamic
 display: DisplayMeasure
 position: Distance
 
-constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, step = 0.1, length = 2, value = 0 }: {min?: number, max?:number, step?:number, length?:number, value?:number}) {
+constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, step = 0.1, length = 2, value = 0 }: {min?: number, max?:number, step?:number, length?:number, value?:number} = {}) {
   super(svgContainer)
   const factor = Math.round(length / step)
   if (!Number.isInteger(length / step)) {
