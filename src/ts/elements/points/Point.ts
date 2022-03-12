@@ -25,6 +25,7 @@ export class Point extends Element2D {
   private _label: string
   private _size: number // Pour la taille de la croix et utilisé dans changeStyle
   trace: boolean
+  traces: Element2D[]
   mark: Element2D | null
   labelElement: Element2D | null
   labelDx: number // Ecart entre le label et le point en abscisse
@@ -37,6 +38,7 @@ export class Point extends Element2D {
     super(figure)
     this._x = x
     this._y = y
+    this.traces = []
     this.group = []
     this.mark = null
     this.labelElement = null
@@ -90,12 +92,14 @@ export class Point extends Element2D {
     this.y = y
     if (this.trace) {
       const M = new Point(this.parentFigure, x, y, { style: 'o', size: 0.02 })
-      this.addChild(M)
+      this.g.appendChild(M.g)
+      this.removeChild(M)
     }
     if (this.mark instanceof Cross) {
       ;[this.mark.x, this.mark.y] = [x, y]
       this.mark.update()
     }
+
     // ToFix ce console.log est là qu'en phase de développement
     if (this.childs.length > 20) console.log(`Nombre de dépendances élevée pour ${this.label} : ${this.childs.length}`)
     this.notifyAllChilds()

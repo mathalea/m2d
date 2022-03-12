@@ -49,7 +49,7 @@ figure.svg.style.border = 'solid'
 // const c3 = new Cursor(figure, -3, 4, { min: 0, max: 2, length: 4, step: 0.1, value: 0 })
 // const c4 = new Cursor(figure, -3, 3, { min: -180, max: 180, length: 4, step: 2, value: 0 })
 const c5 = new Cursor(figure, -3, 2, { min: -90, max: 90, length: 4, step: 0.2, value: 0 })
-const c6 = new Cursor(figure, -3, 1, { min: 0, max: 10, length: 4, step: 0.1, value: 0 })
+const c6 = new Cursor(figure, -3, 1, { min: 0, max: 3, length: 4, step: 0.1, value: 0 })
 const x = new RandomNumber(figure, 0, 9)
 c6.addChild(x)
 // const y = new RandomInteger(figure, -5, 5)
@@ -59,7 +59,7 @@ const B = figure.point(5, 0, { label: 'B' })
 const C = figure.point(0, 0, { label: 'C' })
 C.trace = true
 const s = new Line(A, B, { temp: true })
-const M = new PointOnSegment(s, { length: c6.algebraic })
+const M = new PointByHomothetie(B, A, c6.algebraic)
 M.trace = true
 const N = new PointByRotation(B, A, c5.algebraic)
 N.trace = true
@@ -75,4 +75,3 @@ N.trace = true
 // const B = new PointByTranslationVector(A, V)
 // const s = new Segment(A, B)
 // s.style = '->'
-
