@@ -41,6 +41,12 @@ figure.svg.style.border = 'solid'
 
 const A = figure.point(-4, 0, { label: 'A' })
 const B = figure.point(3, 0)
-const sAB = new Segment(A, B)
-const M = new PointOnSegment(sAB)
-const c = new Cursor(figure, -3, 6, { min: -4, max: 4, length: 6, value: 1 })
+const C1 = new Circle(A, 3)
+const C2 = new Circle(B, 3)
+const M = new PointIntersectionCC(C1, C2)
+const sMB = new Segment(M, B)
+const N = new PointOnSegment(sMB)
+const med = new PerpendicularBisector(sMB)
+med.dashed = true
+const c = new Cursor(figure, -3, 6, { min: -3, max: 3, length: 4, step: 0.1, value: 1 })
+// Options
