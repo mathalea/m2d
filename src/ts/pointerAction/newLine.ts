@@ -18,3 +18,9 @@ export function newLine (figure: Figure, pointerX: number, pointerY: number) {
     }
   }
 }
+
+export function actionNewLineMessage (figure: Figure) {
+  if ([...figure.set].filter(element => element instanceof Point).length < 2) {
+    figure.displayMessage('Il faut au moins deux points pour tracer une droite')
+  } else figure.displayMessage('Cliquer sur deux points de la droite')
+}

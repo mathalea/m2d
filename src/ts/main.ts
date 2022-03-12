@@ -48,3 +48,4 @@ const N = new PointByRotation(B, A, c2.algebraic, { label: 'N' })
 const P = new PointBySimilitude(B, A, c3.algebraic, c4.algebraic, { label: 'P' })
 const s = new Segment(N, P)
 const Q = new PointOnLineAtD(s, c5.algebraic)
+

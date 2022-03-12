@@ -210,7 +210,7 @@ export class Figure {
 
   // ToFix : Il faudrait que la méthode crée 2 points et que ces points se cachent ou se montrent en fonction de leur appartenance au segment [AB]
   pointIntersectionSC (L: Segment, C: Circle, options?: PointOptions) {
-    const [x] = intersectionLCCoord(L, C, 1)
+    const x = intersectionLCCoord(L, C, 1).x
     const [A, B] = [L.A, L.B]
     if (x !== undefined && distance(A, B) > C.radius) {
       let M: Point
