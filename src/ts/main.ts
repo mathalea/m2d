@@ -12,10 +12,6 @@ import { MarkAngle } from './elements/marks/MarkAngle'
 
 // Initialisation
 
-import { Circle } from './elements/lines/Circle'
-import { Segment } from './elements/lines/Segment'
-import { PerpendicularBisector } from './elements/lines/PerpendicularBisector'
-import { PointIntersectionCC } from './elements/points/PointIntersectionCC'
 import { Figure } from './Figure'
 import { addButtons } from './gui/addButtons'
 
