@@ -22,5 +22,6 @@ export class LineByPointVector extends Line {
     this.A = A
     this.B = B
     this.vector = v
+    this.exist = v.exist && A.exist
   }
 }

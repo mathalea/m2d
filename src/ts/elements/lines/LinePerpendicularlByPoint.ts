@@ -20,5 +20,6 @@ export class LinePerpendicularByPoint extends LineByPointVector {
     super(A, v, { color, thickness, temp })
     this.line = L
     this.A = A
+    this.exist = A.exist && L.exist
   }
 }
