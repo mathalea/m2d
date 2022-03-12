@@ -1,3 +1,4 @@
+import { Coords } from './../elements/Element2D'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -20,7 +21,7 @@ import { distance } from './random'
  * @example I = pointItersectionLC(d,c,'I',1) // I est le premier point d'intersection si il existe de la droite (d) et du cercle (c)
  * @author Jean-Claude Lhote
  */
-export function intersectionLCCoord (D: Line, C: Circle, n: 1 | 2 = 1) {
+export function intersectionLCCoord (D: Line, C: Circle, n: 1 | 2 = 1): Coords {
   const O = C.center
   const r = C.radius
   const [a, b, c] = D.equation
@@ -32,7 +33,7 @@ export function intersectionLCCoord (D: Line, C: Circle, n: 1 | 2 = 1) {
     xi = -c / a
     xiPrime = xi
     Delta = 4 * (-xO * xO - (c * c) / (a * a) - (2 * xO * c) / a + r * r)
-    if (Delta < 0) return [undefined, undefined]
+    if (Delta < 0) return { x: NaN, y: NaN }
     else if (Math.abs(Delta) < 10 ** (-6)) {
       // un seul point d'intersection
       yi = yO + Math.sqrt(Delta) / 2
@@ -47,7 +48,7 @@ export function intersectionLCCoord (D: Line, C: Circle, n: 1 | 2 = 1) {
     yi = -c / b
     yiPrime = yi
     Delta = 4 * (-yO * yO - (c * c) / (b * b) - (2 * yO * c) / b + r * r)
-    if (Delta < 0) return [undefined, undefined]
+    if (Delta < 0) return { x: NaN, y: NaN }
     else if (Math.abs(Delta) < 10 ** (-6)) {
       // un seul point d'intersection
       xi = xO + Math.sqrt(Delta) / 2
@@ -63,7 +64,7 @@ export function intersectionLCCoord (D: Line, C: Circle, n: 1 | 2 = 1) {
       4 *
       (1 + (a / b) ** 2) *
       (xO * xO + yO * yO + (c / b) ** 2 + (2 * yO * c) / b - r * r)
-    if (Delta < 0) return [undefined, undefined]
+    if (Delta < 0) return { x: NaN, y: NaN }
     else if (Math.abs(Delta) < 10 ** (-6)) {
       // un seul point d'intersection
       delta = Math.sqrt(Delta)
@@ -85,21 +86,21 @@ export function intersectionLCCoord (D: Line, C: Circle, n: 1 | 2 = 1) {
   }
   if (n === 1) {
     if (yiPrime > yi) {
-      return [xiPrime, yiPrime]
+      return { x: xiPrime, y: yiPrime }
     } else {
-      return [xi, yi]
+      return { x: xi, y: yi }
     }
   } else {
     if (yiPrime > yi) {
-      return [xi, yi]
+      return { x: xi, y: yi }
     } else {
-      return [xiPrime, yiPrime]
+      return { x: xiPrime, y: yiPrime }
     }
   }
 }
 
-export function intersectionSCCoord (L: Segment, C: Circle) {
-  const [x] = intersectionLCCoord(L, C, 1)
+export function intersectionSCCoord (L: Segment, C: Circle): Coords {
+  const { x } = intersectionLCCoord(L, C, 1)
   const [A, B] = [L.A, L.B]
   if (x !== undefined && distance(A, B) > C.radius) {
     if (x < Math.max(A.x, B.x) && x > Math.min(A.x, B.x)) {
@@ -107,7 +108,7 @@ export function intersectionSCCoord (L: Segment, C: Circle) {
     } else {
       return intersectionLCCoord(L, C, 2)
     }
-  } else return [undefined, undefined]
+  } else return { x: NaN, y: NaN }
 }
 
 /**
@@ -117,7 +118,7 @@ export function intersectionSCCoord (L: Segment, C: Circle) {
  * @author Rémi Angot
  * @Source https://stackoverflow.com/questions/12219802/a-javascript-function-that-returns-the-x-y-points-of-intersection-between-two-ci
  */
-export function intersectionCCCoord (C1: Circle, C2: Circle, n: 1 | 2 = 1) {
+export function intersectionCCCoord (C1: Circle, C2: Circle, n: 1 | 2 = 1): Coords {
   const O1 = C1.center
   const O2 = C2.center
   const r0 = C1.radius
@@ -130,10 +131,10 @@ export function intersectionCCCoord (C1: Circle, C2: Circle, n: 1 | 2 = 1) {
   const dy = y1 - y0
   const d = Math.sqrt(dy * dy + dx * dx)
   if (d > r0 + r1) {
-    return [undefined, undefined]
+    return { x: NaN, y: NaN }
   }
   if (d < Math.abs(r0 - r1)) {
-    return [undefined, undefined]
+    return { x: NaN, y: NaN }
   }
   const a = (r0 * r0 - r1 * r1 + d * d) / (2.0 * d)
   const x2 = x0 + (dx * a) / d
@@ -147,20 +148,20 @@ export function intersectionCCCoord (C1: Circle, C2: Circle, n: 1 | 2 = 1) {
   const yiPrime = y2 - ry
   if (n === 1) {
     if (yiPrime > yi) {
-      return [xiPrime, yiPrime]
+      return { x: xiPrime, y: yiPrime }
     } else {
-      return [xi, yi]
+      return { x: xi, y: yi }
     }
   } else {
     if (yiPrime > yi) {
-      return [xi, yi]
+      return { x: xi, y: yi }
     } else {
-      return [xiPrime, yiPrime]
+      return { x: xiPrime, y: yiPrime }
     }
   }
 }
 /**
- * Renvoie 'M' le point d'intersection des droites d1 et d2
+ * Renvoie Un objet Coords : les coordonnées de 'M' le point d'intersection des droites d1 et d2
  * @param {Droite} d1
  * @param {Droite} d2
  * @param {string} [M=''] Nom du point d'intersection. Facultatif, vide par défaut.
@@ -168,12 +169,12 @@ export function intersectionCCCoord (C1: Circle, C2: Circle, n: 1 | 2 = 1) {
  * @return {Point} Point 'M' d'intersection de d1 et de d2
  * @author Jean-Claude Lhote
  */
-export function intersectionLLCoord (L1: Line, L2: Line) {
+export function intersectionLLCoord (L1: Line, L2: Line): Coords {
   const [da, db, dc] = L1.equation
   const [fa, fb, fc] = L2.equation
   let x: number, y: number
   if (fa * db - fb * da === 0) {
-    return [undefined, undefined]
+    return { x: NaN, y: NaN }
   } else {
     y = (fc * da - dc * fa) / (fa * db - fb * da)
   }
@@ -182,5 +183,5 @@ export function intersectionLLCoord (L1: Line, L2: Line) {
   } else { // d n'est pas horizontale donc ...
     x = (-dc - db * y) / da
   }
-  return [x, y]
+  return { x, y }
 }

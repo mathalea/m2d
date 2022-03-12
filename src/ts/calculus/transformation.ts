@@ -45,7 +45,7 @@ export function homothetieCoord (A: Point | Coords, O: Point | Coords, k: number
    * @param angle Angle en degrés
    * @returns [x, y] coordonnées de l'image
    */
-export function similitudeCoord (A: Point | Coords, O: Point | Coords, k: number, angle: number) {
+export function similitudeCoord (A: Point | Coords, O: Point | Coords, k: number, angle: number): Coords {
   const angleRadian = angle * Math.PI / 180
   const x = (O.x + k * (Math.cos(angleRadian) * (this.x - O.x) - Math.sin(angleRadian) * (this.y - O.y)))
   const y = (O.y + k * (Math.cos(angleRadian) * (this.y - O.y) + Math.sin(angleRadian) * (this.x - O.x)))
@@ -59,7 +59,7 @@ export function similitudeCoord (A: Point | Coords, O: Point | Coords, k: number
  * @returns [x, y] coordonnées du projeté orthogonale sur d
  * @author Jean-Claude Lhote
  */
-export function orthogonalProjectionCoord (M: Point | Coords, d: Line) {
+export function orthogonalProjectionCoord (M: Point | Coords, d: Line): Coords {
   const [a, b, c] = d.equation
   const k = 1 / (a * a + b * b)
   let x: number, y: number
