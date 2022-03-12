@@ -2,7 +2,7 @@ import { Line, OptionsGraphiques } from '../elements/lines/Line'
 import { Point } from '../elements/points/Point'
 import { Figure } from '../Figure'
 
-export function actionSetOptions (figure: Figure, pointerX: number, pointerY:number, options: OptionsGraphiques) {
+export function setOptions (figure: Figure, pointerX: number, pointerY:number, options: OptionsGraphiques) {
   for (const e of figure.set) {
     if ((e instanceof Point || e instanceof Line) && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
       // for (const key in options) {

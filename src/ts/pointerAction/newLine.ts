@@ -2,7 +2,7 @@ import { Line } from '../elements/lines/Line'
 import { Point } from '../elements/points/Point'
 import { Figure } from '../Figure'
 
-export function actionNewLine (figure: Figure, pointerX: number, pointerY: number) {
+export function newLine (figure: Figure, pointerX: number, pointerY: number) {
   for (const e of figure.set) {
     if (e instanceof Point && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
       if (figure.selectedElements.length === 1) {
