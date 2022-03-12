@@ -9,6 +9,7 @@ import { newLine, actionNewLineMessage } from './newLine'
 import { actionNewPerpendicularBissectorMessage, newPerpendicularBissector } from './perpendicularBissector'
 import { newIntersection } from './newIntersection'
 import { actionNewCirclePointMessage, newCirclePoint } from './newCirclePoint'
+import { actionNewPolygonMessage, newPolygon } from './newPolygon'
 
 export function handlePointerAction (figure: Figure, event: PointerEvent) {
   const [pointerX, pointerY] = figure.getPointerCoord(event)
@@ -20,6 +21,7 @@ export function handlePointerAction (figure: Figure, event: PointerEvent) {
   else if (figure.pointerAction === 'line') newLine(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'perpendicular') newPerpendicular(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'intersectionLL') newIntersection(figure, pointerX, pointerY)
+  else if (figure.pointerAction === 'polygon') newPolygon(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'setOptions') setOptions(figure, pointerX, pointerY, figure.pointerSetOptions)
 }
 
@@ -33,4 +35,5 @@ export function initMessageAction (figure: Figure, pointerAction: string) {
   else if (pointerAction === 'line') actionNewLineMessage(figure)
   else if (pointerAction === 'droitePerpendiculaire') actionNewPerpendicularMessage(figure)
   else if (pointerAction === 'intersectionLL') figure.displayMessage('Cliquer sur l\'élément sur lequel appliquer le nouveau style')
+  else if (pointerAction === 'polygon') actionNewPolygonMessage(figure)
 }
