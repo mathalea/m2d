@@ -37,10 +37,18 @@ export abstract class Measure {
       }
     }
 
-    set exist (b) {
-      this._exist = b
+    set exist (arg: boolean) {
+      let allParentsExist = true
+      for (const parent of this.parents) {
+        if (!parent.exist) {
+          allParentsExist = false
+          break
+        }
+      }
+      this._exist = arg && allParentsExist
       for (const e of this.childs) {
-        e.exist = b
+        e.exist = this._exist && e.exist
+        if (e instanceof Element2D && e.isVisible) this._exist ? e.show(false) : e.hide(false)
       }
     }
 

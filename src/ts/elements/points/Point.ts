@@ -71,6 +71,7 @@ export class Point extends Element2D {
    * Ce sont sur ses marques (croix ou rond ou ...) qu'il faut faire une mise à jour du graphique
    */
   update (): void {
+    this.moveTo(this.x, this.y)
   }
 
   isOnFigure () {
