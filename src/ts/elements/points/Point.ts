@@ -24,6 +24,7 @@ export class Point extends Element2D {
   private _style: PointStyle
   private _label: string
   private _size: number // Pour la taille de la croix et utilisé dans changeStyle
+  trace: boolean
   mark: Element2D | null
   labelElement: Element2D | null
   labelDx: number // Ecart entre le label et le point en abscisse
@@ -62,6 +63,7 @@ export class Point extends Element2D {
     this.labelDx = labelDx
     this.labelDy = labelDy
     if (label !== undefined) this.label = label
+    this.trace = false
     if (x instanceof Measure) x.addChild(this)
     if (y instanceof Measure) y.addChild(this)
   }
@@ -86,6 +88,10 @@ export class Point extends Element2D {
   moveTo (x: number, y: number) {
     this.x = x
     this.y = y
+    if (this.trace) {
+      const M = new Point(this.parentFigure, x, y, { style: 'o', size: 0.02 })
+      this.addChild(M)
+    }
     if (this.mark instanceof Cross) {
       ;[this.mark.x, this.mark.y] = [x, y]
       this.mark.update()
