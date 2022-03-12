@@ -17,9 +17,9 @@ export class PointIntersectionCC extends Point {
   C2: Circle
   n: 1 | 2
   constructor (C1: Circle, C2: Circle, n: 1 | 2 = 1, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
-    let [x, y] = intersectionCCCoord(C1, C2, n)
+    let { x, y } = intersectionCCCoord(C1, C2, n)
     let exist = true
-    if (x === undefined || y === undefined) {
+    if (isNaN(x) || isNaN(y)) {
       [x, y] = [C1.parentFigure.xMax + 10, C1.parentFigure.yMax + 10]
       exist = false
     }
@@ -33,8 +33,8 @@ export class PointIntersectionCC extends Point {
   }
 
   update (): void {
-    const [x, y] = intersectionCCCoord(this.C1, this.C2, this.n)
-    if (x !== undefined && y !== undefined) {
+    const { x, y } = intersectionCCCoord(this.C1, this.C2, this.n)
+    if (!isNaN(x) && !isNaN(y)) {
       this.moveTo(x, y)
       if (!this.exist) {
         this.show(false)

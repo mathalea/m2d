@@ -16,7 +16,7 @@ export class PointIntersectionLL extends Point {
   L1: Segment
   L2: Segment
   constructor (L1: Line, L2: Line, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
-    const [x, y] = intersectionLLCoord(L1, L2)
+    const { x, y } = intersectionLLCoord(L1, L2)
     super(L1.parentFigure, x, y, { style, size, thickness, color, draggable, temp })
     this.L1 = L1
     this.L2 = L2
@@ -28,8 +28,8 @@ export class PointIntersectionLL extends Point {
   }
 
   update (): void {
-    const [x, y] = intersectionLLCoord(this.L1, this.L2)
-    if (x !== undefined) {
+    const { x, y } = intersectionLLCoord(this.L1, this.L2)
+    if (!isNaN(x) && !isNaN(y)) {
       this.moveTo(x, y)
       if (!this.isVisible) this.show()
     } else this.hide()
