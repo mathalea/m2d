@@ -17,19 +17,15 @@ import { TextByPosition } from './elements/texts/TextByPosition'
 import { Segment } from './elements/lines/Segment'
 import { PointOnLineAtD } from './elements/points/PointOnLineAtD'
 import { PointIntersectionLC } from './elements/points/PointIntersectionLC'
-import { moveDrag, actionStartDrag, stopDrag } from './pointerAction/drag'
-import { actionNewPoint } from './pointerAction/newPoint'
-import { actionNewSegment } from './pointerAction/newSegment'
-import { actionSetOptions } from './pointerAction/setOptions'
-import { actionNewPerpendicular } from './pointerAction/newPerpendicular'
-import { actionNewLine } from './pointerAction/newLine'
+import { moveDrag, stopDrag } from './pointerAction/drag'
+
+import { handlePointerAction, initMessageAction } from './pointerAction/handlePointerAction'
 
 export class Figure {
   width: number
   height: number
   pixelsPerUnit: number
   set: Set<Element2D>
-  setSelectedElements: Set<Element2D>
   selectedElements: Element2D[]
   isDynamic: boolean
   setInDrag: Set<Point | TextByPosition>
@@ -43,7 +39,7 @@ export class Figure {
   svg: SVGElement
   pointerX: number | null
   pointerY: number | null
-  pointerAction: string
+  private _pointerAction: string
   pointerSetOptions: OptionsGraphiques
   messageElement: TextByPosition | null
   constructor ({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true, dx = 1, dy = 1 }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean, dx?: number, dy?: number } = {}) {
@@ -58,10 +54,8 @@ export class Figure {
     this.dy = dy
     this.isDynamic = isDynamic
     this.set = new Set()
-    // ToFix fusionner set et array
-    this.setSelectedElements = new Set()
     this.selectedElements = []
-    this.pointerAction = 'drag'
+    this._pointerAction = 'drag'
     this.pointerSetOptions = { color: 'black', thickness: 3 }
     this.setInDrag = new Set()
     this.isDraging = false
@@ -132,13 +126,7 @@ export class Figure {
   listenPointer () {
     // On créé des listenners et on change leur attitude suivant l'action en cours sauvegardée dans this.pointerAction
     this.svg.addEventListener('pointerdown', (event) => {
-      const [pointerX, pointerY] = this.getPointerCoord(event)
-      if (this.pointerAction === 'pointLibre') actionNewPoint(this, pointerX, pointerY)
-      else if (this.pointerAction === 'drag') actionStartDrag(this, pointerX, pointerY)
-      else if (this.pointerAction === 'segment') actionNewSegment(this, pointerX, pointerY)
-      else if (this.pointerAction === 'droite') actionNewLine(this, pointerX, pointerY)
-      else if (this.pointerAction === 'droitePerpendiculaire') actionNewPerpendicular(this, pointerX, pointerY)
-      else if (this.pointerAction === 'setColor') actionSetOptions(this, pointerX, pointerY, this.pointerSetOptions)
+      handlePointerAction(this, event)
     })
 
     this.svg.addEventListener('pointerup', (event) => {
@@ -151,7 +139,23 @@ export class Figure {
     })
   }
 
-  message (text: string, { dx = 1, dy = 1 }: {dx?: number, dy?: number} = {}) {
+  get pointerAction () {
+    return this._pointerAction
+  }
+
+  set pointerAction (action) {
+    this._pointerAction = action
+    this.clearSelectedElements()
+    initMessageAction(this, action)
+  }
+
+  clearSelectedElements () {
+    for (const e of this.selectedElements) {
+      e.unSelect()
+    }
+  }
+
+  displayMessage (text: string, { dx = 1, dy = 1 }: {dx?: number, dy?: number} = {}) {
     if (this.messageElement) {
       this.messageElement.text = text
       this.messageElement.x = this.xMin + dx

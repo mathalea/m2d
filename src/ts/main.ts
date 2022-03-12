@@ -1,5 +1,3 @@
-import { PointOnSegment } from './elements/points/PointOnSegment'
-import { Cursor } from './elements/others/Cursor'
 import { MarkAngle } from './elements/marks/MarkAngle'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
@@ -12,10 +10,6 @@ import { MarkAngle } from './elements/marks/MarkAngle'
 
 // Initialisation
 
-import { Circle } from './elements/lines/Circle'
-import { Segment } from './elements/lines/Segment'
-import { PerpendicularBisector } from './elements/lines/PerpendicularBisector'
-import { PointIntersectionCC } from './elements/points/PointIntersectionCC'
 import { Figure } from './Figure'
 import { addButtons } from './gui/addButtons'
 
