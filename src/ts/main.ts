@@ -1,14 +1,10 @@
+import { Figure } from './Figure'
 import { PointOnLineAtD } from './elements/points/PointOnLineAtD'
 import { PointByRotation } from './elements/points/PointByRotation'
 import { PointBySimilitude } from './elements/points/PointBySimilitude'
 import { PointByHomothetie } from './elements/points/PointByHomothetie'
-import { PerpendicularBisector } from './elements/lines/PerpendicularBisector'
-import { PointOnSegment } from './elements/points/PointOnSegment'
 import { Segment } from './elements/lines/Segment'
-import { PointIntersectionCC } from './elements/points/PointIntersectionCC'
-import { Circle } from './elements/lines/Circle'
 import { Cursor } from './elements/others/Cursor'
-import { MarkAngle } from './elements/marks/MarkAngle'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -19,9 +15,6 @@ import { MarkAngle } from './elements/marks/MarkAngle'
  */
 
 // Initialisation
-
-import { addButtons } from './gui/addButtons'
-import { testAll } from './tests'
 
 const figure = new Figure()
 const body = document.querySelector('body')
