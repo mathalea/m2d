@@ -11,8 +11,8 @@ export function newPerpendicularBissector (figure: Figure, pointerX: number, poi
         const s = new Segment(A, e, { temp: true })
         const perpendicularBissector = new PerpendicularBisector(s)
         figure.set.add(perpendicularBissector)
-        A.unSelect()
-        actionNewSegmentMessage(figure)
+        figure.clearSelectedElements()
+        actionNewPerpendicularBissectorMessage(figure)
       } else {
         e.select()
         figure.displayMessage('Cliquer sur l\'autre extrémité')
@@ -21,8 +21,8 @@ export function newPerpendicularBissector (figure: Figure, pointerX: number, poi
   }
 }
 
-export function actionNewSegmentMessage (figure: Figure) {
+export function actionNewPerpendicularBissectorMessage (figure: Figure) {
   if ([...figure.set].filter(element => element instanceof Point).length < 2) {
-    figure.displayMessage('Il faut au moins deux points pour tracer un segment')
+    figure.displayMessage('Il faut au moins deux points pour tracer une médiatrice')
   } else figure.displayMessage('Cliquer sur les deux extrémités du segment')
 }
