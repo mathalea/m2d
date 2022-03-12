@@ -1,3 +1,9 @@
+import { PerpendicularBisector } from './elements/lines/PerpendicularBisector'
+import { PointOnSegment } from './elements/points/PointOnSegment'
+import { Segment } from './elements/lines/Segment'
+import { PointIntersectionCC } from './elements/points/PointIntersectionCC'
+import { Circle } from './elements/lines/Circle'
+import { Cursor } from './elements/others/Cursor'
 import { MarkAngle } from './elements/marks/MarkAngle'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
