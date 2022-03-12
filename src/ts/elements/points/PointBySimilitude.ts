@@ -13,12 +13,13 @@ import { Point, PointOptions } from './Point'
 export class PointBySimilitude extends Point {
     center: Point
     angle: number | Measure// Angle en degré
-    k: number // Coefficient
+    k: number |Measure // Coefficient
     previous: Point
-    constructor (A: Point, center: Point, k: number, angle: number | Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
+    constructor (A: Point, center: Point, k: number |Measure, angle: number | Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
       const angleRadian = typeof angle === 'number' ? angle * Math.PI / 180 : angle.value * Math.PI / 180
-      const x = (center.x + k * (Math.cos(angleRadian) * (A.x - center.x) - Math.sin(angleRadian) * (A.y - center.y)))
-      const y = (center.y + k * (Math.cos(angleRadian) * (A.y - center.y) + Math.sin(angleRadian) * (A.x - center.x)))
+
+      const x = (center.x + (k instanceof Measure ? k.value : k) * (Math.cos(angleRadian) * (A.x - center.x) - Math.sin(angleRadian) * (A.y - center.y)))
+      const y = (center.y + (k instanceof Measure ? k.value : k) * (Math.cos(angleRadian) * (A.y - center.y) + Math.sin(angleRadian) * (A.x - center.x)))
       super(A.parentFigure, x, y, { style, size, thickness, color, draggable, temp })
       this.center = center
       this.k = k
@@ -27,12 +28,20 @@ export class PointBySimilitude extends Point {
       if (label !== undefined) this.label = label
       A.addChild(this)
       center.addChild(this)
+      if (angle instanceof Measure) {
+        angle.addChild(this)
+        if (k instanceof Measure) {
+          k.addChild(this)
+          this.exist = A.exist && center.exist && angle.exist && k.exist
+        } else this.exist = A.exist && center.exist && angle.exist
+      } else this.exist = A.exist && center.exist
     }
 
     update (): void {
       const angleRadian = typeof this.angle === 'number' ? this.angle * Math.PI / 180 : this.angle.value * Math.PI / 180
-      const x = (this.center.x + this.k * (Math.cos(angleRadian) * (this.previous.x - this.center.x) - Math.sin(angleRadian) * (this.previous.y - this.center.y)))
-      const y = (this.center.y + this.k * (Math.cos(angleRadian) * (this.previous.y - this.center.y) + Math.sin(angleRadian) * (this.previous.x - this.center.x)))
+      const rapport = (this.k instanceof Measure ? this.k.value : this.k)
+      const x = (this.center.x + rapport * (Math.cos(angleRadian) * (this.previous.x - this.center.x) - Math.sin(angleRadian) * (this.previous.y - this.center.y)))
+      const y = (this.center.y + rapport * (Math.cos(angleRadian) * (this.previous.y - this.center.y) + Math.sin(angleRadian) * (this.previous.x - this.center.x)))
       this.moveTo(x, y)
     }
 }

@@ -26,7 +26,10 @@ export class PointByRotation extends Point {
       if (label !== undefined) this.label = label
       A.addChild(this)
       center.addChild(this)
-      if (typeof angle !== 'number') angle.addChild(this)
+      if (typeof angle !== 'number') {
+        angle.addChild(this)
+        this.exist = A.exist && angle.exist && center.exist
+      } else this.exist = A.exist && center.exist
     }
 
     update (): void {
