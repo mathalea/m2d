@@ -3,7 +3,7 @@ import { LinePerpendicularByPoint } from '../elements/lines/LinePerpendicularlBy
 import { Point } from '../elements/points/Point'
 import { Figure } from '../Figure'
 
-export function actionNewPerpendicular (figure: Figure, pointerX: number, pointerY: number) {
+export function newPerpendicular (figure: Figure, pointerX: number, pointerY: number) {
   for (const e of figure.set) {
     if (e instanceof Point && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15 && figure.selectedElements.filter(element => element instanceof Point).length === 0) {
       e.select()
