@@ -62,6 +62,8 @@ export class Point extends Element2D {
     this.labelDx = labelDx
     this.labelDy = labelDy
     if (label !== undefined) this.label = label
+    if (x instanceof Measure) x.addChild(this)
+    if (y instanceof Measure) y.addChild(this)
   }
 
   /**

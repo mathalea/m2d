@@ -1,4 +1,3 @@
-import { Figure } from './../Figure'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -8,7 +7,6 @@ import { Figure } from './../Figure'
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 import { Coords } from '../elements/Element2D'
-import { Measure } from '../elements/measures/Measure'
 import { Point } from '../elements/points/Point'
 
 export function distance (A: Point | Coords, B: Point | Coords): number {
@@ -45,46 +43,7 @@ export function randint (min: number, max: number, listeAEviter: number[] | numb
   }
   return min + rand
 }
-export class AleaInteger extends Measure {
-  min: number
-  max: number
-  listeAEviter: number[]
-  range: number
-  constructor (figure: Figure, min: number, max: number, listeAEviter: number[] | number = []) {
-    if (!Number.isInteger(min)) min = Math.floor(min)
-    if (!Number.isInteger(max)) max = Math.ceil(max)
-    if (min > max) {
-      const minTemp = min
-      min = max
-      max = minTemp
-    }
-    const range = max - min
-    let rand = Math.floor(Math.random() * (range + 1))
-    if (typeof listeAEviter === 'number') {
-      listeAEviter = [listeAEviter]
-    }
-    if (listeAEviter.length > 0) {
-      while (listeAEviter.indexOf(min + rand) !== -1) {
-        rand = Math.floor(Math.random() * (range + 1))
-      }
-    }
-    super(figure)
-    this.listeAEviter = listeAEviter
-    this.range = range
-    this.min = min
-    this.max = max
-    this.value = min + rand
-  }
 
-  update () {
-    let rand = Math.floor(Math.random() * (this.range + 1))
-    if (this.listeAEviter.length > 0) {
-      while (this.listeAEviter.indexOf(this.min + rand) !== -1) {
-        rand = Math.floor(Math.random() * (this.range + 1))
-      }
-    }
-  }
-}
 export function arrondi (nombre: number, precision: number = 10) {
   return (Math.round(nombre * 10 ** precision) / 10 ** precision)
 }
