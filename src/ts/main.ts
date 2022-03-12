@@ -1,3 +1,10 @@
+import { PerpendicularBisector } from './elements/lines/PerpendicularBisector'
+import { PointOnSegment } from './elements/points/PointOnSegment'
+import { Segment } from './elements/lines/Segment'
+import { PointIntersectionCC } from './elements/points/PointIntersectionCC'
+import { Circle } from './elements/lines/Circle'
+import { Cursor } from './elements/others/Cursor'
+import { MarkAngle } from './elements/marks/MarkAngle'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -31,8 +38,14 @@ figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
 // Ma figure
-
+const c = new Cursor(figure, -3, 6, { min: -3, max: 3, length: 4, step: 0.1, value: 3 })
+const A = figure.point(-4, 0, { label: 'A' })
+const B = figure.point(3, 0)
+const C1 = new Circle(A, 3)
+const C2 = new Circle(B, c.algebraic)
+const M = new PointIntersectionCC(C1, C2)
+const sMB = new Segment(M, B)
+const N = new PointOnSegment(sMB)
+const med = new PerpendicularBisector(sMB)
+med.dashed = true
 // Options
-
-// displayEditor(figure)
-addButtons(figure)

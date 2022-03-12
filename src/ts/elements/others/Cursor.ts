@@ -1,3 +1,5 @@
+import { Distance } from './../measures/Distance'
+import { CalculDynamic } from './../measures/CalculDynamic'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -10,10 +12,10 @@
 import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
 import { Segment } from '../lines/Segment'
-import { Algebraic } from '../measures/Algebraic'
 import { Point } from '../points/Point'
 import { PointOnSegment } from '../points/PointOnSegment'
 import { DisplayMeasure } from '../texts/DisplayMeasure'
+import { Measure } from '../measures/Measure'
 
 export class Cursor extends Element2D {
   tab: Point
@@ -23,8 +25,9 @@ line: Segment
 min: number
 max: number
 step: number
-algebraic: Algebraic
+algebraic: CalculDynamic
 display: DisplayMeasure
+position: Distance
 
 constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, step = 0.1, length = 2, value = 0 }: {min?: number, max?:number, step?:number, length?:number, value?:number}) {
   super(svgContainer)
@@ -33,7 +36,6 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
     length = factor * step
   }
   this.length = length
-  this.algebraic = new Algebraic(svgContainer, Math.max(Math.min(value, max), min))
   this.step = step
   this.max = max
   this.min = min
@@ -42,6 +44,8 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
   this.origin = M
   this.line = new Segment(M, N)
   this.tab = new PointOnSegment(this.line, { draggable: true, style: '', length: length * (Math.max(Math.min(value, max), min) - min) / (max - min) }) // on s'assure que la valeur est comprise entre min et max.
+  this.position = new Distance(M, this.tab)
+  this.algebraic = new CalculDynamic((args: Measure[]) => this.min + (this.max - this.min) * args[0].value / this.length, [this.position])
   this.display = new DisplayMeasure(this.origin.x + this.length + 0.5, this.tab.y, this.algebraic, { precision: 2 })
   this.tab.addChild(this.display)
   this.tab.addChild(this)

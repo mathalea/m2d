@@ -9,7 +9,7 @@
 
 import { distance } from '../../calculus/random'
 import { orthogonalProjectionCoord } from '../../calculus/transformation'
-import { Point, PointOptions } from './Point'
+import { PointOptions } from './Point'
 import { PointOnLine } from './PointOnLine'
 import { Segment } from '../lines/Segment'
 
@@ -27,15 +27,17 @@ export class PointOnSegment extends PointOnLine {
     this.temp = temp
     if (label !== undefined) this.label = label
     this.k = this.length / Llength
+    this.update()
   }
 
-  notifyPointerMove (x: number, y: number) {
-    if (this.draggable) {
-      const P = new Point(this.line.parentFigure, x, y, { temp: true })
-      const M = orthogonalProjectionCoord(P, this.line)
-      const [A, B] = [this.line.A, this.line.B]
-      if (M.x < Math.min(A.x, B.x) || M.y > Math.max(A.x, B.x) || M.x < Math.min(A.y, B.y) || M.y > Math.max(A.y, B.y)) return
-      this.moveTo(M.x, M.y)
-    }
+  moveTo (x: number, y: number) {
+    const L = this.line
+    const P = { x, y }
+    const M = orthogonalProjectionCoord(P, L)
+    const [A, B] = [this.line.A, this.line.B]
+    if (M.x < Math.min(A.x, B.x) || M.x > Math.max(A.x, B.x) || M.y < Math.min(A.y, B.y) || M.y > Math.max(A.y, B.y)) return
+    this.k = (L.B.x - L.A.x) === 0 ? (L.B.y - L.A.y) === 0 ? this.k : (M.y - L.A.y) / (L.B.y - L.A.y) : (M.x - L.A.x) / (L.B.x - L.A.x)
+    this.length = this.k * distance(L.A, L.B)
+    super.moveTo(M.x, M.y)
   }
 }

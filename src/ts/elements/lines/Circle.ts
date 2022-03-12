@@ -9,6 +9,7 @@
 
 import { distance } from '../../calculus/random'
 import { Element2D } from '../Element2D'
+import { Measure } from '../measures/Measure'
 import { Point } from '../points/Point'
 import { OptionsGraphiques } from './Line'
 
@@ -17,8 +18,8 @@ export class Circle extends Element2D {
   temp: boolean
   M: Point // Point de même ordonnée que le centre et d'abscisse supérieure
   pointOnCircle: Point | null // Point qui définit le cercle
-  private _radius: number
-  constructor (center: Point, arg2: number | Point, { color = 'black', thickness = 1, fill = 'none', temp = false, dashed = false }: OptionsGraphiques = {}) {
+  private _radius: number | Measure
+  constructor (center: Point, arg2: number | Point | Measure, { color = 'black', thickness = 1, fill = 'none', temp = false, dashed = false }: OptionsGraphiques = {}) {
     super(center.parentFigure)
     this.pointOnCircle = arg2 instanceof Point ? arg2 : null
     this.center = center
@@ -33,8 +34,9 @@ export class Circle extends Element2D {
     this.g = circle
     if (!this.temp) this.parentFigure.svg.appendChild(this.g)
     this.M = new Point(this.parentFigure, 100, 100, { style: '', temp: true }) // Point temporaire qui sera placé quand on connaitra le rayon
-    this._radius = 0
-    this.radius = (typeof arg2 === 'number') ? arg2 : this.radius = distance(center, arg2)
+    if (arg2 instanceof Measure) this._radius = arg2
+    else this._radius = 0
+    this.radius = (typeof arg2 === 'number') ? arg2 : (arg2 instanceof Point) ? distance(center, arg2) : Math.abs(arg2.value)
     this.M.moveTo(center.x + this.radius, center.y)
     this.fill = fill
     this.color = color
@@ -43,6 +45,10 @@ export class Circle extends Element2D {
 
     if (arg2 instanceof Point) {
       this.pointOnCircle = arg2
+      center.addChild(this)
+      arg2.addChild(this)
+    } else if (arg2 instanceof Measure) {
+      this.pointOnCircle = null
       center.addChild(this)
       arg2.addChild(this)
     } else center.addChild(this)
@@ -68,19 +74,23 @@ export class Circle extends Element2D {
     this.M.moveTo(this.center.x + this.radius, this.center.y)
   }
 
-  get radius () {
-    return this._radius
+  get radius (): number {
+    return (this._radius instanceof Measure) ? this._radius.value : this._radius
   }
 
   set radius (radius: number) {
-    this._radius = radius
-    this.g.setAttribute('r', `${this._radius * this.parentFigure.pixelsPerUnit}`)
+    if (this._radius instanceof Measure) this._radius.value = radius
+    else this._radius = radius
+    this.g.setAttribute('r', `${((this._radius instanceof Measure) ? this._radius.value : this._radius) * this.parentFigure.pixelsPerUnit}`)
   }
 
   update (): void {
     this.moveCenter(this.center.x, this.center.y)
     if (this.pointOnCircle) {
       this.radius = distance(this.center, this.pointOnCircle)
+    }
+    if (this._radius instanceof Measure) {
+      this.radius = Math.max(this._radius.value, 0)
     }
     this.notifyAllChilds()
   }

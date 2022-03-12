@@ -1,3 +1,4 @@
+import { CalculDynamic } from './../measures/CalculDynamic'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -7,15 +8,14 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
-import { Algebraic } from '../measures/Algebraic'
 import { Measure } from '../measures/Measure'
 import { Point, PointOptions } from './Point'
 
 export class PointByRotation extends Point {
     center: Point
-    angle: number | Measure | Algebraic // Angle en degré
+    angle: number | Measure | CalculDynamic // Angle en degré
     previous: Point
-    constructor (A: Point, center: Point, angle: number | Measure | Algebraic, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
+    constructor (A: Point, center: Point, angle: number | Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
       const angleMeasure = (typeof angle === 'number') ? angle : angle.value
       const x = (center.x + (A.x - center.x) * Math.cos((angleMeasure * Math.PI) / 180) - (A.y - center.y) * Math.sin((angleMeasure * Math.PI) / 180))
       const y = (center.y + (A.x - center.x) * Math.sin((angleMeasure * Math.PI) / 180) + (A.y - center.y) * Math.cos((angleMeasure * Math.PI) / 180))
