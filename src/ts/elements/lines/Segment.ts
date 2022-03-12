@@ -27,10 +27,7 @@ export class Segment extends Line {
     this.thickness = thickness
     this.style = style
     this.dashed = dashed
-
-    // Si une des extrémités se déplace alors on recalcule les coordonnées de line
-    A.addChild(this)
-    B.addChild(this)
+    // Les dépendances sont gérées dans Line
   }
 
   update () {

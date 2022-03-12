@@ -1,3 +1,5 @@
+import { LineParallelByPoint } from './elements/lines/LineParallelByPoint'
+import { Figure } from './Figure'
 import { PerpendicularBisector } from './elements/lines/PerpendicularBisector'
 import { PointOnSegment } from './elements/points/PointOnSegment'
 import { Segment } from './elements/lines/Segment'
@@ -16,8 +18,8 @@ import { MarkAngle } from './elements/marks/MarkAngle'
 
 // Initialisation
 
-import { Figure } from './Figure'
 import { addButtons } from './gui/addButtons'
+import { testAll } from './tests'
 
 const figure = new Figure()
 const body = document.querySelector('body')
@@ -48,4 +50,7 @@ const sMB = new Segment(M, B)
 const N = new PointOnSegment(sMB)
 const med = new PerpendicularBisector(sMB)
 med.dashed = true
+const d = new LineParallelByPoint(med, A)
+// if (testAll()) console.log('tests réussis')
+console.log(figure.set)
 // Options

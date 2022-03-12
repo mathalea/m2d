@@ -18,5 +18,6 @@ export class PerpendicularBisector extends LinePerpendicularByPoint {
     const M = new Middle(S, { temp: true })
     super(S, M, { color, thickness, temp })
     this.segment = S
+    this.exist = S.exist
   }
 }

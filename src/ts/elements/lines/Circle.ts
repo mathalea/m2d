@@ -47,11 +47,16 @@ export class Circle extends Element2D {
       this.pointOnCircle = arg2
       center.addChild(this)
       arg2.addChild(this)
+      this.exist = center.exist && this.pointOnCircle.exist
     } else if (arg2 instanceof Measure) {
       this.pointOnCircle = null
       center.addChild(this)
       arg2.addChild(this)
-    } else center.addChild(this)
+      this.exist = center.exist && arg2.value > 0
+    } else {
+      center.addChild(this)
+      this.exist = center.exist
+    }
   }
 
   /**

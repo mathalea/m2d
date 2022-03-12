@@ -1,3 +1,4 @@
+import { Coords } from './../Element2D'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -8,20 +9,20 @@
  */
 import { arrondi } from '../../calculus/random'
 import { Point } from '../points/Point'
-import { PointByRotation } from '../points/PointByRotation'
 import { Measure } from './Measure'
+import { rotationCoord } from '../../calculus/transformation'
 const epsilon = 0.00000001
 
 export class Angle extends Measure {
     A: Point
     O: Point
-    B: Point
+    B: Point | Coords
     valueNonOriented: number
     constructor (A: Point, O: Point, B: Point|number) {
       super(O.parentFigure)
       this.childs = []
       if (typeof B === 'number') {
-        this.B = new PointByRotation(A, O, B, { temp: true })
+        this.B = rotationCoord(A, O, B)
         this.value = B
         O.addChild(this)
         A.addChild(this)
@@ -46,14 +47,14 @@ export class Angle extends Measure {
     }
 }
 
-function angleOriented (A: Point, O: Point, B: Point) {
+function angleOriented (A: Point|Coords, O: Point|Coords, B: Point|Coords) {
   const v = { x: B.x - O.x, y: B.y - O.y }
   const u = { x: A.x - O.x, y: A.y - O.y }
   const s = ((u.x * v.y - v.x * u.y) >= 0) ? 1 : -1 // composante z du produit vectoriel OA^OB
   return s * angle(A, O, B)
 }
 
-function angle (A: Point, O: Point, B: Point) {
+function angle (A: Point|Coords, O: Point|Coords, B: Point|Coords) {
   const OA = { x: A.x - O.x, y: A.y - O.y, norme: 0 }
   OA.norme = Math.sqrt(OA.x ** 2 + OA.y ** 2)
   const OB = { x: B.x - O.x, y: B.y - O.y, norme: 0 }

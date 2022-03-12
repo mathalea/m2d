@@ -1,3 +1,4 @@
+import { Coords } from './../Element2D'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -134,9 +135,9 @@ export class Line extends Element2D {
   }
 
   get angleWithHorizontal () {
-    const O = new Point(this.parentFigure, 0, 0, { temp: true })
-    const A = new Point(this.parentFigure, 1, 0, { temp: true })
-    const M = new Point(this.parentFigure, this.directeur.x, this.directeur.y, { temp: true })
+    const O: Coords = { x: 0, y: 0 }
+    const A: Coords = { x: 1, y: 0 }
+    const M: Coords = { x: this.directeur.x, y: this.directeur.y }
     return angleOriented(A, O, M)
   }
 

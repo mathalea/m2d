@@ -21,5 +21,6 @@ export class LineParallelByPoint extends LineByPointVector {
     this.line = L
     this.A = A
     L.addChild(this)
+    this.exist = L.exist
   }
 }
