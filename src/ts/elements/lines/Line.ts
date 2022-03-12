@@ -70,6 +70,7 @@ export class Line extends Element2D {
     if (!temp) this.parentFigure.set.add(this)
     A.addChild(this)
     B.addChild(this)
+    this.exist = A.exist && B.exist
   }
 
   update () {

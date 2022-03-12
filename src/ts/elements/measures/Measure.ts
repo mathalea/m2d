@@ -14,10 +14,12 @@ export abstract class Measure {
     parentFigure: Figure
     value: number
     childs: (Element2D | Measure)[]
+    parents: (Element2D | Measure)[]
     private _exist: boolean
     constructor (parentFigure: Figure) {
       this.parentFigure = parentFigure
       this.childs = []
+      this.parents = []
       this.value = 0
       this._exist = true
     }
@@ -26,6 +28,7 @@ export abstract class Measure {
 
     addChild (child: Element2D | Measure) {
       this.childs.push(child)
+      child.parents.push(this)
     }
 
     notifyAllChilds () {

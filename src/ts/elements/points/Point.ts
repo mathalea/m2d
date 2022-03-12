@@ -138,14 +138,14 @@ export class Point extends Element2D {
     }
   }
 
-  hide (): void {
-    super.hide()
-    if (this.labelElement) this.labelElement.hide()
+  hide (changeIsVisible = true): void {
+    super.hide(changeIsVisible)
+    if (this.labelElement) this.labelElement.hide(changeIsVisible)
   }
 
-  show (): void {
-    super.show()
-    if (this.labelElement) this.labelElement.show()
+  show (changeIsVisible = true): void {
+    super.show(changeIsVisible)
+    if (this.labelElement) this.labelElement.show(changeIsVisible)
   }
 
   get label () {

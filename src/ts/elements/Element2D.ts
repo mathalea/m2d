@@ -8,9 +8,6 @@
  */
 
 import { Figure } from '../Figure'
-import { Angle } from './measures/Angle'
-import { CalculDynamic } from './measures/CalculDynamic'
-import { Distance } from './measures/Distance'
 import { Measure } from './measures/Measure'
 
 export type optionsElement2D = { color?: string, thickness?: number, fill?: string }
@@ -29,6 +26,7 @@ export abstract class Element2D {
   group: Element2D[]
   g: SVGElement
   childs: (Element2D | Measure)[]
+  parents: (Element2D | Measure)[]
   // Ces paramètres privés sont mis à jour par les getters équivalents sans le _
   private _color: string
   private _fill: string
@@ -43,6 +41,7 @@ export abstract class Element2D {
     this.parentFigure = parentFigure
     this.group = []
     this.childs = []
+    this.parents = []
     this.g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
     this.isVisible = true
     this._color = 'black'
@@ -58,8 +57,9 @@ export abstract class Element2D {
    * Permet d'indiquer au point que sa position dépend d'autres éléments
    * @param child
    */
-  addChild (child: Element2D | Angle | Distance | CalculDynamic | Measure) {
+  addChild (child: Element2D | Measure) {
     this.childs.push(child)
+    child.parents.push(this)
   }
 
   notifyAllChilds () {
@@ -70,10 +70,10 @@ export abstract class Element2D {
 
   abstract update(): void
 
-  hide () {
+  hide (changeIsVisible = true) {
     // Tous les membres du groupe auront la même couleur
     for (const e of this.group) {
-      e.hide()
+      e.hide(changeIsVisible)
     }
     if (this.g.children.length > 0) {
       for (const line of Array.from(this.g.children)) {
@@ -82,13 +82,13 @@ export abstract class Element2D {
     } else { // Le segment ou le cercle ne sont pas des groupes, ce sont des éléments uniques sans children
       this.g.setAttribute('visibility', 'hidden')
     }
-    this.isVisible = false
+    if (changeIsVisible) this.isVisible = false
   }
 
-  show () {
-    // Tous les membres du groupe auront la même couleur
+  show (changeIsVisible = true) {
+    if (!changeIsVisible && !this.isVisible) return
     for (const e of this.group) {
-      e.show()
+      e.show(changeIsVisible)
     }
     if (this.g.children.length > 0) {
       for (const line of Array.from(this.g.children)) {
@@ -97,15 +97,24 @@ export abstract class Element2D {
     } else { // Le segment ou le cercle ne sont pas des groupes, ce sont des éléments uniques sans children
       this.g.setAttribute('visibility', 'visible')
     }
-    this.isVisible = true
+    if (changeIsVisible) this.isVisible = true
   }
 
-  set exist (b) {
-    this._exist = b
+  set exist (arg: boolean) {
+    let allParentsExist = true
+    for (const parent of this.parents) {
+      if (!parent.exist) {
+        allParentsExist = false
+        break
+      }
+    }
+    this._exist = arg && allParentsExist
+    ;(this._exist && this.isVisible)
+      ? this.show(false)
+      : this.hide(false)
     for (const e of this.childs) {
-      // ToFix est-ce qu'on veut qu'ils s'affichent tous ? Il pourrait y avoir des enfants qui veulent rester caché
-      e.exist = b
-      if (e instanceof Element2D) b ? e.show() : e.hide()
+      e.exist = this._exist
+      if (e instanceof Element2D && e.isVisible) this._exist ? e.show(false) : e.hide(false)
     }
   }
 

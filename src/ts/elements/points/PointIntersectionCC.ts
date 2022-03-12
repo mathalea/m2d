@@ -36,15 +36,15 @@ export class PointIntersectionCC extends Point {
     const [x, y] = intersectionCCCoord(this.C1, this.C2, this.n)
     if (x !== undefined && y !== undefined) {
       this.moveTo(x, y)
-      if (!this.isVisible) {
-        this.show()
+      if (!this.exist) {
+        this.show(false)
         this.exist = true
         for (const e of this.childs) {
-          if (e instanceof Element2D) e.show()
+          if (e instanceof Element2D) e.show(false)
         }
       }
     } else {
-      this.hide()
+      this.hide(false)
       this.exist = false
     }
   }
