@@ -7,7 +7,9 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
+import { Measure } from '../measures/Measure'
 import { Point } from '../points/Point'
+import { PointByHomothetie } from '../points/PointByHomothetie'
 import { PointByRotation } from '../points/PointByRotation'
 import { PointOnLineAtD } from '../points/PointOnLineAtD'
 import { Line, OptionsGraphiques } from './Line'
@@ -123,6 +125,17 @@ export class Segment extends Line {
       }
     } catch (error) {
       console.log('Erreur dans Segment.style()', error)
+    }
+  }
+
+  homothetie (center: Point, k:number|Measure) {
+    try {
+      const M = new PointByHomothetie(this.A, center, k, { temp: true })
+      const N = new PointByHomothetie(this.B, center, k, { temp: true })
+      return new Segment(M, N)
+    } catch (error) {
+      console.log('Erreur dans Segment.homothetie()', error)
+      return new Segment(this.A, this.A)
     }
   }
 }

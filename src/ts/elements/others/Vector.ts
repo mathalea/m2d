@@ -69,7 +69,6 @@ export class Vector extends Element2D {
   set x (n: number) {
     if (this._x instanceof Measure) this._x.value = n
     else this._x = n
-    this.update()
   }
 
   get y () {
@@ -79,6 +78,5 @@ export class Vector extends Element2D {
   set y (n: number) {
     if (this._y instanceof Measure) this._y.value = n
     else this._y = n
-    this.update()
   }
 }

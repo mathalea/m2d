@@ -98,23 +98,28 @@ export class Point extends Element2D {
    * @param y nouvelle ordonnée
    */
   moveTo (x: number, y: number) {
-    this.x = x
-    this.y = y
-    if (this.trace && this.exist) {
-      const M = new Point(this.parentFigure, x, y, { style: 'o', size: 0.02 })
-      this.g.appendChild(M.g)
-      this.removeChild(M)
-    }
-    if (this.mark instanceof Cross && this.exist) {
-      ;[this.mark.x, this.mark.y] = [x, y]
-      this.mark.update()
-    }
-    if (this.mark instanceof Circle && this.exist) {
-      this.mark.moveCenter(x, y)
-      this.mark.update()
+    try {
+      this.x = x
+      this.y = y
+      if (this.trace && this.exist) {
+        const M = new Point(this.parentFigure, x, y, { style: 'o', size: 0.02 })
+        this.g.appendChild(M.g)
+        this.removeChild(M)
+      }
+      if (this.mark instanceof Cross && this.exist) {
+        ;[this.mark.x, this.mark.y] = [x, y]
+        this.mark.update()
+      }
+      if (this.mark instanceof Circle && this.exist) {
+        this.mark.moveCenter(x, y)
+        this.mark.update()
+      }
+    } catch (error) {
+      console.log('Erreur dans Point.moveTo()', error)
+      this.exist = false
     }
     // ToFix ce console.log est là qu'en phase de développement
-    if (this.childs.length > 20) console.log(`Nombre de dépendances élevée pour ${this.label} : ${this.childs.length}`)
+    // if (this.childs.length > 20) console.log(`Nombre de dépendances élevée pour ${this.label} : ${this.childs.length}`)
     this.notifyAllChilds()
   }
 
