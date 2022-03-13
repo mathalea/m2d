@@ -39,10 +39,15 @@ export class PointOnLineAtD extends Point {
   }
 
   update () {
-    const L = this.line
-    const dist = this.d instanceof Measure ? this.d.value : this.d
-    const Llength = distance(L.A, L.B)
-    const { x, y } = homothetieCoord(L.B, L.A, dist / (Llength === 0 ? 1 : Llength))
-    this.moveTo(x, y)
+    try {
+      const L = this.line
+      const dist = this.d instanceof Measure ? this.d.value : this.d
+      const Llength = distance(L.A, L.B)
+      const { x, y } = homothetieCoord(L.B, L.A, dist / (Llength === 0 ? 1 : Llength))
+      this.moveTo(x, y)
+    } catch (error) {
+      console.log('Erreur dans PointOnLineAtD.update()', error)
+      this.exist = false
+    }
   }
 }

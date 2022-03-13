@@ -37,14 +37,19 @@ export class PointOnSegment extends PointOnLine {
   }
 
   moveTo (x: number, y: number) {
-    const L = this.line
-    const P = { x, y }
-    const M = orthogonalProjectionCoord(P, L)
-    const [A, B] = [this.line.A, this.line.B]
-    if (M.x < Math.min(A.x, B.x) || M.x > Math.max(A.x, B.x) || M.y < Math.min(A.y, B.y) || M.y > Math.max(A.y, B.y)) return
-    this.k = (L.B.x - L.A.x) === 0 ? (L.B.y - L.A.y) === 0 ? this.k : (M.y - L.A.y) / (L.B.y - L.A.y) : (M.x - L.A.x) / (L.B.x - L.A.x)
-    if (this.length instanceof Measure) this.length.value = this.k * distance(L.A, L.B)
-    else this.length = this.k * distance(L.A, L.B)
-    super.moveTo(M.x, M.y)
+    try {
+      const L = this.line
+      const P = { x, y }
+      const M = orthogonalProjectionCoord(P, L)
+      const [A, B] = [this.line.A, this.line.B]
+      if (M.x < Math.min(A.x, B.x) || M.x > Math.max(A.x, B.x) || M.y < Math.min(A.y, B.y) || M.y > Math.max(A.y, B.y)) return
+      this.k = (L.B.x - L.A.x) === 0 ? (L.B.y - L.A.y) === 0 ? this.k : (M.y - L.A.y) / (L.B.y - L.A.y) : (M.x - L.A.x) / (L.B.x - L.A.x)
+      if (this.length instanceof Measure) this.length.value = this.k * distance(L.A, L.B)
+      else this.length = this.k * distance(L.A, L.B)
+      super.moveTo(M.x, M.y)
+    } catch (error) {
+      console.log('Erreur dans PointOnSegment.moveTo()', error)
+      this.exist = false
+    }
   }
 }

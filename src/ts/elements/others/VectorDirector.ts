@@ -20,7 +20,12 @@ export class VectorDirector extends Vector {
     }
 
     update (): void {
-      [this.x, this.y] = [this.line.directeur.x, this.line.directeur.y]
+      try {
+        [this.x, this.y] = [this.line.directeur.x, this.line.directeur.y]
+      } catch (error) {
+        console.log('Erreur dans VectorDirector.update()', error)
+        this.exist = false
+      }
       this.notifyAllChilds()
     }
 }

@@ -19,9 +19,13 @@ import { Coords } from '../elements/Element2D'
    * @returns [x, y] coordonnées de l'image
    */
 export function rotationCoord (A: Point | Coords, O: Point | Coords, angle: number) {
-  const x = (O.x + (A.x - O.x) * Math.cos((angle * Math.PI) / 180) - (A.y - O.y) * Math.sin((angle * Math.PI) / 180))
-  const y = (O.y + (A.x - O.x) * Math.sin((angle * Math.PI) / 180) + (A.y - O.y) * Math.cos((angle * Math.PI) / 180))
-  return { x, y }
+  try {
+    const x = (O.x + (A.x - O.x) * Math.cos((angle * Math.PI) / 180) - (A.y - O.y) * Math.sin((angle * Math.PI) / 180))
+    const y = (O.y + (A.x - O.x) * Math.sin((angle * Math.PI) / 180) + (A.y - O.y) * Math.cos((angle * Math.PI) / 180))
+    return { x, y }
+  } catch (error) {
+    return { x: NaN, y: NaN }
+  }
 }
 
 /**
@@ -32,9 +36,13 @@ export function rotationCoord (A: Point | Coords, O: Point | Coords, angle: numb
    * @returns [x, y] coordonnées de l'image
    */
 export function homothetieCoord (A: Point | Coords, O: Point | Coords, k: number) {
-  const x = (O.x + k * (A.x - O.x))
-  const y = (O.y + k * (A.y - O.y))
-  return { x, y }
+  try {
+    const x = (O.x + k * (A.x - O.x))
+    const y = (O.y + k * (A.y - O.y))
+    return { x, y }
+  } catch {
+    return { x: NaN, y: NaN }
+  }
 }
 
 /**
@@ -46,10 +54,14 @@ export function homothetieCoord (A: Point | Coords, O: Point | Coords, k: number
    * @returns [x, y] coordonnées de l'image
    */
 export function similitudeCoord (A: Point | Coords, O: Point | Coords, k: number, angle: number): Coords {
-  const angleRadian = angle * Math.PI / 180
-  const x = (O.x + k * (Math.cos(angleRadian) * (this.x - O.x) - Math.sin(angleRadian) * (this.y - O.y)))
-  const y = (O.y + k * (Math.cos(angleRadian) * (this.y - O.y) + Math.sin(angleRadian) * (this.x - O.x)))
-  return { x, y }
+  try {
+    const angleRadian = angle * Math.PI / 180
+    const x = (O.x + k * (Math.cos(angleRadian) * (this.x - O.x) - Math.sin(angleRadian) * (this.y - O.y)))
+    const y = (O.y + k * (Math.cos(angleRadian) * (this.y - O.y) + Math.sin(angleRadian) * (this.x - O.x)))
+    return { x, y }
+  } catch (error) {
+    return { x: NaN, y: NaN }
+  }
 }
 
 /**
@@ -60,18 +72,22 @@ export function similitudeCoord (A: Point | Coords, O: Point | Coords, k: number
  * @author Jean-Claude Lhote
  */
 export function orthogonalProjectionCoord (M: Point | Coords, d: Line): Coords {
-  const [a, b, c] = d.equation
-  const k = 1 / (a * a + b * b)
-  let x: number, y: number
-  if (a === 0) {
-    x = M.x
-    y = -c / b
-  } else if (b === 0) {
-    y = M.y
-    x = -c / a
-  } else {
-    x = k * (b * b * M.x - a * b * M.y - a * c)
-    y = k * (-a * b * M.x + a * a * M.y + (a * a * c) / b) - c / b
+  try {
+    const [a, b, c] = d.equation
+    const k = 1 / (a * a + b * b)
+    let x: number, y: number
+    if (a === 0) {
+      x = M.x
+      y = -c / b
+    } else if (b === 0) {
+      y = M.y
+      x = -c / a
+    } else {
+      x = k * (b * b * M.x - a * b * M.y - a * c)
+      y = k * (-a * b * M.x + a * a * M.y + (a * a * c) / b) - c / b
+    }
+    return { x, y }
+  } catch (error) {
+    return { x: NaN, y: NaN }
   }
-  return { x, y }
 }

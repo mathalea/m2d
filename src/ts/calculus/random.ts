@@ -10,7 +10,11 @@ import { Coords } from '../elements/Element2D'
 import { Point } from '../elements/points/Point'
 
 export function distance (A: Point | Coords, B: Point | Coords): number {
-  return Math.sqrt((A.x - B.x) ** 2 + (A.y - B.y) ** 2)
+  try {
+    return Math.sqrt((A.x - B.x) ** 2 + (A.y - B.y) ** 2)
+  } catch (error) {
+    return NaN
+  }
 }
 
 /**
@@ -31,19 +35,27 @@ export function distance (A: Point | Coords, B: Point | Coords): number {
 */
 export function randint (min: number, max: number, listeAEviter: number[] | number = []) {
   // Source : https://gist.github.com/pc035860/6546661
-  const range = max - min
-  let rand = Math.floor(Math.random() * (range + 1))
-  if (typeof listeAEviter === 'number') {
-    listeAEviter = [listeAEviter]
-  }
-  if (listeAEviter.length > 0) {
-    while (listeAEviter.indexOf(min + rand) !== -1) {
-      rand = Math.floor(Math.random() * (range + 1))
+  try {
+    const range = max - min
+    let rand = Math.floor(Math.random() * (range + 1))
+    if (typeof listeAEviter === 'number') {
+      listeAEviter = [listeAEviter]
     }
+    if (listeAEviter.length > 0) {
+      while (listeAEviter.indexOf(min + rand) !== -1) {
+        rand = Math.floor(Math.random() * (range + 1))
+      }
+    }
+    return min + rand
+  } catch (error) {
+    return NaN
   }
-  return min + rand
 }
 
 export function arrondi (nombre: number, precision: number = 10) {
-  return (Math.round(nombre * 10 ** precision) / 10 ** precision)
+  try {
+    return (Math.round(nombre * 10 ** precision) / 10 ** precision)
+  } catch (error) {
+    return NaN
+  }
 }

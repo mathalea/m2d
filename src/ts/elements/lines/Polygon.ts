@@ -57,7 +57,12 @@ export class Polygon extends Element2D {
     }
 
     update (): void {
-      this.g.setAttribute('points', listeXY(this.points))
+      try {
+        this.g.setAttribute('points', listeXY(this.points))
+      } catch (error) {
+        console.log('Erreur dans Polygone.update', error)
+        this.exist = false
+      }
     }
 
     get style () {
@@ -66,34 +71,52 @@ export class Polygon extends Element2D {
 
     // Tous les sommets auront le même style de sommet
     set style (style: PointStyle) {
-      for (const point of this.points) {
-        point.style = style
+      try {
+        for (const point of this.points) {
+          point.style = style
+        }
+        this._style = style
+      } catch (error) {
+        console.log('Erreur dans Polygone.style', error)
       }
-      this._style = style
     }
 
     get latex (): string {
-      if (!this.isVisible) return ''
-      let latex = `\n\n\t% Polygone ${this.label}`
-      latex += `\n\t\\draw${this.tikzOptions} ${listeXYLatex(this.points)};`
-      return latex
+      try {
+        if (!this.isVisible || !this.exist) return ''
+        let latex = `\n\n\t% Polygone ${this.label}`
+        latex += `\n\t\\draw${this.tikzOptions} ${listeXYLatex(this.points)};`
+        return latex
+      } catch (error) {
+        console.log('Erreur dans Polygone.latex()', error)
+        return ''
+      }
     }
 }
 
 function listeXY (points: Point[]) {
-  const parentFigure = points[0].parentFigure
-  let liste = ''
-  for (const point of points) {
-    liste += `${parentFigure.xToSx(point.x)}, ${parentFigure.yToSy(point.y)} `
+  try {
+    const parentFigure = points[0].parentFigure
+    let liste = ''
+    for (const point of points) {
+      liste += `${parentFigure.xToSx(point.x)}, ${parentFigure.yToSy(point.y)} `
+    }
+    return liste
+  } catch (error) {
+    console.log('Erreur dans Polygone.listeXY', error)
+    return ''
   }
-  return liste
 }
 
 function listeXYLatex (points: Point[]) {
-  let liste = ''
-  for (const point of points) {
-    liste += `(${point.x}, ${point.y})--`
+  try {
+    let liste = ''
+    for (const point of points) {
+      liste += `(${point.x}, ${point.y})--`
+    }
+    liste += 'cycle'
+    return liste
+  } catch (error) {
+    console.log('Erreur dans Polygon.listeXYLatex', error)
   }
-  liste += 'cycle'
-  return liste
 }

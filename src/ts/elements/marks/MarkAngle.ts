@@ -50,12 +50,17 @@ export class MarkAngle extends Element2D {
     }
 
     update () {
-      if (Math.abs(Math.abs(this.angle.value) - 90) < 0.4) {
-        this.arc.hide(false)
-        this.square.show(false)
-      } else {
-        this.arc.show(false)
-        this.square.hide(false)
+      try {
+        if (Math.abs(Math.abs(this.angle.value) - 90) < 0.4) {
+          this.arc.hide(false)
+          this.square.show(false)
+        } else {
+          this.arc.show(false)
+          this.square.hide(false)
+        }
+      } catch (error) {
+        console.log('Erreur dans MArkAngle.update()', error)
+        this.exist = false
       }
     }
 }
