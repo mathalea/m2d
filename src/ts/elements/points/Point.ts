@@ -90,17 +90,19 @@ export class Point extends Element2D {
   moveTo (x: number, y: number) {
     this.x = x
     this.y = y
-    if (this.trace) {
+    if (this.trace && this.exist) {
       const M = new Point(this.parentFigure, x, y, { style: 'o', size: 0.02 })
       this.g.appendChild(M.g)
       this.removeChild(M)
     }
-    if (this.mark instanceof Cross) {
     if (this.mark instanceof Cross && this.exist) {
       ;[this.mark.x, this.mark.y] = [x, y]
       this.mark.update()
     }
-
+    if (this.mark instanceof Circle && this.exist) {
+      this.mark.moveCenter(x, y)
+      this.mark.update()
+    }
     // ToFix ce console.log est là qu'en phase de développement
     if (this.childs.length > 20) console.log(`Nombre de dépendances élevée pour ${this.label} : ${this.childs.length}`)
     this.notifyAllChilds()
@@ -134,7 +136,7 @@ export class Point extends Element2D {
     if (style === '') {
       this.g.remove()
     }
-    if (style === 'x') {
+    if (style === 'x' && this.exist) {
       const X = new Cross(this.parentFigure, this.x, this.y)
       this.mark = X
       this.group.push(X)
@@ -142,7 +144,7 @@ export class Point extends Element2D {
       this.mark.color = this.color
       this.mark.thickness = this.thickness
     }
-    if (style === 'o') {
+    if (style === 'o' && this.exist) {
       // Rond
       const C = new Circle(this, this.size)
       this.mark = C
