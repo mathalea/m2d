@@ -1,3 +1,4 @@
+import { PointByHomothetie } from './../points/PointByHomothetie'
 import { Coords } from './../Element2D'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
@@ -14,6 +15,8 @@ import { angleOriented } from '../../calculus/trigonometry'
 import { Element2D } from '../Element2D'
 import { Vector } from '../others/Vector'
 import { Point } from '../points/Point'
+import { Segment } from './Segment'
+import { Measure } from '../measures/Measure'
 
 export type LineType = 'Line' | 'Segment' | 'Ray'
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
@@ -187,6 +190,16 @@ export class Line extends Element2D {
     } catch (error) {
       console.log('Erreur dans Line.distancePointer', error)
       return NaN
+    }
+  }
+
+  homothetie (center: Point, k:number|Measure) {
+    try {
+      const M = new PointByHomothetie(this.A, center, k, { temp: true })
+      const N = new PointByHomothetie(this.B, center, k, { temp: true })
+      return new Segment(M, N)
+    } catch (error) {
+      console.log('Erreur dans Segment.homothetie()', error)
     }
   }
 }

@@ -9,12 +9,13 @@
 
 import { intersectionLLCoord } from '../../calculus/intersection'
 import { Point, PointOptions } from './Point'
+import { Segment } from '../lines/Segment'
 import { Line } from '../lines/Line'
 
-export class PointIntersectionLL extends Point {
+export class PointIntersectionLS extends Point {
   L1: Line
-  L2: Line
-  constructor (L1: Line, L2: Line, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
+  L2: Segment
+  constructor (L1: Line, L2: Segment, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
     const { x, y } = intersectionLLCoord(L1, L2)
     super(L1.parentFigure, x, y, { style, size, thickness, color, draggable, temp })
     this.L1 = L1
@@ -24,14 +25,21 @@ export class PointIntersectionLL extends Point {
     L2.addChild(this)
     this.x = x
     this.y = y
+    if (x > Math.min(L2.x1, L2.x2) && x < Math.max(L2.x1, L2.x2) && y > Math.min(L2.y1, L2.y2) && y < Math.max(L2.y1, L2.y2)) this.exist = true
+    else this.exist = false
   }
 
   update (): void {
     try {
       const { x, y } = intersectionLLCoord(this.L1, this.L2)
+      if (x > Math.min(this.L2.x1, this.L2.x2) && x < Math.max(this.L2.x1, this.L2.x2) && y > Math.min(this.L2.y1, this.L2.y2) && y < Math.max(this.L2.y1, this.L2.y2)) {
+        this.exist = true
+      } else {
+        this.exist = false
+      }
       if (!isNaN(x) && !isNaN(y)) {
         this.moveTo(x, y)
-        if (!this.isVisible) this.show()
+        if (this.isVisible) this.show()
       } else this.hide()
     } catch (error) {
       console.log('Erreur dans PointIntersectionLL.update()', error)

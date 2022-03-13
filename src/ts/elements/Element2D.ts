@@ -74,6 +74,9 @@ export abstract class Element2D {
   }
 
   notifyAllChilds () {
+    if (this.childs.length > 40) {
+      console.log('Nombre de dépendances élevée pour ', this)
+    }
     for (const element of this.childs) {
       element.update()
     }
