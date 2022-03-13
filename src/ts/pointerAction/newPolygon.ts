@@ -8,6 +8,9 @@ export function newPolygon (figure: Figure, pointerX: number, pointerY: number) 
       if (figure.selectedElements[0] === e) {
         const points = figure.selectedElements as Point[]
         const p = new Polygon(...points)
+        if (figure.pointerSetOptions.color) p.color = figure.pointerSetOptions.color
+        if (figure.pointerSetOptions.thickness) p.thickness = figure.pointerSetOptions.thickness
+        if (figure.pointerSetOptions.dashed !== undefined) p.dashed = figure.pointerSetOptions.dashed
         figure.set.add(p)
         figure.selectedElements = []
         figure.displayMessage('')

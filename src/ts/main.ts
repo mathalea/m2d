@@ -1,19 +1,9 @@
 import { Figure } from './Figure'
-import { PointOnLineAtD } from './elements/points/PointOnLineAtD'
 import { PointByRotation } from './elements/points/PointByRotation'
-import { PointBySimilitude } from './elements/points/PointBySimilitude'
 import { PointByHomothetie } from './elements/points/PointByHomothetie'
-import { Segment } from './elements/lines/Segment'
 import { Cursor } from './elements/others/Cursor'
-import { Point } from './elements/points/Point'
-import { RandomInteger } from './elements/measures/randomInteger'
-import { Vector } from './elements/others/Vector'
-import { PointByTranslationVector } from './elements/points/PointByTranslationVector'
-import { Arc } from './elements/lines/Arc'
-import { ArcBy3Points } from './elements/lines/ArcBy3PointsAndRadius'
 import { RandomNumber } from './elements/measures/randomNumber'
 import { Line } from './elements/lines/Line'
-import { PointOnSegment } from './elements/points/PointOnSegment'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *

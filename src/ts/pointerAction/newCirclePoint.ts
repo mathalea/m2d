@@ -7,7 +7,7 @@ export function newCirclePoint (figure: Figure, pointerX: number, pointerY: numb
     if (e instanceof Point && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
       if (figure.selectedElements.length === 1) {
         const O = figure.selectedElements[0] as Point
-        const c = new Circle(O, e)
+        const c = new Circle(O, e, figure.pointerSetOptions)
         figure.set.add(c)
         figure.clearSelectedElements()
         actionNewCirclePointMessage(figure)

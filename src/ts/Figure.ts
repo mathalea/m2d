@@ -56,7 +56,7 @@ export class Figure {
     this.set = new Set()
     this.selectedElements = []
     this._pointerAction = 'drag'
-    this.pointerSetOptions = { color: 'black', thickness: 3 }
+    this.pointerSetOptions = { color: 'black', thickness: 1 }
     this.setInDrag = new Set()
     this.isDraging = false
     this.messageElement = null

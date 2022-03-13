@@ -11,8 +11,8 @@ import { Point } from '../points/Point'
 import { Line, OptionsGraphiques } from './Line'
 
 export class Ray extends Line {
-  constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', temp = false }: OptionsGraphiques = {}) {
-    super(A, B, { lineType: 'Ray', color, thickness, style, temp })
+  constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', dashed = false, temp = false }: OptionsGraphiques = {}) {
+    super(A, B, { lineType: 'Ray', color, thickness, style, temp, dashed })
   }
 
   update (): void {
