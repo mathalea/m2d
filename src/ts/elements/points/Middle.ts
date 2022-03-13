@@ -19,6 +19,11 @@ export class Middle extends Point {
   }
 
   update (): void {
-    this.moveTo((this.line.A.x + this.line.B.x) / 2, (this.line.A.y + this.line.B.y) / 2)
+    try {
+      this.moveTo((this.line.A.x + this.line.B.x) / 2, (this.line.A.y + this.line.B.y) / 2)
+    } catch (error) {
+      console.log('Erreur dans Middle.update()', error)
+      this.exist = false
+    }
   }
 }

@@ -33,18 +33,23 @@ export class PointIntersectionCC extends Point {
   }
 
   update (): void {
-    const { x, y } = intersectionCCCoord(this.C1, this.C2, this.n)
-    if (!isNaN(x) && !isNaN(y)) {
-      this.moveTo(x, y)
-      if (!this.exist) {
-        this.show(false)
-        this.exist = true
-        for (const e of this.childs) {
-          if (e instanceof Element2D) e.show(false)
+    try {
+      const { x, y } = intersectionCCCoord(this.C1, this.C2, this.n)
+      if (!isNaN(x) && !isNaN(y)) {
+        this.moveTo(x, y)
+        if (!this.exist) {
+          this.show(false)
+          this.exist = true
+          for (const e of this.childs) {
+            if (e instanceof Element2D) e.show(false)
+          }
         }
+      } else {
+        this.hide(false)
+        this.exist = false
       }
-    } else {
-      this.hide(false)
+    } catch (error) {
+      console.log('Erreur dans PointIntersectionCC.update()', error)
       this.exist = false
     }
   }

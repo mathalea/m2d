@@ -33,9 +33,14 @@ export class PointByRotation extends Point {
     }
 
     update (): void {
-      const angleMeasure = (typeof this.angle === 'number') ? this.angle : this.angle.value
-      const x = (this.center.x + (this.previous.x - this.center.x) * Math.cos((angleMeasure * Math.PI) / 180) - (this.previous.y - this.center.y) * Math.sin((angleMeasure * Math.PI) / 180))
-      const y = (this.center.y + (this.previous.x - this.center.x) * Math.sin((angleMeasure * Math.PI) / 180) + (this.previous.y - this.center.y) * Math.cos((angleMeasure * Math.PI) / 180))
-      this.moveTo(x, y)
+      try {
+        const angleMeasure = (typeof this.angle === 'number') ? this.angle : this.angle.value
+        const x = (this.center.x + (this.previous.x - this.center.x) * Math.cos((angleMeasure * Math.PI) / 180) - (this.previous.y - this.center.y) * Math.sin((angleMeasure * Math.PI) / 180))
+        const y = (this.center.y + (this.previous.x - this.center.x) * Math.sin((angleMeasure * Math.PI) / 180) + (this.previous.y - this.center.y) * Math.cos((angleMeasure * Math.PI) / 180))
+        this.moveTo(x, y)
+      } catch (error) {
+        console.log('Erreur dans PointByRotation.update()', error)
+        this.exist = false
+      }
     }
 }

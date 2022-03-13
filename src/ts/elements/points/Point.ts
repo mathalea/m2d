@@ -75,11 +75,21 @@ export class Point extends Element2D {
    * Ce sont sur ses marques (croix ou rond ou ...) qu'il faut faire une mise à jour du graphique
    */
   update (): void {
-    this.moveTo(this.x, this.y)
+    try {
+      this.moveTo(this.x, this.y)
+    } catch (error) {
+      console.log('Erreur dans Point.update()', error)
+      this.exist = false
+    }
   }
 
   isOnFigure () {
-    return (this.x < this.parentFigure.xMax && this.x > this.parentFigure.xMin && this.y < this.parentFigure.yMax && this.y > this.parentFigure.yMin)
+    try {
+      return (this.x < this.parentFigure.xMax && this.x > this.parentFigure.xMin && this.y < this.parentFigure.yMax && this.y > this.parentFigure.yMin)
+    } catch (error) {
+      console.log('Erreur dans Point.isOnFigure()', error)
+      this.exist = false
+    }
   }
 
   /**

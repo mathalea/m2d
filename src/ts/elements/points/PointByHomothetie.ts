@@ -35,13 +35,18 @@ export class PointByHomothetie extends Point {
     }
 
     update (): void {
-      const rapport = this.k instanceof Measure ? this.k.value : this.k
-      if (!isNaN(rapport)) {
-        const x = (this.center.x + rapport * (this.previous.x - this.center.x))
-        const y = (this.center.y + rapport * (this.previous.y - this.center.y))
-        this.moveTo(x, y)
-        this.exist = true
-      } else {
+      try {
+        const rapport = this.k instanceof Measure ? this.k.value : this.k
+        if (!isNaN(rapport)) {
+          const x = (this.center.x + rapport * (this.previous.x - this.center.x))
+          const y = (this.center.y + rapport * (this.previous.y - this.center.y))
+          this.moveTo(x, y)
+          this.exist = true
+        } else {
+          this.exist = false
+        }
+      } catch (error) {
+        console.log('Erreur dans PointByHomothetie.update()', error)
         this.exist = false
       }
     }

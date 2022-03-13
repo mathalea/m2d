@@ -24,7 +24,13 @@ export class PointByTranslationVector extends Point {
   }
 
   update (): void {
-    this.moveTo(this.previous.x + this.vector.x, this.previous.y + this.vector.y)
+    try {
+      this.moveTo(this.previous.x + this.vector.x, this.previous.y + this.vector.y)
+    } catch (error) {
+      console.log('Erreur dans PointByTranslationVector.update()', error)
+      this.exist = false
+    }
+
     this.notifyAllChilds()
   }
 }

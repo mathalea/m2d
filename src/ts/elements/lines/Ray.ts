@@ -30,7 +30,7 @@ export class Ray extends Line {
       this.notifyAllChilds()
     } catch (error) {
       console.log('Erreur dans Ray.update', error)
-      this.existe = false
+      this.exist = false
     }
   }
 }

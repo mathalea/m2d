@@ -84,16 +84,21 @@ export class TextByPosition extends Element2D {
     }
 
     get latex () {
-      if (!this.isVisible) return ''
-      let anchorLatex: 'east' | 'center' |'west'
-      if (this.anchor === 'start') {
-        anchorLatex = 'west'
-      } else if (this.anchor === 'middle') {
-        anchorLatex = 'center'
-      } else {
-        anchorLatex = 'east'
+      try {
+        if (!this.isVisible) return ''
+        let anchorLatex: 'east' | 'center' |'west'
+        if (this.anchor === 'start') {
+          anchorLatex = 'west'
+        } else if (this.anchor === 'middle') {
+          anchorLatex = 'center'
+        } else {
+          anchorLatex = 'east'
+        }
+        return `\n\t\\draw${(this.color !== 'black' && this.color !== undefined) ? `[${this.color}]` : ''} (${this.x},${this.y}) node[anchor = ${anchorLatex}] {${this.text}};`
+      } catch (error) {
+        console.log('Erreur dans TextByPosition.latex()', error)
+        return ''
       }
-      return `\n\t\\draw${(this.color !== 'black' && this.color !== undefined) ? `[${this.color}]` : ''} (${this.x},${this.y}) node[anchor = ${anchorLatex}] {${this.text}};`
     }
 
     /**

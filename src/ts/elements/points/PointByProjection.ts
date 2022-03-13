@@ -24,7 +24,12 @@ export class PointByProjection extends Point {
     }
 
     update (): void {
-      const { x, y } = orthogonalProjectionCoord(this.previous, this.line)
-      this.moveTo(x, y)
+      try {
+        const { x, y } = orthogonalProjectionCoord(this.previous, this.line)
+        this.moveTo(x, y)
+      } catch (error) {
+        console.log('Erreur dans PointByProjection.update()', error)
+        this.exist = false
+      }
     }
 }
