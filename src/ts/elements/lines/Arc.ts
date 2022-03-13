@@ -50,42 +50,55 @@ export class Arc extends Element2D {
   }
 
   update (): void {
-    const angleMeasure = (typeof this.angle === 'number') ? this.angle : this.angle.value
-    const [large, sweep] = getLargeSweep(angleMeasure)
-    this.point2 = rotationCoord(this.point, this.center, angleMeasure)
-    const d = this.parentFigure.xToSx(distance(this.center, this.point))
-    this.g.setAttribute('d', `M${this.parentFigure.xToSx(this.point.x)} ${this.parentFigure.yToSy(this.point.y)} A ${d} ${d} 0 ${large} ${sweep} ${this.parentFigure.xToSx(this.point2.x)} ${this.parentFigure.yToSy(this.point2.y)}`)
+    try {
+      const angleMeasure = (typeof this.angle === 'number') ? this.angle : this.angle.value
+      const [large, sweep] = getLargeSweep(angleMeasure)
+      this.point2 = rotationCoord(this.point, this.center, angleMeasure)
+      const d = this.parentFigure.xToSx(distance(this.center, this.point))
+      this.g.setAttribute('d', `M${this.parentFigure.xToSx(this.point.x)} ${this.parentFigure.yToSy(this.point.y)} A ${d} ${d} 0 ${large} ${sweep} ${this.parentFigure.xToSx(this.point2.x)} ${this.parentFigure.yToSy(this.point2.y)}`)
+    } catch (error) {
+      console.log('Erreur dans Arc.update()', error)
+      this.exist = false
+    }
     // Ajout des segments ?
     // this.g.setAttribute('d', this.g.getAttribute('d') + `L ${this.parentFigure.xToSx(this.center.x)} ${this.parentFigure.yToSy(this.center.y)} Z`)
   }
 
   // ToFix !!! Pas le même qu'en SVG
   get latex (): string {
-    if (!this.isVisible) return ''
-    const angleMeasure = (typeof this.angle === 'number') ? this.angle : this.angle.value
-    const radius = distance(this.center, this.point)
-    const azimut = angleOriented(this.horiz, this.center, this.point)
-    const anglefin = azimut + angleMeasure
-    let latex = `\n\n\t% Arc ${this._label}`
-    latex += `\n\t\\draw${this.tikzOptions} (${this.point.x},${this.point.y}) arc (${azimut}:${anglefin}:${radius}) ;`
-    return latex
+    if (!this.isVisible || !this.exist) return ''
+    try {
+      const angleMeasure = (typeof this.angle === 'number') ? this.angle : this.angle.value
+      const radius = distance(this.center, this.point)
+      const azimut = angleOriented(this.horiz, this.center, this.point)
+      const anglefin = azimut + angleMeasure
+      let latex = `\n\n\t% Arc ${this._label}`
+      latex += `\n\t\\draw${this.tikzOptions} (${this.point.x},${this.point.y}) arc (${azimut}:${anglefin}:${radius}) ;`
+      return latex
+    } catch (error) {
+      return ''
+    }
   }
 }
 
 function getLargeSweep (angle: number) {
-  let large: 0 | 1
-  let sweep: 0 | 1
-  if (angle > 180) {
-    angle = angle - 360
-    large = 1
-    sweep = 0
-  } else if (angle < -180) {
-    angle = 360 + angle
-    large = 1
-    sweep = 1
-  } else {
-    large = 0
-    sweep = (angle > 0) ? 0 : 1
+  try {
+    let large: 0 | 1
+    let sweep: 0 | 1
+    if (angle > 180) {
+      angle = angle - 360
+      large = 1
+      sweep = 0
+    } else if (angle < -180) {
+      angle = 360 + angle
+      large = 1
+      sweep = 1
+    } else {
+      large = 0
+      sweep = (angle > 0) ? 0 : 1
+    }
+    return [large, sweep]
+  } catch (error) {
+    return [NaN, NaN]
   }
-  return [large, sweep]
 }

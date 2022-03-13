@@ -64,8 +64,12 @@ export class Circle extends Element2D {
    * Renvoie un nouveau cercle sans modifier le premier
    */
   translation (xt: number, yt: number) {
-    const O2 = new Point(this.parentFigure, this.center.x + xt, this.center.y + yt)
-    return new Circle(O2, this.radius)
+    try {
+      const O2 = new Point(this.parentFigure, this.center.x + xt, this.center.y + yt)
+      return new Circle(O2, this.radius)
+    } catch (error) {
+      return null
+    }
   }
 
   /**
@@ -74,30 +78,47 @@ export class Circle extends Element2D {
    * @param y
    */
   moveCenter (x: number, y: number) {
-    this.g.setAttribute('cx', `${this.parentFigure.xToSx(x)}`)
-    this.g.setAttribute('cy', `${this.parentFigure.yToSy(y)}`)
-    this.M.moveTo(this.center.x + this.radius, this.center.y)
+    try {
+      this.g.setAttribute('cx', `${this.parentFigure.xToSx(x)}`)
+      this.g.setAttribute('cy', `${this.parentFigure.yToSy(y)}`)
+      this.M.moveTo(this.center.x + this.radius, this.center.y)
+    } catch (error) {
+      console.log('erreur dans Circle.moveCenter', error)
+    }
   }
 
   get radius (): number {
-    return (this._radius instanceof Measure) ? this._radius.value : this._radius
+    try {
+      return (this._radius instanceof Measure) ? this._radius.value : this._radius
+    } catch (error) {
+      return NaN
+    }
   }
 
   set radius (radius: number) {
-    if (this._radius instanceof Measure) this._radius.value = radius
-    else this._radius = radius
-    this.g.setAttribute('r', `${((this._radius instanceof Measure) ? this._radius.value : this._radius) * this.parentFigure.pixelsPerUnit}`)
+    try {
+      if (this._radius instanceof Measure) this._radius.value = radius
+      else this._radius = radius
+      this.g.setAttribute('r', `${((this._radius instanceof Measure) ? this._radius.value : this._radius) * this.parentFigure.pixelsPerUnit}`)
+    } catch (error) {
+      console.log('Erreur dans Circle set radius avec l\'argument ', radius)
+    }
   }
 
   update (): void {
-    this.moveCenter(this.center.x, this.center.y)
-    if (this.pointOnCircle) {
-      this.radius = distance(this.center, this.pointOnCircle)
+    try {
+      this.moveCenter(this.center.x, this.center.y)
+      if (this.pointOnCircle) {
+        this.radius = distance(this.center, this.pointOnCircle)
+      }
+      if (this._radius instanceof Measure) {
+        this.radius = Math.max(this._radius.value, 0)
+      }
+      this.notifyAllChilds()
+    } catch (error) {
+      console.log('Erreur dans Circle update().', error)
+      this.exist = false
     }
-    if (this._radius instanceof Measure) {
-      this.radius = Math.max(this._radius.value, 0)
-    }
-    this.notifyAllChilds()
   }
 
   /**
@@ -105,10 +126,14 @@ export class Circle extends Element2D {
    * Renvoie un nouveau cercle sans modifier le premier
    */
   rotation (O: Point, angle: number) {
-    const x = (O.x + (this.center.x - O.x) * Math.cos((angle * Math.PI) / 180) - (this.center.y - O.y) * Math.sin((angle * Math.PI) / 180))
-    const y = (O.y + (this.center.x - O.x) * Math.sin((angle * Math.PI) / 180) + (this.center.y - O.y) * Math.cos((angle * Math.PI) / 180))
-    const O2 = new Point(this.parentFigure, x, y)
-    return new Circle(O2, this.radius)
+    try {
+      const x = (O.x + (this.center.x - O.x) * Math.cos((angle * Math.PI) / 180) - (this.center.y - O.y) * Math.sin((angle * Math.PI) / 180))
+      const y = (O.y + (this.center.x - O.x) * Math.sin((angle * Math.PI) / 180) + (this.center.y - O.y) * Math.cos((angle * Math.PI) / 180))
+      const O2 = new Point(this.parentFigure, x, y)
+      return new Circle(O2, this.radius)
+    } catch (error) {
+      console.log('Erreur dans Circle.rotation() avec les arguments ', O, angle, error)
+    }
   }
 
   /**
@@ -117,10 +142,14 @@ export class Circle extends Element2D {
    */
 
   homothetie (O: Point, k: number) {
-    const x = (O.x + k * (this.center.x - O.x))
-    const y = (O.y + k * (this.center.y - O.y))
-    const O2 = new Point(this.parentFigure, x, y)
-    return new Circle(O2, this.radius * k)
+    try {
+      const x = (O.x + k * (this.center.x - O.x))
+      const y = (O.y + k * (this.center.y - O.y))
+      const O2 = new Point(this.parentFigure, x, y)
+      return new Circle(O2, this.radius * k)
+    } catch (error) {
+      console.log('Erreur dans Circle.homothetie() avec les arguments ', O, k, error)
+    }
   }
 
   /**
@@ -128,22 +157,34 @@ export class Circle extends Element2D {
    * Renvoie un nouveau point sans modifier le premier
    */
   similitude (O: Point, k: number, angle: number) {
-    const angleRadian = angle * Math.PI / 180
-    const x = (O.x + k * (Math.cos(angleRadian) * (this.center.x - O.x) - Math.sin(angleRadian) * (this.center.y - O.y)))
-    const y = (O.y + k * (Math.cos(angleRadian) * (this.center.y - O.y) + Math.sin(angleRadian) * (this.center.x - O.x))
-    )
-    const O2 = new Point(this.parentFigure, x, y)
-    return new Circle(O2, this.radius * k)
+    try {
+      const angleRadian = angle * Math.PI / 180
+      const x = (O.x + k * (Math.cos(angleRadian) * (this.center.x - O.x) - Math.sin(angleRadian) * (this.center.y - O.y)))
+      const y = (O.y + k * (Math.cos(angleRadian) * (this.center.y - O.y) + Math.sin(angleRadian) * (this.center.x - O.x))
+      )
+      const O2 = new Point(this.parentFigure, x, y)
+      return new Circle(O2, this.radius * k)
+    } catch (error) {
+      console.log('Erreur dans Circle.similitude() avec les arguments ', O, k, angle, error)
+    }
   }
 
   public distancePointer (pointerX: number, pointerY: number) {
-    return Math.abs(distance(this.center, { x: pointerX, y: pointerY }) - this.radius)
+    try {
+      return Math.abs(distance(this.center, { x: pointerX, y: pointerY }) - this.radius)
+    } catch (error) {
+      return NaN
+    }
   }
 
   get latex () {
-    if (!this.isVisible) return ''
-    let latex = `\n\n\t% Circle center : ${this.center.label}, radius ${this._radius}`
-    latex += `\n \t \\draw${this.tikzOptions} (${this.center.x}, ${this.center.y}) circle(${this.radius});`
-    return latex
+    try {
+      if (!this.isVisible || !this.exist) return ''
+      let latex = `\n\n\t% Circle center : ${this.center.label}, radius ${this._radius}`
+      latex += `\n \t \\draw${this.tikzOptions} (${this.center.x}, ${this.center.y}) circle(${this.radius});`
+      return latex
+    } catch (error) {
+      return ''
+    }
   }
 }

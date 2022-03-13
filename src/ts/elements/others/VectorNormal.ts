@@ -20,7 +20,12 @@ export class VectorNormal extends Vector {
   }
 
   update (): void {
-    [this.x, this.y] = [this.line.normal.x, this.line.normal.y]
+    try {
+      [this.x, this.y] = [this.line.normal.x, this.line.normal.y]
+    } catch (error) {
+      console.log('Erreur dans VectorNormal.update()', error)
+      this.exist = false
+    }
     this.notifyAllChilds()
   }
 }

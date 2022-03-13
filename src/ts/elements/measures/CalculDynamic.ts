@@ -26,7 +26,12 @@ export class CalculDynamic extends Measure {
     }
 
     update () {
-      this.value = this.calcul(this.args)
+      try {
+        this.value = this.calcul(this.args)
+      } catch (error) {
+        console.log('Erreur dans CalculDynamic.update()', error)
+        this.exist = false
+      }
       this.notifyAllChilds()
     }
 }

@@ -27,15 +27,25 @@ export class Polyline extends Element2D {
     }
 
     update (): void {
-      this.g.setAttribute('points', `${listeXY(this.points)}`)
+      try {
+        this.g.setAttribute('points', `${listeXY(this.points)}`)
+      } catch (error) {
+        console.log('Erreur dans Polyline.update', error)
+        this.exist = false
+      }
     }
 }
 
 function listeXY (points: Point[]) {
-  const parentFigure = points[0].parentFigure
-  let liste = ''
-  for (const point of points) {
-    liste += `${parentFigure.xToSx(point.x)}, ${parentFigure.yToSy(point.y)} `
+  try {
+    const parentFigure = points[0].parentFigure
+    let liste = ''
+    for (const point of points) {
+      liste += `${parentFigure.xToSx(point.x)}, ${parentFigure.yToSy(point.y)} `
+    }
+    return liste
+  } catch (error) {
+    console.log('Erreur dans Polyline.listeXY', error)
+    return []
   }
-  return liste
 }

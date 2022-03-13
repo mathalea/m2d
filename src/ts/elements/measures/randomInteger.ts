@@ -33,13 +33,18 @@ export class RandomInteger extends Measure {
     }
 
     update () {
-      let rand = Math.floor(Math.random() * (this.range + 1))
-      if (this.listeAEviter.length > 0) {
-        while (this.listeAEviter.indexOf(this.min + rand) !== -1) {
-          rand = Math.floor(Math.random() * (this.range + 1))
+      try {
+        let rand = Math.floor(Math.random() * (this.range + 1))
+        if (this.listeAEviter.length > 0) {
+          while (this.listeAEviter.indexOf(this.min + rand) !== -1) {
+            rand = Math.floor(Math.random() * (this.range + 1))
+          }
         }
+        this.value = this.min + rand
+      } catch (error) {
+        console.log('Erreur dans RandomInteger.update()', error)
+        this.exist = false
       }
-      this.value = this.min + rand
       this.notifyAllChilds()
     }
 }

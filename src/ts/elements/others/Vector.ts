@@ -21,27 +21,32 @@ export class Vector extends Element2D {
     let correct = true
     this._x = 0
     this._y = 0
-    if (typeof arg1 === 'number') {
-      this._x = arg1
-      if (typeof arg2 === 'number' || arg2 instanceof Measure) {
-        this._y = arg2
-        if (arg2 instanceof Measure) arg2.addChild(this)
-      } else correct = false
-    } else if (arg1 instanceof Measure) {
-      this._x = arg1
-      arg1.addChild(this)
-      if (typeof arg2 === 'number' || arg2 instanceof Measure) {
-        this._y = arg2
-        if (arg2 instanceof Measure) arg2.addChild(this)
-      } else correct = false
-    } else if (arg1 instanceof Point && arg2 instanceof Point) {
-      this._x = arg2.x - arg1.x
-      this._y = arg2.y - arg1.y
-    } else {
+    try {
+      if (typeof arg1 === 'number') {
+        this._x = arg1
+        if (typeof arg2 === 'number' || arg2 instanceof Measure) {
+          this._y = arg2
+          if (arg2 instanceof Measure) arg2.addChild(this)
+        } else correct = false
+      } else if (arg1 instanceof Measure) {
+        this._x = arg1
+        arg1.addChild(this)
+        if (typeof arg2 === 'number' || arg2 instanceof Measure) {
+          this._y = arg2
+          if (arg2 instanceof Measure) arg2.addChild(this)
+        } else correct = false
+      } else if (arg1 instanceof Point && arg2 instanceof Point) {
+        this._x = arg2.x - arg1.x
+        this._y = arg2.y - arg1.y
+      } else {
+        correct = false
+      }
+    } catch (error) {
+      console.log(error)
       correct = false
     }
     if (!correct) {
-      throw new Error('Les paramètres doivent être 2 points ou 2 nombres.')
+      this.exist = false
     }
   }
 

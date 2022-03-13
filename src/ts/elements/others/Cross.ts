@@ -37,28 +37,32 @@ export class Cross extends Element2D {
     }
 
     update (): void {
-      const x1Svg = this.parentFigure.xToSx(this.x - this.size)
-      const x2Svg = this.parentFigure.xToSx(this.x + this.size)
-      const y1Svg = this.parentFigure.yToSy(this.y + this.size)
-      const y2Svg = this.parentFigure.yToSy(this.y - this.size)
+      try {
+        const x1Svg = this.parentFigure.xToSx(this.x - this.size)
+        const x2Svg = this.parentFigure.xToSx(this.x + this.size)
+        const y1Svg = this.parentFigure.yToSy(this.y + this.size)
+        const y2Svg = this.parentFigure.yToSy(this.y - this.size)
 
-      const x12Svg = this.parentFigure.xToSx(this.x - this.size)
-      const x22Svg = this.parentFigure.xToSx(this.x + this.size)
-      const y12Svg = this.parentFigure.yToSy(this.y - this.size)
-      const y22Svg = this.parentFigure.yToSy(this.y + this.size)
-
-      this.segment1.setAttribute('x1', `${x1Svg}`)
-      this.segment1.setAttribute('y1', `${y1Svg}`)
-      this.segment1.setAttribute('x2', `${x2Svg}`)
-      this.segment1.setAttribute('y2', `${y2Svg}`)
-      this.segment2.setAttribute('x1', `${x12Svg}`)
-      this.segment2.setAttribute('y1', `${y12Svg}`)
-      this.segment2.setAttribute('x2', `${x22Svg}`)
-      this.segment2.setAttribute('y2', `${y22Svg}`)
+        const x12Svg = this.parentFigure.xToSx(this.x - this.size)
+        const x22Svg = this.parentFigure.xToSx(this.x + this.size)
+        const y12Svg = this.parentFigure.yToSy(this.y - this.size)
+        const y22Svg = this.parentFigure.yToSy(this.y + this.size)
+        this.segment1.setAttribute('x1', `${x1Svg}`)
+        this.segment1.setAttribute('y1', `${y1Svg}`)
+        this.segment1.setAttribute('x2', `${x2Svg}`)
+        this.segment1.setAttribute('y2', `${y2Svg}`)
+        this.segment2.setAttribute('x1', `${x12Svg}`)
+        this.segment2.setAttribute('y1', `${y12Svg}`)
+        this.segment2.setAttribute('x2', `${x22Svg}`)
+        this.segment2.setAttribute('y2', `${y22Svg}`)
+      } catch (error) {
+        console.log(error)
+        this.exist = false
+      }
     }
 
     get latex () {
-      if (!this.isVisible) return ''
+      if (!this.isVisible || !this.exist) return ''
       let tex = `\n\n\t % Point ${this._label ?? ''}`
       tex += `\n \t \\draw${this.tikzOptions} (${this.x - this.size}, ${this.y + this.size}) -- (${this.x + this.size}, ${this.y - this.size});`
       tex += `\n \t \\draw${this.tikzOptions} (${this.x - this.size}, ${this.y - this.size}) -- (${this.x + this.size}, ${this.y + this.size});`

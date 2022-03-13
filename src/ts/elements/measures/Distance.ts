@@ -25,7 +25,12 @@ export class Distance extends Measure {
     }
 
     update () {
-      this.value = distance(this.A, this.B)
+      try {
+        this.value = distance(this.A, this.B)
+      } catch (error) {
+        console.log('Erreur dans Distance.update()', error)
+        this.exist = false
+      }
       this.notifyAllChilds()
     }
 }

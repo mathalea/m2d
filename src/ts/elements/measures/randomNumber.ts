@@ -31,13 +31,18 @@ export class RandomNumber extends Measure {
     }
 
     update () {
-      let rand = Math.random() * this.range
-      if (this.listeAEviter.length > 0) {
-        while (this.listeAEviter.indexOf(this.min + rand) !== -1) {
-          rand = Math.random() * this.range
+      try {
+        let rand = Math.random() * this.range
+        if (this.listeAEviter.length > 0) {
+          while (this.listeAEviter.indexOf(this.min + rand) !== -1) {
+            rand = Math.random() * this.range
+          }
         }
+        this.value = this.min + rand
+      } catch (error) {
+        console.log('Erreur dans RandomNumber.update()', error)
+        this.exist = false
       }
-      this.value = this.min + rand
       this.notifyAllChilds()
     }
 }
