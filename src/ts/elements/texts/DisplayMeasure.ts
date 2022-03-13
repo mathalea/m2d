@@ -26,7 +26,12 @@ export class DisplayMeasure extends TextByPosition {
   }
 
   update (): void {
-    this.text = this.textBefore + this.measure.value.toString().replace(/\d+\.\d+/g, (number: string) => (Math.round(10 ** this.precision * parseFloat(number)) / 10 ** this.precision).toString()) + this.textAfter
+    try {
+      this.text = this.textBefore + this.measure.value.toString().replace(/\d+\.\d+/g, (number: string) => (Math.round(10 ** this.precision * parseFloat(number)) / 10 ** this.precision).toString()) + this.textAfter
+    } catch (error) {
+      console.log('Erreur dans DisplayMeasure.update()', error)
+      this.exist = false
+    }
     this.notifyAllChilds() // Utile ?
   }
 }

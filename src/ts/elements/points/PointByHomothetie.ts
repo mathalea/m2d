@@ -17,20 +17,37 @@ export class PointByHomothetie extends Point {
     constructor (A: Point, center: Point, k: number | Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
       const x = (center.x + (k instanceof Measure ? k.value : k) * (A.x - center.x))
       const y = (center.y + (k instanceof Measure ? k.value : k) * (A.y - center.y))
-      super(A.parentFigure, x, y, { style, size, thickness, color, draggable, temp })
+      super(A.parentFigure, x, y, { style, size, thickness, color, draggable, temp, exist: !isNaN(x) })
       this.center = center
       this.k = k
       this.previous = A
       if (label !== undefined) this.label = label
       A.addChild(this)
       center.addChild(this)
-      if (k instanceof Measure) k.addChild(this)
+      if (k instanceof Measure) {
+        k.addChild(this)
+        if (isNaN(k.value)) this.exist = false
+        else this.exist = true
+      } else {
+        if (isNaN(k)) this.exist = false
+        else this.exist = true
+      }
     }
 
     update (): void {
-      const rapport = this.k instanceof Measure ? this.k.value : this.k
-      const x = (this.center.x + rapport * (this.previous.x - this.center.x))
-      const y = (this.center.y + rapport * (this.previous.y - this.center.y))
-      this.moveTo(x, y)
+      try {
+        const rapport = this.k instanceof Measure ? this.k.value : this.k
+        if (!isNaN(rapport)) {
+          const x = (this.center.x + rapport * (this.previous.x - this.center.x))
+          const y = (this.center.y + rapport * (this.previous.y - this.center.y))
+          this.moveTo(x, y)
+          this.exist = true
+        } else {
+          this.exist = false
+        }
+      } catch (error) {
+        console.log('Erreur dans PointByHomothetie.update()', error)
+        this.exist = false
+      }
     }
 }

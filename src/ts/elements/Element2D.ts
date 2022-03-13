@@ -112,20 +112,25 @@ export abstract class Element2D {
   }
 
   set exist (arg: boolean) {
-    let allParentsExist = true
-    for (const parent of this.parents) {
-      if (!parent.exist) {
-        allParentsExist = false
-        break
+    try {
+      let allParentsExist = true
+      for (const parent of this.parents) {
+        if (!parent.exist) {
+          allParentsExist = false
+          break
+        }
       }
-    }
-    this._exist = arg && allParentsExist
-    ;(this._exist && this.isVisible)
-      ? this.show(false)
-      : this.hide(false)
-    for (const e of this.childs) {
-      e.exist = this._exist && e.exist
-      if (e instanceof Element2D && e.isVisible) this._exist ? e.show(false) : e.hide(false)
+      this._exist = arg && allParentsExist
+      ;(this._exist && this.isVisible)
+        ? this.show(false)
+        : this.hide(false)
+      for (const e of this.childs) {
+        e.exist = this._exist && e.exist
+        if (e instanceof Element2D && e.isVisible) this._exist ? e.show(false) : e.hide(false)
+      }
+    } catch (error) {
+      console.log('Erreur dans Element2d.exist()', error)
+      this.exist = false
     }
   }
 

@@ -28,10 +28,15 @@ export class PointIntersectionLL extends Point {
   }
 
   update (): void {
-    const { x, y } = intersectionLLCoord(this.L1, this.L2)
-    if (!isNaN(x) && !isNaN(y)) {
-      this.moveTo(x, y)
-      if (!this.isVisible) this.show()
-    } else this.hide()
+    try {
+      const { x, y } = intersectionLLCoord(this.L1, this.L2)
+      if (!isNaN(x) && !isNaN(y)) {
+        this.moveTo(x, y)
+        if (!this.isVisible) this.show()
+      } else this.hide()
+    } catch (error) {
+      console.log('Erreur dans PointIntersectionLL.update()', error)
+      this.exist = false
+    }
   }
 }

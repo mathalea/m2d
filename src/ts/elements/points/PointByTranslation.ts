@@ -23,6 +23,11 @@ export class PointByTranslation extends Point {
     }
 
     update (): void {
-      this.moveTo(this.previous.x + this.xt, this.previous.y + this.yt)
+      try {
+        this.moveTo(this.previous.x + this.xt, this.previous.y + this.yt)
+      } catch (error) {
+        console.log('Erreur dans PointByTranslation.update()', error)
+        this.exist = false
+      }
     }
 }

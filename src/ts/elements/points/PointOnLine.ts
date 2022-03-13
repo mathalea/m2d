@@ -42,27 +42,37 @@ export class PointOnLine extends Point {
   }
 
   update () {
-    const L = this.line
-    const Llength = distance(L.A, L.B)
-    if (this.length instanceof Measure) {
-      this.k = this.length.value / (Llength === 0 ? 1 : Llength)
-    } else {
-      this.k = this.length / (Llength === 0 ? 1 : Llength)
+    try {
+      const L = this.line
+      const Llength = distance(L.A, L.B)
+      if (this.length instanceof Measure) {
+        this.k = this.length.value / (Llength === 0 ? 1 : Llength)
+      } else {
+        this.k = this.length / (Llength === 0 ? 1 : Llength)
+      }
+      this.moveTo((1 - this.k) * L.A.x + this.k * L.B.x, (1 - this.k) * L.A.y + this.k * L.B.y)
+    } catch (error) {
+      console.log('Erreur dans PointOnLine.update()', error)
+      this.exist = false
     }
-    this.moveTo((1 - this.k) * L.A.x + this.k * L.B.x, (1 - this.k) * L.A.y + this.k * L.B.y)
   }
 
   moveTo (x: number, y: number) {
-    const L = this.line
-    const P = { x, y }
-    const M = orthogonalProjectionCoord(P, L)
-    this.k = (L.B.x - L.A.x) === 0 ? (L.B.y - L.A.y) === 0 ? this.k : (M.y - L.A.y) / (L.B.y - L.A.y) : (M.x - L.A.x) / (L.B.x - L.A.x)
-    if (this.length instanceof Measure) {
-      this.length.value = this.k * distance(L.A, L.B)
-    } else {
-      this.length = this.k * distance(L.A, L.B)
+    try {
+      const L = this.line
+      const P = { x, y }
+      const M = orthogonalProjectionCoord(P, L)
+      this.k = (L.B.x - L.A.x) === 0 ? (L.B.y - L.A.y) === 0 ? this.k : (M.y - L.A.y) / (L.B.y - L.A.y) : (M.x - L.A.x) / (L.B.x - L.A.x)
+      if (this.length instanceof Measure) {
+        this.length.value = this.k * distance(L.A, L.B)
+      } else {
+        this.length = this.k * distance(L.A, L.B)
+      }
+      super.moveTo(M.x, M.y)
+    } catch (error) {
+      console.log('Erreur dans PointOnLine.moveTo()', error)
+      this.exist = false
     }
-    super.moveTo(M.x, M.y)
   }
 
   /**

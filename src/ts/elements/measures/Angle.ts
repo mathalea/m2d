@@ -41,8 +41,13 @@ export class Angle extends Measure {
     }
 
     update () {
-      this.value = angleOriented(this.A, this.O, this.B)
-      this.valueNonOriented = angle(this.A, this.O, this.B)
+      try {
+        this.value = angleOriented(this.A, this.O, this.B)
+        this.valueNonOriented = angle(this.A, this.O, this.B)
+      } catch (error) {
+        console.log('Erreur dans Angle.update()', error)
+        this.exist = false
+      }
       this.notifyAllChilds()
     }
 }

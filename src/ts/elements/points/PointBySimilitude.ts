@@ -38,10 +38,15 @@ export class PointBySimilitude extends Point {
     }
 
     update (): void {
-      const angleRadian = typeof this.angle === 'number' ? this.angle * Math.PI / 180 : this.angle.value * Math.PI / 180
-      const rapport = (this.k instanceof Measure ? this.k.value : this.k)
-      const x = (this.center.x + rapport * (Math.cos(angleRadian) * (this.previous.x - this.center.x) - Math.sin(angleRadian) * (this.previous.y - this.center.y)))
-      const y = (this.center.y + rapport * (Math.cos(angleRadian) * (this.previous.y - this.center.y) + Math.sin(angleRadian) * (this.previous.x - this.center.x)))
-      this.moveTo(x, y)
+      try {
+        const angleRadian = typeof this.angle === 'number' ? this.angle * Math.PI / 180 : this.angle.value * Math.PI / 180
+        const rapport = (this.k instanceof Measure ? this.k.value : this.k)
+        const x = (this.center.x + rapport * (Math.cos(angleRadian) * (this.previous.x - this.center.x) - Math.sin(angleRadian) * (this.previous.y - this.center.y)))
+        const y = (this.center.y + rapport * (Math.cos(angleRadian) * (this.previous.y - this.center.y) + Math.sin(angleRadian) * (this.previous.x - this.center.x)))
+        this.moveTo(x, y)
+      } catch (error) {
+        console.log('Erreur dans PointBySimilitude.update()', error)
+        this.exist = false
+      }
     }
 }
