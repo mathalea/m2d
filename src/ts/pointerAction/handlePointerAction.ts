@@ -10,6 +10,7 @@ import { actionNewPerpendicularBissectorMessage, newPerpendicularBissector } fro
 import { newIntersection } from './newIntersection'
 import { actionNewCirclePointMessage, newCirclePoint } from './newCirclePoint'
 import { actionNewPolygonMessage, newPolygon } from './newPolygon'
+import { actionNewCircleRadiusMessage, newCircleRadius } from './newCircleRadius'
 
 export function handlePointerAction (figure: Figure, event: PointerEvent) {
   const [pointerX, pointerY] = figure.getPointerCoord(event)
@@ -17,6 +18,7 @@ export function handlePointerAction (figure: Figure, event: PointerEvent) {
   else if (figure.pointerAction === 'drag') startDrag(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'segment') newSegment(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'circlePoint') newCirclePoint(figure, pointerX, pointerY)
+  else if (figure.pointerAction === 'circleRadius') newCircleRadius(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'perpendicularBissector') newPerpendicularBissector(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'line') newLine(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'perpendicular') newPerpendicular(figure, pointerX, pointerY)
@@ -31,6 +33,7 @@ export function initMessageAction (figure: Figure, pointerAction: string) {
   else if (pointerAction === 'freePoint') figure.displayMessage('Cliquer pour créer un nouveau point')
   else if (pointerAction === 'segment') actionNewSegmentMessage(figure)
   else if (pointerAction === 'circlePoint') actionNewCirclePointMessage(figure)
+  else if (pointerAction === 'circleRadius') actionNewCircleRadiusMessage(figure)
   else if (pointerAction === 'perpendicularBissector') actionNewPerpendicularBissectorMessage(figure)
   else if (pointerAction === 'line') actionNewLineMessage(figure)
   else if (pointerAction === 'droitePerpendiculaire') actionNewPerpendicularMessage(figure)

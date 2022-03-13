@@ -43,7 +43,10 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
   const N = new Point(svgContainer, x + length, y, { temp: true })
   this.origin = M
   this.line = new Segment(M, N)
-  this.tab = new PointOnSegment(this.line, { draggable: true, style: '', length: length * (Math.max(Math.min(value, max), min) - min) / (max - min) }) // on s'assure que la valeur est comprise entre min et max.
+  this.line.thickness = 4
+  this.line.color = 'black'
+  this.tab = new PointOnSegment(this.line, { draggable: true, style: 'o', color: 'blue', length: length * (Math.max(Math.min(value, max), min) - min) / (max - min) }) // on s'assure que la valeur est comprise entre min et max.
+  this.line.g.setAttribute('stroke-linecap', 'round')
   this.position = new Distance(M, this.tab)
   this.algebraic = new CalculDynamic((args: Measure[]) => this.min + Math.round((this.max - this.min) * args[0].value / this.length / this.step) * this.step, [this.position])
   this.display = new DisplayMeasure(this.origin.x + this.length + 0.5, this.tab.y, this.algebraic, { precision: 2 })
