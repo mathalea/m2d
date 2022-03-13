@@ -8,6 +8,7 @@
  */
 
 import { Element2D } from '../Element2D'
+import { OptionsGraphiques } from '../lines/Line'
 import { Point } from '../points/Point'
 import { Vector } from './Vector'
 
@@ -16,7 +17,7 @@ export class VectorByPoints extends Element2D {
   end: Point // ToFix ? arg2 ou Point(arg1,arg2)
     x: number
     y: number
-    constructor (arg1: Point, arg2: Point) {
+    constructor (arg1: Point, arg2: Point, { color = 'black', thickness = 1, dashed = false }: OptionsGraphiques = {}) {
       super(arg1.parentFigure)
       if (arg1 instanceof Point && arg2 instanceof Point) {
         this.origin = arg1
@@ -26,6 +27,9 @@ export class VectorByPoints extends Element2D {
         // Si les points servant à définir le vecteur sont temporaires, alors il est inutile de dépendre d'eux.
         if (!arg1.temp) arg1.addChild(this)
         if (!arg2.temp) arg2.addChild(this)
+        this.color = color
+        this.thickness = thickness
+        this.dashed = dashed
       } else {
         throw new Error('Les paramètres doivent être 2 points.')
       }

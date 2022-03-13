@@ -12,7 +12,7 @@ export function newCircleRadius (figure: Figure, pointerX: number, pointerY: num
       window.addEventListener('radiusIsSet', (e: CustomEvent) => {
         const r = e.detail || 0
         if (r > 0) {
-          const C = new Circle(O, r)
+          const C = new Circle(O, r, figure.pointerSetOptions)
           figure.set.add(C)
         }
         figure.clearSelectedElements()
