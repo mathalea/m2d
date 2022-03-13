@@ -11,7 +11,6 @@ import { distance } from '../../calculus/random'
 import { rotationCoord } from '../../calculus/transformation'
 import { angleOriented } from '../../calculus/trigonometry'
 import { Coords, Element2D } from '../Element2D'
-import { Angle } from '../measures/Angle'
 import { Measure } from '../measures/Measure'
 import { Point } from '../points/Point'
 import { OptionsGraphiques } from './Line'
@@ -20,10 +19,10 @@ export class Arc extends Element2D {
   center: Point
   point: Point
   point2: Coords
-  angle: number | Angle
+  angle: number | Measure
   horiz: Coords
   private _label: string
-  constructor (O: Point, A: Point, angle: number | Angle, { color = 'black', thickness = 1, dashed = false, fill = 'none' }: OptionsGraphiques = {}) {
+  constructor (O: Point, A: Point, angle: number | Measure, { color = 'black', thickness = 1, dashed = false, fill = 'none' }: OptionsGraphiques = {}) {
     super(O.parentFigure)
     this.center = O
     this.point = A

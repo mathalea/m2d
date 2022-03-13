@@ -45,7 +45,7 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
   this.line = new Segment(M, N)
   this.tab = new PointOnSegment(this.line, { draggable: true, style: '', length: length * (Math.max(Math.min(value, max), min) - min) / (max - min) }) // on s'assure que la valeur est comprise entre min et max.
   this.position = new Distance(M, this.tab)
-  this.algebraic = new CalculDynamic((args: Measure[]) => this.min + (this.max - this.min) * args[0].value / this.length, [this.position])
+  this.algebraic = new CalculDynamic((args: Measure[]) => this.min + Math.round((this.max - this.min) * args[0].value / this.length / this.step) * this.step, [this.position])
   this.display = new DisplayMeasure(this.origin.x + this.length + 0.5, this.tab.y, this.algebraic, { precision: 2 })
   this.tab.addChild(this.display)
   this.tab.addChild(this)
@@ -54,7 +54,6 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
 }
 
 update () {
-  this.algebraic.value = this.min + (this.tab.x - this.origin.x) * (this.max - this.min) / this.length
   this.notifyAllChilds()
 }
 }

@@ -124,7 +124,7 @@ export abstract class Element2D {
       ? this.show(false)
       : this.hide(false)
     for (const e of this.childs) {
-      e.exist = this._exist
+      e.exist = this._exist && e.exist
       if (e instanceof Element2D && e.isVisible) this._exist ? e.show(false) : e.hide(false)
     }
   }

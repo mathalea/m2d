@@ -13,16 +13,19 @@ import { Segment } from '../lines/Segment'
 import { Circle } from '../lines/Circle'
 import { Cross } from '../others/Cross'
 import { TextByPoint } from '../texts/TextByPoint'
+import { Measure } from '../measures/Measure'
 
 export type PointStyle = 'x' | 'o' | ''
 export type PointOptions = { label?: string, style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean, snapToGrid?: boolean, labelDx?: number, labelDy?: number, exist?: boolean }
 
 export class Point extends Element2D {
-  x: number
-  y: number
+  private _x: number | Measure
+  private _y: number | Measure
   private _style: PointStyle
   private _label: string
   private _size: number // Pour la taille de la croix et utilisé dans changeStyle
+  trace: boolean
+  traces: Element2D[]
   mark: Element2D | null
   labelElement: Element2D | null
   labelDx: number // Ecart entre le label et le point en abscisse
@@ -31,10 +34,11 @@ export class Point extends Element2D {
   temp: boolean // Pour les points qui ne servent qu'à faire des calculs
   snapToGrid: boolean
   // On définit un point avec ses deux coordonnées
-  constructor (figure: Figure, x: number, y: number, { label, style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false, snapToGrid = false, labelDx = -0.3, labelDy = 0.3, exist = true }: PointOptions = {}) {
+  constructor (figure: Figure, x: number | Measure, y: number|Measure, { label, style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false, snapToGrid = false, labelDx = -0.3, labelDy = 0.3, exist = true }: PointOptions = {}) {
     super(figure)
-    this.x = x
-    this.y = y
+    this._x = x
+    this._y = y
+    this.traces = []
     this.group = []
     this.mark = null
     this.labelElement = null
@@ -61,6 +65,9 @@ export class Point extends Element2D {
     this.labelDx = labelDx
     this.labelDy = labelDy
     if (label !== undefined) this.label = label
+    this.trace = false
+    if (x instanceof Measure) x.addChild(this)
+    if (y instanceof Measure) y.addChild(this)
   }
 
   /**
@@ -68,6 +75,7 @@ export class Point extends Element2D {
    * Ce sont sur ses marques (croix ou rond ou ...) qu'il faut faire une mise à jour du graphique
    */
   update (): void {
+    this.moveTo(this.x, this.y)
   }
 
   isOnFigure () {
@@ -80,11 +88,18 @@ export class Point extends Element2D {
    * @param y nouvelle ordonnée
    */
   moveTo (x: number, y: number) {
-    ;[this.x, this.y] = [x, y]
+    this.x = x
+    this.y = y
+    if (this.trace) {
+      const M = new Point(this.parentFigure, x, y, { style: 'o', size: 0.02 })
+      this.g.appendChild(M.g)
+      this.removeChild(M)
+    }
     if (this.mark instanceof Cross) {
       ;[this.mark.x, this.mark.y] = [x, y]
       this.mark.update()
     }
+
     // ToFix ce console.log est là qu'en phase de développement
     if (this.childs.length > 20) console.log(`Nombre de dépendances élevée pour ${this.label} : ${this.childs.length}`)
     this.notifyAllChilds()
@@ -178,5 +193,25 @@ export class Point extends Element2D {
   set size (size) {
     this._size = size
     this.changeStyle(this._style)
+  }
+
+  get x () {
+    if (this._x instanceof Measure) return this._x.value
+    else return this._x
+  }
+
+  set x (x) {
+    if (this._x instanceof Measure) this._x.value = x
+    else this._x = x
+  }
+
+  get y () {
+    if (this._y instanceof Measure) return this._y.value
+    else return this._y
+  }
+
+  set y (y) {
+    if (this._y instanceof Measure) this._y.value = y
+    else this._y = y
   }
 }
