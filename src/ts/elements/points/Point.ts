@@ -96,6 +96,7 @@ export class Point extends Element2D {
       this.removeChild(M)
     }
     if (this.mark instanceof Cross) {
+    if (this.mark instanceof Cross && this.exist) {
       ;[this.mark.x, this.mark.y] = [x, y]
       this.mark.update()
     }

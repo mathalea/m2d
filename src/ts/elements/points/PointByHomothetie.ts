@@ -24,7 +24,14 @@ export class PointByHomothetie extends Point {
       if (label !== undefined) this.label = label
       A.addChild(this)
       center.addChild(this)
-      if (k instanceof Measure) k.addChild(this)
+      if (k instanceof Measure) {
+        k.addChild(this)
+        if (isNaN(k.value)) this.exist = false
+        else this.exist = true
+      } else {
+        if (isNaN(k)) this.exist = false
+        else this.exist = true
+      }
     }
 
     update (): void {
