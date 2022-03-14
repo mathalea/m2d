@@ -6,7 +6,7 @@ import { Segment } from './elements/lines/Segment'
 import { Angle } from './elements/measures/Angle'
 import { CalculDynamic } from './elements/measures/CalculDynamic'
 import { Figure } from './Figure'
-import { PointByHomothetie } from './elements/points/PointByHomothetie'
+import { PointByHomothetie, PointByHomothetie } from './elements/points/PointByHomothetie'
 import { Cursor } from './elements/others/Cursor'
 import { Measure } from './elements/measures/Measure'
 import { Point } from './elements/points/Point'
@@ -42,7 +42,7 @@ figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
 // Ma figure
-const phi = new Cursor(figure, 3, 7, { min: 0, max: 90, length: 4, step: 2, value: 20 })
+const phi = new Cursor(figure, 3, 7, { min: 0, max: 180, length: 4, step: 2, value: 20 })
 const theta = new Cursor(figure, 3, 6, { min: -180, max: 180, length: 4, step: 2, value: 0 })
 const k = new Cursor(figure, 3, 5, { min: 0, max: 1, length: 4, step: 0.05, value: 0 })
 const epsilon = 0.0001
@@ -57,30 +57,32 @@ function zero (n: number) {
   return Math.abs(n) < epsilon ? 1 : 0
 }
 function factor (k:number) {
-  return k === 0 ? NaN : 1
+  return k === 0 ? 0 : 1
 }
 
-const S = figure.point(0, 5, { label: 'S' })
 const O = figure.point(0, 0, { label: 'O' })
-const x1 = new CalculDynamic((a:Measure[]) => Math.sin(a[0].value * Math.PI / 180) * 2, [theta.algebraic, phi.algebraic])
-const x2 = new CalculDynamic((a:Measure[]) => Math.cos(a[0].value * Math.PI / 180) * 2, [theta.algebraic, phi.algebraic])
-const y1 = new CalculDynamic((a:Measure[]) => -Math.cos(a[0].value * Math.PI / 180) * 2 * Math.sin(a[1].value * Math.PI / 180), [theta.algebraic, phi.algebraic])
-const y2 = new CalculDynamic((a:Measure[]) => Math.sin(a[0].value * Math.PI / 180) * 2 * Math.sin(a[1].value * Math.PI / 180), [theta.algebraic, phi.algebraic])
-const xA = new CalculDynamic((a:Measure[]) => a[0].value + a[1].value, [x1, x2])
-const yA = new CalculDynamic((a:Measure[]) => a[0].value + a[1].value, [y1, y2])
-const xB = new CalculDynamic((a:Measure[]) => a[0].value - a[1].value, [x1, x2])
-const yB = new CalculDynamic((a:Measure[]) => a[0].value - a[1].value, [y1, y2])
-const xC = new CalculDynamic((a:Measure[]) => -a[0].value - a[1].value, [x1, x2])
-const yC = new CalculDynamic((a:Measure[]) => -a[0].value - a[1].value, [y1, y2])
-const xD = new CalculDynamic((a:Measure[]) => -a[0].value + a[1].value, [x1, x2])
-const yD = new CalculDynamic((a:Measure[]) => -a[0].value + a[1].value, [y1, y2])
+const xI = new CalculDynamic((a:Measure[]) => Math.sin(a[0].value * Math.PI / 180) * 2, [theta.algebraic, phi.algebraic])
+const xJ = new CalculDynamic((a:Measure[]) => Math.cos(a[0].value * Math.PI / 180) * 2, [theta.algebraic, phi.algebraic])
+const yI = new CalculDynamic((a:Measure[]) => -Math.cos(a[0].value * Math.PI / 180) * 2 * Math.sin(a[1].value * Math.PI / 180), [theta.algebraic, phi.algebraic])
+const yJ = new CalculDynamic((a:Measure[]) => Math.sin(a[0].value * Math.PI / 180) * 2 * Math.sin(a[1].value * Math.PI / 180), [theta.algebraic, phi.algebraic])
+const yK = new CalculDynamic((a:Measure[]) => Math.cos(a[0].value * Math.PI / 180) * 2, [phi.algebraic])
 
-// const I = new Point(figure, x1, y1, { label: 'I', style: '' })
-// const J = new Point(figure, x2, y2, { label: 'J', style: '' })
-// const K = figure.point(0, 2, { label: 'K', style: '' })
+const xA = new CalculDynamic((a:Measure[]) => a[0].value + a[1].value, [xI, xJ])
+const yA = new CalculDynamic((a:Measure[]) => a[0].value + a[1].value, [yI, yJ])
+const xB = new CalculDynamic((a:Measure[]) => a[0].value - a[1].value, [xI, xJ])
+const yB = new CalculDynamic((a:Measure[]) => a[0].value - a[1].value, [yI, yJ])
+const xC = new CalculDynamic((a:Measure[]) => -a[0].value - a[1].value, [xI, xJ])
+const yC = new CalculDynamic((a:Measure[]) => -a[0].value - a[1].value, [yI, yJ])
+const xD = new CalculDynamic((a:Measure[]) => -a[0].value + a[1].value, [xI, xJ])
+const yD = new CalculDynamic((a:Measure[]) => -a[0].value + a[1].value, [yI, yJ])
+const K = new Point(figure, 0, yK, { temp: true })
+const I = new Point(figure, xI, yI, { temp: true })
+const J = new Point(figure, xJ, yJ, { temp: true })
 // const OI = new Segment(O, I, { style: '' })
 // const OJ = new Segment(O, J, { style: '' })
 // const OK = new Segment(O, K, { style: '' })
+const S = new PointByHomothetie(K, O, 2.5, { label: 'S' })
+
 const A = new Point(figure, xA, yA, { label: 'A' })
 const B = new Point(figure, xB, yB, { label: 'B' })
 const C = new Point(figure, xC, yC, { label: 'C' })
