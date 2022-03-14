@@ -30,4 +30,12 @@ export class ExistTest extends Measure {
       else this.value = this.element.exist ? 1 : 0
       this.notifyAllChilds()
     }
+
+    set exist (etat) {
+      // On ne change pas l'état
+    }
+
+    get exist () {
+      return true
+    }
 }
