@@ -9,6 +9,7 @@
 
 import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
+import { ExistTest } from './ExistTest'
 
 export abstract class Measure {
     parentFigure: Figure
@@ -38,21 +39,25 @@ export abstract class Measure {
     }
 
     set exist (arg: boolean) {
-      try {
-        let allParentsExist = true
-        for (const parent of this.parents) {
-          if (!parent.exist) {
-            allParentsExist = false
-            break
+      if (!(this instanceof ExistTest)) {
+        try {
+          let allParentsExist = true
+          for (const parent of this.parents) {
+            if (!parent.exist) {
+              allParentsExist = false
+              break
+            }
           }
+          this._exist = arg && allParentsExist
+          for (const e of this.childs) {
+            e.exist = this._exist && e.exist
+            if (e instanceof Element2D && e.isVisible) this._exist ? e.show(false) : e.hide(false)
+          }
+        } catch (error) {
+          console.log('Erreur dans Measure.exist', error)
         }
-        this._exist = arg && allParentsExist
-        for (const e of this.childs) {
-          e.exist = this._exist && e.exist
-          if (e instanceof Element2D && e.isVisible) this._exist ? e.show(false) : e.hide(false)
-        }
-      } catch (error) {
-        console.log('Erreur dans Measure.exist', error)
+      } else {
+        this._exist = true
       }
     }
 

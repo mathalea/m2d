@@ -10,18 +10,18 @@
 import { distance } from '../../calculus/random'
 import { Point, PointOptions } from './Point'
 import { PointByHomothetie } from './PointByHomothetie'
-import { Segment } from '../lines/Segment'
 import { homothetieCoord } from '../../calculus/transformation'
 import { Measure } from '../measures/Measure'
+import { Line } from '../lines/Line'
 /**
  * Place un point sur un Line (Segment) à une distance D fixe du point Line.A
  */
 export class PointOnLineAtD extends Point {
-  line: Segment
+  line: Line
   length: number // valeur signée (mesure algébrique de A à M)
   d: number | Measure
 
-  constructor (L: Segment, d: number |Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = false, temp = false }: { length?: number, k?: number } & PointOptions = {}) {
+  constructor (L: Line, d: number |Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = false, temp = false }: { length?: number, k?: number } & PointOptions = {}) {
     const length = distance(L.A, L.B)
     const M = new PointByHomothetie(L.B, L.A, (d instanceof Measure ? d.value : d) / (length === 0 ? 1 : length), { temp: true })
     super(L.parentFigure, M.x, M.y, { style, size, thickness, color, draggable, temp })
