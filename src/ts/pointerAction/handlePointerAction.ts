@@ -12,16 +12,18 @@ import { newIntersection } from './newIntersection'
 import { actionNewCirclePointMessage, newCirclePoint } from './newCirclePoint'
 import { actionNewPolygonMessage, newPolygon } from './newPolygon'
 import { actionNewCircleRadiusMessage, newCircleRadius } from './newCircleRadius'
-import { erase } from './erase'
+import { actionErasetMessage, erase } from './erase'
 import { actionNewRayMessage, newRay } from './newRay'
 import { actionNewVectorMessage, newVector } from './newVector'
 import { actionNewParallelMessage, newParallel } from './newParallel'
+import { actionHideMessage, hide } from './hide'
 
 export function handlePointerAction (figure: Figure, event: PointerEvent) {
   const [pointerX, pointerY] = figure.getPointerCoord(event)
   if (figure.pointerAction === 'freePoint') newPoint(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'drag') startDrag(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'erase') erase(figure, pointerX, pointerY)
+  else if (figure.pointerAction === 'hide') hide(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'segment') newSegment(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'line') newLine(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'ray') newRay(figure, pointerX, pointerY)
@@ -38,9 +40,9 @@ export function handlePointerAction (figure: Figure, event: PointerEvent) {
 }
 
 export function initMessageAction (figure: Figure, pointerAction: string) {
-  console.log(pointerAction)
   if (pointerAction === 'drag') figure.displayMessage('')
-  else if (pointerAction === 'erase') figure.displayMessage('Cliquer sur  créer un nouveau point')
+  else if (pointerAction === 'erase') actionErasetMessage(figure)
+  else if (pointerAction === 'hide') actionHideMessage(figure)
   else if (pointerAction === 'freePoint') figure.displayMessage('Cliquer pour créer un nouveau point')
   else if (pointerAction === 'segment') actionNewSegmentMessage(figure)
   else if (pointerAction === 'circlePoint') actionNewCirclePointMessage(figure)

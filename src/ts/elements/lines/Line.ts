@@ -15,7 +15,6 @@ import { angleOriented } from '../../calculus/trigonometry'
 import { Element2D } from '../Element2D'
 import { Vector } from '../others/Vector'
 import { Point } from '../points/Point'
-import { Segment } from './Segment'
 import { Measure } from '../measures/Measure'
 
 export type LineType = 'Line' | 'Segment' | 'Ray'
