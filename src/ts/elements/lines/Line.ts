@@ -197,7 +197,7 @@ export class Line extends Element2D {
     try {
       const M = new PointByHomothetie(this.A, center, k, { temp: true })
       const N = new PointByHomothetie(this.B, center, k, { temp: true })
-      return new Segment(M, N)
+      return new Line(M, N)
     } catch (error) {
       console.log('Erreur dans Segment.homothetie()', error)
     }
