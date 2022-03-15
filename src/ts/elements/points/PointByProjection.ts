@@ -7,15 +7,15 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
-import { orthogonalProjectionCoord } from '../../calculus/transformation'
 import { Line } from '../lines/Line'
+import { Coords } from '../others/Coords'
 import { Point, PointOptions } from './Point'
 
 export class PointByProjection extends Point {
     previous: Point // Antécédent
     line: Line // Droite sur laquelle s'effectue la projection
     constructor (A: Point, L: Line, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
-      const { x, y } = orthogonalProjectionCoord(A, L)
+      const { x, y } = Coords.orthogonalProjectionCoord(A, L)
       super(A.parentFigure, x, y, { label, style, size, thickness, color, draggable, temp })
       this.previous = A
       this.line = L
@@ -25,7 +25,7 @@ export class PointByProjection extends Point {
 
     update (): void {
       try {
-        const { x, y } = orthogonalProjectionCoord(this.previous, this.line)
+        const { x, y } = Coords.orthogonalProjectionCoord(this.previous, this.line)
         this.moveTo(x, y)
       } catch (error) {
         console.log('Erreur dans PointByProjection.update()', error)

@@ -7,8 +7,6 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
-import { intersectionLCCoord } from './calculus/intersection'
-import { distance } from './calculus/random'
 import { Circle } from './elements/lines/Circle'
 import { Element2D } from './elements/Element2D'
 import { PointOptions, Point } from './elements/points/Point'
@@ -20,6 +18,7 @@ import { PointIntersectionLC } from './elements/points/PointIntersectionLC'
 import { moveDrag, stopDrag } from './pointerAction/drag'
 
 import { handlePointerAction, initMessageAction } from './pointerAction/handlePointerAction'
+import { Coords } from './elements/others/Coords'
 
 export class Figure {
   width: number
@@ -210,9 +209,9 @@ export class Figure {
 
   // ToFix : Il faudrait que la méthode crée 2 points et que ces points se cachent ou se montrent en fonction de leur appartenance au segment [AB]
   pointIntersectionSC (L: Segment, C: Circle, options?: PointOptions) {
-    const x = intersectionLCCoord(L, C, 1).x
+    const x = Coords.intersectionLCCoord(L, C, 1).x
     const [A, B] = [L.A, L.B]
-    if (x !== undefined && distance(A, B) > C.radius) {
+    if (x !== undefined && Point.distance(A, B) > C.radius) {
       let M: Point
       if (x < Math.max(A.x, B.x) && x > Math.min(A.x, B.x)) {
         M = this.pointIntersectionLC(L, C, 1, options)

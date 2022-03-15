@@ -7,7 +7,6 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
-import { distance } from '../../calculus/random'
 import { Element2D } from '../Element2D'
 import { Measure } from '../measures/Measure'
 import { Point } from '../points/Point'
@@ -36,7 +35,7 @@ export class Circle extends Element2D {
     this.M = new Point(this.parentFigure, 100, 100, { style: '', temp: true }) // Point temporaire qui sera placé quand on connaitra le rayon
     if (arg2 instanceof Measure) this._radius = arg2
     else this._radius = 0
-    this.radius = (typeof arg2 === 'number') ? arg2 : (arg2 instanceof Point) ? distance(center, arg2) : Math.abs(arg2.value)
+    this.radius = (typeof arg2 === 'number') ? arg2 : (arg2 instanceof Point) ? Point.distance(center, arg2) : Math.abs(arg2.value)
     this.M.moveTo(center.x + this.radius, center.y)
     this.fill = fill
     this.color = color
@@ -109,7 +108,7 @@ export class Circle extends Element2D {
     try {
       this.moveCenter(this.center.x, this.center.y)
       if (this.pointOnCircle) {
-        this.radius = distance(this.center, this.pointOnCircle)
+        this.radius = Point.distance(this.center, this.pointOnCircle)
       }
       if (this._radius instanceof Measure) {
         this.radius = Math.max(this._radius.value, 0)
@@ -171,7 +170,7 @@ export class Circle extends Element2D {
 
   public distancePointer (pointerX: number, pointerY: number) {
     try {
-      return Math.abs(distance(this.center, { x: pointerX, y: pointerY }) - this.radius)
+      return Math.abs(Point.distance(this.center, { x: pointerX, y: pointerY }) - this.radius)
     } catch (error) {
       return NaN
     }

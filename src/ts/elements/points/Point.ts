@@ -14,6 +14,7 @@ import { Circle } from '../lines/Circle'
 import { Cross } from '../others/Cross'
 import { TextByPoint } from '../texts/TextByPoint'
 import { Measure } from '../measures/Measure'
+import { Coords } from '../others/Coords'
 
 export type PointStyle = 'x' | 'o' | ''
 export type PointOptions = { label?: string, style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean, snapToGrid?: boolean, labelDx?: number, labelDy?: number, exist?: boolean }
@@ -231,5 +232,13 @@ export class Point extends Element2D {
   set y (y) {
     if (this._y instanceof Measure) this._y.value = y
     else this._y = y
+  }
+
+  static distance (A: Point | Coords, B: Point | Coords): number {
+    try {
+      return Math.hypot(A.x - B.x, A.y - B.y)
+    } catch (error) {
+      return NaN
+    }
   }
 }

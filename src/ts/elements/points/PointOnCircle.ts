@@ -7,18 +7,18 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
-import { distance, randint } from '../../calculus/random'
-import { rotationCoord } from '../../calculus/transformation'
-import { angleOriented } from '../../calculus/trigonometry'
 import { Circle } from '../lines/Circle'
+import { Angle } from '../measures/Angle'
+import { Calcul } from '../others/Calculs'
+import { Coords } from '../others/Coords'
 import { Point, PointOptions } from './Point'
 import { PointByHomothetie } from './PointByHomothetie'
 
 export class PointOnCircle extends Point {
   circle: Circle
   angle: number
-  constructor (C: Circle, { label, angle = randint(-180, 180), style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: PointOptions & {angle?: number} = {}) {
-    const { x, y } = rotationCoord(C.M, C.center, angle)
+  constructor (C: Circle, { label, angle = Calcul.randint(-180, 180), style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: PointOptions & {angle?: number} = {}) {
+    const { x, y } = Coords.rotationCoord(C.M, C.center, angle)
     super(C.parentFigure, x, y, { draggable, style, color, size, thickness, temp })
     this.circle = C
     this.angle = angle
@@ -30,8 +30,8 @@ export class PointOnCircle extends Point {
     try {
       const O = this.circle.center
       const P = new Point(this.circle.parentFigure, x, y, { temp: true })
-      const M = new PointByHomothetie(P, O, this.circle.radius / distance(O, P), { temp: true })
-      this.angle = this.circle.pointOnCircle ? angleOriented(this.circle.pointOnCircle, this.circle.center, M) : angleOriented(this.circle.M, this.circle.center, M)
+      const M = new PointByHomothetie(P, O, this.circle.radius / Point.distance(O, P), { temp: true })
+      this.angle = this.circle.pointOnCircle ? Angle.angleOriented(this.circle.pointOnCircle, this.circle.center, M) : Angle.angleOriented(this.circle.M, this.circle.center, M)
       super.moveTo(M.x, M.y)
     } catch (error) {
       console.log('Erreur dans PointOnCircle.moveTo()', error)
@@ -42,7 +42,7 @@ export class PointOnCircle extends Point {
   update (): void {
     try {
       const C = this.circle
-      const { x, y } = C.pointOnCircle ? rotationCoord(C.pointOnCircle, C.center, this.angle) : rotationCoord(C.M, C.center, this.angle)
+      const { x, y } = C.pointOnCircle ? Coords.rotationCoord(C.pointOnCircle, C.center, this.angle) : Coords.rotationCoord(C.M, C.center, this.angle)
       this.moveTo(x, y)
     } catch (error) {
       console.log('Erreur dans PointOnCircle.update()', error)

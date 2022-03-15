@@ -7,9 +7,9 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
-import { intersectionCCCoord } from '../../calculus/intersection'
 import { Element2D } from '../Element2D'
 import { Circle } from '../lines/Circle'
+import { Coords } from '../others/Coords'
 import { Point, PointOptions } from './Point'
 
 export class PointIntersectionCC extends Point {
@@ -17,7 +17,7 @@ export class PointIntersectionCC extends Point {
   C2: Circle
   n: 1 | 2
   constructor (C1: Circle, C2: Circle, n: 1 | 2 = 1, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
-    let { x, y } = intersectionCCCoord(C1, C2, n)
+    let { x, y } = Coords.intersectionCCCoord(C1, C2, n)
     let exist = true
     if (isNaN(x) || isNaN(y)) {
       [x, y] = [C1.parentFigure.xMax + 10, C1.parentFigure.yMax + 10]
@@ -34,7 +34,7 @@ export class PointIntersectionCC extends Point {
 
   update (): void {
     try {
-      const { x, y } = intersectionCCCoord(this.C1, this.C2, this.n)
+      const { x, y } = Coords.intersectionCCCoord(this.C1, this.C2, this.n)
       if (!isNaN(x) && !isNaN(y)) {
         this.moveTo(x, y)
         if (!this.exist) {
