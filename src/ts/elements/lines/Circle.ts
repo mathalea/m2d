@@ -1,3 +1,4 @@
+import { PointByHomothetie } from './../points/PointByHomothetie'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -11,6 +12,9 @@ import { Element2D } from '../Element2D'
 import { Measure } from '../measures/Measure'
 import { Point } from '../points/Point'
 import { OptionsGraphiques } from './Line'
+import { CalculDynamic } from '../measures/CalculDynamic'
+import { PointByRotation } from '../points/PointByRotation'
+import { PointBySimilitude } from '../points/PointBySimilitude'
 
 export class Circle extends Element2D {
   center: Point
@@ -124,12 +128,16 @@ export class Circle extends Element2D {
    * Rotation définie par un centre et un angle en degrés
    * Renvoie un nouveau cercle sans modifier le premier
    */
-  rotation (O: Point, angle: number) {
+  static rotation (C:Circle, O: Point, angle: number | Measure) {
     try {
-      const x = (O.x + (this.center.x - O.x) * Math.cos((angle * Math.PI) / 180) - (this.center.y - O.y) * Math.sin((angle * Math.PI) / 180))
-      const y = (O.y + (this.center.x - O.x) * Math.sin((angle * Math.PI) / 180) + (this.center.y - O.y) * Math.cos((angle * Math.PI) / 180))
-      const O2 = new Point(this.parentFigure, x, y)
-      return new Circle(O2, this.radius)
+      let O2: PointByRotation
+      if (angle instanceof Measure) {
+        O2 = new PointByRotation(C.center, O, angle, { temp: true })
+        return new Circle(O2, C.radius)
+      } else {
+        O2 = new PointByRotation(C.center, O, angle, { temp: true })
+        return new Circle(O2, C.radius)
+      }
     } catch (error) {
       console.log('Erreur dans Circle.rotation() avec les arguments ', O, angle, error)
     }
@@ -140,12 +148,18 @@ export class Circle extends Element2D {
    * Renvoie un nouveau point sans modifier le premier
    */
 
-  homothetie (O: Point, k: number) {
+  static homothetie (C: Circle, O: Point, k: number | Measure) {
     try {
-      const x = (O.x + k * (this.center.x - O.x))
-      const y = (O.y + k * (this.center.y - O.y))
-      const O2 = new Point(this.parentFigure, x, y)
-      return new Circle(O2, this.radius * k)
+      let rayon: Measure
+      let O2: PointByHomothetie
+      if (k instanceof Measure) {
+        rayon = new CalculDynamic((x:Measure[]) => Math.abs(x[0].value * C.radius), [k])
+        O2 = new PointByHomothetie(C.center, O, k, { temp: true })
+        return new Circle(O2, rayon)
+      } else {
+        O2 = new PointByHomothetie(C.center, O, k, { temp: true })
+        return new Circle(O2, C.radius * k)
+      }
     } catch (error) {
       console.log('Erreur dans Circle.homothetie() avec les arguments ', O, k, error)
     }
@@ -155,14 +169,18 @@ export class Circle extends Element2D {
    * Similitude définie par un centre, un rapport et un angle en degré
    * Renvoie un nouveau point sans modifier le premier
    */
-  similitude (O: Point, k: number, angle: number) {
+  static similitude (C: Circle, O: Point, k: number | Measure, angle: number | Measure) {
     try {
-      const angleRadian = angle * Math.PI / 180
-      const x = (O.x + k * (Math.cos(angleRadian) * (this.center.x - O.x) - Math.sin(angleRadian) * (this.center.y - O.y)))
-      const y = (O.y + k * (Math.cos(angleRadian) * (this.center.y - O.y) + Math.sin(angleRadian) * (this.center.x - O.x))
-      )
-      const O2 = new Point(this.parentFigure, x, y)
-      return new Circle(O2, this.radius * k)
+      let rayon: Measure
+      let O2: PointBySimilitude
+      if (k instanceof Measure) {
+        rayon = new CalculDynamic((x:Measure[]) => Math.abs(x[0].value * C.radius), [k])
+        O2 = new PointBySimilitude(C.center, O, k, angle, { temp: true })
+        return new Circle(O2, rayon)
+      } else {
+        O2 = new PointBySimilitude(C.center, O, k, angle, { temp: true })
+        return new Circle(O2, C.radius * k)
+      }
     } catch (error) {
       console.log('Erreur dans Circle.similitude() avec les arguments ', O, k, angle, error)
     }
