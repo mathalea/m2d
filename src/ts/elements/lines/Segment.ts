@@ -128,14 +128,15 @@ export class Segment extends Line {
     }
   }
 
-  homothetie (center: Point, k:number|Measure) {
+  // usage : Segment.homothetie(segment, center, factor)
+  static homothetie (segment: Segment, center: Point, k:number|Measure) {
     try {
-      const M = new PointByHomothetie(this.A, center, k, { temp: true })
-      const N = new PointByHomothetie(this.B, center, k, { temp: true })
+      const M = new PointByHomothetie(segment.A, center, k, { temp: true })
+      const N = new PointByHomothetie(segment.B, center, k, { temp: true })
       return new Segment(M, N)
     } catch (error) {
       console.log('Erreur dans Segment.homothetie()', error)
-      return new Segment(this.A, this.A)
+      return new Segment(segment.A, segment.A)
     }
   }
 }

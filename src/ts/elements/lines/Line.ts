@@ -192,16 +192,19 @@ export class Line extends Element2D {
     }
   }
 
-  homothetie (center: Point, k:number|Measure) {
+  // usage : Line.homothetie(line, center, factor)
+  static homothetie (line: Line, center: Point, k:number|Measure) {
     try {
-      const M = new PointByHomothetie(this.A, center, k, { temp: true })
-      const N = new PointByHomothetie(this.B, center, k, { temp: true })
+      const M = new PointByHomothetie(line.A, center, k, { temp: true })
+      const N = new PointByHomothetie(line.B, center, k, { temp: true })
       return new Line(M, N)
     } catch (error) {
       console.log('Erreur dans Segment.homothetie()', error)
+      return new Line(line.A, line.B)
     }
   }
 }
+
 
 // une droite coupe deux bords, on les détecte ici.
 function getCoordsOut (A: Point, B: Point) {
