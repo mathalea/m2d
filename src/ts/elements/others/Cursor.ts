@@ -17,7 +17,7 @@ import { PointOnSegment } from '../points/PointOnSegment'
 import { DisplayMeasure } from '../texts/DisplayMeasure'
 import { Measure } from '../measures/Measure'
 
-export class Cursor extends Element2D {
+export class Cursor extends Measure {
   tab: Point
   origin: Point
   length: number
@@ -25,7 +25,7 @@ line: Segment
 min: number
 max: number
 step: number
-algebraic: CalculDynamic
+calcul: CalculDynamic
 display: DisplayMeasure
 position: Distance
 
@@ -48,15 +48,17 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
   this.tab = new PointOnSegment(this.line, { draggable: true, style: 'o', color: 'blue', length: length * (Math.max(Math.min(value, max), min) - min) / (max - min) }) // on s'assure que la valeur est comprise entre min et max.
   this.line.g.setAttribute('stroke-linecap', 'round')
   this.position = new Distance(M, this.tab)
-  this.algebraic = new CalculDynamic((args: Measure[]) => this.min + Math.round((this.max - this.min) * args[0].value / this.length / this.step) * this.step, [this.position])
-  this.display = new DisplayMeasure(this.origin.x + this.length + 0.5, this.tab.y, this.algebraic, { precision: 2 })
+  this.calcul = new CalculDynamic((args: Measure[]) => this.min + Math.round((this.max - this.min) * args[0].value / this.length / this.step) * this.step, [this.position])
+  this.value = this.calcul.value
+  this.display = new DisplayMeasure(this.origin.x + this.length + 0.5, this.tab.y, this, { precision: 2 })
   this.tab.addChild(this.display)
   this.tab.addChild(this)
-  this.tab.addChild(this.algebraic)
+  this.tab.addChild(this.calcul)
   this.tab.style = 'x'
 }
 
 update () {
+  this.value = this.calcul.value
   this.notifyAllChilds()
 }
 }

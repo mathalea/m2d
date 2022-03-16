@@ -14,6 +14,8 @@ import { Point } from '../points/Point'
 import { Measure } from '../measures/Measure'
 import { Coords } from '../others/Coords'
 import { Angle } from '../measures/Angle'
+import { PointByRotation } from '../points/PointByRotation'
+import { PointBySimilitude } from '../points/PointBySimilitude'
 
 export type LineType = 'Line' | 'Segment' | 'Ray'
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
@@ -190,15 +192,37 @@ export class Line extends Element2D {
     }
   }
 
-  // usage : Line.homothetie(line, center, factor)
+  // usage : Segment.homothetie(segment, center, factor)
   static homothetie (line: Line, center: Point, k:number|Measure) {
     try {
       const M = new PointByHomothetie(line.A, center, k, { temp: true })
       const N = new PointByHomothetie(line.B, center, k, { temp: true })
       return new Line(M, N)
     } catch (error) {
-      console.log('Erreur dans Segment.homothetie()', error)
-      return new Line(line.A, line.B)
+      console.log('Erreur dans Line.homothetie()', error)
+      return new Line(line.A, line.A)
+    }
+  }
+
+  static rotation (line: Line, center: Point, angle: number|Measure) {
+    try {
+      const M = new PointByRotation(line.A, center, angle, { temp: true })
+      const N = new PointByRotation(line.B, center, angle, { temp: true })
+      return new Line(M, N)
+    } catch (error) {
+      console.log('Erreur dans Line.homothetie()', error)
+      return new Line(line.A, line.A)
+    }
+  }
+
+  static similitude (line: Line, center: Point, k: number|Measure, angle: number|Measure) {
+    try {
+      const M = new PointBySimilitude(line.A, center, k, angle, { temp: true })
+      const N = new PointBySimilitude(line.B, center, k, angle, { temp: true })
+      return new Line(M, N)
+    } catch (error) {
+      console.log('Erreur dans Line.similitude()', error)
+      return new Line(line.A, line.A)
     }
   }
 }

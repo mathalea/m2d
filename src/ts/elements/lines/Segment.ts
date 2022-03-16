@@ -11,6 +11,7 @@ import { Measure } from '../measures/Measure'
 import { Point } from '../points/Point'
 import { PointByHomothetie } from '../points/PointByHomothetie'
 import { PointByRotation } from '../points/PointByRotation'
+import { PointBySimilitude } from '../points/PointBySimilitude'
 import { PointOnLineAtD } from '../points/PointOnLineAtD'
 import { Line, OptionsGraphiques } from './Line'
 import { Polyline } from './Polyline'
@@ -133,6 +134,28 @@ export class Segment extends Line {
     try {
       const M = new PointByHomothetie(segment.A, center, k, { temp: true })
       const N = new PointByHomothetie(segment.B, center, k, { temp: true })
+      return new Segment(M, N)
+    } catch (error) {
+      console.log('Erreur dans Segment.homothetie()', error)
+      return new Segment(segment.A, segment.A)
+    }
+  }
+
+  static rotation (segment: Segment, center: Point, angle: number|Measure) {
+    try {
+      const M = new PointByRotation(segment.A, center, angle, { temp: true })
+      const N = new PointByRotation(segment.B, center, angle, { temp: true })
+      return new Segment(M, N)
+    } catch (error) {
+      console.log('Erreur dans Segment.homothetie()', error)
+      return new Segment(segment.A, segment.A)
+    }
+  }
+
+  static similitude (segment: Segment, center: Point, k: number|Measure, angle: number|Measure) {
+    try {
+      const M = new PointBySimilitude(segment.A, center, k, angle, { temp: true })
+      const N = new PointBySimilitude(segment.B, center, k, angle, { temp: true })
       return new Segment(M, N)
     } catch (error) {
       console.log('Erreur dans Segment.homothetie()', error)
