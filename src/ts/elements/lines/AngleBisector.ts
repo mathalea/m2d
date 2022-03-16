@@ -19,7 +19,7 @@ export class AngleBisector extends Ray {
   side2: Point
   origin: Point
   AOB: Angle
-  constructor (A: Point, O: Point, B: Point, { color = 'black', thickness = 1, style = '', dashed, temp = false }: { color?: string, thickness?: number, style?: SegmentStyle, temp?: boolean } = {}) {
+  constructor (A: Point, O: Point, B: Point, { color = 'black', thickness = 1, style = '', dashed, temp = false }: { color?: string, thickness?: number, style?: SegmentStyle, temp?: boolean, dashed?: boolean } = {}) {
     const AOB = new Angle(A, O, B)
     const halfAngle = new CalculDynamic((a: Angle[]) => a[0].value / 2, [AOB])
     const M = new PointByRotation(A, O, halfAngle, { temp: true })

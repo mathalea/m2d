@@ -9,6 +9,7 @@
 
 import { Element2D } from '../Element2D'
 import { Angle } from '../measures/Angle'
+import { Const } from '../measures/Const'
 import { Measure } from '../measures/Measure'
 import { Coords } from '../others/Coords'
 import { Point } from '../points/Point'
@@ -18,22 +19,25 @@ export class Arc extends Element2D {
   center: Point
   point: Point
   point2: Coords
-  angle: number | Measure
+  angle: Measure
   horiz: Coords
   private _label: string
   constructor (O: Point, A: Point, angle: number | Measure, { color = 'black', thickness = 1, dashed = false, fill = 'none' }: OptionsGraphiques = {}) {
     super(O.parentFigure)
     this.center = O
     this.point = A
-    this.angle = angle
+    if (typeof angle === 'number') this.angle = new Const(O.parentFigure, angle)
+    else {
+      this.angle = angle
+      angle.addChild(this)
+    }
     this.parentFigure.set.add(this)
-    const angleMeasure = (typeof angle === 'number') ? angle : angle.value
-    const B = Coords.rotationCoord(A, O, angleMeasure)
+    const B = Coords.rotationCoord(A, O, this.angle.value)
     this.point2 = B
-    this._label = (O.label ?? '') + (A.label ?? '') + ' ' + angleMeasure.toString() + '°'
+    this._label = (O.label ?? '') + (A.label ?? '') + ' ' + this.angle.value.toString() + '°'
     this.horiz = { x: this.center.x + 1, y: this.center.y }
     const radius = this.parentFigure.xToSx(Point.distance(O, A))
-    const [large, sweep] = getLargeSweep(angleMeasure)
+    const [large, sweep] = getLargeSweep(this.angle.value)
     this.g = document.createElementNS('http://www.w3.org/2000/svg', 'path')
     this.g.setAttribute('d', `M${this.parentFigure.xToSx(A.x)} ${this.parentFigure.yToSy(A.y)} A ${radius} ${radius} 0 ${large} ${sweep} ${this.parentFigure.xToSx(B.x)} ${this.parentFigure.yToSy(B.y)}`)
     // Ajout des segments ?
@@ -45,14 +49,12 @@ export class Arc extends Element2D {
     this.parentFigure.svg.appendChild(this.g)
     A.addChild(this)
     O.addChild(this)
-    if (angle instanceof Measure) angle.addChild(this)
   }
 
   update (): void {
     try {
-      const angleMeasure = (typeof this.angle === 'number') ? this.angle : this.angle.value
-      const [large, sweep] = getLargeSweep(angleMeasure)
-      this.point2 = Coords.rotationCoord(this.point, this.center, angleMeasure)
+      const [large, sweep] = getLargeSweep(this.angle.value)
+      this.point2 = Coords.rotationCoord(this.point, this.center, this.angle.value)
       const d = this.parentFigure.xToSx(Point.distance(this.center, this.point))
       this.g.setAttribute('d', `M${this.parentFigure.xToSx(this.point.x)} ${this.parentFigure.yToSy(this.point.y)} A ${d} ${d} 0 ${large} ${sweep} ${this.parentFigure.xToSx(this.point2.x)} ${this.parentFigure.yToSy(this.point2.y)}`)
     } catch (error) {
@@ -67,10 +69,9 @@ export class Arc extends Element2D {
   get latex (): string {
     if (!this.isVisible || !this.exist) return ''
     try {
-      const angleMeasure = (typeof this.angle === 'number') ? this.angle : this.angle.value
       const radius = Point.distance(this.center, this.point)
       const azimut = Angle.angleOriented(this.horiz, this.center, this.point)
-      const anglefin = azimut + angleMeasure
+      const anglefin = azimut + this.angle.value
       let latex = `\n\n\t% Arc ${this._label}`
       latex += `\n\t\\draw${this.tikzOptions} (${this.point.x},${this.point.y}) arc (${azimut}:${anglefin}:${radius}) ;`
       return latex
