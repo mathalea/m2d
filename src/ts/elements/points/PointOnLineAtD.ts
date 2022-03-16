@@ -12,35 +12,38 @@ import { PointByHomothetie } from './PointByHomothetie'
 import { Measure } from '../measures/Measure'
 import { Line } from '../lines/Line'
 import { Coords } from '../others/Coords'
+import { Const } from '../measures/Const'
 /**
  * Place un point sur un Line (Segment) à une distance D fixe du point Line.A
  */
 export class PointOnLineAtD extends Point {
   line: Line
-  length: number // valeur signée (mesure algébrique de A à M)
-  d: number | Measure
+  length: Measure // valeur signée (mesure algébrique de A à M)
+  d: Measure
 
-  constructor (L: Line, d: number |Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = false, temp = false }: { length?: number, k?: number } & PointOptions = {}) {
+  constructor (L: Line, d: number | Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = false, temp = false }: { length?: number, k?: number } & PointOptions = {}) {
     const length = Point.distance(L.A, L.B)
-    const M = new PointByHomothetie(L.B, L.A, (d instanceof Measure ? d.value : d) / (length === 0 ? 1 : length), { temp: true })
-    super(L.parentFigure, M.x, M.y, { style, size, thickness, color, draggable, temp })
+    super(L.parentFigure, 0, 0, { style, size, thickness, color, draggable, temp })
+    this.line = L
+    this.line.addChild(this)
+    if (typeof d === 'number') this.d = new Const(L.parentFigure, d)
+    else {
+      this.d = d
+      d.addChild(this)
+    }
+    const M = new PointByHomothetie(L.B, L.A, this.d.value / (length === 0 ? 1 : length), { temp: true })
     this.x = M.x
     this.y = M.y
-    this.line = L
-    this.d = d
-    this.length = length
+    this.moveTo(M.x, M.y)
+    this.length = new Const(L.parentFigure, length)
     if (label !== undefined) this.label = label
-    this.line.addChild(this)
-    if (d instanceof Measure) {
-      d.addChild(this)
-      this.exist = d.exist && L.exist
-    } else this.exist = L.exist
+    this.exist = this.d.exist && L.exist
   }
 
   update () {
     try {
       const L = this.line
-      const dist = this.d instanceof Measure ? this.d.value : this.d
+      const dist = this.d.value
       const Llength = Point.distance(L.A, L.B)
       const coords = Coords.homothetieCoord(L.B, L.A, dist / (Llength === 0 ? 1 : Llength))
       this.moveTo(coords.x, coords.y)

@@ -10,18 +10,26 @@
 import { randint } from '../../calculus/random'
 import { Circle } from '../lines/Circle'
 import { Angle } from '../measures/Angle'
+import { Const } from '../measures/Const'
+import { Measure } from '../measures/Measure'
 import { Coords } from '../others/Coords'
 import { Point, PointOptions } from './Point'
 import { PointByHomothetie } from './PointByHomothetie'
 
 export class PointOnCircle extends Point {
   circle: Circle
-  angle: number
-  constructor (C: Circle, { label, angle = randint(-180, 180), style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: PointOptions & {angle?: number} = {}) {
-    const coords = Coords.rotationCoord(C.M, C.center, angle)
-    super(C.parentFigure, coords.x, coords.y, { draggable, style, color, size, thickness, temp })
+  angle: Measure
+  constructor (C: Circle, { label, angle = randint(-180, 180), style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: PointOptions & {angle?: number|Measure} = {}) {
+    super(C.parentFigure, 0, 0, { draggable, style, color, size, thickness, temp })
+    if (typeof angle === 'number') this.angle = new Const(C.parentFigure, angle)
+    else {
+      this.angle = angle
+      angle.addChild(this)
+    }
+    const coords = Coords.rotationCoord(C.M, C.center, this.angle.value)
+    this.x = coords.x
+    this.y = coords.y
     this.circle = C
-    this.angle = angle
     if (label !== undefined) this.label = label
     C.addChild(this)
   }
@@ -31,7 +39,7 @@ export class PointOnCircle extends Point {
       const O = this.circle.center
       const P = new Point(this.circle.parentFigure, x, y, { temp: true })
       const M = new PointByHomothetie(P, O, this.circle.radius / Point.distance(O, P), { temp: true })
-      this.angle = this.circle.pointOnCircle ? Angle.angleOriented(this.circle.pointOnCircle, this.circle.center, M) : Angle.angleOriented(this.circle.M, this.circle.center, M)
+      this.angle.value = this.circle.pointOnCircle ? Angle.angleOriented(this.circle.pointOnCircle, this.circle.center, M) : Angle.angleOriented(this.circle.M, this.circle.center, M)
       super.moveTo(M.x, M.y)
     } catch (error) {
       console.log('Erreur dans PointOnCircle.moveTo()', error)
@@ -42,7 +50,7 @@ export class PointOnCircle extends Point {
   update (): void {
     try {
       const C = this.circle
-      const coords = C.pointOnCircle ? Coords.rotationCoord(C.pointOnCircle, C.center, this.angle) : Coords.rotationCoord(C.M, C.center, this.angle)
+      const coords = C.pointOnCircle ? Coords.rotationCoord(C.pointOnCircle, C.center, this.angle.value) : Coords.rotationCoord(C.M, C.center, this.angle.value)
       this.moveTo(coords.x, coords.y)
     } catch (error) {
       console.log('Erreur dans PointOnCircle.update()', error)
