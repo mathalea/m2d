@@ -9,7 +9,7 @@ export function newPerpendicularBissector (figure: Figure, pointerX: number, poi
       if (figure.selectedElements.length === 1) {
         const A = figure.selectedElements[0] as Point
         const s = new Segment(A, e, { temp: true })
-        const perpendicularBissector = new PerpendicularBisector(s)
+        const perpendicularBissector = new PerpendicularBisector(s, figure.pointerSetOptions)
         figure.set.add(perpendicularBissector)
         figure.clearSelectedElements()
         actionNewPerpendicularBissectorMessage(figure)
