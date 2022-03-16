@@ -10,8 +10,8 @@
 import { Point, PointOptions } from './Point'
 import { Segment } from '../lines/Segment'
 import { Measure } from '../measures/Measure'
-import { Calcul } from '../others/Calculs'
 import { Coords } from '../others/Coords'
+import { randint } from '../../calculus/random'
 
 export class PointOnLine extends Point {
   line: Segment
@@ -22,7 +22,7 @@ export class PointOnLine extends Point {
     // Si k n'est pas défini, ce sera length/distance(A,B) qui déterminera la position du point.
     // Si length n'est pas non plus défini, elle sera choisi entre 15% et 85% de la distance(A,B)
     if (!(length instanceof Measure)) {
-      length = (length === undefined) ? Calcul.randint(15, 85) * Llength / 100 : length
+      length = (length === undefined) ? randint(15, 85) * Llength / 100 : length
     }
     if (k === undefined) {
       k = ((length instanceof Measure ? length.value : length) || 0) / Llength // Evitons la division par zéro avec le milieu d'un segment nul.

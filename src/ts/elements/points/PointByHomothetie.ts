@@ -7,36 +7,35 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
+import { Const } from '../measures/Const'
 import { Measure } from '../measures/Measure'
 import { Point, PointOptions } from './Point'
 
 export class PointByHomothetie extends Point {
     center: Point
-    k: number | Measure // Coefficient de l'homothétie
+    k: Measure // Coefficient de l'homothétie
     previous: Point
     constructor (A: Point, center: Point, k: number | Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
       const x = (center.x + (k instanceof Measure ? k.value : k) * (A.x - center.x))
       const y = (center.y + (k instanceof Measure ? k.value : k) * (A.y - center.y))
       super(A.parentFigure, x, y, { style, size, thickness, color, draggable, temp, exist: !isNaN(x) })
       this.center = center
-      this.k = k
+      if (typeof k === 'number') this.k = new Const(A.parentFigure, k)
+      else {
+        this.k = k
+        k.addChild(this)
+      }
       this.previous = A
       if (label !== undefined) this.label = label
       A.addChild(this)
       center.addChild(this)
-      if (k instanceof Measure) {
-        k.addChild(this)
-        if (isNaN(k.value)) this.exist = false
-        else this.exist = true
-      } else {
-        if (isNaN(k)) this.exist = false
-        else this.exist = true
-      }
+      if (isNaN(this.k.value)) this.exist = false
+      else this.exist = true
     }
 
     update (): void {
       try {
-        const rapport = this.k instanceof Measure ? this.k.value : this.k
+        const rapport = this.k.value
         if (!isNaN(rapport)) {
           const x = (this.center.x + rapport * (this.previous.x - this.center.x))
           const y = (this.center.y + rapport * (this.previous.y - this.center.y))

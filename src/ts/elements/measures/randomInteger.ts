@@ -1,6 +1,9 @@
 import { Figure } from '../../Figure'
 import { Measure } from './Measure'
-
+/**
+ * sa propriété value retourne un nombre aléatoire entier quand elle est lue.
+ * Ce nombre est compris entre min et max en évitant les nombres exclus (listeAEviter)
+ */
 export class RandomInteger extends Measure {
     min: number
     max: number
