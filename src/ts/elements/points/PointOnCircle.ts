@@ -18,8 +18,8 @@ export class PointOnCircle extends Point {
   circle: Circle
   angle: number
   constructor (C: Circle, { label, angle = Calcul.randint(-180, 180), style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: PointOptions & {angle?: number} = {}) {
-    const { x, y } = Coords.rotationCoord(C.M, C.center, angle)
-    super(C.parentFigure, x, y, { draggable, style, color, size, thickness, temp })
+    const coords = Coords.rotationCoord(C.M, C.center, angle)
+    super(C.parentFigure, coords.x, coords.y, { draggable, style, color, size, thickness, temp })
     this.circle = C
     this.angle = angle
     if (label !== undefined) this.label = label
@@ -42,8 +42,8 @@ export class PointOnCircle extends Point {
   update (): void {
     try {
       const C = this.circle
-      const { x, y } = C.pointOnCircle ? Coords.rotationCoord(C.pointOnCircle, C.center, this.angle) : Coords.rotationCoord(C.M, C.center, this.angle)
-      this.moveTo(x, y)
+      const coords = C.pointOnCircle ? Coords.rotationCoord(C.pointOnCircle, C.center, this.angle) : Coords.rotationCoord(C.M, C.center, this.angle)
+      this.moveTo(coords.x, coords.y)
     } catch (error) {
       console.log('Erreur dans PointOnCircle.update()', error)
       this.exist = false

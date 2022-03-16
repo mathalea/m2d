@@ -42,8 +42,8 @@ export class PointOnLineAtD extends Point {
       const L = this.line
       const dist = this.d instanceof Measure ? this.d.value : this.d
       const Llength = Point.distance(L.A, L.B)
-      const { x, y } = Coords.homothetieCoord(L.B, L.A, dist / (Llength === 0 ? 1 : Llength))
-      this.moveTo(x, y)
+      const coords = Coords.homothetieCoord(L.B, L.A, dist / (Llength === 0 ? 1 : Llength))
+      this.moveTo(coords.x, coords.y)
     } catch (error) {
       console.log('Erreur dans PointOnLineAtD.update()', error)
       this.exist = false

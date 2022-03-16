@@ -34,9 +34,9 @@ export class PointIntersectionCC extends Point {
 
   update (): void {
     try {
-      const { x, y } = Coords.intersectionCCCoord(this.C1, this.C2, this.n)
-      if (!isNaN(x) && !isNaN(y)) {
-        this.moveTo(x, y)
+      const coords = Coords.intersectionCCCoord(this.C1, this.C2, this.n)
+      if (!isNaN(coords.x) && !isNaN(coords.y)) {
+        this.moveTo(coords.x, coords.y)
         if (!this.exist) {
           this.show(false)
           this.exist = true

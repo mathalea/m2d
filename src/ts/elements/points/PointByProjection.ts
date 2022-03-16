@@ -15,8 +15,8 @@ export class PointByProjection extends Point {
     previous: Point // Antécédent
     line: Line // Droite sur laquelle s'effectue la projection
     constructor (A: Point, L: Line, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
-      const { x, y } = Coords.orthogonalProjectionCoord(A, L)
-      super(A.parentFigure, x, y, { label, style, size, thickness, color, draggable, temp })
+      const coords = Coords.orthogonalProjectionCoord(A, L)
+      super(A.parentFigure, coords.x, coords.y, { label, style, size, thickness, color, draggable, temp })
       this.previous = A
       this.line = L
       A.addChild(this)
@@ -25,8 +25,8 @@ export class PointByProjection extends Point {
 
     update (): void {
       try {
-        const { x, y } = Coords.orthogonalProjectionCoord(this.previous, this.line)
-        this.moveTo(x, y)
+        const coords = Coords.orthogonalProjectionCoord(this.previous, this.line)
+        this.moveTo(coords.x, coords.y)
       } catch (error) {
         console.log('Erreur dans PointByProjection.update()', error)
         this.exist = false

@@ -2,6 +2,7 @@ import { Figure } from './Figure'
 import { Cursor } from './elements/others/Cursor'
 import { Point } from './elements/points/Point'
 import { Segment } from './elements/lines/Segment'
+import { Const } from './elements/measures/Const'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -34,8 +35,13 @@ figure.svg.style.border = 'solid'
 // Ma figure
 const k = new Cursor(figure, -4, 7, { min: -2, max: 2, step: 0.1, length: 5, value: 1.2 })
 const angle = new Cursor(figure, -4, 6, { min: -180, max: 180, step: 2, length: 5, value: 0 })
-const O = new Point(figure, 0, 0, { label: 'O' })
-const A = new Point(figure, 5, 0, { label: 'A' })
+
+const xO = new Const(figure, 0)
+const yO = new Const(figure, 0)
+const xA = new Const(figure, 5)
+const yA = new Const(figure, 0)
+const O = new Point(figure, xO, yO, { label: 'O' })
+const A = new Point(figure, xA, yA, { label: 'A' })
 const s = new Segment(O, A, { temp: true })
 const t = Segment.homothetie(s, O, k)
 const u = Segment.similitude(s, A, k, angle)

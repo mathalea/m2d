@@ -51,19 +51,19 @@ export class Coords {
         const yiPrime = y2 - ry
         if (n === 1) {
           if (yiPrime > yi) {
-            return { x: xiPrime, y: yiPrime }
+            return new Coords(xiPrime, yiPrime)
           } else {
-            return { x: xi, y: yi }
+            return new Coords(xi, yi)
           }
         } else {
           if (yiPrime > yi) {
-            return { x: xi, y: yi }
+            return new Coords(xi, yi)
           } else {
-            return { x: xiPrime, y: yiPrime }
+            return new Coords(xiPrime, yiPrime)
           }
         }
       } catch (error) {
-        return { x: NaN, y: NaN }
+        return new Coords(NaN, NaN)
       }
     }
 
@@ -73,7 +73,7 @@ export class Coords {
         const [fa, fb, fc] = L2.equation
         let x: number, y: number
         if (fa * db - fb * da === 0) {
-          return { x: NaN, y: NaN }
+          return new Coords(NaN, NaN)
         } else {
           y = (fc * da - dc * fa) / (fa * db - fb * da)
         }
@@ -82,9 +82,9 @@ export class Coords {
         } else { // d n'est pas horizontale donc ...
           x = (-dc - db * y) / da
         }
-        return { x, y }
+        return new Coords(x, y)
       } catch (error) {
-        return { x: NaN, y: NaN }
+        return new Coords(NaN, NaN)
       }
     }
 
@@ -98,9 +98,9 @@ export class Coords {
           } else {
             return Coords.intersectionLCCoord(L, C, 2)
           }
-        } else return { x: NaN, y: NaN }
+        } else return new Coords(NaN, NaN)
       } catch (error) {
-        return { x: NaN, y: NaN }
+        return new Coords(NaN, NaN)
       }
     }
 
@@ -117,7 +117,7 @@ export class Coords {
           xi = -c / a
           xiPrime = xi
           Delta = 4 * (-xO * xO - (c * c) / (a * a) - (2 * xO * c) / a + r * r)
-          if (Delta < 0) return { x: NaN, y: NaN }
+          if (Delta < 0) return new Coords(NaN, NaN)
           else if (Math.abs(Delta) < 10 ** (-6)) {
             // un seul point d'intersection
             yi = yO + Math.sqrt(Delta) / 2
@@ -132,7 +132,7 @@ export class Coords {
           yi = -c / b
           yiPrime = yi
           Delta = 4 * (-yO * yO - (c * c) / (b * b) - (2 * yO * c) / b + r * r)
-          if (Delta < 0) return { x: NaN, y: NaN }
+          if (Delta < 0) return new Coords(NaN, NaN)
           else if (Math.abs(Delta) < 10 ** (-6)) {
             // un seul point d'intersection
             xi = xO + Math.sqrt(Delta) / 2
@@ -148,7 +148,7 @@ export class Coords {
             4 *
             (1 + (a / b) ** 2) *
             (xO * xO + yO * yO + (c / b) ** 2 + (2 * yO * c) / b - r * r)
-          if (Delta < 0) return { x: NaN, y: NaN }
+          if (Delta < 0) return new Coords(NaN, NaN)
           else if (Math.abs(Delta) < 10 ** (-6)) {
             // un seul point d'intersection
             delta = Math.sqrt(Delta)
@@ -170,19 +170,19 @@ export class Coords {
         }
         if (n === 1) {
           if (yiPrime > yi) {
-            return { x: xiPrime, y: yiPrime }
+            return new Coords(xiPrime, yiPrime)
           } else {
-            return { x: xi, y: yi }
+            return new Coords(xi, yi)
           }
         } else {
           if (yiPrime > yi) {
-            return { x: xi, y: yi }
+            return new Coords(xi, yi)
           } else {
-            return { x: xiPrime, y: yiPrime }
+            return new Coords(xiPrime, yiPrime)
           }
         }
       } catch (error) {
-        return { x: NaN, y: NaN }
+        return new Coords(NaN, NaN)
       }
     }
 
@@ -208,9 +208,9 @@ export class Coords {
           x = k * (b * b * M.x - a * b * M.y - a * c)
           y = k * (-a * b * M.x + a * a * M.y + (a * a * c) / b) - c / b
         }
-        return { x, y }
+        return new Coords(x, y)
       } catch (error) {
-        return { x: NaN, y: NaN }
+        return new Coords(NaN, NaN)
       }
     }
 
@@ -225,9 +225,9 @@ export class Coords {
       try {
         const x = (O.x + (A.x - O.x) * Math.cos((angle * Math.PI) / 180) - (A.y - O.y) * Math.sin((angle * Math.PI) / 180))
         const y = (O.y + (A.x - O.x) * Math.sin((angle * Math.PI) / 180) + (A.y - O.y) * Math.cos((angle * Math.PI) / 180))
-        return { x, y }
+        return new Coords(x, y)
       } catch (error) {
-        return { x: NaN, y: NaN }
+        return new Coords(NaN, NaN)
       }
     }
 
@@ -242,9 +242,9 @@ export class Coords {
       try {
         const x = (O.x + k * (A.x - O.x))
         const y = (O.y + k * (A.y - O.y))
-        return { x, y }
+        return new Coords(x, y)
       } catch {
-        return { x: NaN, y: NaN }
+        return new Coords(NaN, NaN)
       }
     }
 
@@ -261,9 +261,9 @@ export class Coords {
         const angleRadian = angle * Math.PI / 180
         const x = (O.x + k * (Math.cos(angleRadian) * (A.x - O.x) - Math.sin(angleRadian) * (A.y - O.y)))
         const y = (O.y + k * (Math.cos(angleRadian) * (A.y - O.y) + Math.sin(angleRadian) * (A.x - O.x)))
-        return { x, y }
+        return new Coords(x, y)
       } catch (error) {
-        return { x: NaN, y: NaN }
+        return new Coords(NaN, NaN)
       }
     }
 }

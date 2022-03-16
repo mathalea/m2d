@@ -10,7 +10,6 @@ import { CalculDynamic } from './../measures/CalculDynamic'
  */
 
 import { Figure } from '../../Figure'
-import { Element2D } from '../Element2D'
 import { Segment } from '../lines/Segment'
 import { Point } from '../points/Point'
 import { PointOnSegment } from '../points/PointOnSegment'
