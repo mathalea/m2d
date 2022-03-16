@@ -7,12 +7,11 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
-import { distance } from '../../calculus/random'
 import { Point, PointOptions } from './Point'
 import { PointByHomothetie } from './PointByHomothetie'
-import { homothetieCoord } from '../../calculus/transformation'
 import { Measure } from '../measures/Measure'
 import { Line } from '../lines/Line'
+import { Coords } from '../others/Coords'
 /**
  * Place un point sur un Line (Segment) à une distance D fixe du point Line.A
  */
@@ -22,7 +21,7 @@ export class PointOnLineAtD extends Point {
   d: number | Measure
 
   constructor (L: Line, d: number |Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = false, temp = false }: { length?: number, k?: number } & PointOptions = {}) {
-    const length = distance(L.A, L.B)
+    const length = Point.distance(L.A, L.B)
     const M = new PointByHomothetie(L.B, L.A, (d instanceof Measure ? d.value : d) / (length === 0 ? 1 : length), { temp: true })
     super(L.parentFigure, M.x, M.y, { style, size, thickness, color, draggable, temp })
     this.x = M.x
@@ -42,9 +41,9 @@ export class PointOnLineAtD extends Point {
     try {
       const L = this.line
       const dist = this.d instanceof Measure ? this.d.value : this.d
-      const Llength = distance(L.A, L.B)
-      const { x, y } = homothetieCoord(L.B, L.A, dist / (Llength === 0 ? 1 : Llength))
-      this.moveTo(x, y)
+      const Llength = Point.distance(L.A, L.B)
+      const coords = Coords.homothetieCoord(L.B, L.A, dist / (Llength === 0 ? 1 : Llength))
+      this.moveTo(coords.x, coords.y)
     } catch (error) {
       console.log('Erreur dans PointOnLineAtD.update()', error)
       this.exist = false

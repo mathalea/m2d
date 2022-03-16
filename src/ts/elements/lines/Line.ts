@@ -1,5 +1,4 @@
 import { PointByHomothetie } from './../points/PointByHomothetie'
-import { Coords } from './../Element2D'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -9,13 +8,14 @@ import { Coords } from './../Element2D'
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
-import { distance } from '../../calculus/random'
-import { orthogonalProjectionCoord } from '../../calculus/transformation'
-import { angleOriented } from '../../calculus/trigonometry'
 import { Element2D } from '../Element2D'
 import { Vector } from '../others/Vector'
 import { Point } from '../points/Point'
 import { Measure } from '../measures/Measure'
+import { Coords } from '../others/Coords'
+import { Angle } from '../measures/Angle'
+import { PointByRotation } from '../points/PointByRotation'
+import { PointBySimilitude } from '../points/PointBySimilitude'
 
 export type LineType = 'Line' | 'Segment' | 'Ray'
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
@@ -175,7 +175,7 @@ export class Line extends Element2D {
       const O: Coords = { x: 0, y: 0 }
       const A: Coords = { x: 1, y: 0 }
       const M: Coords = { x: this.directeur.x, y: this.directeur.y }
-      return angleOriented(A, O, M)
+      return Angle.angleOriented(A, O, M)
     } catch (error) {
       console.log('Erreur dans Line.angleWidthHorizontal', error)
       return NaN
@@ -184,21 +184,45 @@ export class Line extends Element2D {
 
   public distancePointer (pointerX: number, pointerY: number) {
     try {
-      const M = orthogonalProjectionCoord({ x: pointerX, y: pointerY }, this)
-      return distance(M, { x: pointerX, y: pointerY })
+      const M = Coords.orthogonalProjectionCoord({ x: pointerX, y: pointerY }, this)
+      return Point.distance(M, { x: pointerX, y: pointerY })
     } catch (error) {
       console.log('Erreur dans Line.distancePointer', error)
       return NaN
     }
   }
 
-  homothetie (center: Point, k:number|Measure) {
+  // usage : Segment.homothetie(segment, center, factor)
+  static homothetie (line: Line, center: Point, k:number|Measure) {
     try {
-      const M = new PointByHomothetie(this.A, center, k, { temp: true })
-      const N = new PointByHomothetie(this.B, center, k, { temp: true })
+      const M = new PointByHomothetie(line.A, center, k, { temp: true })
+      const N = new PointByHomothetie(line.B, center, k, { temp: true })
       return new Line(M, N)
     } catch (error) {
-      console.log('Erreur dans Segment.homothetie()', error)
+      console.log('Erreur dans Line.homothetie()', error)
+      return new Line(line.A, line.A)
+    }
+  }
+
+  static rotation (line: Line, center: Point, angle: number|Measure) {
+    try {
+      const M = new PointByRotation(line.A, center, angle, { temp: true })
+      const N = new PointByRotation(line.B, center, angle, { temp: true })
+      return new Line(M, N)
+    } catch (error) {
+      console.log('Erreur dans Line.homothetie()', error)
+      return new Line(line.A, line.A)
+    }
+  }
+
+  static similitude (line: Line, center: Point, k: number|Measure, angle: number|Measure) {
+    try {
+      const M = new PointBySimilitude(line.A, center, k, angle, { temp: true })
+      const N = new PointBySimilitude(line.B, center, k, angle, { temp: true })
+      return new Line(M, N)
+    } catch (error) {
+      console.log('Erreur dans Line.similitude()', error)
+      return new Line(line.A, line.A)
     }
   }
 }

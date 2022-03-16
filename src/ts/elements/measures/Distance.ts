@@ -7,7 +7,6 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
-import { distance } from '../../calculus/random'
 import { Point } from '../points/Point'
 import { Measure } from './Measure'
 
@@ -26,7 +25,7 @@ export class Distance extends Measure {
 
     update () {
       try {
-        this.value = distance(this.A, this.B)
+        this.value = Point.distance(this.A, this.B)
       } catch (error) {
         console.log('Erreur dans Distance.update()', error)
         this.exist = false

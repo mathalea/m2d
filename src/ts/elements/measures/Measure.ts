@@ -9,7 +9,6 @@
 
 import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
-import { ExistTest } from './ExistTest'
 
 export abstract class Measure {
     parentFigure: Figure

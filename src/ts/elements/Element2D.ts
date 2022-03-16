@@ -11,10 +11,6 @@ import { Figure } from '../Figure'
 import { Measure } from './measures/Measure'
 
 export type optionsElement2D = { color?: string, thickness?: number, fill?: string }
-export type Coords = {
-  x: number
-  y: number
-}
 
 /**
  * Classe parente de tous les éléments de géométrie

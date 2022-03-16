@@ -7,22 +7,22 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
-import { distance, randint } from '../../calculus/random'
-import { orthogonalProjectionCoord } from '../../calculus/transformation'
 import { Point, PointOptions } from './Point'
 import { Segment } from '../lines/Segment'
 import { Measure } from '../measures/Measure'
+import { Calcul } from '../others/Calculs'
+import { Coords } from '../others/Coords'
 
 export class PointOnLine extends Point {
   line: Segment
   length: number | Measure// valeur signée (mesure algébrique de A à M)
   k: number
   constructor (L: Segment, { label, k, length, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: { length?: number | Measure, k?: number} & PointOptions = {}) {
-    const Llength = distance(L.A, L.B)
+    const Llength = Point.distance(L.A, L.B)
     // Si k n'est pas défini, ce sera length/distance(A,B) qui déterminera la position du point.
     // Si length n'est pas non plus défini, elle sera choisi entre 15% et 85% de la distance(A,B)
     if (!(length instanceof Measure)) {
-      length = (length === undefined) ? randint(15, 85) * Llength / 100 : length
+      length = (length === undefined) ? Calcul.randint(15, 85) * Llength / 100 : length
     }
     if (k === undefined) {
       k = ((length instanceof Measure ? length.value : length) || 0) / Llength // Evitons la division par zéro avec le milieu d'un segment nul.
@@ -44,7 +44,7 @@ export class PointOnLine extends Point {
   update () {
     try {
       const L = this.line
-      const Llength = distance(L.A, L.B)
+      const Llength = Point.distance(L.A, L.B)
       if (this.length instanceof Measure) {
         this.k = this.length.value / (Llength === 0 ? 1 : Llength)
       } else {
@@ -61,12 +61,12 @@ export class PointOnLine extends Point {
     try {
       const L = this.line
       const P = { x, y }
-      const M = orthogonalProjectionCoord(P, L)
+      const M = Coords.orthogonalProjectionCoord(P, L)
       this.k = (L.B.x - L.A.x) === 0 ? (L.B.y - L.A.y) === 0 ? this.k : (M.y - L.A.y) / (L.B.y - L.A.y) : (M.x - L.A.x) / (L.B.x - L.A.x)
       if (this.length instanceof Measure) {
-        this.length.value = this.k * distance(L.A, L.B)
+        this.length.value = this.k * Point.distance(L.A, L.B)
       } else {
-        this.length = this.k * distance(L.A, L.B)
+        this.length = this.k * Point.distance(L.A, L.B)
       }
       super.moveTo(M.x, M.y)
     } catch (error) {
