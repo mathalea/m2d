@@ -1,3 +1,17 @@
+import { ExistTest } from './elements/measures/ExistTest'
+import { DisplayMeasure } from './elements/texts/DisplayMeasure'
+import { PointIntersectionLS } from './elements/points/PointIntersectionLS'
+import { PointIntersectionLL } from './elements/points/PointIntersectionLL'
+import { Segment } from './elements/lines/Segment'
+import { Angle } from './elements/measures/Angle'
+import { CalculDynamic } from './elements/measures/CalculDynamic'
+import { Figure } from './Figure'
+import { PointByHomothetie, PointByHomothetie } from './elements/points/PointByHomothetie'
+import { Cursor } from './elements/others/Cursor'
+import { Measure } from './elements/measures/Measure'
+import { Point } from './elements/points/Point'
+import { Line } from './elements/lines/Line'
+import { Element2D } from './elements/Element2D'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -8,11 +22,6 @@
  */
 
 // Initialisation
-
-import { Circle } from './elements/lines/Circle'
-import { Polygon } from './elements/lines/Polygon'
-import { Figure } from './Figure'
-import { addButtons } from './gui/addButtons'
 
 const figure = new Figure()
 const body = document.querySelector('body')
@@ -33,14 +42,5 @@ figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
 // Ma figure
-
-const A = figure.point(0, 0)
-const B = figure.point(3, 0)
-const C = figure.point(2, 5)
-const p = new Polygon(A, B, C)
-p.thickness = 2
-
-// Options
-
-// displayEditor(figure)
-addButtons(figure)
+const A = new Point(figure, 0, 5)
+const B = new Point(figure, 5, 0)

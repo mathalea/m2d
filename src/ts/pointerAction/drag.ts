@@ -4,7 +4,8 @@ import { Figure } from '../Figure'
 
 export function moveDrag (figure: Figure, pointerX: number, pointerY: number) {
   if (!figure.isDraging) return
-  document.querySelector('body').style.cursor = 'move'
+  const body = document.querySelector('body')
+  if (body) body.style.cursor = 'move'
   for (const e of figure.setInDrag) {
     e.notifyPointerMove(pointerX, pointerY)
   }
@@ -33,5 +34,6 @@ export function stopDrag (figure: Figure) {
   }
   figure.isDraging = false
   figure.setInDrag.clear()
-  document.querySelector('body').style.cursor = 'default'
+  const body = document.querySelector('body')
+  if (body) body.style.cursor = 'default'
 }

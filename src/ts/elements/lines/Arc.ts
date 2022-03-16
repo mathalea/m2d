@@ -11,7 +11,6 @@ import { distance } from '../../calculus/random'
 import { rotationCoord } from '../../calculus/transformation'
 import { angleOriented } from '../../calculus/trigonometry'
 import { Coords, Element2D } from '../Element2D'
-import { Angle } from '../measures/Angle'
 import { Measure } from '../measures/Measure'
 import { Point } from '../points/Point'
 import { OptionsGraphiques } from './Line'
@@ -20,9 +19,10 @@ export class Arc extends Element2D {
   center: Point
   point: Point
   point2: Coords
-  angle: number | Angle
+  angle: number | Measure
   horiz: Coords
-  constructor (O: Point, A: Point, angle: number | Angle, { color = 'black', thickness = 1, dashed = false, fill = 'none' }: OptionsGraphiques = {}) {
+  private _label: string
+  constructor (O: Point, A: Point, angle: number | Measure, { color = 'black', thickness = 1, dashed = false, fill = 'none' }: OptionsGraphiques = {}) {
     super(O.parentFigure)
     this.center = O
     this.point = A
@@ -44,48 +44,61 @@ export class Arc extends Element2D {
     this.thickness = thickness
     this.dashed = dashed
     this.parentFigure.svg.appendChild(this.g)
-    A.addDependency(this)
-    O.addDependency(this)
-    if (angle instanceof Measure) angle.addDependency(this)
+    A.addChild(this)
+    O.addChild(this)
+    if (angle instanceof Measure) angle.addChild(this)
   }
 
   update (): void {
-    const angleMeasure = (typeof this.angle === 'number') ? this.angle : this.angle.value
-    const [large, sweep] = getLargeSweep(angleMeasure)
-    this.point2 = rotationCoord(this.point, this.center, angleMeasure)
-    const d = this.parentFigure.xToSx(distance(this.center, this.point))
-    this.g.setAttribute('d', `M${this.parentFigure.xToSx(this.point.x)} ${this.parentFigure.yToSy(this.point.y)} A ${d} ${d} 0 ${large} ${sweep} ${this.parentFigure.xToSx(this.point2.x)} ${this.parentFigure.yToSy(this.point2.y)}`)
+    try {
+      const angleMeasure = (typeof this.angle === 'number') ? this.angle : this.angle.value
+      const [large, sweep] = getLargeSweep(angleMeasure)
+      this.point2 = rotationCoord(this.point, this.center, angleMeasure)
+      const d = this.parentFigure.xToSx(distance(this.center, this.point))
+      this.g.setAttribute('d', `M${this.parentFigure.xToSx(this.point.x)} ${this.parentFigure.yToSy(this.point.y)} A ${d} ${d} 0 ${large} ${sweep} ${this.parentFigure.xToSx(this.point2.x)} ${this.parentFigure.yToSy(this.point2.y)}`)
+    } catch (error) {
+      console.log('Erreur dans Arc.update()', error)
+      this.exist = false
+    }
     // Ajout des segments ?
     // this.g.setAttribute('d', this.g.getAttribute('d') + `L ${this.parentFigure.xToSx(this.center.x)} ${this.parentFigure.yToSy(this.center.y)} Z`)
   }
 
   // ToFix !!! Pas le même qu'en SVG
   get latex (): string {
-    if (!this.isVisible) return ''
-    const angleMeasure = (typeof this.angle === 'number') ? this.angle : this.angle.value
-    const radius = distance(this.center, this.point)
-    const azimut = angleOriented(this.horiz, this.center, this.point)
-    const anglefin = azimut + angleMeasure
-    let latex = `\n\n\t% Arc ${this._label}`
-    latex += `\n\t\\draw${this.tikzOptions} (${this.point.x},${this.point.y}) arc (${azimut}:${anglefin}:${radius}) ;`
-    return latex
+    if (!this.isVisible || !this.exist) return ''
+    try {
+      const angleMeasure = (typeof this.angle === 'number') ? this.angle : this.angle.value
+      const radius = distance(this.center, this.point)
+      const azimut = angleOriented(this.horiz, this.center, this.point)
+      const anglefin = azimut + angleMeasure
+      let latex = `\n\n\t% Arc ${this._label}`
+      latex += `\n\t\\draw${this.tikzOptions} (${this.point.x},${this.point.y}) arc (${azimut}:${anglefin}:${radius}) ;`
+      return latex
+    } catch (error) {
+      return ''
+    }
   }
 }
 
 function getLargeSweep (angle: number) {
-  let large: 0 | 1
-  let sweep: 0 | 1
-  if (angle > 180) {
-    angle = angle - 360
-    large = 1
-    sweep = 0
-  } else if (angle < -180) {
-    angle = 360 + angle
-    large = 1
-    sweep = 1
-  } else {
-    large = 0
-    sweep = (angle > 0) ? 0 : 1
+  try {
+    let large: 0 | 1
+    let sweep: 0 | 1
+    if (angle > 180) {
+      angle = angle - 360
+      large = 1
+      sweep = 0
+    } else if (angle < -180) {
+      angle = 360 + angle
+      large = 1
+      sweep = 1
+    } else {
+      large = 0
+      sweep = (angle > 0) ? 0 : 1
+    }
+    return [large, sweep]
+  } catch (error) {
+    return [NaN, NaN]
   }
-  return [large, sweep]
 }

@@ -21,7 +21,7 @@ export class Barycenter extends Point {
       Cx = 0
       Cy = 0
       for (const point of points) {
-        point.addDependency(this)
+        point.addChild(this)
         Cx += point.x
         Cy += point.y
       }
@@ -33,18 +33,23 @@ export class Barycenter extends Point {
     }
 
     update () {
-      let Cx: number
-      let Cy: number
-      Cx = 0
-      Cy = 0
-      for (const point of this.points) {
-        Cx += point.x
-        Cy += point.y
+      try {
+        let Cx: number
+        let Cy: number
+        Cx = 0
+        Cy = 0
+        for (const point of this.points) {
+          Cx += point.x
+          Cy += point.y
+        }
+        Cx /= this.points.length
+        Cy /= this.points.length
+        this.x = Cx
+        this.y = Cy
+        super.moveTo(Cx, Cy)
+      } catch (error) {
+        console.log('Erreur dans Barycenter.update()', error)
+        this.exist = false
       }
-      Cx /= this.points.length
-      Cy /= this.points.length
-      this.x = Cx
-      this.y = Cy
-      super.moveTo(Cx, Cy)
     }
 }

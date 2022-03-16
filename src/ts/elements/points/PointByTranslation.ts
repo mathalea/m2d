@@ -19,10 +19,15 @@ export class PointByTranslation extends Point {
       this.yt = yt
       this.previous = A
       if (label !== undefined) this.label = label
-      A.addDependency(this)
+      A.addChild(this)
     }
 
     update (): void {
-      this.moveTo(this.previous.x + this.xt, this.previous.y + this.yt)
+      try {
+        this.moveTo(this.previous.x + this.xt, this.previous.y + this.yt)
+      } catch (error) {
+        console.log('Erreur dans PointByTranslation.update()', error)
+        this.exist = false
+      }
     }
 }

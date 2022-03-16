@@ -8,9 +8,6 @@
  */
 
 import { Figure } from '../Figure'
-import { Angle } from './measures/Angle'
-import { CalculDynamic } from './measures/Calculdynamic'
-import { Distance } from './measures/Distance'
 import { Measure } from './measures/Measure'
 
 export type optionsElement2D = { color?: string, thickness?: number, fill?: string }
@@ -28,20 +25,23 @@ export abstract class Element2D {
   // Un élément de géométrie peut être composé de plusieurs autres éléments de géométrie (plusieurs segments pour marquer un point ou coder un angle par exemple)
   group: Element2D[]
   g: SVGElement
-  dependencies: (Element2D | Measure)[]
+  childs: (Element2D | Measure)[]
+  parents: (Element2D | Measure)[]
+  // Ces paramètres privés sont mis à jour par les getters équivalents sans le _
   private _color: string
   private _fill: string
   private _thickness: number
   private _opacity: number
   private _fillOpacity: number
   private _dashed: boolean
-  _label: string
+  private _exist: boolean
   isVisible: boolean
 
   constructor (parentFigure: Figure) {
     this.parentFigure = parentFigure
     this.group = []
-    this.dependencies = []
+    this.childs = []
+    this.parents = []
     this.g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
     this.isVisible = true
     this._color = 'black'
@@ -52,28 +52,44 @@ export abstract class Element2D {
     this._dashed = false
     this._label = ''
     this.draggable = true
+    this._exist = true
   }
 
   /**
    * Permet d'indiquer au point que sa position dépend d'autres éléments
-   * @param dependency
+   * @param child
    */
-  addDependency (dependency: Element2D | Angle | Distance | CalculDynamic | Measure) {
-    this.dependencies.push(dependency)
+  addChild (child: Element2D | Measure) {
+    this.childs.push(child)
+    child.parents.push(this)
   }
 
-  notifyAllDependencies () {
-    for (const element of this.dependencies) {
+  removeChild (child: Element2D | Measure) {
+    const index = this.childs.indexOf(child)
+    if (index > -1) {
+      this.childs.splice(index, 1)
+    }
+    const index2 = child.parents.indexOf(this)
+    if (index2 > -1) {
+      child.parents.splice(index2, 1)
+    }
+  }
+
+  notifyAllChilds () {
+    if (this.childs.length > 40) {
+      console.log('Nombre de dépendances élevée pour ', this)
+    }
+    for (const element of this.childs) {
       element.update()
     }
   }
 
   abstract update(): void
 
-  hide () {
+  hide (changeIsVisible = true) {
     // Tous les membres du groupe auront la même couleur
     for (const e of this.group) {
-      e.hide()
+      e.hide(changeIsVisible)
     }
     if (this.g.children.length > 0) {
       for (const line of Array.from(this.g.children)) {
@@ -82,13 +98,13 @@ export abstract class Element2D {
     } else { // Le segment ou le cercle ne sont pas des groupes, ce sont des éléments uniques sans children
       this.g.setAttribute('visibility', 'hidden')
     }
-    this.isVisible = false
+    if (changeIsVisible) this.isVisible = false
   }
 
-  show () {
-    // Tous les membres du groupe auront la même couleur
+  show (changeIsVisible = true) {
+    if (!changeIsVisible && !this.isVisible) return
     for (const e of this.group) {
-      e.show()
+      e.show(changeIsVisible)
     }
     if (this.g.children.length > 0) {
       for (const line of Array.from(this.g.children)) {
@@ -97,7 +113,34 @@ export abstract class Element2D {
     } else { // Le segment ou le cercle ne sont pas des groupes, ce sont des éléments uniques sans children
       this.g.setAttribute('visibility', 'visible')
     }
-    this.isVisible = true
+    if (changeIsVisible) this.isVisible = true
+  }
+
+  set exist (arg: boolean) {
+    try {
+      let allParentsExist = true
+      for (const parent of this.parents) {
+        if (!parent.exist) {
+          allParentsExist = false
+          break
+        }
+      }
+      this._exist = arg && allParentsExist
+      ;(this._exist && this.isVisible)
+        ? this.show(false)
+        : this.hide(false)
+      for (const e of this.childs) {
+        e.exist = this._exist && e.exist
+        if (e instanceof Element2D && e.isVisible) this._exist ? e.show(false) : e.hide(false)
+      }
+    } catch (error) {
+      console.log('Erreur dans Element2d.exist()', error)
+      this.exist = false
+    }
+  }
+
+  get exist () {
+    return this._exist
   }
 
   get color () {
@@ -213,5 +256,24 @@ export abstract class Element2D {
     let txtOptions = ''
     if (arrayOptions) txtOptions = `[${arrayOptions.join(', ')}]`
     return txtOptions
+  }
+
+  select () {
+    this.parentFigure.selectedElements.push(this)
+    if (this.g.children.length > 0) {
+      for (const line of Array.from(this.g.children)) {
+        line.setAttribute('stroke', 'purple')
+        line.setAttribute('stroke-width', '5')
+      }
+    } else { // Le segment ou le cercle ne sont pas des groupes, ce sont des éléments uniques sans children
+      this.g.setAttribute('stroke', 'purple')
+      this.g.setAttribute('stroke-width', '5')
+    }
+  }
+
+  unSelect () {
+    this.parentFigure.selectedElements = this.parentFigure.selectedElements.filter((e) => e !== this)
+    this.color = this._color
+    this.thickness = this._thickness
   }
 }

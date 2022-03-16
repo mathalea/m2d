@@ -23,21 +23,31 @@ export class PointOnCircle extends Point {
     this.circle = C
     this.angle = angle
     if (label !== undefined) this.label = label
-    C.addDependency(this)
+    C.addChild(this)
   }
 
   moveTo (x: number, y: number) {
-    const O = this.circle.center
-    const P = new Point(this.circle.parentFigure, x, y, { temp: true })
-    const M = new PointByHomothetie(P, O, this.circle.radius / distance(O, P), { temp: true })
-    this.angle = this.circle.pointOnCircle ? angleOriented(this.circle.pointOnCircle, this.circle.center, M) : angleOriented(this.circle.M, this.circle.center, M)
-    super.moveTo(M.x, M.y)
+    try {
+      const O = this.circle.center
+      const P = new Point(this.circle.parentFigure, x, y, { temp: true })
+      const M = new PointByHomothetie(P, O, this.circle.radius / distance(O, P), { temp: true })
+      this.angle = this.circle.pointOnCircle ? angleOriented(this.circle.pointOnCircle, this.circle.center, M) : angleOriented(this.circle.M, this.circle.center, M)
+      super.moveTo(M.x, M.y)
+    } catch (error) {
+      console.log('Erreur dans PointOnCircle.moveTo()', error)
+      this.exist = false
+    }
   }
 
   update (): void {
-    const C = this.circle
-    const { x, y } = C.pointOnCircle ? rotationCoord(C.pointOnCircle, C.center, this.angle) : rotationCoord(C.M, C.center, this.angle)
-    this.moveTo(x, y)
+    try {
+      const C = this.circle
+      const { x, y } = C.pointOnCircle ? rotationCoord(C.pointOnCircle, C.center, this.angle) : rotationCoord(C.M, C.center, this.angle)
+      this.moveTo(x, y)
+    } catch (error) {
+      console.log('Erreur dans PointOnCircle.update()', error)
+      this.exist = false
+    }
   }
 
   /**

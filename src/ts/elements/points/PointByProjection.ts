@@ -19,12 +19,17 @@ export class PointByProjection extends Point {
       super(A.parentFigure, x, y, { label, style, size, thickness, color, draggable, temp })
       this.previous = A
       this.line = L
-      A.addDependency(this)
-      L.addDependency(this)
+      A.addChild(this)
+      L.addChild(this)
     }
 
     update (): void {
-      const { x, y } = orthogonalProjectionCoord(this.previous, this.line)
-      this.moveTo(x, y)
+      try {
+        const { x, y } = orthogonalProjectionCoord(this.previous, this.line)
+        this.moveTo(x, y)
+      } catch (error) {
+        console.log('Erreur dans PointByProjection.update()', error)
+        this.exist = false
+      }
     }
 }

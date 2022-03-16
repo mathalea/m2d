@@ -1,14 +1,14 @@
-import { Line } from '../elements/lines/Line'
+import { Circle } from '../elements/lines/Circle'
+import { Line, OptionsGraphiques } from '../elements/lines/Line'
 import { Point } from '../elements/points/Point'
 import { Figure } from '../Figure'
 
-export function actionSetOptions (figure: Figure, pointerX: number, pointerY:number, options) {
+export function setOptions (figure: Figure, pointerX: number, pointerY:number, options: OptionsGraphiques) {
   for (const e of figure.set) {
-    if ((e instanceof Point || e instanceof Line) && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
-      for (const key in options) {
-        e[key] = options[key]
-      }
-      // ToFix on applique au premier que l'on trouve et ce n'est pas forcément le plus proche du pointer
+    if ((e instanceof Point || e instanceof Line || e instanceof Circle) && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
+      if (options.color) e.color = options.color
+      if (options.thickness) e.thickness = options.thickness
+      if (options.dashed !== undefined) e.dashed = options.dashed
       break
     }
   }

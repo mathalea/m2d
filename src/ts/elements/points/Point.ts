@@ -11,31 +11,41 @@ import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
 import { Segment } from '../lines/Segment'
 import { Circle } from '../lines/Circle'
-import { Cross } from '../others/cross'
+import { Cross } from '../others/Cross'
 import { TextByPoint } from '../texts/TextByPoint'
+import { Measure } from '../measures/Measure'
 
 export type PointStyle = 'x' | 'o' | ''
-export type PointOptions = { label?: string, style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean, snapToGrid?: boolean }
+export type PointOptions = { label?: string, style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean, snapToGrid?: boolean, labelDx?: number, labelDy?: number, exist?: boolean }
 
 export class Point extends Element2D {
-  x: number
-  y: number
+  private _x: number | Measure
+  private _y: number | Measure
   private _style: PointStyle
-  protected _size: number // Pour la taille de la croix et utilisé dans changeStyle
-  mark: Element2D
-  labelElement: Element2D
+  private _label: string
+  private _size: number // Pour la taille de la croix et utilisé dans changeStyle
+  trace: boolean
+  traces: Element2D[]
+  mark: Element2D | null
+  labelElement: Element2D | null
+  labelDx: number // Ecart entre le label et le point en abscisse
+  labelDy: number // Ecart entre le label et le point en ordonnées
   draggable: true | false | Circle | Segment
   temp: boolean // Pour les points qui ne servent qu'à faire des calculs
   snapToGrid: boolean
   // On définit un point avec ses deux coordonnées
-  constructor (figure: Figure, x: number, y: number, { label, style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false, snapToGrid = false }: PointOptions = {}) {
+  constructor (figure: Figure, x: number | Measure, y: number|Measure, { label, style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false, snapToGrid = false, labelDx = -0.3, labelDy = 0.3, exist = true }: PointOptions = {}) {
     super(figure)
-    this.x = x
-    this.y = y
+    this._x = x
+    this._y = y
+    this.traces = []
     this.group = []
+    this.mark = null
+    this.labelElement = null
     this._style = style
     this.thickness = thickness
     this.temp = temp
+    this.exist = exist
     this._size = size
     // Les points que l'on peut déplacer sont bleus par défaut
     this.color = color || (draggable ? 'blue' : 'black')
@@ -51,7 +61,13 @@ export class Point extends Element2D {
       this.parentFigure.svg.appendChild(this.g)
       if (this.draggable) this.g.style.cursor = 'move'
     }
+    this._label = label || ''
+    this.labelDx = labelDx
+    this.labelDy = labelDy
     if (label !== undefined) this.label = label
+    this.trace = false
+    if (x instanceof Measure) x.addChild(this)
+    if (y instanceof Measure) y.addChild(this)
   }
 
   /**
@@ -59,10 +75,21 @@ export class Point extends Element2D {
    * Ce sont sur ses marques (croix ou rond ou ...) qu'il faut faire une mise à jour du graphique
    */
   update (): void {
+    try {
+      this.moveTo(this.x, this.y)
+    } catch (error) {
+      console.log('Erreur dans Point.update()', error)
+      this.exist = false
+    }
   }
 
   isOnFigure () {
-    return (this.x < this.parentFigure.xMax && this.x > this.parentFigure.xMin && this.y < this.parentFigure.yMax && this.y > this.parentFigure.yMin)
+    try {
+      return (this.x < this.parentFigure.xMax && this.x > this.parentFigure.xMin && this.y < this.parentFigure.yMax && this.y > this.parentFigure.yMin)
+    } catch (error) {
+      console.log('Erreur dans Point.isOnFigure()', error)
+      this.exist = false
+    }
   }
 
   /**
@@ -71,14 +98,29 @@ export class Point extends Element2D {
    * @param y nouvelle ordonnée
    */
   moveTo (x: number, y: number) {
-    ;[this.x, this.y] = [x, y]
-    if (this.mark instanceof Cross) {
-      ;[this.mark.x, this.mark.y] = [x, y]
-      this.mark.update()
+    try {
+      this.x = x
+      this.y = y
+      if (this.trace && this.exist) {
+        const M = new Point(this.parentFigure, x, y, { style: 'o', size: 0.02 })
+        this.g.appendChild(M.g)
+        this.removeChild(M)
+      }
+      if (this.mark instanceof Cross && this.exist) {
+        ;[this.mark.x, this.mark.y] = [x, y]
+        this.mark.update()
+      }
+      if (this.mark instanceof Circle && this.exist) {
+        this.mark.moveCenter(x, y)
+        this.mark.update()
+      }
+    } catch (error) {
+      console.log('Erreur dans Point.moveTo()', error)
+      this.exist = false
     }
     // ToFix ce console.log est là qu'en phase de développement
-    if (this.dependencies.length > 20) console.log(`Nombre de dépendances élevée pour ${this.label} : ${this.dependencies.length}`)
-    this.notifyAllDependencies()
+    // if (this.childs.length > 20) console.log(`Nombre de dépendances élevée pour ${this.label} : ${this.childs.length}`)
+    this.notifyAllChilds()
   }
 
   /**
@@ -105,11 +147,11 @@ export class Point extends Element2D {
    * @param style 'x' | 'o' | ''
    */
   private changeStyle (style: 'x' | 'o' | '') {
-    if (this.parentFigure.set.has(this.mark)) this.parentFigure.set.delete(this.mark)
+    if (this.mark !== null) this.parentFigure.set.delete(this.mark)
     if (style === '') {
       this.g.remove()
     }
-    if (style === 'x') {
+    if (style === 'x' && this.exist) {
       const X = new Cross(this.parentFigure, this.x, this.y)
       this.mark = X
       this.group.push(X)
@@ -117,7 +159,7 @@ export class Point extends Element2D {
       this.mark.color = this.color
       this.mark.thickness = this.thickness
     }
-    if (style === 'o') {
+    if (style === 'o' && this.exist) {
       // Rond
       const C = new Circle(this, this.size)
       this.mark = C
@@ -129,14 +171,14 @@ export class Point extends Element2D {
     }
   }
 
-  hide (): void {
-    super.hide()
-    this.labelElement.hide()
+  hide (changeIsVisible = true): void {
+    super.hide(changeIsVisible)
+    if (this.labelElement) this.labelElement.hide(changeIsVisible)
   }
 
-  show (): void {
-    super.show()
-    this.labelElement.show()
+  show (changeIsVisible = true): void {
+    super.show(changeIsVisible)
+    if (this.labelElement) this.labelElement.show(changeIsVisible)
   }
 
   get label () {
@@ -145,11 +187,9 @@ export class Point extends Element2D {
 
   set label (label) {
     if (this.labelElement) {
-      this.labelElement.g.remove()
-      this.parentFigure.set.delete(this.labelElement)
-    }
-    if (label !== '') {
-      this.labelElement = new TextByPoint(this, label, { dx: -0.3, dy: 0.3 })
+      this.labelElement.g.innerHTML = label
+    } else if (this._label) {
+      this.labelElement = new TextByPoint(this, label, { dx: this.labelDx, dy: this.labelDy })
       this.parentFigure.svg.appendChild(this.labelElement.g)
     }
     this._label = label
@@ -171,5 +211,25 @@ export class Point extends Element2D {
   set size (size) {
     this._size = size
     this.changeStyle(this._style)
+  }
+
+  get x () {
+    if (this._x instanceof Measure) return this._x.value
+    else return this._x
+  }
+
+  set x (x) {
+    if (this._x instanceof Measure) this._x.value = x
+    else this._x = x
+  }
+
+  get y () {
+    if (this._y instanceof Measure) return this._y.value
+    else return this._y
+  }
+
+  set y (y) {
+    if (this._y instanceof Measure) this._y.value = y
+    else this._y = y
   }
 }

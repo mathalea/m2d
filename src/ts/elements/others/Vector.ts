@@ -9,22 +9,44 @@
 
 import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
+import { Measure } from '../measures/Measure'
 import { Point } from '../points/Point'
 
 export class Vector extends Element2D {
-  private _x: number
-  private _y: number
+  private _x: number | Measure
+  private _y: number | Measure
 
-  constructor (figure: Figure, arg1: number | Point, arg2: number | Point) {
+  constructor (figure: Figure, arg1: number | Point | Measure, arg2: number | Point| Measure) {
     super(figure)
-    if (typeof arg1 === 'number' && typeof arg2 === 'number') {
-      this._x = arg1
-      this._y = arg2
-    } else if (arg1 instanceof Point && arg2 instanceof Point) {
-      this._x = arg2.x - arg1.x
-      this._y = arg2.y - arg1.y
-    } else {
-      throw new Error('Les paramètres doivent être 2 points ou 2 nombres.')
+    let correct = true
+    this._x = 0
+    this._y = 0
+    try {
+      if (typeof arg1 === 'number') {
+        this._x = arg1
+        if (typeof arg2 === 'number' || arg2 instanceof Measure) {
+          this._y = arg2
+          if (arg2 instanceof Measure) arg2.addChild(this)
+        } else correct = false
+      } else if (arg1 instanceof Measure) {
+        this._x = arg1
+        arg1.addChild(this)
+        if (typeof arg2 === 'number' || arg2 instanceof Measure) {
+          this._y = arg2
+          if (arg2 instanceof Measure) arg2.addChild(this)
+        } else correct = false
+      } else if (arg1 instanceof Point && arg2 instanceof Point) {
+        this._x = arg2.x - arg1.x
+        this._y = arg2.y - arg1.y
+      } else {
+        correct = false
+      }
+    } catch (error) {
+      console.log(error)
+      correct = false
+    }
+    if (!correct) {
+      this.exist = false
     }
   }
 
@@ -37,24 +59,24 @@ export class Vector extends Element2D {
   }
 
   update () {
-    this.notifyAllDependencies()
+    this.notifyAllChilds()
   }
 
   get x () {
-    return this._x
+    return this._x instanceof Measure ? this._x.value : this._x
   }
 
   set x (n: number) {
-    this._x = n
-    // this.update()
+    if (this._x instanceof Measure) this._x.value = n
+    else this._x = n
   }
 
   get y () {
-    return this._y
+    return this._y instanceof Measure ? this._y.value : this._y
   }
 
   set y (n: number) {
-    this._y = n
-    // this.update()
+    if (this._y instanceof Measure) this._y.value = n
+    else this._y = n
   }
 }

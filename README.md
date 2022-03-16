@@ -68,12 +68,12 @@ Les objets `Element2D` peuvent être stylisés
 #### Les dépendances
 
 ```
-dependencies: {element: Element2D, type: string}[]
+childs: {element: Element2D, type: string}[]
 ```
 
 Exemple : 
-- Quand on créé un segment [AB], on prévient A que le segment dépend de lui avec `A.addDepency(this)`.
-- Lorsque `A` est déplacé, il exécute après son déplacement `notifyAllDependencies()` qui parcourt la liste de ces dépendances.
+- Quand on créé un segment [AB], on prévient A que le segment dépend de lui avec `A.addChild(this)`.
+- Lorsque `A` est déplacé, il exécute après son déplacement `notifyAllChilds()` qui parcourt la liste de ces dépendances.
 - Comme le segment est dans sa liste de dépendance on appelle la méthode `update()`  du segment.
 
 Avec un fonctionnement en cascade chaque objet prévient ses dépendances pour qu'elles se mettent à jour. Dans chaque objet, la il y a la méthode `update` pour calculer les nouvelles coordonnées et la liste des paramètres nécessaires à ce nouveau calcul (l'antécédent de la transformation, les éléments caractéristiques de la transformation...)

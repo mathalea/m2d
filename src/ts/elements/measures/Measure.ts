@@ -9,26 +9,55 @@
 
 import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
+import { ExistTest } from './ExistTest'
 
 export abstract class Measure {
     parentFigure: Figure
     value: number
-    dependencies: (Element2D | Measure)[]
+    childs: (Element2D | Measure)[]
+    parents: (Element2D | Measure)[]
+    private _exist: boolean
     constructor (parentFigure: Figure) {
       this.parentFigure = parentFigure
-      this.dependencies = []
+      this.childs = []
+      this.parents = []
       this.value = 0
+      this._exist = true
     }
 
     abstract update ():void
 
-    addDependency (dependency: Element2D | Measure) {
-      this.dependencies.push(dependency)
+    addChild (child: Element2D | Measure) {
+      this.childs.push(child)
+      child.parents.push(this)
     }
 
-    notifyAllDependencies () {
-      for (const element of this.dependencies) {
+    notifyAllChilds () {
+      for (const element of this.childs) {
         element.update()
       }
+    }
+
+    set exist (arg: boolean) {
+      try {
+        let allParentsExist = true
+        for (const parent of this.parents) {
+          if (!parent.exist) {
+            allParentsExist = false
+            break
+          }
+        }
+        this._exist = arg && allParentsExist
+        for (const e of this.childs) {
+          e.exist = this._exist && e.exist
+          if (e instanceof Element2D && e.isVisible) this._exist ? e.show(false) : e.hide(false)
+        }
+      } catch (error) {
+        console.log('Erreur dans Measure.exist', error)
+      }
+    }
+
+    get exist () {
+      return this._exist
     }
 }

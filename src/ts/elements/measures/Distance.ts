@@ -8,26 +8,29 @@
  */
 
 import { distance } from '../../calculus/random'
-import { Figure } from '../../Figure'
 import { Point } from '../points/Point'
 import { Measure } from './Measure'
 
 export class Distance extends Measure {
     A: Point
     B: Point
-    parentFigure: Figure
     constructor (A: Point, B: Point) {
       super(A.parentFigure)
-      this.dependencies = []
+      this.childs = []
       this.A = A
       this.B = B
-      A.addDependency(this)
-      B.addDependency(this)
+      A.addChild(this)
+      B.addChild(this)
       this.update()
     }
 
     update () {
-      this.value = distance(this.A, this.B)
-      this.notifyAllDependencies()
+      try {
+        this.value = distance(this.A, this.B)
+      } catch (error) {
+        console.log('Erreur dans Distance.update()', error)
+        this.exist = false
+      }
+      this.notifyAllChilds()
     }
 }

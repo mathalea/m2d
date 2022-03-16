@@ -1,3 +1,5 @@
+import { Distance } from './../measures/Distance'
+import { CalculDynamic } from './../measures/CalculDynamic'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -10,10 +12,10 @@
 import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
 import { Segment } from '../lines/Segment'
-import { Algebraic } from '../measures/Algebraic'
 import { Point } from '../points/Point'
 import { PointOnSegment } from '../points/PointOnSegment'
 import { DisplayMeasure } from '../texts/DisplayMeasure'
+import { Measure } from '../measures/Measure'
 
 export class Cursor extends Element2D {
   tab: Point
@@ -23,17 +25,17 @@ line: Segment
 min: number
 max: number
 step: number
-algebraic: Algebraic
+algebraic: CalculDynamic
 display: DisplayMeasure
+position: Distance
 
-constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, step = 0.1, length = 2, value = 0 }: {min?: number, max?:number, step?:number, length?:number, value?:number}) {
+constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, step = 0.1, length = 2, value = 0 }: {min?: number, max?:number, step?:number, length?:number, value?:number} = {}) {
   super(svgContainer)
   const factor = Math.round(length / step)
   if (!Number.isInteger(length / step)) {
     length = factor * step
   }
   this.length = length
-  this.algebraic = new Algebraic(svgContainer, Math.max(Math.min(value, max), min))
   this.step = step
   this.max = max
   this.min = min
@@ -41,16 +43,20 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
   const N = new Point(svgContainer, x + length, y, { temp: true })
   this.origin = M
   this.line = new Segment(M, N)
-  this.tab = new PointOnSegment(this.line, { draggable: true, style: '', length: length * (Math.max(Math.min(value, max), min) - min) / (max - min) }) // on s'assure que la valeur est comprise entre min et max.
+  this.line.thickness = 4
+  this.line.color = 'black'
+  this.tab = new PointOnSegment(this.line, { draggable: true, style: 'o', color: 'blue', length: length * (Math.max(Math.min(value, max), min) - min) / (max - min) }) // on s'assure que la valeur est comprise entre min et max.
+  this.line.g.setAttribute('stroke-linecap', 'round')
+  this.position = new Distance(M, this.tab)
+  this.algebraic = new CalculDynamic((args: Measure[]) => this.min + Math.round((this.max - this.min) * args[0].value / this.length / this.step) * this.step, [this.position])
   this.display = new DisplayMeasure(this.origin.x + this.length + 0.5, this.tab.y, this.algebraic, { precision: 2 })
-  this.tab.addDependency(this.display)
-  this.tab.addDependency(this)
-  this.tab.addDependency(this.algebraic)
+  this.tab.addChild(this.display)
+  this.tab.addChild(this)
+  this.tab.addChild(this.algebraic)
   this.tab.style = 'x'
 }
 
 update () {
-  this.algebraic.value = this.min + (this.tab.x - this.origin.x) * (this.max - this.min) / this.length
-  this.notifyAllDependencies()
+  this.notifyAllChilds()
 }
 }

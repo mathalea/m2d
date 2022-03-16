@@ -16,11 +16,16 @@ export class VectorNormal extends Vector {
     const [x, y] = [L.normal.x, L.normal.y]
     super(L.parentFigure, x, y)
     this.line = L
-    L.addDependency(this)
+    L.addChild(this)
   }
 
   update (): void {
-    [this.x, this.y] = [this.line.normal.x, this.line.normal.y]
-    this.notifyAllDependencies()
+    try {
+      [this.x, this.y] = [this.line.normal.x, this.line.normal.y]
+    } catch (error) {
+      console.log('Erreur dans VectorNormal.update()', error)
+      this.exist = false
+    }
+    this.notifyAllChilds()
   }
 }

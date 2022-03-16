@@ -2,19 +2,25 @@ import { Segment } from '../elements/lines/Segment'
 import { Point } from '../elements/points/Point'
 import { Figure } from '../Figure'
 
-export function actionNewSegment (figure: Figure, pointerX: number, pointerY: number) {
+export function newSegment (figure: Figure, pointerX: number, pointerY: number) {
   for (const e of figure.set) {
     if (e instanceof Point && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
-      if (figure.setSelectedElements.size === 1) {
-        const A = [...figure.setSelectedElements][0] as Point
-        const s = new Segment(A, e)
+      if (figure.selectedElements.length === 1) {
+        const A = figure.selectedElements[0] as Point
+        const s = new Segment(A, e, figure.pointerSetOptions)
         figure.set.add(s)
-        figure.setSelectedElements.clear()
-        figure.message('Cliquer sur les deux extrémités du segment')
+        figure.clearSelectedElements()
+        actionNewSegmentMessage(figure)
       } else {
-        figure.setSelectedElements.add(e)
-        figure.message('Cliquer sur l\'autre extrémité')
-      } 
+        e.select()
+        figure.displayMessage('Cliquer sur l\'autre extrémité')
+      }
     }
   }
+}
+
+export function actionNewSegmentMessage (figure: Figure) {
+  if ([...figure.set].filter(element => element instanceof Point).length < 2) {
+    figure.displayMessage('Il faut au moins deux points pour tracer un segment')
+  } else figure.displayMessage('Cliquer sur les deux extrémités du segment')
 }

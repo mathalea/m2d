@@ -19,7 +19,7 @@ export class TextByPoint extends TextByPosition {
     this.A = A
     this._dx = dx
     this._dy = dy
-    A.addDependency(this)
+    A.addChild(this)
   }
 
   /**
@@ -35,8 +35,13 @@ export class TextByPoint extends TextByPosition {
   }
 
   update (): void {
-    this.x = this.A.x + this._dx
-    this.y = this.A.y + this._dy
+    try {
+      this.x = this.A.x + this._dx
+      this.y = this.A.y + this._dy
+    } catch (error) {
+      console.log('Erreur dans TextByPoint.update()', error)
+      this.exist = false
+    }
   }
 
   get dx () {
