@@ -17,7 +17,7 @@ export type optionsElement2D = { color?: string, thickness?: number, fill?: stri
  */
 export abstract class Element2D {
   parentFigure: Figure
-  draggable: any
+  draggable: boolean
   // Un élément de géométrie peut être composé de plusieurs autres éléments de géométrie (plusieurs segments pour marquer un point ou coder un angle par exemple)
   group: Element2D[]
   g: SVGElement
@@ -46,6 +46,8 @@ export abstract class Element2D {
     this._opacity = 1
     this._fillOpacity = 1
     this._dashed = false
+    this._label = ''
+    this.draggable = true
     this._exist = true
   }
 
