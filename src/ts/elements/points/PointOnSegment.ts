@@ -12,26 +12,27 @@ import { PointOnLine } from './PointOnLine'
 import { Segment } from '../lines/Segment'
 import { Measure } from '../measures/Measure'
 import { Coords } from '../others/Coords'
+import { Const } from '../measures/Const'
 
 export class PointOnSegment extends PointOnLine {
   constructor (L: Segment, { label, length, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: { length?: number | Measure } & PointOptions = {}) {
+    super(L, { length, style, size, thickness, color, draggable, temp })
     const Llength = Point.distance(L.A, L.B)
     if (!(length instanceof Measure)) {
-      length = length === undefined ? length = Llength / 2 : length < 0 ? 0 : Math.min(length, Llength)
+      this.length = new Const(L.parentFigure, length === undefined ? length = Llength / 2 : length < 0 ? 0 : Math.min(length, Llength))
     } else {
-      if (length.value > Llength) length.value = Llength
-      if (length.value < 0) length.value = 0
+      this.length = length
+      if (this.length.value > Llength) this.length.value = Llength
+      if (this.length.value < 0) this.length.value = 0
     }
-    super(L, { length, style, size, thickness, color, draggable, temp })
     this.size = size
     this.style = style
     this.thickness = thickness
-    this.length = length
     this.color = color
     this.draggable = draggable
     this.temp = temp
     if (label !== undefined) this.label = label
-    this.k = (length instanceof Measure ? length.value : length) / Llength
+    this.k.value = (length instanceof Measure ? length.value : length) / Llength
     this.update()
   }
 
@@ -42,9 +43,8 @@ export class PointOnSegment extends PointOnLine {
       const M = Coords.orthogonalProjectionCoord(P, L)
       const [A, B] = [this.line.A, this.line.B]
       if (M.x < Math.min(A.x, B.x) || M.x > Math.max(A.x, B.x) || M.y < Math.min(A.y, B.y) || M.y > Math.max(A.y, B.y)) return
-      this.k = (L.B.x - L.A.x) === 0 ? (L.B.y - L.A.y) === 0 ? this.k : (M.y - L.A.y) / (L.B.y - L.A.y) : (M.x - L.A.x) / (L.B.x - L.A.x)
-      if (this.length instanceof Measure) this.length.value = this.k * Point.distance(L.A, L.B)
-      else this.length = this.k * Point.distance(L.A, L.B)
+      this.k.value = (L.B.x - L.A.x) === 0 ? (L.B.y - L.A.y) === 0 ? this.k.value : (M.y - L.A.y) / (L.B.y - L.A.y) : (M.x - L.A.x) / (L.B.x - L.A.x)
+      this.length.value = this.k.value * Point.distance(L.A, L.B)
       super.moveTo(M.x, M.y)
     } catch (error) {
       console.log('Erreur dans PointOnSegment.moveTo()', error)

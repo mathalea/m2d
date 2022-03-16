@@ -11,7 +11,11 @@ import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
 import { Measure } from './Measure'
 /**
- *
+ *Test d'existance ou de non existance.
+ * Sa propriété value vaut 1 ou 0.
+ * Si not===false, alors value=1 si l'objet 'element' a sa propriété exist à true et 0 sinon.
+ * Si not===false, alors value=0 si l'objet 'element' a sa propriété exist à true et 1 sinon.
+ * Exemple d'usage : comme rapport d'homothétie pour faire apparaitre ou disparaitre un segment ou un cercle.
  */
 export class ExistTest extends Measure {
     element: Element2D

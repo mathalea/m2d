@@ -37,7 +37,7 @@ export class VectorByPoints extends Element2D {
 
     get norme () {
       try {
-        return Math.sqrt(this.x ** 2 + this.y ** 2)
+        return Math.hypot(this.x, this.y)
       } catch (error) {
         console.log('Erreur dans VectorByPoints.norme', error)
         return NaN

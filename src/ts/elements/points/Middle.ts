@@ -9,7 +9,9 @@
 
 import { Point } from './Point'
 import { Segment } from '../lines/Segment'
-
+/**
+ * Point, milieu du segment passé en argument.
+ */
 export class Middle extends Point {
   line: Segment
   constructor (s: Segment, { style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: { style?: '' | 'x' | 'o', size?: number, thickness?: number, color?: string, draggable?: boolean, temp?: boolean } = {}) {

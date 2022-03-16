@@ -8,8 +8,8 @@
  */
 import { Point } from '../points/Point'
 import { Measure } from './Measure'
-import { Calcul } from '../others/Calculs'
 import { Coords } from '../others/Coords'
+import { arrondi } from '../../calculus/round'
 const epsilon = 0.00000001
 
 export class Angle extends Measure {
@@ -66,6 +66,6 @@ export class Angle extends Measure {
       if (OA.norme * OB.norme < epsilon) {
         return 0 // On évite de retouner un angle NaN, zéro, c'est toujours mieux que NaN.
       }
-      return (Math.acos(Calcul.arrondi(scalaire / (OA.norme * OB.norme)))) * 180 / Math.PI
+      return (Math.acos(arrondi(scalaire / (OA.norme * OB.norme)))) * 180 / Math.PI
     }
 }
