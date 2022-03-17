@@ -15,7 +15,6 @@ export class Cross extends Element2D {
     y: number
     size: number
     segment1: SVGLineElement
-    _label: string
     segment2: SVGLineElement
     constructor (svgContainer: Figure, x: number, y: number, { color = 'blue', size = 0.15, thickness = 2, label = '' }: {color?: string, size?: number, thickness?: number, label?: string} = {}) {
       super(svgContainer)
@@ -31,7 +30,7 @@ export class Cross extends Element2D {
       this.color = color
       this.thickness = thickness
       this.parentFigure.set.add(this)
-      this._label = label
+      this.label = label
       // ToFix, il faut ajouter une méthode label pour place le nom de la droite
       // On pourrait se servir pour ça des xOut et yOut
     }
@@ -63,7 +62,7 @@ export class Cross extends Element2D {
 
     get latex () {
       if (!this.isVisible || !this.exist) return ''
-      let tex = `\n\n\t % Point ${this._label ?? ''}`
+      let tex = `\n\n\t % Point ${this.label ?? ''}`
       tex += `\n \t \\draw${this.tikzOptions} (${this.x - this.size}, ${this.y + this.size}) -- (${this.x + this.size}, ${this.y - this.size});`
       tex += `\n \t \\draw${this.tikzOptions} (${this.x - this.size}, ${this.y - this.size}) -- (${this.x + this.size}, ${this.y + this.size});`
       return tex

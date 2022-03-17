@@ -9,7 +9,6 @@
 
 import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
-import { Segment } from '../lines/Segment'
 import { Circle } from '../lines/Circle'
 import { Cross } from '../others/Cross'
 import { TextByPoint } from '../texts/TextByPoint'
@@ -24,7 +23,6 @@ export class Point extends Element2D {
   private _x: Measure
   private _y: Measure
   private _style: PointStyle
-  private _label: string
   private _size: number // Pour la taille de la croix et utilisé dans changeStyle
   trace: boolean
   traces: Element2D[]
@@ -32,7 +30,6 @@ export class Point extends Element2D {
   labelElement: Element2D | null
   labelDx: number // Ecart entre le label et le point en abscisse
   labelDy: number // Ecart entre le label et le point en ordonnées
-  draggable: true | false | Circle | Segment
   temp: boolean // Pour les points qui ne servent qu'à faire des calculs
   snapToGrid: boolean
   // On définit un point avec ses deux coordonnées
@@ -44,13 +41,13 @@ export class Point extends Element2D {
     else this._y = y
     this.traces = []
     this.group = []
-    this.mark = null
     this.labelElement = null
     this._style = style
     this.thickness = thickness
     this.temp = temp
     this.exist = exist
     this._size = size
+    this.mark = null
     // Les points que l'on peut déplacer sont bleus par défaut
     this.color = color || (draggable ? 'blue' : 'black')
     this.draggable = draggable
@@ -65,7 +62,7 @@ export class Point extends Element2D {
       this.parentFigure.svg.appendChild(this.g)
       if (this.draggable) this.g.style.cursor = 'move'
     }
-    this._label = label || ''
+    this.label = label || ''
     this.labelDx = labelDx
     this.labelDy = labelDy
     if (label !== undefined) this.label = label
@@ -185,10 +182,7 @@ export class Point extends Element2D {
     if (this.labelElement) this.labelElement.show(changeIsVisible)
   }
 
-  get label () {
-    return this._label
-  }
-
+  /*
   set label (label) {
     if (this.labelElement) {
       this.labelElement.g.innerHTML = label
@@ -198,7 +192,7 @@ export class Point extends Element2D {
     }
     this._label = label
   }
-
+*/
   get style () {
     return this._style
   }
