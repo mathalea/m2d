@@ -17,10 +17,11 @@ import { Line, OptionsGraphiques } from './Line'
 import { Polyline } from './Polyline'
 
 export class Segment extends Line {
+  label: string
   constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
     super(A, B, { lineType: 'Segment', color, thickness, style, temp, dashed })
     if (!temp) this.parentFigure.set.add(this)
-    if (A.label && B.label) this.label = `[${A.label}${B.label}]`
+    this.label = (A.label && B.label) ? `[${A.label}${B.label}]` : ''
     if (!temp) this.parentFigure.svg.appendChild(this.g)
 
     // Les styles ne doivent être appliqués qu'une fois le groupe créé

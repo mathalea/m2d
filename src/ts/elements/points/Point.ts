@@ -24,6 +24,7 @@ export class Point extends Element2D {
   private _y: Measure
   private _style: PointStyle
   private _size: number // Pour la taille de la croix et utilisé dans changeStyle
+  private _label: string
   trace: boolean
   traces: Element2D[]
   mark: Element2D | null
@@ -42,6 +43,7 @@ export class Point extends Element2D {
     this.traces = []
     this.group = []
     this.labelElement = null
+    this._label = ''
     this._style = style
     this.thickness = thickness
     this.temp = temp
@@ -182,7 +184,10 @@ export class Point extends Element2D {
     if (this.labelElement) this.labelElement.show(changeIsVisible)
   }
 
-  /*
+  get label () {
+    return this._label
+  }
+
   set label (label) {
     if (this.labelElement) {
       this.labelElement.g.innerHTML = label
@@ -192,7 +197,7 @@ export class Point extends Element2D {
     }
     this._label = label
   }
-*/
+
   get style () {
     return this._style
   }

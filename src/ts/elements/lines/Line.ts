@@ -30,6 +30,7 @@ export class Line extends Element2D {
   type: LineType
   _style: string
   temp: boolean
+  label: string
   constructor (A: Point, B: Point, { lineType: type = 'Line', color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
     super(A.parentFigure)
     this.exist = true
