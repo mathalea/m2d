@@ -15,13 +15,14 @@ import { Cross } from '../others/Cross'
 import { TextByPoint } from '../texts/TextByPoint'
 import { Measure } from '../measures/Measure'
 import { Coords } from '../others/Coords'
+import { Const } from '../measures/Const'
 
 export type PointStyle = 'x' | 'o' | ''
 export type PointOptions = { label?: string, style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean, snapToGrid?: boolean, labelDx?: number, labelDy?: number, exist?: boolean }
 
 export class Point extends Element2D {
-  private _x: number | Measure
-  private _y: number | Measure
+  private _x: Measure
+  private _y: Measure
   private _style: PointStyle
   private _label: string
   private _size: number // Pour la taille de la croix et utilisé dans changeStyle
@@ -37,8 +38,10 @@ export class Point extends Element2D {
   // On définit un point avec ses deux coordonnées
   constructor (figure: Figure, x: number | Measure, y: number|Measure, { label, style = 'x', size = 0.15, thickness = 3, color, draggable = true, temp = false, snapToGrid = false, labelDx = -0.3, labelDy = 0.3, exist = true }: PointOptions = {}) {
     super(figure)
-    this._x = x
-    this._y = y
+    if (typeof x === 'number') this._x = new Const(figure, x)
+    else this._x = x
+    if (typeof y === 'number') this._y = new Const(figure, y)
+    else this._y = y
     this.traces = []
     this.group = []
     this.mark = null
@@ -215,23 +218,19 @@ export class Point extends Element2D {
   }
 
   get x () {
-    if (this._x instanceof Measure) return this._x.value
-    else return this._x
+    return this._x.value
   }
 
   set x (x) {
-    if (this._x instanceof Measure) this._x.value = x
-    else this._x = x
+    this._x.value = x
   }
 
   get y () {
-    if (this._y instanceof Measure) return this._y.value
-    else return this._y
+    return this._y.value
   }
 
   set y (y) {
-    if (this._y instanceof Measure) this._y.value = y
-    else this._y = y
+    this._y.value = y
   }
 
   static distance (A: Point | Coords, B: Point | Coords): number {

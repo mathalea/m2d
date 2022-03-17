@@ -15,20 +15,26 @@ import { OptionsGraphiques } from './Line'
 import { CalculDynamic } from '../measures/CalculDynamic'
 import { PointByRotation } from '../points/PointByRotation'
 import { PointBySimilitude } from '../points/PointBySimilitude'
+import { Distance } from '../measures/Distance'
+import { Const } from '../measures/Const'
 
 export class Circle extends Element2D {
   center: Point
   temp: boolean
   M: Point // Point de même ordonnée que le centre et d'abscisse supérieure
   pointOnCircle: Point | null // Point qui définit le cercle
-  private _radius: number | Measure
+  private _radius: Measure // _radius est une Measure (CalculDynamic ou Distance) alors que radius est un nombre (sa propriété value)
   constructor (center: Point, arg2: number | Point | Measure, { color = 'black', thickness = 1, fill = 'none', temp = false, dashed = false }: OptionsGraphiques = {}) {
     super(center.parentFigure)
     this.pointOnCircle = arg2 instanceof Point ? arg2 : null
     this.center = center
     this.temp = temp
     if (!this.temp) this.parentFigure.set.add(this)
-
+    if (arg2 instanceof Point) this._radius = new Distance(center, arg2)
+    else {
+      if (typeof arg2 === 'number') this._radius = new Const(center.parentFigure, arg2)
+      else this._radius = new CalculDynamic((r: Measure[]) => Math.abs(r[0].value), [arg2])
+    }
     const xSvg = this.parentFigure.xToSx(this.center.x)
     const ySvg = this.parentFigure.yToSy(this.center.y)
     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
@@ -37,9 +43,6 @@ export class Circle extends Element2D {
     this.g = circle
     if (!this.temp) this.parentFigure.svg.appendChild(this.g)
     this.M = new Point(this.parentFigure, 100, 100, { style: '', temp: true }) // Point temporaire qui sera placé quand on connaitra le rayon
-    if (arg2 instanceof Measure) this._radius = arg2
-    else this._radius = 0
-    this.radius = (typeof arg2 === 'number') ? arg2 : (arg2 instanceof Point) ? Point.distance(center, arg2) : Math.abs(arg2.value)
     this.M.moveTo(center.x + this.radius, center.y)
     this.fill = fill
     this.color = color
@@ -92,7 +95,7 @@ export class Circle extends Element2D {
 
   get radius (): number {
     try {
-      return (this._radius instanceof Measure) ? this._radius.value : this._radius
+      return this._radius.value
     } catch (error) {
       return NaN
     }
@@ -100,9 +103,8 @@ export class Circle extends Element2D {
 
   set radius (radius: number) {
     try {
-      if (this._radius instanceof Measure) this._radius.value = radius
-      else this._radius = radius
-      this.g.setAttribute('r', `${((this._radius instanceof Measure) ? this._radius.value : this._radius) * this.parentFigure.pixelsPerUnit}`)
+      this._radius.value = radius
+      this.g.setAttribute('r', `${this._radius.value * this.parentFigure.pixelsPerUnit}`)
     } catch (error) {
       console.log('Erreur dans Circle set radius avec l\'argument ', radius)
     }
@@ -183,6 +185,19 @@ export class Circle extends Element2D {
       }
     } catch (error) {
       console.log('Erreur dans Circle.similitude() avec les arguments ', O, k, angle, error)
+    }
+  }
+
+  /**
+   * Translation définie par un couple de coordonnées ou un objet possédant des paramètres x et y
+   * Renvoie un nouveau cercle sans modifier le premier
+   */
+  static translation (cercle: Circle, xt: number, yt: number) {
+    try {
+      const O2 = new Point(cercle.parentFigure, cercle.center.x + xt, cercle.center.y + yt)
+      return new Circle(O2, cercle.radius)
+    } catch (error) {
+      return null
     }
   }
 

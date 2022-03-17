@@ -3,6 +3,8 @@ import { Cursor } from './elements/others/Cursor'
 import { Point } from './elements/points/Point'
 import { Segment } from './elements/lines/Segment'
 import { Const } from './elements/measures/Const'
+import { Arc } from './elements/lines/Arc'
+import { Circle } from './elements/lines/Circle'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -42,6 +44,9 @@ const xA = new Const(figure, 5)
 const yA = new Const(figure, 0)
 const O = new Point(figure, xO, yO, { label: 'O' })
 const A = new Point(figure, xA, yA, { label: 'A' })
+const B = new Point(figure, 3, 6, { label: 'B' })
+const a = new Arc(B, O, 45)
+const c = new Circle(A, 5)
 const s = new Segment(O, A, { temp: true })
 const t = Segment.homothetie(s, O, k)
 const u = Segment.similitude(s, A, k, angle)

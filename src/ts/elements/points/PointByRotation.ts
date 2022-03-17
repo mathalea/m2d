@@ -1,4 +1,3 @@
-import { CalculDynamic } from './../measures/CalculDynamic'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -10,10 +9,11 @@ import { CalculDynamic } from './../measures/CalculDynamic'
 
 import { Measure } from '../measures/Measure'
 import { Point, PointOptions } from './Point'
+import { Const } from '../measures/Const'
 
 export class PointByRotation extends Point {
     center: Point
-    angle: number | Measure | CalculDynamic // Angle en degré
+    angle: Measure // Angle en degré
     previous: Point
     constructor (A: Point, center: Point, angle: number | Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
       const angleMeasure = (typeof angle === 'number') ? angle : angle.value
@@ -21,20 +21,23 @@ export class PointByRotation extends Point {
       const y = (center.y + (A.x - center.x) * Math.sin((angleMeasure * Math.PI) / 180) + (A.y - center.y) * Math.cos((angleMeasure * Math.PI) / 180))
       super(A.parentFigure, x, y, { style, size, thickness, color, draggable, temp })
       this.center = center
-      this.angle = angle
+      if (typeof angle === 'number') this.angle = new Const(A.parentFigure, angle)
+      else {
+        this.angle = angle
+        angle.addChild(this)
+      }
       this.previous = A
       if (label !== undefined) this.label = label
       A.addChild(this)
       center.addChild(this)
       if (typeof angle !== 'number') {
-        angle.addChild(this)
         this.exist = A.exist && angle.exist && center.exist
       } else this.exist = A.exist && center.exist
     }
 
     update (): void {
       try {
-        const angleMeasure = (typeof this.angle === 'number') ? this.angle : this.angle.value
+        const angleMeasure = this.angle.value
         const x = (this.center.x + (this.previous.x - this.center.x) * Math.cos((angleMeasure * Math.PI) / 180) - (this.previous.y - this.center.y) * Math.sin((angleMeasure * Math.PI) / 180))
         const y = (this.center.y + (this.previous.x - this.center.x) * Math.sin((angleMeasure * Math.PI) / 180) + (this.previous.y - this.center.y) * Math.cos((angleMeasure * Math.PI) / 180))
         this.moveTo(x, y)
