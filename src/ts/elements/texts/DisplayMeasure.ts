@@ -15,7 +15,7 @@ export class DisplayMeasure extends TextByPosition {
     textBefore: string
   textAfter: string
   precision: number
-  constructor (x: number, y: number, measure: Measure, { precision = 1, textBefore = '', textAfter = '', anchor = 'start' }: {precision?: number, textBefore?: string, textAfter?: string, anchor?: 'start' | 'middle' | 'end' } = {}) {
+  constructor (x: number, y: number, measure: Measure, { precision = 1, textBefore = '', textAfter = '', anchor = 'start', draggable = false }: {precision?: number, textBefore?: string, textAfter?: string, anchor?: 'start' | 'middle' | 'end', draggable?: boolean } = {}) {
     super(measure.parentFigure, x, y, textBefore + measure.value.toString().replace(/\d+\.\d+/g, (number: string) => (Math.round(10 ** precision * parseFloat(number)) / 10 ** precision).toString()) + textAfter)
     measure.addChild(this)
     this.anchor = anchor
@@ -23,6 +23,7 @@ export class DisplayMeasure extends TextByPosition {
     this.textBefore = textBefore
     this.textAfter = textAfter
     this.precision = precision
+    this.draggable = draggable
   }
 
   update (): void {

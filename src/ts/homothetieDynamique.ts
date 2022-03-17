@@ -9,7 +9,7 @@
 
 import { Figure } from './Figure'
 import { Ray } from './elements/lines/Ray'
-import { Cursor } from './elements/others/Cursor'
+import { Cursor } from './elements/measures/Cursor'
 import { VectorByPoints } from './elements/others/VectorByPoints'
 import { PointByHomothetie } from './elements/points/PointByHomothetie'
 import { Polygon } from './elements/lines/Polygon'

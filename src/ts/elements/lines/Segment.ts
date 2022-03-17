@@ -20,7 +20,7 @@ export class Segment extends Line {
   constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
     super(A, B, { lineType: 'Segment', color, thickness, style, temp, dashed })
     if (!temp) this.parentFigure.set.add(this)
-    if (A.label && B.label) this._label = `[${A.label}${B.label}]`
+    if (A.label && B.label) this.label = `[${A.label}${B.label}]`
     if (!temp) this.parentFigure.svg.appendChild(this.g)
 
     // Les styles ne doivent être appliqués qu'une fois le groupe créé
@@ -52,7 +52,7 @@ export class Segment extends Line {
   get latex () {
     try {
       if (!this.isVisible) return ''
-      let latex = `\n\n\t% ${this._label ?? 'Segment'}`
+      let latex = `\n\n\t% ${this.label ?? 'Segment'}`
       latex += `\n \t \\draw${this.tikzOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
       return latex
     } catch (error) {

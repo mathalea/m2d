@@ -1,6 +1,9 @@
 import { Segment } from './elements/lines/Segment'
 import { Figure } from './Figure'
 import { Point } from './elements/points/Point'
+import { Cursor } from './elements/measures/Cursor'
+import { randint } from './calculus/random'
+import { Circle } from './elements/lines/Circle'
 /**
  * Fichier de tests unitaires
  */
@@ -9,16 +12,23 @@ const figure = new Figure()
 export function testAll (): boolean {
   let result = true
   try {
-    testPoint()
+    if (testPoint()) console.log('testPoint OK')
   } catch (error) {
     console.log('erreur dans testPoint')
     console.log(error)
     result = false
   }
   try {
-    testSegment()
+    if (testSegment()) console.log('testSegment Ok')
   } catch (error) {
     console.log('erreur dans testSegment')
+    console.log(error)
+    result = false
+  }
+  try {
+    if (testCursor()) console.log('testCursor Ok')
+  } catch (error) {
+    console.log('erreur dans testCursor')
     console.log(error)
     result = false
   }
@@ -54,6 +64,33 @@ function testSegment () : boolean {
         N.removeChild(s)
       }
     }
+  } catch (error) {
+    result = false
+    console.log(error)
+  }
+  return result
+}
+
+function testCursor () : boolean {
+  let result = true
+  try {
+    const c = new Cursor(figure, 0, 0, { min: randint(-5, 0), max: randint(5, 10), length: 5, step: 0.1 })
+    for (let i = 0; i < 100; i++) {
+      c.value = randint(c.min, c.max)
+      c.update()
+    }
+  } catch (error) {
+    result = false
+    console.log(error)
+  }
+  return result
+}
+
+function testCircle () : boolean {
+  let result = true
+  try {
+    const A = new Point(figure, 0, 0)
+    const c = new Circle(A, 5)
   } catch (error) {
     result = false
     console.log(error)

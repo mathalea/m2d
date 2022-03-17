@@ -1,5 +1,5 @@
-import { Distance } from './../measures/Distance'
-import { CalculDynamic } from './../measures/CalculDynamic'
+import { Distance } from './Distance'
+import { CalculDynamic } from './CalculDynamic'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -14,7 +14,7 @@ import { Segment } from '../lines/Segment'
 import { Point } from '../points/Point'
 import { PointOnSegment } from '../points/PointOnSegment'
 import { DisplayMeasure } from '../texts/DisplayMeasure'
-import { Measure } from '../measures/Measure'
+import { Measure } from './Measure'
 
 export class Cursor extends Measure {
   tab: Point
@@ -49,7 +49,7 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
   this.position = new Distance(M, this.tab)
   this.calcul = new CalculDynamic((args: Measure[]) => this.min + Math.round((this.max - this.min) * args[0].value / this.length / this.step) * this.step, [this.position])
   this.value = this.calcul.value
-  this.display = new DisplayMeasure(this.origin.x + this.length + 0.5, this.tab.y, this, { precision: 2 })
+  this.display = new DisplayMeasure(this.origin.x + this.length + 0.5, this.tab.y, this, { precision: 2, draggable: false })
   this.tab.addChild(this.display)
   this.tab.addChild(this)
   this.tab.addChild(this.calcul)

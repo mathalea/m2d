@@ -31,6 +31,7 @@ export abstract class Element2D {
   private _fillOpacity: number
   private _dashed: boolean
   private _exist: boolean
+  private _label: string
   isVisible: boolean
 
   constructor (parentFigure: Figure) {
@@ -133,6 +134,14 @@ export abstract class Element2D {
       console.log('Erreur dans Element2d.exist()', error)
       this.exist = false
     }
+  }
+
+  get label () {
+    return this._label
+  }
+
+  set label (name) {
+    this._label = name
   }
 
   get exist () {
