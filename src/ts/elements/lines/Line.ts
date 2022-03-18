@@ -16,7 +16,11 @@ import { Coords } from '../others/Coords'
 import { Angle } from '../measures/Angle'
 import { PointByRotation } from '../points/PointByRotation'
 import { PointBySimilitude } from '../points/PointBySimilitude'
-
+/**
+ * Crée une droite, une demi-droite ou un segment à partir de deux points.
+ * lineType défini le type de tracé parmis les trois types : Line (defaut), Ray ou Segment
+ * Pour les deux derniers types, il est préférable de passer par les sous classes respectives (Ray ou Segment)
+ */
 export type LineType = 'Line' | 'Segment' | 'Ray'
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
 export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number, temp?: boolean, dashed?: boolean, lineType?: LineType }

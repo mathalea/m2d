@@ -9,7 +9,9 @@
 
 import { Measure } from '../measures/Measure'
 import { TextByPosition } from './TextByPosition'
-
+/**
+ * Crée un affichage pour la valeur d'une instance d'une classe dérivée de Measure aux coordonnées x et y.
+ */
 export class DisplayMeasure extends TextByPosition {
     measure: Measure
     textBefore: string

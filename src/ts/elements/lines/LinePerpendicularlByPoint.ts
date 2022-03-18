@@ -11,7 +11,9 @@ import { Line, OptionsGraphiques } from './Line'
 import { LineByPointVector } from './LineByPointVector'
 import { Point } from '../points/Point'
 import { VectorNormal } from '../others/VectorNormal'
-
+/**
+ * Crée une droite par la donnée d'une autre droite (perpendiculaire) et d'un point de passage.
+ */
 export class LinePerpendicularByPoint extends LineByPointVector {
   line: Line // La droite à laquelle il faut être perpendiculaire
   A: Point // Le point par lequel passe la droite

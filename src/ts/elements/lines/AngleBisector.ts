@@ -13,7 +13,10 @@ import { Angle } from '../measures/Angle'
 import { CalculDynamic } from '../measures/CalculDynamic'
 import { Point } from '../points/Point'
 import { PointByRotation } from '../points/PointByRotation'
-
+/**
+ * Crée la bissectrice de l'angle orienté AOB.
+ * l'objet créé hérite des propriétés de Ray (sous classe de Line)
+ */
 export class AngleBisector extends Ray {
   side1: Point
   side2: Point

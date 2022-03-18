@@ -11,7 +11,9 @@ import { Line, OptionsGraphiques } from './Line'
 import { Point } from '../points/Point'
 import { PointByTranslationVector } from '../points/PointByTranslationVector'
 import { Vector } from '../others/Vector'
-
+/**
+ * Crée une droite par la donnée d'un point et d'un vecteur directeur.
+ */
 export class LineByPointVector extends Line {
   A: Point
   B: Point

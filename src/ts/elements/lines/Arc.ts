@@ -14,7 +14,10 @@ import { Measure } from '../measures/Measure'
 import { Coords } from '../others/Coords'
 import { Point } from '../points/Point'
 import { OptionsGraphiques } from './Line'
-
+/**
+ * Crée un arc de cercle d'extrémité A, de centre O et d'angle donné.
+ * angle peut être un nombre (constante) ou une instance des classes dérivées de Measure
+ */
 export class Arc extends Element2D {
   center: Point
   point: Point

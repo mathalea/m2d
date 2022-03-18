@@ -10,7 +10,10 @@
 import { Point, PointOptions } from './Point'
 import { Vector } from '../others/Vector'
 import { VectorByPoints } from '../others/VectorByPoints'
-
+/**
+ * Crée l'image de A par la translation de vecteur v.
+ * v est un Vector ou un VectorByPoints
+ */
 export class PointByTranslationVector extends Point {
   previous: Point
   vector: Vector | VectorByPoints

@@ -18,7 +18,11 @@ import { Const } from '../measures/Const'
 
 export type PointStyle = 'x' | 'o' | ''
 export type PointOptions = { label?: string, style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean, snapToGrid?: boolean, labelDx?: number, labelDy?: number, exist?: boolean }
-
+/**
+ * Classe essentielle parente de nombreuses autres classes.
+ * Crée un point aux coordonnées x et y.
+ * x et y peuvent être des nombres (constantes) ou des instances de classes dérivées de Measure.
+ */
 export class Point extends Element2D {
   private _x: Measure
   private _y: Measure

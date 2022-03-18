@@ -11,7 +11,10 @@ import { Circle } from '../lines/Circle'
 import { Point, PointOptions } from './Point'
 import { Line } from '../lines/Line'
 import { Coords } from '../others/Coords'
-
+/**
+ * Crée le point d'intersection du cercle C et de la droite L.
+ * n = 1 ou 2 détérmine lequel des deux points d'intersection est choisi
+ */
 export class PointIntersectionLC extends Point {
   L: Line
   C: Circle

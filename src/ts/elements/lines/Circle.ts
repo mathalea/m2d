@@ -17,7 +17,10 @@ import { PointByRotation } from '../points/PointByRotation'
 import { PointBySimilitude } from '../points/PointBySimilitude'
 import { Distance } from '../measures/Distance'
 import { Const } from '../measures/Const'
-
+/**
+ * Crée un cercle dont on donne le centre et un point ou le rayon.
+ * Le rayon peut être un nombre (constante) ou une instance des classes dérivées de Measure
+ */
 export class Circle extends Element2D {
   center: Point
   temp: boolean

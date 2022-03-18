@@ -11,7 +11,10 @@ import { Element2D } from '../Element2D'
 import { OptionsGraphiques } from '../lines/Line'
 import { Point } from '../points/Point'
 import { Vector } from './Vector'
-
+/**
+ * Crée un vecteur à partir de deux instances de Point.
+ * L'objet est dépendant des points utilisés.
+ */
 export class VectorByPoints extends Element2D {
   origin: Point // ToFix ? arg1 ou Point(0,0)
   end: Point // ToFix ? arg2 ou Point(arg1,arg2)

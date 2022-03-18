@@ -1,6 +1,8 @@
 import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
-
+/**
+ * Crée une grille fixe formée de lignes horizontales et verticales.
+ */
 export class Grid extends Element2D {
   xMin: number
   xMax: number

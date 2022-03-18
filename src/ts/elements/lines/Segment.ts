@@ -15,7 +15,9 @@ import { PointBySimilitude } from '../points/PointBySimilitude'
 import { PointOnLineAtD } from '../points/PointOnLineAtD'
 import { Line, OptionsGraphiques } from './Line'
 import { Polyline } from './Polyline'
-
+/**
+ * Crée un segment d'extrémité A et B en appelant le constructeur de Line avec le lineType 'Segment'.
+ */
 export class Segment extends Line {
   label: string
   constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {

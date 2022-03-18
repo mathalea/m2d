@@ -56,10 +56,10 @@ P.color = 'blue'
 P.fill = 'yellow'
 P.opacity = 1
 
-const N = new PointByHomothetie(A, D, c.algebraic, { label: '' })
-const U = new PointByHomothetie(C, D, c.algebraic, { label: '' })
-const V = new PointByHomothetie(M, D, c.algebraic, { label: '' })
-const W = new PointByHomothetie(B, D, c.algebraic, { label: '' })
+const N = new PointByHomothetie(A, D, c, { label: '' })
+const U = new PointByHomothetie(C, D, c, { label: '' })
+const V = new PointByHomothetie(M, D, c, { label: '' })
+const W = new PointByHomothetie(B, D, c, { label: '' })
 const Q = new Polygon(N, V, W, U)
 Q.thickness = 1
 Q.color = 'red'

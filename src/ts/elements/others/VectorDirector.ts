@@ -9,7 +9,9 @@
 
 import { Line } from '../lines/Line'
 import { Vector } from './Vector'
-
+/**
+ * Crée un vecteur à partir d'une droite (Line). Est notamment utilisé dans LineParallelByPoint.
+ */
 export class VectorDirector extends Vector {
     line: Line
     constructor (L: Line) {

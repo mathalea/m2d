@@ -13,7 +13,12 @@ import { Measure } from '../measures/Measure'
 import { Coords } from '../others/Coords'
 import { randint } from '../../calculus/random'
 import { Const } from '../measures/Const'
-
+/**
+ * Crée un point sur la droite L.
+ * si length est précisé, alors le point est créé à la distance length de L.A (premier point de passage de L)
+ * si k est précisé, alors le point est construit comme barycentre de L.A(k) et L.B(1-k).
+ * Exemple: si k=0.5, alors le point est créé au milieu de L.A et L.B
+ */
 export class PointOnLine extends Point {
   line: Segment
   length: Measure// valeur signée (mesure algébrique de A à M)
