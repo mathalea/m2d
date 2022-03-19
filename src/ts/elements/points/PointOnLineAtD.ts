@@ -14,7 +14,8 @@ import { Line } from '../lines/Line'
 import { Coords } from '../others/Coords'
 import { Const } from '../measures/Const'
 /**
- * Place un point sur un Line (Segment) à une distance D fixe du point Line.A
+ * Place un point sur une droite L (Line) à une distance d fixe du point L.A
+ * d peut être un nombre (constante) ou une instance de classe dérivée de Measure.
  */
 export class PointOnLineAtD extends Point {
   line: Line

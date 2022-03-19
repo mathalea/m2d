@@ -9,7 +9,9 @@
 
 import { Element2D } from '../Element2D'
 import { Point } from '../points/Point'
-
+/**
+ * Crée une ligne brisée ouverte à partir d'un array d'instances de Point.
+ */
 export class Polyline extends Element2D {
     points: Point[]
     constructor (...points: Point[]) {

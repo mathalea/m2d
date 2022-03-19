@@ -10,7 +10,9 @@
 import { Point, PointOptions } from './Point'
 import { Line } from '../lines/Line'
 import { Coords } from '../others/Coords'
-
+/**
+ * Crée le point d'intersection de deux droites L1 et L2.
+ */
 export class PointIntersectionLL extends Point {
   L1: Line
   L2: Line

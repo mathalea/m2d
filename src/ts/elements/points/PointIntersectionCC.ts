@@ -11,7 +11,10 @@ import { Element2D } from '../Element2D'
 import { Circle } from '../lines/Circle'
 import { Coords } from '../others/Coords'
 import { Point, PointOptions } from './Point'
-
+/**
+ * Crée le point d'intersection de deux cercles C1 et C2.
+ * n = 1 ou 2 détérmine lequel des deux points d'intersection est choisi
+ */
 export class PointIntersectionCC extends Point {
   C1: Circle
   C2: Circle

@@ -10,7 +10,10 @@
 import { Measure } from '../measures/Measure'
 import { Point, PointOptions } from './Point'
 import { Const } from '../measures/Const'
-
+/**
+ * Crée l'image (Point) de A par la rotation de centre 'center' et d'angle 'angle'.
+ * angle peut être un nombre (constante) ou une instance d'une classe dérivée de Measure.
+ */
 export class PointByRotation extends Point {
     center: Point
     angle: Measure // Angle en degré

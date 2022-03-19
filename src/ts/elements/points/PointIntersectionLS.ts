@@ -11,7 +11,9 @@ import { Point, PointOptions } from './Point'
 import { Segment } from '../lines/Segment'
 import { Line } from '../lines/Line'
 import { Coords } from '../others/Coords'
-
+/**
+ * Crée le point d'intersection de la droites L1 et du segment L2.
+ */
 export class PointIntersectionLS extends Point {
   L1: Line
   L2: Segment

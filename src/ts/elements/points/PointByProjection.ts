@@ -10,7 +10,9 @@
 import { Line } from '../lines/Line'
 import { Coords } from '../others/Coords'
 import { Point, PointOptions } from './Point'
-
+/**
+ * Crée l'image (Point) de A par la projection orthogonale sur L.
+ */
 export class PointByProjection extends Point {
     previous: Point // Antécédent
     line: Line // Droite sur laquelle s'effectue la projection

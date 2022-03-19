@@ -11,7 +11,9 @@ import { Middle } from '../points/Middle'
 import { LinePerpendicularByPoint } from './LinePerpendicularlByPoint'
 import { OptionsGraphiques } from './Line'
 import { Segment } from './Segment'
-
+/**
+ * Crée la médiatrice d'un segment donné.
+ */
 export class PerpendicularBisector extends LinePerpendicularByPoint {
   segment: Segment
   constructor (S: Segment, { color = 'black', thickness = 1, dashed = false, temp = false }: OptionsGraphiques = {}) {

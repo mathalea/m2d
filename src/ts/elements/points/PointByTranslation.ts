@@ -8,7 +8,10 @@
  */
 
 import { Point, PointOptions } from './Point'
-
+/**
+ * Crée l'image (Point) de A par la translation de vecteur(xt;yt).
+ * xt et yt sont des nombres (constantes). ToFix : pourquoi ne pas ajouter les instances de classes dérivées de Measure ?
+ */
 export class PointByTranslation extends Point {
     xt: number
     yt: number

@@ -9,7 +9,9 @@
 
 import { Line } from '../lines/Line'
 import { Vector } from './Vector'
-
+/**
+ * Crée un vecteur normal à une droite (Line). Est notamment utilisé dans LinePerpendicularByPoint
+ */
 export class VectorNormal extends Vector {
   line: Line
   constructor (L: Line) {

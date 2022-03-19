@@ -10,7 +10,10 @@
 import { Const } from '../measures/Const'
 import { Measure } from '../measures/Measure'
 import { Point, PointOptions } from './Point'
-
+/**
+ * Crée l'image (Point) de A par la similitude de centre 'center', de rapport k et d'angle 'angle'.
+ * k et angle peuvent être un nombre (constante) ou une instance d'une classe dérivée de Measure.
+ */
 export class PointBySimilitude extends Point {
     center: Point
     angle: Measure// Angle en degré

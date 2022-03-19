@@ -9,14 +9,17 @@
 
 import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
-
+/**
+ * Crée une croix aux coordonnées fournies.
+ * Sert notamment dans les instances de Point dont il est en fait l'élément graphique.
+ */
 export class Cross extends Element2D {
     x: number
     y: number
     size: number
     segment1: SVGLineElement
-    _label: string
     segment2: SVGLineElement
+    label: string
     constructor (svgContainer: Figure, x: number, y: number, { color = 'blue', size = 0.15, thickness = 2, label = '' }: {color?: string, size?: number, thickness?: number, label?: string} = {}) {
       super(svgContainer)
       this.x = x
@@ -29,9 +32,9 @@ export class Cross extends Element2D {
       this.parentFigure.svg.appendChild(this.g)
       this.update()
       this.color = color
+      this.label = label
       this.thickness = thickness
       this.parentFigure.set.add(this)
-      this._label = label
       // ToFix, il faut ajouter une méthode label pour place le nom de la droite
       // On pourrait se servir pour ça des xOut et yOut
     }
@@ -63,7 +66,7 @@ export class Cross extends Element2D {
 
     get latex () {
       if (!this.isVisible || !this.exist) return ''
-      let tex = `\n\n\t % Point ${this._label ?? ''}`
+      let tex = `\n\n\t % Point ${this.label ?? ''}`
       tex += `\n \t \\draw${this.tikzOptions} (${this.x - this.size}, ${this.y + this.size}) -- (${this.x + this.size}, ${this.y - this.size});`
       tex += `\n \t \\draw${this.tikzOptions} (${this.x - this.size}, ${this.y - this.size}) -- (${this.x + this.size}, ${this.y + this.size});`
       return tex

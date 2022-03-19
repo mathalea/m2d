@@ -11,7 +11,9 @@ import { Line, OptionsGraphiques } from './Line'
 import { LineByPointVector } from './LineByPointVector'
 import { Point } from '../points/Point'
 import { VectorDirector } from '../others/VectorDirector'
-
+/**
+ * Crée une droite par la donnée d'une autre droite (parallèle) et d'un point de passage.
+ */
 export class LineParallelByPoint extends LineByPointVector {
   line: Line // La droite à laquelle il faut être parallèle
   A: Point // Le point par lequel passe la droite

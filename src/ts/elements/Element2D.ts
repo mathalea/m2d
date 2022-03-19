@@ -46,7 +46,6 @@ export abstract class Element2D {
     this._opacity = 1
     this._fillOpacity = 1
     this._dashed = false
-    this._label = ''
     this.draggable = true
     this._exist = true
   }

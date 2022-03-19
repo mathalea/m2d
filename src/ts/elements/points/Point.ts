@@ -9,7 +9,6 @@
 
 import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
-import { Segment } from '../lines/Segment'
 import { Circle } from '../lines/Circle'
 import { Cross } from '../others/Cross'
 import { TextByPoint } from '../texts/TextByPoint'
@@ -19,20 +18,23 @@ import { Const } from '../measures/Const'
 
 export type PointStyle = 'x' | 'o' | ''
 export type PointOptions = { label?: string, style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean, snapToGrid?: boolean, labelDx?: number, labelDy?: number, exist?: boolean }
-
+/**
+ * Classe essentielle parente de nombreuses autres classes.
+ * Crée un point aux coordonnées x et y.
+ * x et y peuvent être des nombres (constantes) ou des instances de classes dérivées de Measure.
+ */
 export class Point extends Element2D {
   private _x: Measure
   private _y: Measure
   private _style: PointStyle
-  private _label: string
   private _size: number // Pour la taille de la croix et utilisé dans changeStyle
+  private _label: string
   trace: boolean
   traces: Element2D[]
   mark: Element2D | null
   labelElement: Element2D | null
   labelDx: number // Ecart entre le label et le point en abscisse
   labelDy: number // Ecart entre le label et le point en ordonnées
-  draggable: true | false | Circle | Segment
   temp: boolean // Pour les points qui ne servent qu'à faire des calculs
   snapToGrid: boolean
   // On définit un point avec ses deux coordonnées
@@ -44,13 +46,14 @@ export class Point extends Element2D {
     else this._y = y
     this.traces = []
     this.group = []
-    this.mark = null
     this.labelElement = null
+    this._label = ''
     this._style = style
     this.thickness = thickness
     this.temp = temp
     this.exist = exist
     this._size = size
+    this.mark = null
     // Les points que l'on peut déplacer sont bleus par défaut
     this.color = color || (draggable ? 'blue' : 'black')
     this.draggable = draggable
@@ -65,7 +68,7 @@ export class Point extends Element2D {
       this.parentFigure.svg.appendChild(this.g)
       if (this.draggable) this.g.style.cursor = 'move'
     }
-    this._label = label || ''
+    this.label = label || ''
     this.labelDx = labelDx
     this.labelDy = labelDy
     if (label !== undefined) this.label = label

@@ -9,7 +9,9 @@
 
 import { Point } from '../points/Point'
 import { TextByPosition } from './TextByPosition'
-
+/**
+ * Crée un affichage de texte lié au point A situé à dx en abscisse et à dy en ordonnée de A.
+ */
 export class TextByPoint extends TextByPosition {
   A: Point
   private _dx: number

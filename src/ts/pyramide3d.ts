@@ -1,17 +1,14 @@
 import { ExistTest } from './elements/measures/ExistTest'
-import { DisplayMeasure } from './elements/texts/DisplayMeasure'
 import { PointIntersectionLS } from './elements/points/PointIntersectionLS'
-import { PointIntersectionLL } from './elements/points/PointIntersectionLL'
 import { Segment } from './elements/lines/Segment'
 import { Angle } from './elements/measures/Angle'
 import { CalculDynamic } from './elements/measures/CalculDynamic'
 import { Figure } from './Figure'
-import { PointByHomothetie, PointByHomothetie } from './elements/points/PointByHomothetie'
-import { Cursor } from './elements/others/Cursor'
+import { PointByHomothetie } from './elements/points/PointByHomothetie'
+import { Cursor } from './elements/measures/Cursor'
 import { Measure } from './elements/measures/Measure'
 import { Point } from './elements/points/Point'
 import { Line } from './elements/lines/Line'
-import { Element2D } from './elements/Element2D'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -61,11 +58,11 @@ function factor (k:number) {
 }
 
 const O = figure.point(0, 0, { label: 'O' })
-const xI = new CalculDynamic((a:Measure[]) => Math.sin(a[0].value * Math.PI / 180) * 2, [theta.algebraic, phi.algebraic])
-const xJ = new CalculDynamic((a:Measure[]) => Math.cos(a[0].value * Math.PI / 180) * 2, [theta.algebraic, phi.algebraic])
-const yI = new CalculDynamic((a:Measure[]) => -Math.cos(a[0].value * Math.PI / 180) * 2 * Math.sin(a[1].value * Math.PI / 180), [theta.algebraic, phi.algebraic])
-const yJ = new CalculDynamic((a:Measure[]) => Math.sin(a[0].value * Math.PI / 180) * 2 * Math.sin(a[1].value * Math.PI / 180), [theta.algebraic, phi.algebraic])
-const yK = new CalculDynamic((a:Measure[]) => Math.cos(a[0].value * Math.PI / 180) * 2, [phi.algebraic])
+const xI = new CalculDynamic((a:Measure[]) => Math.sin(a[0].value * Math.PI / 180) * 2, [theta, phi])
+const xJ = new CalculDynamic((a:Measure[]) => Math.cos(a[0].value * Math.PI / 180) * 2, [theta, phi])
+const yI = new CalculDynamic((a:Measure[]) => -Math.cos(a[0].value * Math.PI / 180) * 2 * Math.sin(a[1].value * Math.PI / 180), [theta, phi])
+const yJ = new CalculDynamic((a:Measure[]) => Math.sin(a[0].value * Math.PI / 180) * 2 * Math.sin(a[1].value * Math.PI / 180), [theta, phi])
+const yK = new CalculDynamic((a:Measure[]) => Math.cos(a[0].value * Math.PI / 180) * 2, [phi])
 
 const xA = new CalculDynamic((a:Measure[]) => a[0].value + a[1].value, [xI, xJ])
 const yA = new CalculDynamic((a:Measure[]) => a[0].value + a[1].value, [yI, yJ])
@@ -152,14 +149,14 @@ const SCprime = new Segment(S, Cprime)
 const SDprime = new Segment(S, Dprime)
 
 // La section
-const A1B1prime = Segment.homothetie(ABprime, S, k.algebraic)
-const B1C1prime = Segment.homothetie(BCprime, S, k.algebraic)
-const C1D1prime = Segment.homothetie(CDprime, S, k.algebraic)
-const D1A1prime = Segment.homothetie(DAprime, S, k.algebraic)
-const A1B1 = Segment.homothetie(AB, S, k.algebraic)
-const B1C1 = Segment.homothetie(BC, S, k.algebraic)
-const C1D1 = Segment.homothetie(DC, S, k.algebraic)
-const D1A1 = Segment.homothetie(AD, S, k.algebraic)
+const A1B1prime = Segment.homothetie(ABprime, S, k)
+const B1C1prime = Segment.homothetie(BCprime, S, k)
+const C1D1prime = Segment.homothetie(CDprime, S, k)
+const D1A1prime = Segment.homothetie(DAprime, S, k)
+const A1B1 = Segment.homothetie(AB, S, k)
+const B1C1 = Segment.homothetie(BC, S, k)
+const C1D1 = Segment.homothetie(DC, S, k)
+const D1A1 = Segment.homothetie(AD, S, k)
 A1B1.dashed = true
 B1C1.dashed = true
 C1D1.dashed = true

@@ -10,7 +10,10 @@
 import { Const } from '../measures/Const'
 import { Measure } from '../measures/Measure'
 import { Point, PointOptions } from './Point'
-
+/**
+ * Crée l'image (Point) de A par l'homothétie de centre 'center' et de rapport k.
+ * k peut être un nombre (constante) ou une instance d'une classe dérivée de Measure.
+ */
 export class PointByHomothetie extends Point {
     center: Point
     k: Measure // Coefficient de l'homothétie

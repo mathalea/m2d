@@ -8,12 +8,14 @@
  */
 
 import { Point, PointOptions } from './Point'
-import { Segment } from '../lines/Segment'
-
+import { Line } from '../lines/Line'
+/**
+ * Crée l'image (Point) de A par la symétrie orthogonale d'axe line.
+ */
 export class PointByReflectionOverLine extends Point {
-    line: Segment
+    line: Line
     previous: Point
-    constructor (A: Point, line: Segment, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
+    constructor (A: Point, line: Line, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
       let x, y
       const [a, b, c] = line.equation
       const k = 1 / (a * a + b * b)

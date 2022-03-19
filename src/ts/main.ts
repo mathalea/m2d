@@ -1,10 +1,11 @@
 import { Figure } from './Figure'
-import { Cursor } from './elements/others/Cursor'
+import { Cursor } from './elements/measures/Cursor'
 import { Point } from './elements/points/Point'
 import { Segment } from './elements/lines/Segment'
 import { Const } from './elements/measures/Const'
 import { Arc } from './elements/lines/Arc'
 import { Circle } from './elements/lines/Circle'
+import { testAll } from './tests'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -36,7 +37,7 @@ figure.svg.style.border = 'solid'
 
 // Ma figure
 const k = new Cursor(figure, -4, 7, { min: -2, max: 2, step: 0.1, length: 5, value: 1.2 })
-const angle = new Cursor(figure, -4, 6, { min: -180, max: 180, step: 2, length: 5, value: 0 })
+const angle = new Cursor(figure, -4, 6, { min: -180, max: 180, step: 1, length: 5, value: 0 })
 
 const xO = new Const(figure, 0)
 const yO = new Const(figure, 0)
@@ -52,5 +53,6 @@ const t = Segment.homothetie(s, O, k)
 const u = Segment.similitude(s, A, k, angle)
 t.style = '|-|'
 u.style = '|-|'
+testAll()
 // const angle
 // const ABisVisible = new CalculDynamic((a:Measure[]) => zero(sommeValue(a)), [])

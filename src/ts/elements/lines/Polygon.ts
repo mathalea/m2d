@@ -13,7 +13,9 @@ import { Point, PointStyle } from '../points/Point'
 import { PointOnLineAtD } from '../points/PointOnLineAtD'
 import { Segment } from './Segment'
 import { TextByPoint } from '../texts/TextByPoint'
-
+/**
+ * Crée un polygone (ligne brisée fermée) à partir d'un array d'instances de Point.
+ */
 export class Polygon extends Element2D {
   points: Point[]
   labelsPoints: Point[]

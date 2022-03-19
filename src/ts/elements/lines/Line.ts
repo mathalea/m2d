@@ -20,6 +20,11 @@ import { PointBySimilitude } from '../points/PointBySimilitude'
 export type LineType = 'Line' | 'Segment' | 'Ray'
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
 export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number, temp?: boolean, dashed?: boolean, lineType?: LineType }
+/**
+ * Crée une droite, une demi-droite ou un segment à partir de deux points.
+ * lineType défini le type de tracé parmis les trois types : Line (defaut), Ray ou Segment
+ * Pour les deux derniers types, il est préférable de passer par les sous classes respectives (Ray ou Segment)
+ */
 export class Line extends Element2D {
   A: Point
   B: Point
@@ -28,9 +33,9 @@ export class Line extends Element2D {
   x2: number
   y2: number // Coordonnées de l'extrémité la plus à droite
   type: LineType
-  _label: string
   _style: string
   temp: boolean
+  label: string
   constructor (A: Point, B: Point, { lineType: type = 'Line', color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
     super(A.parentFigure)
     this.exist = true
@@ -38,7 +43,7 @@ export class Line extends Element2D {
     this.B = B
     this.type = type
     this._style = ''
-    this._label = (A.label.length > 0 && B.label.length > 0) ? `(${A.label + B.label})` : ''
+    this.label = (A.label.length > 0 && B.label.length > 0) ? `(${A.label + B.label})` : ''
 
     if (this.type === 'Line') {
       if (A.isOnFigure()) {
@@ -98,7 +103,7 @@ export class Line extends Element2D {
   get latex () {
     try {
       if (!this.isVisible || !this.exist) return ''
-      let latex = `\n\n\t% ${this._label ?? 'Droite'}`
+      let latex = `\n\n\t% ${this.label ?? 'Droite'}`
       latex += `\n \t \\draw${this.tikzOptions} (${this.x1}, ${this.y1}) -- (${this.x2}, ${this.y2});`
       return latex
     } catch (error) {

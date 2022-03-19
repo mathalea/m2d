@@ -15,7 +15,10 @@ import { Measure } from '../measures/Measure'
 import { Coords } from '../others/Coords'
 import { Point, PointOptions } from './Point'
 import { PointByHomothetie } from './PointByHomothetie'
-
+/**
+ * Crée un point sur le cercle C.
+ * si un angle est précisé, alors il détermine l'azimut du point sur le cercle.
+ */
 export class PointOnCircle extends Point {
   circle: Circle
   angle: Measure

@@ -9,7 +9,7 @@
 
 import { Point, PointOptions } from './Point'
 /**
- * Crée le barycentre d'un Array de Point.
+ * Crée le barycentre d'un Array d'instances de Point.
  */
 export class Barycenter extends Point {
     points: Point[]

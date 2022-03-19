@@ -13,7 +13,10 @@ import { Segment } from '../lines/Segment'
 import { Measure } from '../measures/Measure'
 import { Coords } from '../others/Coords'
 import { Const } from '../measures/Const'
-
+/**
+ * Crée un point sur le segment L.
+ * Si length est précisé et si la longeur du segment est supérieure à length, alors le point est situé à cette distance length de L.A
+ */
 export class PointOnSegment extends PointOnLine {
   constructor (L: Segment, { label, length, style = 'x', size = 0.15, thickness = 3, color = 'Gray', draggable = true, temp = false }: { length?: number | Measure } & PointOptions = {}) {
     super(L, { length, style, size, thickness, color, draggable, temp })

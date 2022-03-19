@@ -9,7 +9,10 @@
 
 import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
-
+/**
+ * Crée un affichage de texte à la position (x;y).
+ * x et y sont des nombres (constantes). ToFix : peut-être pourrait-on ajouter les instances de classes dérivée de Measure.
+ */
 export class TextByPosition extends Element2D {
     private _x: number
     private _y: number

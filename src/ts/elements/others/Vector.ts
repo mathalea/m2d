@@ -12,7 +12,11 @@ import { Element2D } from '../Element2D'
 import { Const } from '../measures/Const'
 import { Measure } from '../measures/Measure'
 import { Point } from '../points/Point'
-
+/**
+ * Crée un vecteur à partir de deux coordonnées (nombre ou instance de classe dérivée de Measure) ou de deux intances de Point.
+ * Si des points sont donnés, ils ne servent qu'à déterminer les composantes constantes du vecteur qui devient indépendant de ces points.
+ * Pour un vecteur dépendant des points fournis, il faut se tourner vers la classe VectorByPoints
+ */
 export class Vector extends Element2D {
   private _x: Measure
   private _y: Measure
