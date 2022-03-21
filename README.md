@@ -97,5 +97,6 @@ Dans textByPosition.ts, on arrondit à un chiffre après la virgule.
 ### Measures
 
 Un objet enfant de `Element2D` peut dépendre d'un autre objet enfant de `Element2D` ou enfant de `Measure` qui est une classe abstraite pour des valeurs numériques dynamiques.
-Parmi les enfant de `Measure` on trouve l'objet `Algebraic` qui peut avoir ses dépendances. Un point peut être défini par homothétie en utilisant un rapport de type `number` ou `Algebraic`. Dans ce dernier cas, on pourra faire varier le rapport d'homothétie dynamiquement avec, par exemple, l'attribut algebraic d'un objet `Cursor`.
-Cette bivalence `number | Algebraic` devrait être ajoutée dans d'autres objet comme `PointByRotation`...++
+Parmi les enfant de `Measure` on trouve `Cursor` ou `Angle` ou encore `Distance`.
+ Un point peut être défini par homothétie en utilisant un rapport de type `number` ou `Measure`. Dans ce dernier cas, on pourra faire varier le rapport d'homothétie dynamiquement avec, par exemple, un objet `Cursor`.
+

@@ -1,11 +1,11 @@
 import { Figure } from './Figure'
-import { Cursor } from './elements/measures/Cursor'
 import { Point } from './elements/points/Point'
 import { Segment } from './elements/lines/Segment'
 import { Const } from './elements/measures/Const'
 import { Arc } from './elements/lines/Arc'
 import { Circle } from './elements/lines/Circle'
 import { testAll } from './tests'
+import { Cursor } from './elements/measures/Cursor'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *

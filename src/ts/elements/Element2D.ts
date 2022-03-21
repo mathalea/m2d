@@ -51,14 +51,16 @@ export abstract class Element2D {
   }
 
   /**
-   * Permet d'indiquer au point que sa position dépend d'autres éléments
-   * @param child
+   * Permet d'indiquer à l'objet quel élément (child) dépend de lui.
    */
   addChild (child: Element2D | Measure) {
     this.childs.push(child)
     child.parents.push(this)
   }
 
+  /**
+ * Permet de retirer un objet (child) de la liste des enfants.
+ */
   removeChild (child: Element2D | Measure) {
     const index = this.childs.indexOf(child)
     if (index > -1) {
@@ -70,6 +72,9 @@ export abstract class Element2D {
     }
   }
 
+  /**
+ * Appelle de façon récursive la méthode update() de chaque enfant.
+ */
   notifyAllChilds () {
     if (this.childs.length > 40) {
       console.log('Nombre de dépendances élevée pour ', this)
@@ -79,6 +84,9 @@ export abstract class Element2D {
     }
   }
 
+  /**
+ * Méthode de mise à jour de l'objet
+ */
   abstract update(): void
 
   hide (changeIsVisible = true) {
