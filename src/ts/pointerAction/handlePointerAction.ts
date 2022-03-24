@@ -18,6 +18,7 @@ import { actionNewVectorMessage, newVector } from './newVector'
 import { actionNewParallelMessage, newParallel } from './newParallel'
 import { actionHideMessage, hide } from './hide'
 import { newPointByCoords } from './newPointByCoords'
+import { newReflectAboutPoint, actionNewReflectAboutPointMessage } from './newReflectAboutPoint'
 
 export function handlePointerAction (figure: Figure, event: PointerEvent) {
   const [pointerX, pointerY] = figure.getPointerCoord(event)
@@ -38,6 +39,7 @@ export function handlePointerAction (figure: Figure, event: PointerEvent) {
   else if (figure.pointerAction === 'parallel') newParallel(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'intersectionLL') newIntersection(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'polygon') newPolygon(figure, pointerX, pointerY)
+  else if (figure.pointerAction === 'reflectAboutPoint') newReflectAboutPoint(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'setOptions') setOptions(figure, pointerX, pointerY, figure.pointerSetOptions)
 }
 
@@ -58,4 +60,5 @@ export function initMessageAction (figure: Figure, pointerAction: string) {
   else if (pointerAction === 'parallel') actionNewParallelMessage(figure)
   else if (pointerAction === 'intersectionLL') figure.displayMessage('Cliquer sur l\'élément sur lequel appliquer le nouveau style')
   else if (pointerAction === 'polygon') actionNewPolygonMessage(figure)
+  else if (pointerAction === 'reflectAboutPoint') actionNewReflectAboutPointMessage(figure)
 }

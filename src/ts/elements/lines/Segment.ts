@@ -155,6 +155,17 @@ export class Segment extends Line {
     }
   }
 
+  rotation (center: Point, angle: number|Measure) {
+    try {
+      const M = new PointByRotation(this.A, center, angle, { temp: true })
+      const N = new PointByRotation(this.B, center, angle, { temp: true })
+      return new Segment(M, N)
+    } catch (error) {
+      console.log('Erreur dans segment.rotation', error)
+      return new Segment(this.A, this.B)
+    }
+  }
+
   static similitude (segment: Segment, center: Point, k: number|Measure, angle: number|Measure) {
     try {
       const M = new PointBySimilitude(segment.A, center, k, angle, { temp: true })

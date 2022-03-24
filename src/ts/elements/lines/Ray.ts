@@ -7,7 +7,9 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
+import { Measure } from '../measures/Measure'
 import { Point } from '../points/Point'
+import { PointByRotation } from '../points/PointByRotation'
 import { Line, OptionsGraphiques } from './Line'
 /**
  * Crée une demi-droite d'origine A passant par B en appelant le constructeur de Line avec le lineType 'Ray'.
@@ -33,6 +35,17 @@ export class Ray extends Line {
     } catch (error) {
       console.log('Erreur dans Ray.update', error)
       this.exist = false
+    }
+  }
+
+  rotation (center: Point, angle: number|Measure) {
+    try {
+      const M = new PointByRotation(this.A, center, angle, { temp: true })
+      const N = new PointByRotation(this.B, center, angle, { temp: true })
+      return new Ray(M, N)
+    } catch (error) {
+      console.log('Erreur dans ray.rotation', error)
+      return new Ray(this.A, this.B)
     }
   }
 }

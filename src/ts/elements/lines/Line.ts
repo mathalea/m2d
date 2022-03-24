@@ -32,20 +32,20 @@ export class Line extends Element2D {
   y1: number // Coordonnées de l'extrémité la plus à gauche (qui sort légèrement du cadre)
   x2: number
   y2: number // Coordonnées de l'extrémité la plus à droite
-  type: LineType
+  lineType: LineType
   _style: string
   temp: boolean
   label: string
-  constructor (A: Point, B: Point, { lineType: type = 'Line', color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
+  constructor (A: Point, B: Point, { lineType = 'Line', color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
     super(A.parentFigure)
     this.exist = true
     this.A = A
     this.B = B
-    this.type = type
+    this.lineType = lineType
     this._style = ''
     this.label = (A.label.length > 0 && B.label.length > 0) ? `(${A.label + B.label})` : ''
 
-    if (this.type === 'Line') {
+    if (this.lineType === 'Line') {
       if (A.isOnFigure()) {
         ;[this.x1, this.y1, this.x2, this.y2] = getCoordsOut(A, B)
       } else if (B.isOnFigure()) {
@@ -53,9 +53,9 @@ export class Line extends Element2D {
       } else {
         ;[this.x1, this.y1, this.x2, this.y2] = [A.x, A.y, B.x, B.y]
       }
-    } else if (this.type === 'Ray') {
+    } else if (this.lineType === 'Ray') {
       ;[this.x1, this.y1, this.x2, this.y2] = getRayCoordsOut(A, B)
-    } else if (this.type === 'Segment') {
+    } else if (this.lineType === 'Segment') {
       ;[this.x1, this.y1, this.x2, this.y2] = [A.x, A.y, B.x, B.y]
     } else {
       throw new Error("Le type doit être l'un des trois suivants : Line ou Segment ou Ray")
@@ -213,10 +213,22 @@ export class Line extends Element2D {
     try {
       const M = new PointByRotation(line.A, center, angle, { temp: true })
       const N = new PointByRotation(line.B, center, angle, { temp: true })
-      return new Line(M, N)
+      console.log(line.lineType)
+      return new Line(M, N, { lineType: line.lineType })
     } catch (error) {
       console.log('Erreur dans Line.homothetie()', error)
       return new Line(line.A, line.A)
+    }
+  }
+
+  rotation (center: Point, angle: number|Measure) {
+    try {
+      const M = new PointByRotation(this.A, center, angle, { temp: true })
+      const N = new PointByRotation(this.B, center, angle, { temp: true })
+      return new Line(M, N, { lineType: this.lineType })
+    } catch (error) {
+      console.log('Erreur dans Line.homothetie()', error)
+      return new Line(this.A, this.B)
     }
   }
 
