@@ -90,6 +90,7 @@ export abstract class Element2D {
   abstract update(): void
 
   hide (changeIsVisible = true) {
+    this.parentFigure.set.delete(this)
     // Tous les membres du groupe auront la même couleur
     for (const e of this.group) {
       e.hide(changeIsVisible)
@@ -105,6 +106,7 @@ export abstract class Element2D {
   }
 
   show (changeIsVisible = true) {
+    if (!this.parentFigure.set.has(this)) this.parentFigure.set.add(this)
     if (!changeIsVisible && !this.isVisible) return
     for (const e of this.group) {
       e.show(changeIsVisible)
