@@ -17,10 +17,12 @@ import { actionNewRayMessage, newRay } from './newRay'
 import { actionNewVectorMessage, newVector } from './newVector'
 import { actionNewParallelMessage, newParallel } from './newParallel'
 import { actionHideMessage, hide } from './hide'
+import { newPointByCoords } from './newPointByCoords'
 
 export function handlePointerAction (figure: Figure, event: PointerEvent) {
   const [pointerX, pointerY] = figure.getPointerCoord(event)
   if (figure.pointerAction === 'freePoint') newPoint(figure, pointerX, pointerY)
+  else if (figure.pointerAction === 'pointByCoords') newPointByCoords(figure)
   else if (figure.pointerAction === 'drag') startDrag(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'erase') erase(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'hide') hide(figure, pointerX, pointerY)

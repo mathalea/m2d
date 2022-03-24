@@ -19,6 +19,7 @@ import { moveDrag, stopDrag } from './pointerAction/drag'
 
 import { handlePointerAction, initMessageAction } from './pointerAction/handlePointerAction'
 import { Coords } from './elements/others/Coords'
+import { newPointByCoords } from './pointerAction/newPointByCoords'
 
 export class Figure {
   width: number
@@ -146,6 +147,7 @@ export class Figure {
     this._pointerAction = action
     this.clearSelectedElements()
     initMessageAction(this, action)
+    if (action === 'pointByCoords') newPointByCoords(this) // Cette action ne doit pas attendre un clic sur la figure
   }
 
   clearSelectedElements () {
