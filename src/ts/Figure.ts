@@ -40,7 +40,7 @@ export class Figure {
   pointerX: number | null
   pointerY: number | null
   private _pointerAction: string
-  pointerSetOptions: OptionsGraphiques
+  pointerSetOptions: OptionsGraphiques & {angle?: number}
   messageElement: TextByPosition | null
   constructor ({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true, dx = 1, dy = 1 }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean, dx?: number, dy?: number } = {}) {
     this.width = width
