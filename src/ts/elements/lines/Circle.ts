@@ -150,6 +150,25 @@ export class Circle extends Element2D {
   }
 
   /**
+   * Rotation définie par un centre et un angle en degrés
+   * Renvoie un nouveau cercle sans modifier le premier
+   */
+  rotation (O: Point, angle: number | Measure) {
+    try {
+      let O2: PointByRotation
+      if (angle instanceof Measure) {
+        O2 = new PointByRotation(this.center, O, angle, { temp: true })
+        return new Circle(O2, this._radius)
+      } else {
+        O2 = new PointByRotation(this.center, O, angle, { temp: true })
+        return new Circle(O2, this._radius)
+      }
+    } catch (error) {
+      console.log('Erreur dans Circle.rotation() avec les arguments ', O, angle, error)
+    }
+  }
+
+  /**
    * Homothétie définie par un centre et un rapport
    * Renvoie un nouveau point sans modifier le premier
    */

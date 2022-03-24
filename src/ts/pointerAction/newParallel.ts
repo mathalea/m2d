@@ -1,5 +1,7 @@
 import { Line } from '../elements/lines/Line'
 import { LineParallelByPoint } from '../elements/lines/LineParallelByPoint'
+import { Segment } from '../elements/lines/Segment'
+import { SegmentParallelByPoint } from '../elements/lines/SegmentParallelByPoint'
 import { Point } from '../elements/points/Point'
 import { Figure } from '../Figure'
 
@@ -20,7 +22,10 @@ export function newParallel (figure: Figure, pointerX: number, pointerY: number)
     figure.displayMessage('Cliquer sur une droite et sur un point')
     const A = figure.selectedElements.filter(element => element instanceof Point)[0] as Point
     const L = figure.selectedElements.filter(element => element instanceof Line)[0] as Line
-    const d = new LineParallelByPoint(L, A, figure.pointerSetOptions)
+    let d: Line
+    if (L instanceof Segment) {
+      d = new SegmentParallelByPoint(L, A, figure.pointerSetOptions)
+    } else d = new LineParallelByPoint(L, A, figure.pointerSetOptions)
     figure.clearSelectedElements()
     return d
   }

@@ -2,10 +2,11 @@ import { Line } from '../elements/lines/Line'
 import { Point } from '../elements/points/Point'
 import { PointByRotation } from '../elements/points/PointByRotation'
 import { Figure } from '../Figure'
+import { Circle } from '../elements/lines/Circle'
 
 export function newRotation (figure: Figure, pointerX: number, pointerY: number) {
   for (const e of figure.set) {
-    if ((e instanceof Line || e instanceof Point) && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
+    if ((e instanceof Line || e instanceof Circle || e instanceof Point) && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
       if (figure.selectedElements.length === 0 && e instanceof Point) {
         e.select()
         const event = new Event('waitForAngle')
@@ -14,16 +15,17 @@ export function newRotation (figure: Figure, pointerX: number, pointerY: number)
           figure.pointerSetOptions.angle = e.detail
           figure.displayMessage('Cliquer sur l\'objet à transformer')
         }, { once: true })
-      } else {
+        break
+      } else if (figure.selectedElements.length === 1) {
         const A = figure.selectedElements[0] as Point
         let B = null
         const r = figure.pointerSetOptions.angle
         if (r) {
-          if (e instanceof Line) {
+          if (e instanceof Line || e instanceof Circle) {
             B = e.rotation(A, r)
-            if (figure.pointerSetOptions.color) B.color = figure.pointerSetOptions.color
-            if (figure.pointerSetOptions.thickness) B.thickness = figure.pointerSetOptions.thickness
-            if (figure.pointerSetOptions.dashed !== undefined) B.dashed = figure.pointerSetOptions.dashed
+            if (B && figure.pointerSetOptions.color) B.color = figure.pointerSetOptions.color
+            if (B && figure.pointerSetOptions.thickness) B.thickness = figure.pointerSetOptions.thickness
+            if (B && figure.pointerSetOptions.dashed !== undefined) B.dashed = figure.pointerSetOptions.dashed
           } else {
             B = new PointByRotation(e, A, r)
           }
@@ -31,6 +33,7 @@ export function newRotation (figure: Figure, pointerX: number, pointerY: number)
           A.select()
           return B
         }
+        break
       }
     }
   }
