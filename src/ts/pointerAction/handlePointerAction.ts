@@ -20,6 +20,7 @@ import { actionHideMessage, hide } from './hide'
 import { newPointByCoords } from './newPointByCoords'
 import { newReflectAboutPoint, actionNewReflectAboutPointMessage } from './newReflectAboutPoint'
 import { newRotation, actionNewRotationMessage } from './newRotation'
+import { newCircleByDistanceAndCenter, actionCircleByDistanceAndCenterMessage } from './newCircleByDistanceAndCenter'
 
 export function handlePointerAction (figure: Figure, event: PointerEvent) {
   const [pointerX, pointerY] = figure.getPointerCoord(event)
@@ -34,6 +35,7 @@ export function handlePointerAction (figure: Figure, event: PointerEvent) {
   else if (figure.pointerAction === 'vector') newVector(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'circlePoint') newCirclePoint(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'circleRadius') newCircleRadius(figure, pointerX, pointerY)
+  else if (figure.pointerAction === 'circleByDistanceAndCenter') newCircleByDistanceAndCenter(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'perpendicularBissector') newPerpendicularBissector(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'angleBissector') newAngleBissector(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'perpendicular') newPerpendicular(figure, pointerX, pointerY)
@@ -53,6 +55,7 @@ export function initMessageAction (figure: Figure, pointerAction: string) {
   else if (pointerAction === 'segment') actionNewSegmentMessage(figure)
   else if (pointerAction === 'circlePoint') actionNewCirclePointMessage(figure)
   else if (pointerAction === 'circleRadius') actionNewCircleRadiusMessage(figure)
+  else if (pointerAction === 'circleByDistanceAndCenter') actionCircleByDistanceAndCenterMessage(figure)
   else if (pointerAction === 'perpendicularBissector') actionNewPerpendicularBissectorMessage(figure)
   else if (pointerAction === 'angleBissector') actionNewAngleBissectorMessage(figure)
   else if (pointerAction === 'line') actionNewLineMessage(figure)

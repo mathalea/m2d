@@ -7,12 +7,13 @@ export function newRay (figure: Figure, pointerX: number, pointerY: number) {
     if (e instanceof Point && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
       if (figure.selectedElements.length === 1) {
         const A = figure.selectedElements[0] as Point
+        if (e === A) break
         const s = new Ray(A, e, figure.pointerSetOptions)
         figure.selectedElements = []
         actionNewRayMessage(figure)
         return s
       } else {
-        figure.selectedElements.push(e)
+        e.select()
         figure.displayMessage('Cliquer sur un point de la demi-droite')
       }
     }

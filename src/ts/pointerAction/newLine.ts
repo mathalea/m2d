@@ -7,12 +7,13 @@ export function newLine (figure: Figure, pointerX: number, pointerY: number) {
     if (e instanceof Point && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
       if (figure.selectedElements.length === 1) {
         const A = figure.selectedElements[0] as Point
+        if (A === e) break
         const s = new Line(A, e, figure.pointerSetOptions)
         figure.selectedElements = []
         figure.displayMessage('Cliquer sur deux points de la droite')
         return s
       } else {
-        figure.selectedElements.push(e)
+        e.select()
         figure.displayMessage('Cliquer sur un deuxième point de la droite')
       }
     }

@@ -11,8 +11,9 @@ export function newRotation (figure: Figure, pointerX: number, pointerY: number)
         e.select()
         const event = new Event('waitForAngle')
         window.dispatchEvent(event)
-        window.addEventListener('angleIsSet', (e: CustomEvent) => {
-          figure.pointerSetOptions.angle = e.detail
+        window.addEventListener('angleIsSet', (e: Event) => {
+          const detail = (<CustomEvent>event).detail
+          figure.pointerSetOptions.angle = detail
           figure.displayMessage('Cliquer sur l\'objet à transformer')
         }, { once: true })
         break

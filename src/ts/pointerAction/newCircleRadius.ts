@@ -10,8 +10,9 @@ export function newCircleRadius (figure: Figure, pointerX: number, pointerY: num
       const O = e as Point
       const event = new Event('waitForRadius')
       window.dispatchEvent(event)
-      window.addEventListener('radiusIsSet', (e: CustomEvent) => {
-        const r = e.detail || 0
+      window.addEventListener('radiusIsSet', (event: Event) => {
+        const detail = (<CustomEvent>event).detail
+        const r = detail || 0
         if (r > 0) {
           C = new Circle(O, r, figure.pointerSetOptions)
         }

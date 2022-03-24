@@ -7,6 +7,7 @@ export function newSegment (figure: Figure, pointerX: number, pointerY: number) 
     if (e instanceof Point && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
       if (figure.selectedElements.length === 1) {
         const A = figure.selectedElements[0] as Point
+        if (A === e) break
         const s = new Segment(A, e, figure.pointerSetOptions)
         figure.clearSelectedElements()
         actionNewSegmentMessage(figure)
