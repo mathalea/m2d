@@ -8,33 +8,29 @@ import { Figure } from '../Figure'
 
 export function newIntersection (figure: Figure, pointerX: number, pointerY: number) {
   for (const e of figure.set) {
+    let p: Point | null = null
+    let p2: Point | null = null
     if ((e instanceof Line || e instanceof Circle) && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
       if (figure.selectedElements.length === 1) {
         if (figure.selectedElements[0] instanceof Line && e instanceof Line) {
           const L = figure.selectedElements[0] as Line
-          const p = new PointIntersectionLL(L, e)
-          figure.set.add(p)
+          p = new PointIntersectionLL(L, e)
         } else if (figure.selectedElements[0] instanceof Line && e instanceof Circle) {
           const L = figure.selectedElements[0] as Line
-          const p = new PointIntersectionLC(L, e)
-          const p2 = new PointIntersectionLC(L, e, 2)
-          figure.set.add(p)
-          figure.set.add(p2)
+          p = new PointIntersectionLC(L, e)
+          p2 = new PointIntersectionLC(L, e, 2)
         } else if (figure.selectedElements[0] instanceof Circle && e instanceof Line) {
           const C = figure.selectedElements[0] as Circle
-          const p = new PointIntersectionLC(e, C)
-          const p2 = new PointIntersectionLC(e, C, 2)
-          figure.set.add(p)
-          figure.set.add(p2)
+          p = new PointIntersectionLC(e, C)
+          p2 = new PointIntersectionLC(e, C, 2)
         } else if (figure.selectedElements[0] instanceof Circle && e instanceof Circle) {
           const C = figure.selectedElements[0] as Circle
-          const p = new PointIntersectionCC(e, C)
-          const p2 = new PointIntersectionCC(e, C, 2)
-          figure.set.add(p)
-          figure.set.add(p2)
+          p = new PointIntersectionCC(e, C)
+          p2 = new PointIntersectionCC(e, C, 2)
         }
         figure.clearSelectedElements()
         figure.displayMessage('Cliquer sur le premier objet pour créer un autre point d\'intersection')
+        return [p, p2]
       } else {
         e.select()
         figure.displayMessage('Cliquer sur le deuxième objet')

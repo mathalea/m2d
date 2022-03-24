@@ -10,9 +10,9 @@ export function newPerpendicularBissector (figure: Figure, pointerX: number, poi
         const A = figure.selectedElements[0] as Point
         const s = new Segment(A, e, { temp: true })
         const perpendicularBissector = new PerpendicularBisector(s, figure.pointerSetOptions)
-        figure.set.add(perpendicularBissector)
         figure.clearSelectedElements()
         actionNewPerpendicularBissectorMessage(figure)
+        return perpendicularBissector
       } else {
         e.select()
         figure.displayMessage('Cliquer sur l\'autre extrémité')

@@ -16,9 +16,9 @@ export function newAngleBissector (figure: Figure, pointerX: number, pointerY: n
         const O = figure.selectedElements[1] as Point
         const B = e
         const angleBissector = new AngleBisector(A, O, B, figure.pointerSetOptions)
-        figure.set.add(angleBissector)
         figure.clearSelectedElements()
         actionNewAngleBissectorMessage(figure)
+        return angleBissector
       }
     }
   }

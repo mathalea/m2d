@@ -3,6 +3,7 @@ import { Point } from '../elements/points/Point'
 import { Figure } from '../Figure'
 
 export function newCircleRadius (figure: Figure, pointerX: number, pointerY: number) {
+  let C: Circle
   for (const e of figure.set) {
     if (e instanceof Point && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
       e.select()
@@ -12,11 +13,11 @@ export function newCircleRadius (figure: Figure, pointerX: number, pointerY: num
       window.addEventListener('radiusIsSet', (e: CustomEvent) => {
         const r = e.detail || 0
         if (r > 0) {
-          const C = new Circle(O, r, figure.pointerSetOptions)
-          figure.set.add(C)
+          C = new Circle(O, r, figure.pointerSetOptions)
         }
         figure.clearSelectedElements()
         figure.displayMessage('Cliquer sur le centre du cercle')
+        return C
       }, { once: true })
     }
   }

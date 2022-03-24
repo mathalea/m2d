@@ -21,8 +21,8 @@ export function newPerpendicular (figure: Figure, pointerX: number, pointerY: nu
     const A = figure.selectedElements.filter(element => element instanceof Point)[0] as Point
     const L = figure.selectedElements.filter(element => element instanceof Line)[0] as Line
     const d = new LinePerpendicularByPoint(L, A, figure.pointerSetOptions)
-    figure.set.add(d)
     figure.clearSelectedElements()
+    return d
   }
 }
 

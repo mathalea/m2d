@@ -8,9 +8,9 @@ export function newLine (figure: Figure, pointerX: number, pointerY: number) {
       if (figure.selectedElements.length === 1) {
         const A = figure.selectedElements[0] as Point
         const s = new Line(A, e, figure.pointerSetOptions)
-        figure.set.add(s)
         figure.selectedElements = []
         figure.displayMessage('Cliquer sur deux points de la droite')
+        return s
       } else {
         figure.selectedElements.push(e)
         figure.displayMessage('Cliquer sur un deuxième point de la droite')

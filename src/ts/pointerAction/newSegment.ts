@@ -8,9 +8,9 @@ export function newSegment (figure: Figure, pointerX: number, pointerY: number) 
       if (figure.selectedElements.length === 1) {
         const A = figure.selectedElements[0] as Point
         const s = new Segment(A, e, figure.pointerSetOptions)
-        figure.set.add(s)
         figure.clearSelectedElements()
         actionNewSegmentMessage(figure)
+        return s
       } else {
         e.select()
         figure.displayMessage('Cliquer sur l\'autre extrémité')

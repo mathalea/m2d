@@ -8,9 +8,9 @@ export function newVector (figure: Figure, pointerX: number, pointerY: number) {
       if (figure.selectedElements.length === 1) {
         const A = figure.selectedElements[0] as Point
         const s = new VectorByPoints(A, e, figure.pointerSetOptions)
-        figure.set.add(s)
         figure.selectedElements = []
         actionNewVectorMessage(figure)
+        return s
       } else {
         figure.selectedElements.push(e)
         figure.displayMessage('Cliquer sur l\'extrémité du vecteur')

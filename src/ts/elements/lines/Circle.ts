@@ -66,6 +66,7 @@ export class Circle extends Element2D {
       center.addChild(this)
       this.exist = center.exist
     }
+    this.update()
   }
 
   /**

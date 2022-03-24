@@ -21,5 +21,7 @@ export class PerpendicularBisector extends LinePerpendicularByPoint {
     super(S, M, { color, thickness, dashed, temp })
     this.segment = S
     this.exist = S.exist
+    S.A.addChild(this)
+    S.B.addChild(this)
   }
 }
