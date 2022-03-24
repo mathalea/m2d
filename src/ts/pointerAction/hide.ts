@@ -7,6 +7,7 @@ export function hide (figure: Figure, pointerX: number, pointerY: number) {
   for (const e of figure.set) {
     if ((e instanceof Point || e instanceof Line || e instanceof Circle) && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
       e.hide()
+      if (e instanceof Point) e.draggable = false
       break
     }
   }
