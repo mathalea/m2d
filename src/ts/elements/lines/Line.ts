@@ -1,4 +1,3 @@
-import { PointByHomothetie } from './../points/PointByHomothetie'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -7,7 +6,10 @@ import { PointByHomothetie } from './../points/PointByHomothetie'
  * @Author Angot Rémi and Lhote Jean-Claude (contact@coopmaths.fr)
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
-
+import { PointByTranslationVector } from './../points/PointByTranslationVector'
+import { PointByTranslation } from './../points/PointByTranslation'
+import { PointByReflectionOverLine } from './../points/PointByReflectionOverLine'
+import { PointByHomothetie } from './../points/PointByHomothetie'
 import { Element2D } from '../Element2D'
 import { Vector } from '../others/Vector'
 import { Point } from '../points/Point'
@@ -85,6 +87,7 @@ export class Line extends Element2D {
   update () {
     try {
       const [xOutLeft, yOutLeft, xOutRight, yOutRight] = getCoordsOut(this.A, this.B)
+      console.log(xOutLeft, yOutLeft, xOutRight, yOutRight, this.A.exist)
       const x1Svg = this.parentFigure.xToSx(xOutRight)
       const x2Svg = this.parentFigure.xToSx(xOutLeft)
       const y1Svg = this.parentFigure.yToSy(yOutRight)
@@ -197,7 +200,51 @@ export class Line extends Element2D {
     }
   }
 
-  // usage : Segment.homothetie(segment, center, factor)
+  translationXY (xt:number|Measure, yt:number|Measure) {
+    try {
+      const M = new PointByTranslation(this.A, xt, yt, { temp: true })
+      const N = new PointByTranslation(this.B, xt, yt, { temp: true })
+      return new Line(M, N)
+    } catch (error) {
+      console.log('Erreur dans Line.reflexionOverLine()', error)
+      return new Line(this.A, this.B)
+    }
+  }
+
+  translationV (v:Vector) {
+    try {
+      const M = new PointByTranslationVector(this.A, v, { temp: true })
+      const N = new PointByTranslationVector(this.B, v, { temp: true })
+      return new Line(M, N)
+    } catch (error) {
+      console.log('Erreur dans Line.reflexionOverLine()', error)
+      return new Line(this.A, this.B)
+    }
+  }
+
+  reflexionOverLine (L: Line) {
+    try {
+      const M = new PointByReflectionOverLine(this.A, L, { temp: true })
+      const N = new PointByReflectionOverLine(this.B, L, { temp: true })
+      return new Line(M, N)
+    } catch (error) {
+      console.log('Erreur dans Line.reflexionOverLine()', error)
+      return new Line(this.A, this.B)
+    }
+  }
+
+  homothetie (center: Point, k:number|Measure) {
+    try {
+      const M = new PointByHomothetie(this.A, center, k, { temp: true })
+      const N = new PointByHomothetie(this.B, center, k, { temp: true })
+      return new Line(M, N)
+    } catch (error) {
+      console.log('Erreur dans Line.homothetie()', error)
+      return new Line(this.A, this.B)
+    }
+  }
+
+  /* usage : Segment.homothetie(segment, center, factor)
   static homothetie (line: Line, center: Point, k:number|Measure) {
     try {
       const M = new PointByHomothetie(line.A, center, k, { temp: true })
@@ -220,7 +267,7 @@ export class Line extends Element2D {
       return new Line(line.A, line.A)
     }
   }
-
+*/
   rotation (center: Point, angle: number|Measure) {
     try {
       const M = new PointByRotation(this.A, center, angle, { temp: true })
@@ -231,7 +278,7 @@ export class Line extends Element2D {
       return new Line(this.A, this.B)
     }
   }
-
+  /*
   static similitude (line: Line, center: Point, k: number|Measure, angle: number|Measure) {
     try {
       const M = new PointBySimilitude(line.A, center, k, angle, { temp: true })
@@ -242,8 +289,19 @@ export class Line extends Element2D {
       return new Line(line.A, line.A)
     }
   }
-}
+*/
 
+  similitude (center: Point, k: number|Measure, angle: number|Measure) {
+    try {
+      const M = new PointBySimilitude(this.A, center, k, angle, { temp: true })
+      const N = new PointBySimilitude(this.B, center, k, angle, { temp: true })
+      return new Line(M, N)
+    } catch (error) {
+      console.log('Erreur dans Line.similitude()', error)
+      return new Line(this.A, this.A)
+    }
+  }
+}
 // une droite coupe deux bords, on les détecte ici.
 function getCoordsOut (A: Point, B: Point) {
   try {
