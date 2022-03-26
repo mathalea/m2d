@@ -54,7 +54,7 @@ export class PointByReflectionOverLine extends Point {
         }
         this.moveTo(x, y)
       } catch (error) {
-        console.log('Erreur dans PointByReflexionOverLine.update()', error)
+        console.log('Erreur dans PointByreflectionOverLine.update()', error)
         this.exist = false
       }
     }

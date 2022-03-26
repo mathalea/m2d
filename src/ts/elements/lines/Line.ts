@@ -206,7 +206,7 @@ export class Line extends Element2D {
       const N = new PointByTranslation(this.B, xt, yt, { temp: true })
       return new Line(M, N)
     } catch (error) {
-      console.log('Erreur dans Line.reflexionOverLine()', error)
+      console.log('Erreur dans Line.reflectionOverLine()', error)
       return new Line(this.A, this.B)
     }
   }
@@ -217,18 +217,18 @@ export class Line extends Element2D {
       const N = new PointByTranslationVector(this.B, v, { temp: true })
       return new Line(M, N)
     } catch (error) {
-      console.log('Erreur dans Line.reflexionOverLine()', error)
+      console.log('Erreur dans Line.reflectionOverLine()', error)
       return new Line(this.A, this.B)
     }
   }
 
-  reflexionOverLine (L: Line) {
+  reflectionOverLine (L: Line) {
     try {
       const M = new PointByReflectionOverLine(this.A, L, { temp: true })
       const N = new PointByReflectionOverLine(this.B, L, { temp: true })
       return new Line(M, N)
     } catch (error) {
-      console.log('Erreur dans Line.reflexionOverLine()', error)
+      console.log('Erreur dans Line.reflectionOverLine()', error)
       return new Line(this.A, this.B)
     }
   }
