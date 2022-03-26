@@ -20,8 +20,9 @@ Le fichier `src/main.ts` permet de faire des tests de constructions/
 
 On créé un objet `figure` instance de la classe `Figure` qui stockera toutes les information sur le container SVG (width, height, xMin, yMin...) et les éléments de ce SVG (sauvegardés dans `figure.set` pour ceux qui ont besoin d'un tracé). `figure` a notamment 2 propriétés `figure.svg` et `figure.latex` qui permettent de récupérer le code SVG ou TikZ de la figure.
 
-Le objets graphiques sont des instances d'objets d'une sous classe de `Element2D` qui ont un paramètre `g` qui sera un groupe SVG ou un simple élément qui est automatiquement ajouté au svg de la figure.
+Les objets graphiques sont des instances d'objets d'une sous classe de `Element2D` qui ont un paramètre `g` qui sera un groupe SVG ou un simple élément qui est automatiquement ajouté au svg de la figure.
 
+Les nombres utilisés comme par exemple les rapports d'homothétie ou les angles de rotation sont des instances d'objets d'une sous classe de  `Measure`. L'objet Cursor par exemple fournit l'un de ces nombres et peut agir comme un variateur pour des constructions paramétrées.
 
 ```
 const figure = new Figure()
@@ -41,24 +42,15 @@ Les objets `Element2D` peuvent être stylisés
 
 #### ToDo
 
-- AngleMark
-- ~PointByOrthongonalProjection~
 - Bspline
-- ~Mediatrice~
-- ~Bissectrice~
 - SegmentCode
 - Cube
-- ~DemiDroite (Ray)~
-- ~Grille aimantée pour placer les points~
-- ~Vecteur avec flèche~
-- ~Arc de cercle défini par 3 points~
 - Codage segment
 - Codage arc
 - Texte le long d'un segment
 - Repère
 - Courbe représentative de fonctions
 - Calculs d'aires
-- Ajouter le type Algebraic pour les arguments de PointByRotation(), PointBySimilitude(), PointOnLineAtD(), Vector(), Angle(), ...
 - ...
 
 
