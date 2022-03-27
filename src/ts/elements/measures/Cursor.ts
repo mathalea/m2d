@@ -38,8 +38,8 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
   this.step = step
   this.max = max
   this.min = min
-  const M = new Point(svgContainer, x, y, { temp: true })
-  const N = new Point(svgContainer, x + length, y, { temp: true })
+  const M = new Point(svgContainer, x, y, { temp: true, draggable: false })
+  const N = new Point(svgContainer, x + length, y, { temp: true, draggable: false })
   this.origin = M
   this.line = new Segment(M, N)
   this.line.thickness = 4

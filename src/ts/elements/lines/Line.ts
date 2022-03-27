@@ -87,7 +87,7 @@ export class Line extends Element2D {
   update () {
     try {
       const [xOutLeft, yOutLeft, xOutRight, yOutRight] = getCoordsOut(this.A, this.B)
-      console.log(xOutLeft, yOutLeft, xOutRight, yOutRight, this.A.exist)
+      // console.log(xOutLeft, yOutLeft, xOutRight, yOutRight, this.A.exist)
       const x1Svg = this.parentFigure.xToSx(xOutRight)
       const x2Svg = this.parentFigure.xToSx(xOutLeft)
       const y1Svg = this.parentFigure.yToSy(yOutRight)

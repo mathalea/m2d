@@ -104,7 +104,7 @@ export class Polygon extends Element2D {
         return ''
       }
     }
-/*
+
     rotation (center:Point, angle:number|Measure) {
       try {
         const points: Point[] = []
@@ -182,7 +182,6 @@ export class Polygon extends Element2D {
         return new Polygon(...this.points)
       }
     }
-    */
 }
 
 function listeXY (points: Point[]) {

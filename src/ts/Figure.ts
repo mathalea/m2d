@@ -7,16 +7,15 @@
  * @License: GNU AGPLv3 https://www.gnu.org/licenses/agpl-3.0.html
  */
 
-import { Circle } from './elements/lines/Circle'
 import { Element2D } from './elements/Element2D'
 import { PointOptions, Point } from './elements/points/Point'
+import { Circle } from './elements/lines/Circle'
 import { Line, OptionsGraphiques } from './elements/lines/Line'
 import { TextByPosition } from './elements/texts/TextByPosition'
 import { Segment } from './elements/lines/Segment'
 import { PointOnLineAtD } from './elements/points/PointOnLineAtD'
 import { PointIntersectionLC } from './elements/points/PointIntersectionLC'
 import { moveDrag, stopDrag } from './pointerAction/drag'
-
 import { handlePointerAction, initMessageAction } from './pointerAction/handlePointerAction'
 import { Coords } from './elements/others/Coords'
 import { newPointByCoords } from './pointerAction/newPointByCoords'
