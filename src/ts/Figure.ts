@@ -8,16 +8,11 @@
  */
 
 import { Element2D } from './elements/Element2D'
-import { PointOptions, Point } from './elements/points/Point'
-import { Circle } from './elements/lines/Circle'
-import { Line, OptionsGraphiques } from './elements/lines/Line'
+import { Point } from './elements/points/Point'
+import { OptionsGraphiques } from './elements/lines/Line'
 import { TextByPosition } from './elements/texts/TextByPosition'
-import { Segment } from './elements/lines/Segment'
-import { PointOnLineAtD } from './elements/points/PointOnLineAtD'
-import { PointIntersectionLC } from './elements/points/PointIntersectionLC'
 import { moveDrag, stopDrag } from './pointerAction/drag'
 import { handlePointerAction, initMessageAction } from './pointerAction/handlePointerAction'
-import { Coords } from './elements/others/Coords'
 import { newPointByCoords } from './pointerAction/newPointByCoords'
 
 export class Figure {
@@ -165,68 +160,6 @@ export class Figure {
       this.messageElement = message
       this.set.delete(this.messageElement) // Pour l'exclure de la sortie LaTeX et du drag
     }
-  }
-
-  /**
-     * Ajoute un segment au SVG
-     * @param A
-     * @param B
-     * @param options
-     * @returns
-     */
-  segment (A: Point, B: Point, options?: OptionsGraphiques) {
-    return new Segment(A, B, options)
-  }
-
-  circle (O: Point, arg2: number | Point, options?: OptionsGraphiques) {
-    return new Circle(O, arg2, options)
-  }
-
-  /**
-   * Trace une droite passant par A et B
-   * @param A
-   * @param B
-   * @param option add1 contrôle la distance ajoutée du côté de A et add2 celle du côté de B
-   * @returns
-   */
-  line (A: Point, B: Point, { color = 'black', thickness = 1 } = {}) {
-    return new Line(A, B, { lineType: 'Line', color, thickness })
-  }
-
-  /**
-     * Ajoute un point au SVG
-     * @param x
-     * @param y
-     * @param options
-     * @returns
-     */
-  point (x: number, y: number, options?: PointOptions) {
-    return new Point(this, x, y, options)
-  }
-
-  pointIntersectionLC (L: Segment, C: Circle, n: 1 | 2 = 1, options?: PointOptions) {
-    return new PointIntersectionLC(L, C, n, options)
-  }
-
-  // ToFix : Il faudrait que la méthode crée 2 points et que ces points se cachent ou se montrent en fonction de leur appartenance au segment [AB]
-  pointIntersectionSC (L: Segment, C: Circle, options?: PointOptions) {
-    const x = Coords.intersectionLCCoord(L, C, 1).x
-    const [A, B] = [L.A, L.B]
-    if (x !== undefined && Point.distance(A, B) > C.radius) {
-      let M: Point
-      if (x < Math.max(A.x, B.x) && x > Math.min(A.x, B.x)) {
-        M = this.pointIntersectionLC(L, C, 1, options)
-      } else {
-        M = this.pointIntersectionLC(L, C, 2, options)
-      }
-      C.addChild(M)
-      L.addChild(M)
-      return M
-    }
-  }
-
-  pointOnSegmentAtD (L: Segment, d: number) {
-    return new PointOnLineAtD(L, d)
   }
 
   get latex () {

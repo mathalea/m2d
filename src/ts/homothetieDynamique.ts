@@ -14,6 +14,7 @@ import { VectorByPoints } from './elements/others/VectorByPoints'
 import { PointByHomothetie } from './elements/points/PointByHomothetie'
 import { Polygon } from './elements/lines/Polygon'
 import { PointByTranslationVector } from './elements/points/PointByTranslationVector'
+import { Point } from './elements/points/Point'
 
 /**
  * Script qui permet de tester M2D
@@ -43,10 +44,10 @@ figure.svg.style.border = 'solid'
 
 // On créé des points à partir de leur coordonnées
 
-const A = figure.point(0, 2, { label: 'A' })
-const B = figure.point(4, -2, { label: 'B' })
-const C = figure.point(7, 3, { label: 'C' })
-const D = figure.point(-1, 2, { label: 'D' })
+const A = new Point(figure, 0, 2, { label: 'A' })
+const B = new Point(figure, 4, -2, { label: 'B' })
+const C = new Point(figure, 7, 3, { label: 'C' })
+const D = new Point(figure, -1, 2, { label: 'D' })
 const c = new Cursor(figure, -5, 5, { min: -2, max: 2, step: 0.1, length: 3, value: 0 })
 const v = new VectorByPoints(C, A)
 const M = new PointByTranslationVector(B, v, { label: 'M' })

@@ -57,7 +57,7 @@ function factor (k:number) {
   return k === 0 ? 0 : 1
 }
 
-const O = figure.point(0, 0, { label: 'O' })
+const O = new Point(figure, 0, 0, { label: 'O' })
 const xI = new CalculDynamic((a:Measure[]) => Math.sin(a[0].value * Math.PI / 180) * 2, [theta, phi])
 const xJ = new CalculDynamic((a:Measure[]) => Math.cos(a[0].value * Math.PI / 180) * 2, [theta, phi])
 const yI = new CalculDynamic((a:Measure[]) => -Math.cos(a[0].value * Math.PI / 180) * 2 * Math.sin(a[1].value * Math.PI / 180), [theta, phi])
