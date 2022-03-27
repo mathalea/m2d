@@ -1,4 +1,5 @@
-import { PointByHomothetie } from './../points/PointByHomothetie'
+import { PointByReflectionOverLine } from './../points/PointByReflectionOverLine'
+import { PointByTranslationVector } from './../points/PointByTranslationVector'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -11,12 +12,14 @@ import { PointByHomothetie } from './../points/PointByHomothetie'
 import { Element2D } from '../Element2D'
 import { Measure } from '../measures/Measure'
 import { Point } from '../points/Point'
-import { OptionsGraphiques } from './Line'
+import { OptionsGraphiques, Line } from './Line'
 import { CalculDynamic } from '../measures/CalculDynamic'
 import { PointByRotation } from '../points/PointByRotation'
 import { PointBySimilitude } from '../points/PointBySimilitude'
 import { Distance } from '../measures/Distance'
 import { Const } from '../measures/Const'
+import { Vector } from './../others/Vector'
+import { PointByHomothetie } from './../points/PointByHomothetie'
 /**
  * Crée un cercle dont on donne le centre et un point ou le rayon.
  * Le rayon peut être un nombre (constante) ou une instance des classes dérivées de Measure
@@ -67,19 +70,6 @@ export class Circle extends Element2D {
       this.exist = center.exist
     }
     this.update()
-  }
-
-  /**
-   * Translation définie par un couple de coordonnées ou un objet possédant des paramètres x et y
-   * Renvoie un nouveau cercle sans modifier le premier
-   */
-  translation (xt: number, yt: number) {
-    try {
-      const O2 = new Point(this.parentFigure, this.center.x + xt, this.center.y + yt)
-      return new Circle(O2, this.radius)
-    } catch (error) {
-      return null
-    }
   }
 
   /**
@@ -134,25 +124,6 @@ export class Circle extends Element2D {
    * Rotation définie par un centre et un angle en degrés
    * Renvoie un nouveau cercle sans modifier le premier
    */
-  static rotation (C:Circle, O: Point, angle: number | Measure) {
-    try {
-      let O2: PointByRotation
-      if (angle instanceof Measure) {
-        O2 = new PointByRotation(C.center, O, angle, { temp: true })
-        return new Circle(O2, C.radius)
-      } else {
-        O2 = new PointByRotation(C.center, O, angle, { temp: true })
-        return new Circle(O2, C.radius)
-      }
-    } catch (error) {
-      console.log('Erreur dans Circle.rotation() avec les arguments ', O, angle, error)
-    }
-  }
-
-  /**
-   * Rotation définie par un centre et un angle en degrés
-   * Renvoie un nouveau cercle sans modifier le premier
-   */
   rotation (O: Point, angle: number | Measure) {
     try {
       let O2: PointByRotation
@@ -173,20 +144,19 @@ export class Circle extends Element2D {
    * Renvoie un nouveau point sans modifier le premier
    */
 
-  static homothetie (C: Circle, O: Point, k: number | Measure) {
+  homothetie (O: Point, k: number | Measure) {
     try {
       let rayon: Measure
-      let O2: PointByHomothetie
       if (k instanceof Measure) {
-        rayon = new CalculDynamic((x:Measure[]) => Math.abs(x[0].value * C.radius), [k])
-        O2 = new PointByHomothetie(C.center, O, k, { temp: true })
-        return new Circle(O2, rayon)
+        rayon = new CalculDynamic((x:Measure[]) => Math.abs(x[0].value * x[1].value), [k, this._radius])
       } else {
-        O2 = new PointByHomothetie(C.center, O, k, { temp: true })
-        return new Circle(O2, C.radius * k)
+        rayon = new CalculDynamic((x:Measure[]) => Math.abs(x[0].value * k), [this._radius])
       }
+      const O2 = new PointByHomothetie(this.center, O, k, { temp: true })
+      return new Circle(O2, rayon)
     } catch (error) {
       console.log('Erreur dans Circle.homothetie() avec les arguments ', O, k, error)
+      return new Circle(this.center, this.radius)
     }
   }
 
@@ -194,20 +164,19 @@ export class Circle extends Element2D {
    * Similitude définie par un centre, un rapport et un angle en degré
    * Renvoie un nouveau point sans modifier le premier
    */
-  static similitude (C: Circle, O: Point, k: number | Measure, angle: number | Measure) {
+  similitude (O: Point, k: number | Measure, angle: number | Measure) {
     try {
       let rayon: Measure
-      let O2: PointBySimilitude
       if (k instanceof Measure) {
-        rayon = new CalculDynamic((x:Measure[]) => Math.abs(x[0].value * C.radius), [k])
-        O2 = new PointBySimilitude(C.center, O, k, angle, { temp: true })
-        return new Circle(O2, rayon)
+        rayon = new CalculDynamic((x:Measure[]) => Math.abs(x[0].value * x[1].value), [k, this._radius])
       } else {
-        O2 = new PointBySimilitude(C.center, O, k, angle, { temp: true })
-        return new Circle(O2, C.radius * k)
+        rayon = new CalculDynamic((x:Measure[]) => Math.abs(x[0].value * k), [this._radius])
       }
+      const O2 = new PointBySimilitude(this.center, O, k, angle, { temp: true })
+      return new Circle(O2, rayon)
     } catch (error) {
       console.log('Erreur dans Circle.similitude() avec les arguments ', O, k, angle, error)
+      return new Circle(this.center, this.radius)
     }
   }
 
@@ -215,12 +184,40 @@ export class Circle extends Element2D {
    * Translation définie par un couple de coordonnées ou un objet possédant des paramètres x et y
    * Renvoie un nouveau cercle sans modifier le premier
    */
-  static translation (cercle: Circle, xt: number, yt: number) {
+  translation (xt: number, yt: number) {
     try {
-      const O2 = new Point(cercle.parentFigure, cercle.center.x + xt, cercle.center.y + yt)
-      return new Circle(O2, cercle.radius)
+      const rayon = new CalculDynamic((x:Measure[]) => Math.abs(x[0].value), [this._radius])
+      const O2 = new Point(this.parentFigure, this.center.x + xt, this.center.y + yt)
+      return new Circle(O2, rayon)
     } catch (error) {
-      return null
+      console.log('Erreur dans Circle.translation() avec les arguments', xt, yt, error)
+      return new Circle(this.center, this.radius)
+    }
+  }
+
+  /**
+   * Translation définie par un couple de coordonnées ou un objet possédant des paramètres x et y
+   * Renvoie un nouveau cercle sans modifier le premier
+   */
+  translationVector (v: Vector) {
+    try {
+      const rayon = new CalculDynamic((x:Measure[]) => Math.abs(x[0].value), [this._radius])
+      const O2 = new PointByTranslationVector(this.center, v)
+      return new Circle(O2, rayon)
+    } catch (error) {
+      console.log('Erreur dans Circle.translationVector() avec le vecteur ', v, error)
+      return new Circle(this.center, this.radius)
+    }
+  }
+
+  reflectionOverLine (L: Line) {
+    try {
+      const rayon = new CalculDynamic((x:Measure[]) => Math.abs(x[0].value), [this._radius])
+      const O2 = new PointByReflectionOverLine(this.center, L)
+      return new Circle(O2, rayon)
+    } catch (error) {
+      console.log('Erreur dans Circle.translationVector() avec le vecteur ', L, error)
+      return new Circle(this.center, this.radius)
     }
   }
 
