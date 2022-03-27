@@ -8,6 +8,7 @@
  */
 
 import { Measure } from '../measures/Measure'
+import { Vector } from '../others/Vector'
 import { Point } from '../points/Point'
 import { PointByHomothetie } from '../points/PointByHomothetie'
 import { PointByRotation } from '../points/PointByRotation'
@@ -15,6 +16,10 @@ import { PointBySimilitude } from '../points/PointBySimilitude'
 import { PointOnLineAtD } from '../points/PointOnLineAtD'
 import { Line, OptionsGraphiques } from './Line'
 import { Polyline } from './Polyline'
+import { PointByTranslation } from '../points/PointByTranslation'
+import { PointByReflectionOverLine } from '../points/PointByReflectionOverLine'
+import { PointByTranslationVector } from './../points/PointByTranslationVector'
+
 /**
  * Crée un segment d'extrémité A et B en appelant le constructeur de Line avec le lineType 'Segment'.
  */
@@ -133,25 +138,47 @@ export class Segment extends Line {
   }
 
   // usage : Segment.homothetie(segment, center, factor)
-  static homothetie (segment: Segment, center: Point, k:number|Measure) {
+  homothetie (center: Point, k:number|Measure) {
     try {
-      const M = new PointByHomothetie(segment.A, center, k, { temp: true })
-      const N = new PointByHomothetie(segment.B, center, k, { temp: true })
+      const M = new PointByHomothetie(this.A, center, k, { temp: true })
+      const N = new PointByHomothetie(this.B, center, k, { temp: true })
       return new Segment(M, N)
     } catch (error) {
       console.log('Erreur dans Segment.homothetie()', error)
-      return new Segment(segment.A, segment.A)
+      return new Segment(this.A, this.B)
     }
   }
 
-  static rotation (segment: Segment, center: Point, angle: number|Measure) {
+  translationVector (v: Vector): Line {
     try {
-      const M = new PointByRotation(segment.A, center, angle, { temp: true })
-      const N = new PointByRotation(segment.B, center, angle, { temp: true })
+      const M = new PointByTranslationVector(this.A, v, { temp: true })
+      const N = new PointByTranslationVector(this.B, v, { temp: true })
       return new Segment(M, N)
     } catch (error) {
-      console.log('Erreur dans Segment.homothetie()', error)
-      return new Segment(segment.A, segment.A)
+      console.log('Erreur dans segment.translationVector', error)
+      return new Segment(this.A, this.B)
+    }
+  }
+
+  translation (xt:number|Measure, yt:number|Measure): Line {
+    try {
+      const M = new PointByTranslation(this.A, xt, yt, { temp: true })
+      const N = new PointByTranslation(this.B, xt, yt, { temp: true })
+      return new Segment(M, N)
+    } catch (error) {
+      console.log('Erreur dans segment.translation', error)
+      return new Segment(this.A, this.B)
+    }
+  }
+
+  reflectionOverLine (L: Line) {
+    try {
+      const M = new PointByReflectionOverLine(this.A, L, { temp: true })
+      const N = new PointByReflectionOverLine(this.B, L, { temp: true })
+      return new Segment(M, N)
+    } catch (error) {
+      console.log('Erreur dans Segment.reflectionOverLine()', error)
+      return new Segment(this.A, this.B)
     }
   }
 
@@ -166,14 +193,14 @@ export class Segment extends Line {
     }
   }
 
-  static similitude (segment: Segment, center: Point, k: number|Measure, angle: number|Measure) {
+  similitude (center: Point, k: number|Measure, angle: number|Measure) {
     try {
-      const M = new PointBySimilitude(segment.A, center, k, angle, { temp: true })
-      const N = new PointBySimilitude(segment.B, center, k, angle, { temp: true })
+      const M = new PointBySimilitude(this.A, center, k, angle, { temp: true })
+      const N = new PointBySimilitude(this.B, center, k, angle, { temp: true })
       return new Segment(M, N)
     } catch (error) {
       console.log('Erreur dans Segment.homothetie()', error)
-      return new Segment(segment.A, segment.A)
+      return new Segment(this.A, this.B)
     }
   }
 }

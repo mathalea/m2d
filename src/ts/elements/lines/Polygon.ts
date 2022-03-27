@@ -1,3 +1,4 @@
+
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -13,6 +14,15 @@ import { Point, PointStyle } from '../points/Point'
 import { PointOnLineAtD } from '../points/PointOnLineAtD'
 import { Segment } from './Segment'
 import { TextByPoint } from '../texts/TextByPoint'
+import { PointByRotation } from '../points/PointByRotation'
+import { Measure } from '../measures/Measure'
+import { PointBySimilitude } from '../points/PointBySimilitude'
+import { Vector } from '../others/Vector'
+import { Line } from './Line'
+import { PointByReflectionOverLine } from './../points/PointByReflectionOverLine'
+import { PointByTranslationVector } from './../points/PointByTranslationVector'
+import { PointByHomothetie } from './../points/PointByHomothetie'
+import { PointByTranslation } from './../points/PointByTranslation'
 /**
  * Crée un polygone (ligne brisée fermée) à partir d'un array d'instances de Point.
  */
@@ -92,6 +102,84 @@ export class Polygon extends Element2D {
       } catch (error) {
         console.log('Erreur dans Polygone.latex()', error)
         return ''
+      }
+    }
+
+    rotation (center:Point, angle:number|Measure) {
+      try {
+        const points: Point[] = []
+        for (let i = 0; i < this.points.length; i++) {
+          points[i] = new PointByRotation(this.points[i], center, angle, { temp: true })
+        }
+        return new Polygon(...points)
+      } catch (error) {
+        console.log('Erreur dans Polygon.rotation()', error)
+        return new Polygon(...this.points)
+      }
+    }
+
+    similitude (center:Point, k: number|Measure, angle:number|Measure) {
+      try {
+        const points: Point[] = []
+        for (let i = 0; i < this.points.length; i++) {
+          points[i] = new PointBySimilitude(this.points[i], center, k, angle, { temp: true })
+        }
+        return new Polygon(...points)
+      } catch (error) {
+        console.log('Erreur dans Polygon.similitude()', error)
+        return new Polygon(...this.points)
+      }
+    }
+
+    translation (xt:number|Measure, yt:number|Measure) {
+      try {
+        const points: Point[] = []
+        for (let i = 0; i < this.points.length; i++) {
+          points[i] = new PointByTranslation(this.points[i], xt, yt, { temp: true })
+        }
+        return new Polygon(...points)
+      } catch (error) {
+        console.log('Erreur dans Polygon.translation()', error)
+        return new Polygon(...this.points)
+      }
+    }
+
+    translationVector (v:Vector) {
+      try {
+        const points: Point[] = []
+        for (let i = 0; i < this.points.length; i++) {
+          points[i] = new PointByTranslationVector(this.points[i], v, { temp: true })
+        }
+        return new Polygon(...points)
+      } catch (error) {
+        console.log('Erreur dans Polygon.translationVector()', error)
+        return new Polygon(...this.points)
+      }
+    }
+
+    homothetie (center:Point, k: number|Measure) {
+      try {
+        const points: Point[] = []
+        for (let i = 0; i < this.points.length; i++) {
+          points[i] = new PointByHomothetie(this.points[i], center, k, { temp: true })
+        }
+        return new Polygon(...points)
+      } catch (error) {
+        console.log('Erreur dans Polygon.homothetie()', error)
+        return new Polygon(...this.points)
+      }
+    }
+
+    reflectionOverLine (L: Line) {
+      try {
+        const points: Point[] = []
+        for (let i = 0; i < this.points.length; i++) {
+          points[i] = new PointByReflectionOverLine(this.points[i], L, { temp: true })
+        }
+        return new Polygon(...points)
+      } catch (error) {
+        console.log('Erreur dans Polygon.reflectionOverLine()', error)
+        return new Polygon(...this.points)
       }
     }
 }

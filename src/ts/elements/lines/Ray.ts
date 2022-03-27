@@ -8,8 +8,14 @@
  */
 
 import { Measure } from '../measures/Measure'
+import { Vector } from '../others/Vector'
 import { Point } from '../points/Point'
+import { PointByHomothetie } from '../points/PointByHomothetie'
+import { PointByReflectionOverLine } from '../points/PointByReflectionOverLine'
 import { PointByRotation } from '../points/PointByRotation'
+import { PointBySimilitude } from '../points/PointBySimilitude'
+import { PointByTranslation } from '../points/PointByTranslation'
+import { PointByTranslationVector } from '../points/PointByTranslationVector'
 import { Line, OptionsGraphiques } from './Line'
 /**
  * Crée une demi-droite d'origine A passant par B en appelant le constructeur de Line avec le lineType 'Ray'.
@@ -48,7 +54,63 @@ export class Ray extends Line {
       return new Ray(this.A, this.B)
     }
   }
+
+  homothetie (center: Point, k:number|Measure) {
+    try {
+      const M = new PointByHomothetie(this.A, center, k, { temp: true })
+      const N = new PointByHomothetie(this.B, center, k, { temp: true })
+      return new Ray(M, N)
+    } catch (error) {
+      console.log('Erreur dans Ray.homothetie()', error)
+      return new Ray(this.A, this.B)
+    }
+  }
+
+  translationVector (v: Vector): Line {
+    try {
+      const M = new PointByTranslationVector(this.A, v, { temp: true })
+      const N = new PointByTranslationVector(this.B, v, { temp: true })
+      return new Ray(M, N)
+    } catch (error) {
+      console.log('Erreur dans segment.translationVector', error)
+      return new Ray(this.A, this.B)
+    }
+  }
+
+  translation (xt:number|Measure, yt:number|Measure): Line {
+    try {
+      const M = new PointByTranslation(this.A, xt, yt, { temp: true })
+      const N = new PointByTranslation(this.B, xt, yt, { temp: true })
+      return new Ray(M, N)
+    } catch (error) {
+      console.log('Erreur dans segment.translation', error)
+      return new Ray(this.A, this.B)
+    }
+  }
+
+  reflectionOverLine (L: Line) {
+    try {
+      const M = new PointByReflectionOverLine(this.A, L, { temp: true })
+      const N = new PointByReflectionOverLine(this.B, L, { temp: true })
+      return new Ray(M, N)
+    } catch (error) {
+      console.log('Erreur dans Ray.reflectionOverLine()', error)
+      return new Ray(this.A, this.B)
+    }
+  }
+
+  similitude (center: Point, k: number|Measure, angle: number|Measure) {
+    try {
+      const M = new PointBySimilitude(this.A, center, k, angle, { temp: true })
+      const N = new PointBySimilitude(this.B, center, k, angle, { temp: true })
+      return new Ray(M, N)
+    } catch (error) {
+      console.log('Erreur dans Ray.homothetie()', error)
+      return new Ray(this.A, this.B)
+    }
+  }
 }
+
 function getRayCoordsOut (A: Point, B: Point) {
   try {
     const parentFigure = A.parentFigure
