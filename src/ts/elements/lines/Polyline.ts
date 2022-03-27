@@ -73,7 +73,7 @@ export class Polyline extends Element2D {
       }
     }
 
-    translationXY (xt:number|Measure, yt:number|Measure) {
+    translation (xt:number|Measure, yt:number|Measure) {
       try {
         const points: Point[] = []
         for (let i = 0; i < this.points.length; i++) {
@@ -81,12 +81,12 @@ export class Polyline extends Element2D {
         }
         return new Polygon(...points)
       } catch (error) {
-        console.log('Erreur dans Polyline.translationXY()', error)
+        console.log('Erreur dans Polyline.translation()', error)
         return new Polygon(...this.points)
       }
     }
 
-    translationV (v:Vector) {
+    translationVector (v:Vector) {
       try {
         const points: Point[] = []
         for (let i = 0; i < this.points.length; i++) {
@@ -94,7 +94,7 @@ export class Polyline extends Element2D {
         }
         return new Polygon(...points)
       } catch (error) {
-        console.log('Erreur dans Polyline.translationV()', error)
+        console.log('Erreur dans Polyline.translationVector()', error)
         return new Polygon(...this.points)
       }
     }

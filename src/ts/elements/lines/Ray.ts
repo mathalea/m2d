@@ -66,24 +66,24 @@ export class Ray extends Line {
     }
   }
 
-  translationV (v: Vector): Line {
+  translationVector (v: Vector): Line {
     try {
       const M = new PointByTranslationVector(this.A, v, { temp: true })
       const N = new PointByTranslationVector(this.B, v, { temp: true })
       return new Ray(M, N)
     } catch (error) {
-      console.log('Erreur dans segment.translationV', error)
+      console.log('Erreur dans segment.translationVector', error)
       return new Ray(this.A, this.B)
     }
   }
 
-  translationXY (xt:number|Measure, yt:number|Measure): Line {
+  translation (xt:number|Measure, yt:number|Measure): Line {
     try {
       const M = new PointByTranslation(this.A, xt, yt, { temp: true })
       const N = new PointByTranslation(this.B, xt, yt, { temp: true })
       return new Ray(M, N)
     } catch (error) {
-      console.log('Erreur dans segment.translationXY', error)
+      console.log('Erreur dans segment.translation', error)
       return new Ray(this.A, this.B)
     }
   }

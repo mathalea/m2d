@@ -200,7 +200,7 @@ export class Line extends Element2D {
     }
   }
 
-  translationXY (xt:number|Measure, yt:number|Measure) {
+  translation (xt:number|Measure, yt:number|Measure) {
     try {
       const M = new PointByTranslation(this.A, xt, yt, { temp: true })
       const N = new PointByTranslation(this.B, xt, yt, { temp: true })
@@ -211,7 +211,7 @@ export class Line extends Element2D {
     }
   }
 
-  translationV (v:Vector) {
+  translationVector (v:Vector) {
     try {
       const M = new PointByTranslationVector(this.A, v, { temp: true })
       const N = new PointByTranslationVector(this.B, v, { temp: true })
