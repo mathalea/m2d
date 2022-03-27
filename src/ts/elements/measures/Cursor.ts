@@ -53,7 +53,6 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
   this.tab.addChild(this.display)
   this.tab.addChild(this)
   this.tab.addChild(this.calcul)
-  this.tab.style = 'x'
 }
 
 update () {

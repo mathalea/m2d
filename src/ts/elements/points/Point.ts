@@ -9,12 +9,12 @@
 
 import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
-import { Circle } from '../lines/Circle'
 import { Cross } from '../others/Cross'
 import { TextByPoint } from '../texts/TextByPoint'
 import { Measure } from '../measures/Measure'
 import { Coords } from '../others/Coords'
 import { Const } from '../measures/Const'
+import { RoundMark } from '../others/RoundMark'
 
 export type PointStyle = 'x' | 'o' | ''
 export type PointOptions = { label?: string, style?: PointStyle, size?: number, color?: string, thickness?: number, draggable?: boolean, temp?: boolean, snapToGrid?: boolean, labelDx?: number, labelDy?: number, exist?: boolean }
@@ -113,12 +113,8 @@ export class Point extends Element2D {
         this.g.appendChild(M.g)
         this.removeChild(M)
       }
-      if (this.mark instanceof Cross && this.exist) {
+      if ((this.mark instanceof Cross || this.mark instanceof RoundMark) && this.exist) {
         ;[this.mark.x, this.mark.y] = [x, y]
-        this.mark.update()
-      }
-      if (this.mark instanceof Circle && this.exist) {
-        this.mark.moveCenter(x, y)
         this.mark.update()
       }
     } catch (error) {
@@ -155,9 +151,7 @@ export class Point extends Element2D {
    */
   private changeStyle (style: 'x' | 'o' | '') {
     if (this.mark !== null) this.parentFigure.set.delete(this.mark)
-    if (style === '') {
-      this.g.remove()
-    }
+    this.g.remove()
     if (style === 'x' && this.exist) {
       const X = new Cross(this.parentFigure, this.x, this.y)
       this.mark = X
@@ -167,12 +161,10 @@ export class Point extends Element2D {
       this.mark.thickness = this.thickness
     }
     if (style === 'o' && this.exist) {
-      // Rond
-      const C = new Circle(this, this.size)
-      this.mark = C
-      this.group.push(C)
-      this.g.appendChild(C.g)
-      C.fill = this.color
+      const o = new RoundMark(this.parentFigure, this.x, this.y)
+      this.mark = o
+      this.group.push(o)
+      this.g = o.g
       this.mark.color = this.color
       this.mark.thickness = this.thickness
     }
