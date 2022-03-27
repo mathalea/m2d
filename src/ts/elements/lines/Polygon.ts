@@ -32,6 +32,7 @@ export class Polygon extends Element2D {
   barycenter: Point
   labels: TextByPoint[]
   label: string
+  segments : Segment[]
   // ToFix il manque une méthode color mais comment savoir que l'on clique sur un polygone (il faut créer des segments virtuels ?)
     private _style: PointStyle
     constructor (...points: Point[]) {
@@ -42,6 +43,7 @@ export class Polygon extends Element2D {
       this.opacity = 1
       this.labels = []
       this.labelsPoints = []
+      this.segments = []
 
       this.g = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
       this.g.setAttribute('points', listeXY(this.points))
@@ -63,6 +65,10 @@ export class Polygon extends Element2D {
         if (name) point.labelElement = (new TextByPoint(this.labelsPoints[this.labelsPoints.length - 1], name))
         point.addChild(this)
       }
+      for (let i = 0; i < points.length - 1; i++) {
+        this.segments.push(new Segment(points[i], points[i + 1], { thickness: 0 }))
+      }
+      this.segments.push(new Segment(points[points.length - 1], points[0], { thickness: 0 }))
 
       // On supprime les marques des points
       this.style = ''
@@ -180,6 +186,19 @@ export class Polygon extends Element2D {
       } catch (error) {
         console.log('Erreur dans Polygon.reflectionOverLine()', error)
         return new Polygon(...this.points)
+      }
+    }
+
+    public distancePointer (pointerX: number, pointerY: number) {
+      try {
+        let distance = Infinity
+        for (const segment of this.segments) {
+          distance = Math.min(segment.distancePointer(pointerX, pointerY), distance)
+        }
+        return distance
+      } catch (error) {
+        console.log('Erreur dans Polygone.distancePointer', error)
+        return NaN
       }
     }
 }
