@@ -301,6 +301,18 @@ export class Line extends Element2D {
       return new Line(this.A, this.A)
     }
   }
+
+  /**
+   * Quand le pointeur se déplace en mode drag, la ligne va aussi se déplacer
+   * @param x coordonnées dans notre repère
+   * @param y
+   */
+  notifyPointerDeltaMove (x: number, y: number) {
+    if (this.A.draggable && this.B.draggable) {
+      this.A.moveTo(this.A.x + x, this.A.y + y)
+      this.B.moveTo(this.B.x + x, this.B.y + y)
+    }
+  }
 }
 // une droite coupe deux bords, on les détecte ici.
 function getCoordsOut (A: Point, B: Point) {

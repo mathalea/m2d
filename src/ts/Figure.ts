@@ -9,11 +9,12 @@
 
 import { Element2D } from './elements/Element2D'
 import { Point } from './elements/points/Point'
-import { OptionsGraphiques } from './elements/lines/Line'
+import { Line, OptionsGraphiques } from './elements/lines/Line'
 import { TextByPosition } from './elements/texts/TextByPosition'
 import { moveDrag, stopDrag } from './pointerAction/drag'
 import { handlePointerAction, initMessageAction } from './pointerAction/handlePointerAction'
 import { newPointByCoords } from './pointerAction/newPointByCoords'
+import { Coords } from './elements/others/Coords'
 
 export class Figure {
   width: number
@@ -22,8 +23,9 @@ export class Figure {
   set: Set<Element2D>
   selectedElements: Element2D[]
   isDynamic: boolean
-  setInDrag: Set<Point | TextByPosition>
+  setInDrag: Set<Point | TextByPosition | Line>
   isDraging: boolean
+  startDragCoords: Coords // Pour déplacer des Line, on sauvegarde où a commencé le drag
   xMin: number
   xMax: number
   yMin: number
@@ -53,6 +55,7 @@ export class Figure {
     this.pointerSetOptions = { color: 'black', thickness: 1 }
     this.setInDrag = new Set()
     this.isDraging = false
+    this.startDragCoords = new Coords(Infinity, Infinity)
     this.messageElement = null
 
     this.pointerX = null
