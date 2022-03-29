@@ -55,7 +55,9 @@ export class Polygon extends Element2D {
       this.barycenter = new Barycenter(this.points, { temp: true })
       this.label = this.points.reduce((name, currentLabel) => name + currentLabel.label, '')
       for (const point of points) {
-        this.labelsPoints.push(new PointOnLineAtD(new Segment(point, this.barycenter, { temp: true }), -0.5, { temp: true, style: '' }))
+        const s = new Segment(point, this.barycenter, { temp: true })
+        const pointForTextPosition = new PointOnLineAtD(s, -0.5, { temp: true, style: '' })
+        this.labelsPoints.push(pointForTextPosition)
         const name = point.label ?? ''
         // Le label du point est effacé pour être rattaché à un nouveau point qui dépend du barycentre
         if (point.labelElement) {

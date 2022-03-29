@@ -23,6 +23,14 @@ import { newRotation, actionNewRotationMessage } from './newRotation'
 import { newCircleByDistanceAndCenter, actionCircleByDistanceAndCenterMessage } from './newCircleByDistanceAndCenter'
 import { actionNewMiddleMessage, newMiddle } from './newMiddle'
 import { actionNewPointOnMessage, newPointOn } from './newPointOn'
+import { Point } from '../elements/points/Point'
+import { Circle } from '../elements/lines/Circle'
+import { Line } from '../elements/lines/Line'
+import { Polygon } from '../elements/lines/Polygon'
+import { TextByPosition } from '../elements/texts/TextByPosition'
+import { Element2D } from '../elements/Element2D'
+
+export type ClickedElements = {points: Point[], texts: TextByPosition[], lines: Line[], polygons: Polygon[], circles: Circle[], all: Element2D[] }
 
 export function handlePointerAction (figure: Figure, event: PointerEvent) {
   const [pointerX, pointerY] = figure.getPointerCoord(event)
@@ -47,7 +55,7 @@ export function handlePointerAction (figure: Figure, event: PointerEvent) {
   else if (figure.pointerAction === 'intersectionLL') newIntersection(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'polygon') newPolygon(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'reflectAboutPoint') newReflectAboutPoint(figure, pointerX, pointerY)
-  else if (figure.pointerAction === 'rotation') newRotation(figure, pointerX, pointerY)
+  else if (figure.pointerAction === 'rotation') newRotation(figure, clickedElements(figure, pointerX, pointerY))
   else if (figure.pointerAction === 'setOptions') setOptions(figure, pointerX, pointerY, figure.pointerSetOptions)
 }
 
@@ -73,4 +81,22 @@ export function initMessageAction (figure: Figure, pointerAction: string) {
   else if (pointerAction === 'polygon') actionNewPolygonMessage(figure)
   else if (pointerAction === 'reflectAboutPoint') actionNewReflectAboutPointMessage(figure)
   else if (pointerAction === 'rotation') actionNewRotationMessage(figure)
+}
+
+function clickedElements (figure: Figure, pointerX: number, pointerY: number, distanceInPixels = 15): ClickedElements {
+  const points = []
+  const texts = []
+  const lines = []
+  const polygons = []
+  const circles = []
+  for (const e of figure.set) {
+    if (e.isVisible && (e instanceof Line || e instanceof Circle || e instanceof Point || e instanceof Polygon || e instanceof TextByPosition) && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < distanceInPixels) {
+      if (e instanceof Point) points.push(e)
+      if (e instanceof TextByPosition) texts.push(e)
+      if (e instanceof Line) lines.push(e)
+      if (e instanceof Polygon) polygons.push(e)
+      if (e instanceof Circle) circles.push(e)
+    }
+  }
+  return { points, texts, lines, polygons, circles, all: [...points, ...texts, ...lines, ...polygons, ...circles] }
 }
