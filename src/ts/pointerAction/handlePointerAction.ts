@@ -22,10 +22,12 @@ import { newReflectAboutPoint, actionNewReflectAboutPointMessage } from './newRe
 import { newRotation, actionNewRotationMessage } from './newRotation'
 import { newCircleByDistanceAndCenter, actionCircleByDistanceAndCenterMessage } from './newCircleByDistanceAndCenter'
 import { actionNewMiddleMessage, newMiddle } from './newMiddle'
+import { actionNewPointOnMessage, newPointOn } from './newPointOn'
 
 export function handlePointerAction (figure: Figure, event: PointerEvent) {
   const [pointerX, pointerY] = figure.getPointerCoord(event)
   if (figure.pointerAction === 'freePoint') newPoint(figure, pointerX, pointerY)
+  else if (figure.pointerAction === 'pointOn') newPointOn(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'pointByCoords') newPointByCoords(figure)
   else if (figure.pointerAction === 'middle') newMiddle(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'drag') startDrag(figure, pointerX, pointerY)
@@ -54,6 +56,7 @@ export function initMessageAction (figure: Figure, pointerAction: string) {
   else if (pointerAction === 'erase') actionErasetMessage(figure)
   else if (pointerAction === 'hide') actionHideMessage(figure)
   else if (pointerAction === 'freePoint') figure.displayMessage('Cliquer pour créer un nouveau point')
+  else if (pointerAction === 'pointOn') actionNewPointOnMessage(figure)
   else if (pointerAction === 'middle') actionNewMiddleMessage(figure)
   else if (pointerAction === 'segment') actionNewSegmentMessage(figure)
   else if (pointerAction === 'circlePoint') actionNewCirclePointMessage(figure)

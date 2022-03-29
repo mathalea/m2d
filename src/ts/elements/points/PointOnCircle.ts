@@ -35,6 +35,7 @@ export class PointOnCircle extends Point {
     this.circle = C
     if (label !== undefined) this.label = label
     C.addChild(this)
+    this.update()
   }
 
   moveTo (x: number, y: number) {

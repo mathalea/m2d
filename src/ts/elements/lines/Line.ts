@@ -19,7 +19,7 @@ import { Angle } from '../measures/Angle'
 import { PointByRotation } from '../points/PointByRotation'
 import { PointBySimilitude } from '../points/PointBySimilitude'
 
-export type LineType = 'Line' | 'Segment' | 'Ray'
+export type LineType = 'Line' | 'Segment' | 'Ray' | 'Cursor'
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
 export type OptionsGraphiques = { color?: string, style?: SegmentStyle, thickness?: number, fill?: string, add1?: number, add2?: number, temp?: boolean, dashed?: boolean, lineType?: LineType }
 /**
@@ -308,7 +308,7 @@ export class Line extends Element2D {
    * @param y
    */
   notifyPointerDeltaMove (x: number, y: number) {
-    if (this.A.draggable && this.B.draggable) {
+    if ((this.A.draggable && this.B.draggable) || this.lineType === 'Cursor') {
       this.A.moveTo(this.A.x + x, this.A.y + y)
       this.B.moveTo(this.B.x + x, this.B.y + y)
     }

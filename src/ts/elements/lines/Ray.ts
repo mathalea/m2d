@@ -8,6 +8,7 @@
  */
 
 import { Measure } from '../measures/Measure'
+import { Coords } from '../others/Coords'
 import { Vector } from '../others/Vector'
 import { Point } from '../points/Point'
 import { PointByHomothetie } from '../points/PointByHomothetie'
@@ -107,6 +108,18 @@ export class Ray extends Line {
     } catch (error) {
       console.log('Erreur dans Ray.homothetie()', error)
       return new Ray(this.A, this.B)
+    }
+  }
+
+  public distancePointer (pointerX: number, pointerY: number) {
+    try {
+      const M = Coords.orthogonalProjectionCoord({ x: pointerX, y: pointerY }, this)
+      // Pour les points hors de la demi-droite, la distance est infinie
+      if ((this.A.x < this.B.x && M.x < this.A.x) || (this.B.x < this.A.x && M.x > this.A.x) || (this.A.y < this.B.y && M.y < this.A.y) || (this.B.y < this.A.y && M.y > this.A.y)) return Infinity
+      return Point.distance(M, { x: pointerX, y: pointerY })
+    } catch (error) {
+      console.log('Erreur dans Line.distancePointer', error)
+      return NaN
     }
   }
 }
