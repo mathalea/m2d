@@ -1,3 +1,4 @@
+import { Const } from './../measures/Const'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -9,27 +10,28 @@
 
 import { Figure } from '../../Figure'
 import { Element2D } from '../Element2D'
+import { Measure } from '../measures/Measure'
 /**
  * Crée un affichage de texte à la position (x;y).
  * x et y sont des nombres (constantes). ToFix : peut-être pourrait-on ajouter les instances de classes dérivée de Measure.
  */
 export class TextByPosition extends Element2D {
-    private _x: number
-    private _y: number
+    private _x: Measure
+    private _y: Measure
     private _text: string
     private _anchor: 'start' | 'middle' | 'end'
     snapToGrid: boolean
-    constructor (figure: Figure, x: number, y: number, text: string, { anchor = 'middle', temp = false, draggable = true, color = 'black', snapToGrid = false }: {anchor?: 'start' | 'middle' | 'end', temp?: boolean, draggable?: boolean, color?: string, snapToGrid?: boolean} = {}) {
+    constructor (figure: Figure, x: number|Measure, y: number|Measure, text: string, { anchor = 'middle', temp = false, draggable = true, color = 'black', snapToGrid = false }: {anchor?: 'start' | 'middle' | 'end', temp?: boolean, draggable?: boolean, color?: string, snapToGrid?: boolean} = {}) {
       super(figure)
       this.anchor = anchor
       this.g = document.createElementNS('http://www.w3.org/2000/svg', 'text')
       // ToFix est-ce bien nécessaire d'initialiser ainsi ces paramètres ?
-      this._x = x
-      this._y = y
+      this._x = (x instanceof Measure) ? x : new Const(figure, x)
+      this._y = (y instanceof Measure) ? y : new Const(figure, y)
       this._text = ''
       this._anchor = anchor
-      this.x = x
-      this.y = y
+      this.x = this._x.value
+      this.y = this._y.value
       this.text = text ?? ''
       this.text = text.replace(/\d+\.\d+/g, (number: string) => (Math.round(10 * parseFloat(number)) / 10).toString())
       this.draggable = draggable
@@ -57,21 +59,21 @@ export class TextByPosition extends Element2D {
     }
 
     get x () {
-      return this._x
+      return this._x.value
     }
 
-    set x (x) {
+    set x (x: number) {
       this.g.setAttribute('x', `${this.parentFigure.xToSx(x)}`)
-      this._x = x
+      this._x.value = x
     }
 
     get y () {
-      return this._y
+      return this._y.value
     }
 
-    set y (y) {
+    set y (y: number) {
       this.g.setAttribute('y', `${this.parentFigure.yToSy(y)}`)
-      this._y = y
+      this._y.value = y
     }
 
     get text () {
@@ -81,6 +83,11 @@ export class TextByPosition extends Element2D {
     set text (text) {
       this.g.textContent = `${text}`
       this._text = text
+    }
+
+    moveTo (x: number, y: number) {
+      this.x = x
+      this.y = y
     }
 
     update (): void {
@@ -110,8 +117,7 @@ export class TextByPosition extends Element2D {
    * @param y
    */
     notifyPointerMove (x: number, y: number) {
-      this.x = x
-      this.y = y
+      this.moveTo(x, y)
     }
 
     /**

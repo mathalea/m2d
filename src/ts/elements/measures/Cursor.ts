@@ -1,3 +1,4 @@
+import { PointByTranslation } from './../points/PointByTranslation'
 import { Distance } from './Distance'
 import { CalculDynamic } from './CalculDynamic'
 /*
@@ -19,6 +20,7 @@ import { Measure } from './Measure'
 export class Cursor extends Measure {
   tab: Point
   origin: Point
+  end: Point
   length: number
 line: Segment
 min: number
@@ -38,9 +40,10 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
   this.step = step
   this.max = max
   this.min = min
-  const M = new Point(svgContainer, x, y, { temp: true, draggable: false })
-  const N = new Point(svgContainer, x + length, y, { temp: true, draggable: false })
+  const M = new Point(svgContainer, x, y, { temp: true })
+  const N = new PointByTranslation(M, length, 0, { temp: true, draggable: false })
   this.origin = M
+  this.end = N
   this.line = new Segment(M, N)
   this.line.lineType = 'Cursor'
   this.line.thickness = 4
@@ -50,7 +53,7 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
   this.position = new Distance(M, this.tab)
   this.calcul = new CalculDynamic((args: Measure[]) => this.min + Math.round((this.max - this.min) * args[0].value / this.length / this.step) * this.step, [this.position])
   this.value = this.calcul.value
-  this.display = new DisplayMeasure(this.origin.x + this.length + 0.5, this.tab.y, this, { precision: 2, draggable: false })
+  this.display = new DisplayMeasure(this.end.x + 0.5, this.tab.y, this, { precision: 2, draggable: true })
   this.tab.addChild(this.display)
   this.tab.addChild(this)
   this.tab.addChild(this.calcul)
@@ -58,6 +61,8 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
 
 update () {
   this.value = this.calcul.value
+  this.display.x = this.end.x + 0.5
+  this.display.y = this.tab.y
   this.notifyAllChilds()
 }
 }

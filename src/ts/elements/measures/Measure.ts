@@ -12,7 +12,7 @@ import { Element2D } from '../Element2D'
 
 export abstract class Measure {
     parentFigure: Figure
-    value: number
+    private _value: number
     childs: (Element2D | Measure)[]
     parents: (Element2D | Measure)[]
     private _exist: boolean
@@ -20,8 +20,16 @@ export abstract class Measure {
       this.parentFigure = parentFigure
       this.childs = []
       this.parents = []
-      this.value = 0
+      this._value = 0
       this._exist = true
+    }
+
+    set value (x) {
+      this._value = x
+    }
+
+    get value () {
+      return this._value
     }
 
     abstract update ():void
