@@ -1,3 +1,4 @@
+import { Const } from './../measures/Const'
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
  *
@@ -14,18 +15,28 @@ import { Point, PointOptions } from './Point'
  * xt et yt sont des nombres (constantes). ToFix : pourquoi ne pas ajouter les instances de classes dérivées de Measure ?
  */
 export class PointByTranslation extends Point {
-    xt: number | Measure
-    yt: number | Measure
+    xt: Measure
+    yt: Measure
     previous: Point
     constructor (A: Point, xt: number|Measure, yt: number|Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
-      super(A.parentFigure, A.x + (xt instanceof Measure ? xt.value : xt), A.y + (yt instanceof Measure ? yt.value : yt), { style, size, thickness, color, draggable, temp })
+      super(A.parentFigure, A.x, A.y, { style, size, thickness, color, draggable, temp })
+
+      if (typeof xt === 'number') {
+        xt = new Const(A.parentFigure, xt)
+      } else {
+        xt.addChild(this)
+      }
+      if (typeof yt === 'number') {
+        yt = new Const(A.parentFigure, yt)
+      } else {
+        yt.addChild(this)
+      }
+      this.moveTo(A.x + xt.value, A.y + yt.value)
       this.xt = xt
       this.yt = yt
       this.previous = A
       if (label !== undefined) this.label = label
       A.addChild(this)
-      if (xt instanceof Measure) xt.addChild(this)
-      if (yt instanceof Measure) yt.addChild(this)
     }
 
     update (): void {

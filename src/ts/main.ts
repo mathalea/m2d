@@ -1,3 +1,6 @@
+import { VectorByPoints } from './elements/others/VectorByPoints'
+import { Vector } from './elements/others/Vector'
+import { PointByTranslation } from './elements/points/PointByTranslation'
 import { Figure } from './Figure'
 import { PointByRotation } from './elements/points/PointByRotation'
 import { Point } from './elements/points/Point'
@@ -46,11 +49,14 @@ const angle = new Cursor(figure, -4, 6, { min: -180, max: 180, step: 1, length: 
 const O = new Point(figure, 0, 0, { label: 'O' })
 const A = new Point(figure, 5, 1, { label: 'A' })
 const B = new Point(figure, 3, 6, { label: 'B' })
-const P = new Point(figure, 0, 5, { label: 'P' })
-const H = new Point(figure, -2, 4)
-const p = new Polygon(O, A, B, P)
-const OH = new Line(O, H)
-const p1 = p.rotation(O, angle)
-const p2 = p.homothetie(O, k)
-const p3 = p.reflectionOverLine(OH)
-const L4 = p.similitude(A, k, angle)
+const D = new Point(figure, -5, 4, { label: 'D' })
+const C = new Circle(O, A)
+const V = new VectorByPoints(B, D)
+const AB = new Line(A, B)
+const C1 = C.reflectionOverLine(AB)
+const C2 = C.homothetie(B, k)
+const C3 = C.rotation(A, angle)
+const C4 = C.translationVector(V)
+C3.dashed = true
+C3.color = 'pink'
+C2.color = 'purple'
