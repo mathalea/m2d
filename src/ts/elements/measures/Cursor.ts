@@ -45,7 +45,7 @@ constructor (svgContainer: Figure, x: number, y: number, { min = 0, max = 1, ste
   this.origin = M
   this.end = N
   this.line = new Segment(M, N)
-  this.line.draggable = false
+  this.line.lineType = 'Cursor'
   this.line.thickness = 4
   this.line.color = 'black'
   this.tab = new PointOnSegment(this.line, { draggable: true, style: 'o', color: 'blue', length: length * (Math.max(Math.min(value, max), min) - min) / (max - min) }) // on s'assure que la valeur est comprise entre min et max.

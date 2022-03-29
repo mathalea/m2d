@@ -16,15 +16,23 @@ export function moveDrag (figure: Figure, pointerX: number, pointerY: number) {
 }
 
 export function actionStartDrag (figure: Figure, pointerX: number, pointerY: number) {
+  const pointsNearClick = []
+  const textsNearClick = []
+  const linesNearClick = []
   for (const e of figure.set) {
     if (e.draggable && (e instanceof Point || e instanceof TextByPosition || e instanceof Line) && e.distancePointer(pointerX, pointerY) * figure.pixelsPerUnit < 15) {
-      // ToFix est-ce qu'on garde le fait de pouvoir déplacer plusieurs points en même temps
-      // Un set de taille 1 est inutile autant avoir un unique élément
-      if (figure.setInDrag.size < 1) {
-        figure.startDragCoords = { x: pointerX, y: pointerY }
-        figure.setInDrag.add(e)
-        figure.isDraging = true
-      }
+      if (e instanceof Point) pointsNearClick.push(e)
+      else if (e instanceof Text) textsNearClick.push(e)
+      else if (e instanceof Line) linesNearClick.push(e)
+    }
+  }
+  // On priorise les points sur les lines
+  // Si on peut déplacer un point, on le fait
+  for (const e of [...pointsNearClick, ...textsNearClick, ...linesNearClick]) {
+    if (figure.setInDrag.size < 1) {
+      figure.startDragCoords = { x: pointerX, y: pointerY }
+      figure.setInDrag.add(e)
+      figure.isDraging = true
     }
   }
 }

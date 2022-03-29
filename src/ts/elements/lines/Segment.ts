@@ -19,6 +19,7 @@ import { Polyline } from './Polyline'
 import { PointByTranslation } from '../points/PointByTranslation'
 import { PointByReflectionOverLine } from '../points/PointByReflectionOverLine'
 import { PointByTranslationVector } from './../points/PointByTranslationVector'
+import { Coords } from '../others/Coords'
 
 /**
  * Crée un segment d'extrémité A et B en appelant le constructeur de Line avec le lineType 'Segment'.
@@ -201,6 +202,18 @@ export class Segment extends Line {
     } catch (error) {
       console.log('Erreur dans Segment.homothetie()', error)
       return new Segment(this.A, this.B)
+    }
+  }
+
+  public distancePointer (pointerX: number, pointerY: number) {
+    try {
+      const M = Coords.orthogonalProjectionCoord({ x: pointerX, y: pointerY }, this)
+      // Pour les points hors du segments, la distance est infinie
+      if (M.x < Math.min(this.A.x, this.B.x) || M.x > Math.max(this.A.x, this.B.x) || M.y < Math.min(this.A.y, this.B.y) || M.y > Math.max(this.A.y, this.B.y)) return Infinity
+      return Point.distance(M, { x: pointerX, y: pointerY })
+    } catch (error) {
+      console.log('Erreur dans Line.distancePointer', error)
+      return NaN
     }
   }
 }
