@@ -67,6 +67,10 @@ export class Figure {
     this.svg.setAttribute('viewBox', `${this.xToSx(this.xMin)} ${this.yToSy(this.yMax)} ${this.width} ${this.height}`)
     // Pour éviter le scroll quand on manipule la figure sur un écran tactile
     this.svg.style.touchAction = 'none'
+    const style = document.createElementNS('http://www.w3.org/2000/svg', 'style')
+    this.svg.appendChild(style)
+    style.type = 'text/css'
+    style.innerHTML = '.onlyOver:hover { opacity: 1; }'
 
     if (this.isDynamic) this.listenPointer()
   }

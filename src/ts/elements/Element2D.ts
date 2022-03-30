@@ -281,4 +281,14 @@ export abstract class Element2D {
     this.color = this._color
     this.thickness = this._thickness
   }
+
+  setVisibleOnlyHover () {
+    this.g.classList.add('onlyOver')
+    this.g.setAttribute('opacity', '0')
+  }
+
+  endVisibleOnlyOver () {
+    this.g.classList.remove('onlyOver')
+    this.g.removeAttribute('opacity')
+  }
 }

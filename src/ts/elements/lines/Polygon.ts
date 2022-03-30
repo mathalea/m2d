@@ -55,6 +55,7 @@ export class Polygon extends Element2D {
       this.barycenter = new Barycenter(this.points, { temp: true })
       this.label = this.points.reduce((name, currentLabel) => name + currentLabel.label, '')
       for (const point of points) {
+        if (point.mark) point.mark.setVisibleOnlyHover()
         const s = new Segment(point, this.barycenter, { temp: true })
         const pointForTextPosition = new PointOnLineAtD(s, -0.5, { temp: true, style: '' })
         this.labelsPoints.push(pointForTextPosition)
@@ -71,9 +72,6 @@ export class Polygon extends Element2D {
         this.segments.push(new Segment(points[i], points[i + 1], { thickness: 0 }))
       }
       this.segments.push(new Segment(points[points.length - 1], points[0], { thickness: 0 }))
-
-      // On supprime les marques des points
-      this.style = ''
     }
 
     update (): void {

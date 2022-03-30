@@ -20,15 +20,20 @@ export class Cross extends Element2D {
     segment1: SVGLineElement
     segment2: SVGLineElement
     label: string
-    constructor (svgContainer: Figure, x: number, y: number, { color = 'blue', size = 0.15, thickness = 2, label = '' }: {color?: string, size?: number, thickness?: number, label?: string} = {}) {
+    visibleOnlyOver: boolean // Permet de cacher les points sauf lorsqu'ils sont survolés
+    constructor (svgContainer: Figure, x: number, y: number, { color = 'blue', size = 0.15, thickness = 2, label = '', visibleOnlyOver = false }: {color?: string, size?: number, thickness?: number, label?: string, visibleOnlyOver?: boolean} = {}) {
       super(svgContainer)
       this.x = x
       this.y = y
       this.size = size
+      this.visibleOnlyOver = visibleOnlyOver
       this.segment1 = document.createElementNS('http://www.w3.org/2000/svg', 'line')
       this.segment2 = document.createElementNS('http://www.w3.org/2000/svg', 'line')
       this.g.appendChild(this.segment1)
       this.g.appendChild(this.segment2)
+      if (visibleOnlyOver) {
+        this.setVisibleOnlyHover()
+      }
       this.parentFigure.svg.appendChild(this.g)
       this.update()
       this.color = color
