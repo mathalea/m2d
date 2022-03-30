@@ -60,9 +60,8 @@ export function handlePointerAction (figure: Figure, event: PointerEvent) {
   else if (figure.pointerAction === 'reflectAboutPoint') newReflectAboutPoint(clickedElements)
   else if (figure.pointerAction === 'rotation') newRotation(clickedElements)
   else if (figure.pointerAction === 'setOptions') setOptions(figure, pointerX, pointerY, figure.pointerSetOptions)
-  else if (figure.pointerAction === 'reflectionOverLine') newReflectionOverLine(figure, clickedElements(figure, pointerX, pointerY))
-  else if (figure.pointerAction === 'homothetie') newHomothetie(figure, clickedElements(figure, pointerX, pointerY))
-  
+  else if (figure.pointerAction === 'reflectionOverLine') newReflectionOverLine(clickedElements)
+  else if (figure.pointerAction === 'homothetie') newHomothetie(clickedElements)
 }
 
 export function initMessageAction (figure: Figure, pointerAction: string) {

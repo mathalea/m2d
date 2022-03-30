@@ -6,7 +6,8 @@ import { PointByReflectionOverLine } from '../elements/points/PointByReflectionO
 import { Figure } from '../Figure'
 import { ClickedElements } from './handlePointerAction'
 
-export function newReflectionOverLine (figure: Figure, clickedElements: ClickedElements) {
+export function newReflectionOverLine (clickedElements: ClickedElements) {
+  const figure = clickedElements.figure
   for (const e of clickedElements.all) {
     if (figure.selectedElements.length === 0 && e instanceof Line) {
       e.select()

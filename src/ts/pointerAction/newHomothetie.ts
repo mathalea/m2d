@@ -6,7 +6,8 @@ import { Polygon } from '../elements/lines/Polygon'
 import { ClickedElements } from './handlePointerAction'
 import { PointByHomothetie } from '../elements/points/PointByHomothetie'
 
-export function newHomothetie (figure: Figure, clickedElements: ClickedElements) {
+export function newHomothetie (clickedElements: ClickedElements) {
+  const figure = clickedElements.figure
   for (const e of clickedElements.all) {
     if (figure.selectedElements.length === 0 && e instanceof Point) {
       e.select()
