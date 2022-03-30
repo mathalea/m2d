@@ -29,6 +29,8 @@ import { Line } from '../elements/lines/Line'
 import { Polygon } from '../elements/lines/Polygon'
 import { TextByPosition } from '../elements/texts/TextByPosition'
 import { Element2D } from '../elements/Element2D'
+import { actionNewReflectionOverLineMessage, newReflectionOverLine } from './newReflectionOverLine'
+import { actionNewHomothetieMessage, newHomothetie } from './newHomothetie'
 
 export type ClickedElements = {points: Point[], texts: TextByPosition[], lines: Line[], polygons: Polygon[], circles: Circle[], all: Element2D[], figure: Figure }
 
@@ -58,6 +60,9 @@ export function handlePointerAction (figure: Figure, event: PointerEvent) {
   else if (figure.pointerAction === 'reflectAboutPoint') newReflectAboutPoint(clickedElements)
   else if (figure.pointerAction === 'rotation') newRotation(clickedElements)
   else if (figure.pointerAction === 'setOptions') setOptions(figure, pointerX, pointerY, figure.pointerSetOptions)
+  else if (figure.pointerAction === 'reflectionOverLine') newReflectionOverLine(figure, clickedElements(figure, pointerX, pointerY))
+  else if (figure.pointerAction === 'homothetie') newHomothetie(figure, clickedElements(figure, pointerX, pointerY))
+  
 }
 
 export function initMessageAction (figure: Figure, pointerAction: string) {
@@ -82,6 +87,8 @@ export function initMessageAction (figure: Figure, pointerAction: string) {
   else if (pointerAction === 'polygon') actionNewPolygonMessage(figure)
   else if (pointerAction === 'reflectAboutPoint') actionNewReflectAboutPointMessage(figure)
   else if (pointerAction === 'rotation') actionNewRotationMessage(figure)
+  else if (pointerAction === 'reflectionOverLine') actionNewReflectionOverLineMessage(figure)
+  else if (pointerAction === 'homothetie') actionNewHomothetieMessage(figure)
 }
 
 function getClickedElements (figure: Figure, pointerX: number, pointerY: number, distanceInPixels = 15): ClickedElements {
