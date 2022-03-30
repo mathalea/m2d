@@ -30,10 +30,11 @@ import { Polygon } from '../elements/lines/Polygon'
 import { TextByPosition } from '../elements/texts/TextByPosition'
 import { Element2D } from '../elements/Element2D'
 
-export type ClickedElements = {points: Point[], texts: TextByPosition[], lines: Line[], polygons: Polygon[], circles: Circle[], all: Element2D[] }
+export type ClickedElements = {points: Point[], texts: TextByPosition[], lines: Line[], polygons: Polygon[], circles: Circle[], all: Element2D[], figure: Figure }
 
 export function handlePointerAction (figure: Figure, event: PointerEvent) {
   const [pointerX, pointerY] = figure.getPointerCoord(event)
+  const clickedElements = getClickedElements(figure, pointerX, pointerY)
   if (figure.pointerAction === 'freePoint') newPoint(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'pointOn') newPointOn(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'pointByCoords') newPointByCoords(figure)
@@ -53,9 +54,9 @@ export function handlePointerAction (figure: Figure, event: PointerEvent) {
   else if (figure.pointerAction === 'perpendicular') newPerpendicular(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'parallel') newParallel(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'intersectionLL') newIntersection(figure, pointerX, pointerY)
-  else if (figure.pointerAction === 'polygon') newPolygon(figure, pointerX, pointerY)
-  else if (figure.pointerAction === 'reflectAboutPoint') newReflectAboutPoint(figure, pointerX, pointerY)
-  else if (figure.pointerAction === 'rotation') newRotation(figure, clickedElements(figure, pointerX, pointerY))
+  else if (figure.pointerAction === 'polygon') newPolygon(clickedElements.points)
+  else if (figure.pointerAction === 'reflectAboutPoint') newReflectAboutPoint(clickedElements)
+  else if (figure.pointerAction === 'rotation') newRotation(clickedElements)
   else if (figure.pointerAction === 'setOptions') setOptions(figure, pointerX, pointerY, figure.pointerSetOptions)
 }
 
@@ -83,7 +84,7 @@ export function initMessageAction (figure: Figure, pointerAction: string) {
   else if (pointerAction === 'rotation') actionNewRotationMessage(figure)
 }
 
-function clickedElements (figure: Figure, pointerX: number, pointerY: number, distanceInPixels = 15): ClickedElements {
+function getClickedElements (figure: Figure, pointerX: number, pointerY: number, distanceInPixels = 15): ClickedElements {
   const points = []
   const texts = []
   const lines = []
@@ -98,5 +99,5 @@ function clickedElements (figure: Figure, pointerX: number, pointerY: number, di
       if (e instanceof Circle) circles.push(e)
     }
   }
-  return { points, texts, lines, polygons, circles, all: [...points, ...texts, ...lines, ...polygons, ...circles] }
+  return { points, texts, lines, polygons, circles, all: [...points, ...texts, ...polygons, ...lines, ...circles], figure }
 }

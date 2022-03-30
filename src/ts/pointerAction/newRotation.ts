@@ -6,7 +6,8 @@ import { Circle } from '../elements/lines/Circle'
 import { Polygon } from '../elements/lines/Polygon'
 import { ClickedElements } from './handlePointerAction'
 
-export function newRotation (figure: Figure, clickedElements: ClickedElements) {
+export function newRotation (clickedElements: ClickedElements) {
+  const figure = clickedElements.figure
   for (const e of clickedElements.all) {
     if (figure.selectedElements.length === 0 && e instanceof Point) {
       e.select()
