@@ -282,7 +282,7 @@ export abstract class Element2D {
     this.thickness = this._thickness
   }
 
-  setVisibleOnlyHover () {
+  setVisibleOnMouseOver () {
     this.g.classList.add('onlyOver')
     this.g.setAttribute('opacity', '0')
   }
