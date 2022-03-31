@@ -47,6 +47,7 @@ export class MarkAngle extends Element2D {
       this.dashed = dashed
       this.update()
       this.exist = A.exist && O.exist && B.exist
+      this.update()
     }
 
     update () {
