@@ -33,6 +33,7 @@ import { actionNewReflectionOverLineMessage, newReflectionOverLine } from './new
 import { actionNewHomothetieMessage, newHomothetie } from './newHomothetie'
 import { newMarkAngle, actionNewMarkAngleMessage } from './newMarkAngle'
 import { actionNewTranslationBy2PointseMessage, newTranslationBy2Points } from './newTranslationBy2Points'
+import { actionNewRegularPolygonMessage, newRegularPolygon } from './newRegularPolygon'
 
 export type ClickedElements = {points: Point[], texts: TextByPosition[], lines: Line[], polygons: Polygon[], circles: Circle[], all: Element2D[], figure: Figure }
 
@@ -59,6 +60,7 @@ export function handlePointerAction (figure: Figure, event: PointerEvent) {
   else if (figure.pointerAction === 'parallel') newParallel(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'intersectionLL') newIntersection(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'polygon') newPolygon(clickedElements.points)
+  else if (figure.pointerAction === 'regularPolygon') newRegularPolygon(clickedElements.points)
   else if (figure.pointerAction === 'reflectAboutPoint') newReflectAboutPoint(clickedElements)
   else if (figure.pointerAction === 'rotation') newRotation(clickedElements)
   else if (figure.pointerAction === 'setOptions') setOptions(figure, pointerX, pointerY, figure.pointerSetOptions)
@@ -88,6 +90,7 @@ export function initMessageAction (figure: Figure, pointerAction: string) {
   else if (pointerAction === 'parallel') actionNewParallelMessage(figure)
   else if (pointerAction === 'intersectionLL') figure.displayMessage('Cliquer sur l\'élément sur lequel appliquer le nouveau style')
   else if (pointerAction === 'polygon') actionNewPolygonMessage(figure)
+  else if (pointerAction === 'regularPolygon') actionNewRegularPolygonMessage(figure)
   else if (pointerAction === 'reflectAboutPoint') actionNewReflectAboutPointMessage(figure)
   else if (pointerAction === 'rotation') actionNewRotationMessage(figure)
   else if (pointerAction === 'reflectionOverLine') actionNewReflectionOverLineMessage(figure)

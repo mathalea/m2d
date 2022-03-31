@@ -12,6 +12,7 @@ import { testAll } from './tests'
 import { Cursor } from './elements/measures/Cursor'
 import { Line } from './elements/lines/Line'
 import { Polygon } from './elements/lines/Polygon'
+import { RegularPolygon } from './elements/lines/RegularPolygon'
 
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
@@ -48,15 +49,4 @@ const angle = new Cursor(figure, -4, 6, { min: -180, max: 180, step: 1, length: 
 
 const O = new Point(figure, 0, 0, { label: 'O' })
 const A = new Point(figure, 5, 1, { label: 'A' })
-const B = new Point(figure, 3, 6, { label: 'B' })
-const D = new Point(figure, -5, 4, { label: 'D' })
-const C = new Circle(O, A)
-const V = new VectorByPoints(B, D)
-const AB = new Line(A, B)
-const C1 = C.reflectionOverLine(AB)
-const C2 = C.homothetie(B, k)
-const C3 = C.rotation(A, angle)
-const C4 = C.translationVector(V)
-C3.dashed = true
-C3.color = 'pink'
-C2.color = 'purple'
+const p = new RegularPolygon(O, A, 1, {color: 'blue'})
