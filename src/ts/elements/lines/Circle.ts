@@ -20,6 +20,7 @@ import { Distance } from '../measures/Distance'
 import { Const } from '../measures/Const'
 import { Vector } from './../others/Vector'
 import { PointByHomothetie } from './../points/PointByHomothetie'
+import { VectorByPoints } from '../others/VectorByPoints'
 /**
  * Crée un cercle dont on donne le centre et un point ou le rayon.
  * Le rayon peut être un nombre (constante) ou une instance des classes dérivées de Measure
@@ -199,7 +200,7 @@ export class Circle extends Element2D {
    * Translation définie par un couple de coordonnées ou un objet possédant des paramètres x et y
    * Renvoie un nouveau cercle sans modifier le premier
    */
-  translationVector (v: Vector) {
+  translationVector (v: Vector | VectorByPoints) {
     try {
       const rayon = new CalculDynamic((x:Measure[]) => Math.abs(x[0].value), [this._radius])
       const O2 = new PointByTranslationVector(this.center, v)

@@ -23,6 +23,7 @@ import { PointByReflectionOverLine } from './../points/PointByReflectionOverLine
 import { PointByTranslationVector } from './../points/PointByTranslationVector'
 import { PointByHomothetie } from './../points/PointByHomothetie'
 import { PointByTranslation } from './../points/PointByTranslation'
+import { VectorByPoints } from '../others/VectorByPoints'
 /**
  * Crée un polygone (ligne brisée fermée) à partir d'un array d'instances de Point.
  */
@@ -150,7 +151,7 @@ export class Polygon extends Element2D {
       }
     }
 
-    translationVector (v:Vector) {
+    translationVector (v:Vector | VectorByPoints) {
       try {
         const points: Point[] = []
         for (let i = 0; i < this.points.length; i++) {

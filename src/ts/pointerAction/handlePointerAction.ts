@@ -32,6 +32,7 @@ import { Element2D } from '../elements/Element2D'
 import { actionNewReflectionOverLineMessage, newReflectionOverLine } from './newReflectionOverLine'
 import { actionNewHomothetieMessage, newHomothetie } from './newHomothetie'
 import { newMarkAngle, actionNewMarkAngleMessage } from './newMarkAngle'
+import { actionNewTranslationBy2PointseMessage, newTranslationBy2Points } from './newTranslationBy2Points'
 
 export type ClickedElements = {points: Point[], texts: TextByPosition[], lines: Line[], polygons: Polygon[], circles: Circle[], all: Element2D[], figure: Figure }
 
@@ -63,6 +64,7 @@ export function handlePointerAction (figure: Figure, event: PointerEvent) {
   else if (figure.pointerAction === 'setOptions') setOptions(figure, pointerX, pointerY, figure.pointerSetOptions)
   else if (figure.pointerAction === 'reflectionOverLine') newReflectionOverLine(clickedElements)
   else if (figure.pointerAction === 'homothetie') newHomothetie(clickedElements)
+  else if (figure.pointerAction === 'translation') newTranslationBy2Points(clickedElements)
   else if (figure.pointerAction === 'markAngle') newMarkAngle(clickedElements.points)
 }
 
@@ -90,7 +92,8 @@ export function initMessageAction (figure: Figure, pointerAction: string) {
   else if (pointerAction === 'rotation') actionNewRotationMessage(figure)
   else if (pointerAction === 'reflectionOverLine') actionNewReflectionOverLineMessage(figure)
   else if (pointerAction === 'homothetie') actionNewHomothetieMessage(figure)
-  else if (pointerAction === 'markAnglr') actionNewMarkAngleMessage(figure)
+  else if (pointerAction === 'translation') actionNewTranslationBy2PointseMessage(figure)
+  else if (pointerAction === 'markAngle') actionNewMarkAngleMessage(figure)
 }
 
 function getClickedElements (figure: Figure, pointerX: number, pointerY: number, distanceInPixels = 15): ClickedElements {

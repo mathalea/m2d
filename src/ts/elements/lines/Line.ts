@@ -18,6 +18,7 @@ import { Coords } from '../others/Coords'
 import { Angle } from '../measures/Angle'
 import { PointByRotation } from '../points/PointByRotation'
 import { PointBySimilitude } from '../points/PointBySimilitude'
+import { VectorByPoints } from '../others/VectorByPoints'
 
 export type LineType = 'Line' | 'Segment' | 'Ray' | 'Cursor'
 export type SegmentStyle = '' | '|-' | '-|' | '|-|'
@@ -211,7 +212,7 @@ export class Line extends Element2D {
     }
   }
 
-  translationVector (v:Vector) {
+  translationVector (v:Vector | VectorByPoints) {
     try {
       const M = new PointByTranslationVector(this.A, v, { temp: true })
       const N = new PointByTranslationVector(this.B, v, { temp: true })
