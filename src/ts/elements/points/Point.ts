@@ -75,6 +75,7 @@ export class Point extends Element2D {
     this.trace = false
     if (x instanceof Measure) x.addChild(this)
     if (y instanceof Measure) y.addChild(this)
+    this.parentFigure.updateStyleCursor()
   }
 
   /**
@@ -154,6 +155,7 @@ export class Point extends Element2D {
     this.g.remove()
     if (style === 'x' && this.exist) {
       const X = new Cross(this.parentFigure, this.x, this.y)
+      X.draggable = this.draggable
       this.mark = X
       this.group.push(X)
       this.g = X.g

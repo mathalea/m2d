@@ -15,6 +15,7 @@ import { moveDrag, stopDrag } from './pointerAction/drag'
 import { handlePointerAction, initMessageAction } from './pointerAction/handlePointerAction'
 import { newPointByCoords } from './pointerAction/newPointByCoords'
 import { Coords } from './elements/others/Coords'
+import { Cross } from './elements/others/Cross'
 
 export class Figure {
   width: number
@@ -149,6 +150,18 @@ export class Figure {
     this.clearSelectedElements()
     initMessageAction(this, action)
     if (action === 'pointByCoords') newPointByCoords(this) // Cette action ne doit pas attendre un clic sur la figure
+    this.updateStyleCursor()
+  }
+
+  updateStyleCursor () {
+    const action = this.pointerAction
+    for (const e of this.set) {
+      if (action === 'drag' && e instanceof Cross && e.draggable) e.g.style.cursor = 'move'
+      else if (action === 'drag' && e instanceof Cross && !e.draggable) e.g.style.cursor = 'default'
+      else if (action === 'drag' && e instanceof Line && e.A.draggable && e.B.draggable) e.g.style.cursor = 'move'
+      // ToFix Si un polygone est par-dessus le segment alors le pointeur ne change pas pour le drag de segment
+      else e.g.style.cursor = 'pointer'
+    }
   }
 
   clearSelectedElements () {
