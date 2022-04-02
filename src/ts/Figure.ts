@@ -17,8 +17,8 @@ import { newPointByCoords } from './pointerAction/newPointByCoords'
 import { Coords } from './elements/others/Coords'
 import { Cross } from './elements/others/Cross'
 
-type ElementSaved = {className: string, arguments: (string | number)[], color?: string, thickness?: number, dashed?: boolean, fill?: boolean}
-export type Save = ElementSaved[]
+type ElementSaved = {className: string, arguments: (string | number)[], id: number, color?: string, thickness?: number, dashed?: boolean, fill?: boolean}
+export type Save = {[id: number]: ElementSaved}
 export class Figure {
   width: number
   height: number
@@ -48,7 +48,7 @@ export class Figure {
     this.width = width
     this.height = height
     this.lastId = 0
-    this.save = []
+    this.save = {}
     this.dictionnary = {}
     this.pixelsPerUnit = pixelsPerUnit
     this.xMin = xMin

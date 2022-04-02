@@ -45,5 +45,5 @@ figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
 // Ma figure
-const save = [{ className: 'Point', arguments: [-5.566666666666666, 2.466666666666667], thickness: 3, color: 'blue' }, { className: 'Point', arguments: [0.2333333333333325, 2.9000000000000004], thickness: 3, color: 'blue' }, { className: 'Point', arguments: [8.766666666666666, 1.1333333333333337], thickness: 3, color: 'blue' }, { className: 'Point', arguments: [14.5, 0.5666666666666664], thickness: 3, color: 'blue' }, { className: 'Segment', arguments: [1, 3], color: 'black', thickness: 1, dashed: false }, { className: 'Segment', arguments: [5, 7], color: 'black', thickness: 1, dashed: false }]
+const save = {"1":{"className":"Point","id":1,"arguments":[-7.266666666666667,2.9000000000000004],"thickness":3,"color":"blue"},"3":{"className":"Point","id":3,"arguments":[-7.1,-0.033333333333333215],"thickness":3,"color":"blue"},"5":{"className":"Point","id":5,"arguments":[-3.966666666666667,-0.033333333333333215],"thickness":3,"color":"blue"},"7":{"className":"Segment","arguments":[1,3],"id":7,"color":"black","thickness":1,"dashed":false}}
 loadJson(save, figure)

@@ -40,7 +40,7 @@ export class Point extends Element2D {
   // On définit un point avec ses deux coordonnées
   constructor (figure: Figure, x: number | Measure, y: number|Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'blue', draggable = true, temp = false, snapToGrid = false, labelDx = -0.3, labelDy = 0.3, exist = true }: PointOptions = {}) {
     super(figure)
-    if (typeof x === 'number' && typeof y === 'number') this.parentFigure.save.push({ className: 'Point', arguments: [x, y], thickness, color })
+    if (typeof x === 'number' && typeof y === 'number') this.parentFigure.save[this.id] = { className: 'Point', id: this.id, arguments: [x, y], thickness, color }
     console.log(JSON.stringify(this.parentFigure.save))
     if (typeof x === 'number') this._x = new Const(figure, x)
     else this._x = x
