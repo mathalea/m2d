@@ -12,12 +12,14 @@ import { Element2D } from '../Element2D'
 
 export abstract class Measure {
     parentFigure: Figure
+    id: number
     private _value: number
     childs: (Element2D | Measure)[]
     parents: (Element2D | Measure)[]
     private _exist: boolean
     constructor (parentFigure: Figure) {
       this.parentFigure = parentFigure
+      this.id = this.parentFigure.lastId++
       this.childs = []
       this.parents = []
       this._value = 0

@@ -41,6 +41,7 @@ export class Line extends Element2D {
   label: string
   constructor (A: Point, B: Point, { lineType = 'Line', color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
     super(A.parentFigure)
+    if (!temp) this.parentFigure.save[this.id] = { className: 'Line', arguments: [A.id, B.id], thickness, color }
     this.exist = true
     this.A = A
     this.B = B

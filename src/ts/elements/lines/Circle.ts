@@ -33,6 +33,8 @@ export class Circle extends Element2D {
   private _radius: Measure // _radius est une Measure (CalculDynamic ou Distance) alors que radius est un nombre (sa propriété value)
   constructor (center: Point, arg2: number | Point | Measure, { color = 'black', thickness = 1, fill = 'none', temp = false, dashed = false }: OptionsGraphiques = {}) {
     super(center.parentFigure)
+    if (typeof arg2 === 'number') this.parentFigure.save[this.id] = { className: 'CircleCenterRadius', arguments: [center.id, arg2], thickness, color }
+    else this.parentFigure.save[this.id] = { className: 'CircleCenterPointOrMeasure', arguments: [center.id, arg2.id], thickness, color }
     this.pointOnCircle = arg2 instanceof Point ? arg2 : null
     this.center = center
     this.temp = temp

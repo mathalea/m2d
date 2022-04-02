@@ -45,5 +45,5 @@ figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
 // Ma figure
-const save = {"1":{"className":"Point","id":1,"arguments":[-7.266666666666667,2.9000000000000004],"thickness":3,"color":"blue"},"3":{"className":"Point","id":3,"arguments":[-7.1,-0.033333333333333215],"thickness":3,"color":"blue"},"5":{"className":"Point","id":5,"arguments":[-3.966666666666667,-0.033333333333333215],"thickness":3,"color":"blue"},"7":{"className":"Segment","arguments":[1,3],"id":7,"color":"black","thickness":1,"dashed":false}}
+const save = {"3":{"className":"Point","arguments":[-5.033333333333333,0.43333333333333357],"thickness":3,"color":"blue"},"7":{"className":"Point","arguments":[1.5,0.2333333333333334],"thickness":3,"color":"blue"},"11":{"className":"Point","arguments":[6.433333333333334,2.8],"thickness":3,"color":"blue"},"15":{"className":"Segment","arguments":[3,7],"color":"black","thickness":1,"dashed":false},"16":{"className":"CircleCenterPoint","arguments":[3,11],"thickness":1,"color":"black"},"18":{"className":"Point","arguments":[100,100],"thickness":3,"color":"blue"},"21":{"className":"CircleCenterRadius","arguments":[7,2],"thickness":1,"color":"black"},"23":{"className":"Point","arguments":[100,100],"thickness":3,"color":"blue"}}
 loadJson(save, figure)
