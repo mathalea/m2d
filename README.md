@@ -92,3 +92,15 @@ Un objet enfant de `Element2D` peut dépendre d'un autre objet enfant de `Elemen
 Parmi les enfant de `Measure` on trouve `Cursor` ou `Angle` ou encore `Distance`.
  Un point peut être défini par homothétie en utilisant un rapport de type `number` ou `Measure`. Dans ce dernier cas, on pourra faire varier le rapport d'homothétie dynamiquement avec, par exemple, un objet `Cursor`.
 
+ ### Gestion de la sauvegarde
+
+ * `Figure` possède un compteur `lastId` qui est incrémenté à chaque création d'enfants de `Element2D`.
+ * Chaque élément a un id unique : `element.id`.
+ * Sauvegarde : 
+   [ 
+       {className, arguments, color, thickness, dashed},
+       {className, arguments, color, thickness, dashed},
+   ]
+ Où `arguments` est la liste des arguments du constructeur (strings ou numbers) dans le même ordre que pour le constructeur
+
+

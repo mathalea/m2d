@@ -28,6 +28,8 @@ export class Segment extends Line {
   label: string
   constructor (A: Point, B: Point, { color = 'black', thickness = 1, style = '', temp = false, dashed = false }: OptionsGraphiques = {}) {
     super(A, B, { lineType: 'Segment', color, thickness, style, temp, dashed })
+    if (!this.temp) this.parentFigure.save.push({ className: 'Segment', arguments: [A.id, B.id], color, thickness, dashed })
+    console.log(JSON.stringify(this.parentFigure.save))
     this.label = (A.label && B.label) ? `[${A.label}${B.label}]` : ''
 
     // Les styles ne doivent être appliqués qu'une fois le groupe créé

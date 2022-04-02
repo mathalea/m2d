@@ -13,6 +13,7 @@ import { Cursor } from './elements/measures/Cursor'
 import { Line } from './elements/lines/Line'
 import { Polygon } from './elements/lines/Polygon'
 import { RegularPolygon } from './elements/lines/RegularPolygon'
+import { loadJson } from './load'
 
 /*
  * Created by Angot Rémi and Lhote Jean-Claude on 15/02/2022.
@@ -44,9 +45,5 @@ figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
 // Ma figure
-const k = new Cursor(figure, -4, 7, { min: -2, max: 2, step: 0.1, length: 5, value: 1 })
-const angle = new Cursor(figure, -4, 6, { min: -180, max: 180, step: 1, length: 5, value: 0 })
-
-const O = new Point(figure, 0, 0, { label: 'O' })
-const A = new Point(figure, 5, 1, { label: 'A' })
-const p = new RegularPolygon(O, A, 1, {color: 'blue'})
+const save = [{ className: 'Point', arguments: [-5.566666666666666, 2.466666666666667], thickness: 3, color: 'blue' }, { className: 'Point', arguments: [0.2333333333333325, 2.9000000000000004], thickness: 3, color: 'blue' }, { className: 'Point', arguments: [8.766666666666666, 1.1333333333333337], thickness: 3, color: 'blue' }, { className: 'Point', arguments: [14.5, 0.5666666666666664], thickness: 3, color: 'blue' }, { className: 'Segment', arguments: [1, 3], color: 'black', thickness: 1, dashed: false }, { className: 'Segment', arguments: [5, 7], color: 'black', thickness: 1, dashed: false }]
+loadJson(save, figure)

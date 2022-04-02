@@ -17,11 +17,16 @@ import { newPointByCoords } from './pointerAction/newPointByCoords'
 import { Coords } from './elements/others/Coords'
 import { Cross } from './elements/others/Cross'
 
+type ElementSaved = {className: string, arguments: (string | number)[], color?: string, thickness?: number, dashed?: boolean, fill?: boolean}
+export type Save = ElementSaved[]
 export class Figure {
   width: number
   height: number
+  lastId: number
+  save: Save
   pixelsPerUnit: number
   set: Set<Element2D>
+  dictionnary : {[id: number]: Element2D}
   selectedElements: Element2D[]
   isDynamic: boolean
   setInDrag: Set<Point | TextByPosition | Line>
@@ -42,6 +47,9 @@ export class Figure {
   constructor ({ width = 600, height = 400, pixelsPerUnit = 30, xMin = -10, yMin = -6, isDynamic = true, dx = 1, dy = 1 }: { width?: number, height?: number, pixelsPerUnit?: number, xMin?: number, yMin?: number, isDynamic?: boolean, dx?: number, dy?: number } = {}) {
     this.width = width
     this.height = height
+    this.lastId = 0
+    this.save = []
+    this.dictionnary = {}
     this.pixelsPerUnit = pixelsPerUnit
     this.xMin = xMin
     this.xMax = xMin + width / pixelsPerUnit

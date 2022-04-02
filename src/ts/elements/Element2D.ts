@@ -17,6 +17,7 @@ export type optionsElement2D = { color?: string, thickness?: number, fill?: stri
  */
 export abstract class Element2D {
   parentFigure: Figure
+  id: number
   draggable: boolean
   // Un élément de géométrie peut être composé de plusieurs autres éléments de géométrie (plusieurs segments pour marquer un point ou coder un angle par exemple)
   group: Element2D[]
@@ -35,6 +36,8 @@ export abstract class Element2D {
 
   constructor (parentFigure: Figure) {
     this.parentFigure = parentFigure
+    this.id = this.parentFigure.lastId++
+    this.parentFigure.dictionnary[this.id] = this
     this.group = []
     this.childs = []
     this.parents = []
