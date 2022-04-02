@@ -37,6 +37,7 @@ export class Angle extends Measure {
       this.O = O
       this.A = A
       this.valueNonOriented = Angle.angle(this.A, this.O, this.B)
+      this.parentFigure.save[this.id] = { className: 'Const', arguments: [this.A.id, this.O.id, this.B.id] }
     }
 
     update () {
