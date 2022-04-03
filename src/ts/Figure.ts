@@ -150,6 +150,7 @@ export class Figure {
     this.clearSelectedElements()
     initMessageAction(this, action)
     if (action === 'pointByCoords') newPointByCoords(this) // Cette action ne doit pas attendre un clic sur la figure
+    else if (action === 'latex') alert(this.latex)
     this.updateStyleCursor()
   }
 
