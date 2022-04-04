@@ -26,7 +26,7 @@ import { loadJson } from './load'
 
 // Initialisation
 
-const figure = new Figure()
+const figure = new Figure({ width: 1040, height: 640 })
 const body = document.querySelector('body')
 const texteLatex = document.createElement('pre')
 const btnLatex = document.createElement('button')
@@ -45,5 +45,5 @@ figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
 // Ma figure
-const save = {"3":{"className":"Point","arguments":[-5.033333333333333,0.43333333333333357],"thickness":3,"color":"blue"},"7":{"className":"Point","arguments":[1.5,0.2333333333333334],"thickness":3,"color":"blue"},"11":{"className":"Point","arguments":[6.433333333333334,2.8],"thickness":3,"color":"blue"},"15":{"className":"Segment","arguments":[3,7],"color":"black","thickness":1,"dashed":false},"16":{"className":"CircleCenterPoint","arguments":[3,11],"thickness":1,"color":"black"},"18":{"className":"Point","arguments":[100,100],"thickness":3,"color":"blue"},"21":{"className":"CircleCenterRadius","arguments":[7,2],"thickness":1,"color":"black"},"23":{"className":"Point","arguments":[100,100],"thickness":3,"color":"blue"}}
+const save = {"1":{"className":"Const","arguments":[-9]},"2":{"className":"Const","arguments":[6.5]},"3":{"className":"Point","arguments":[-7.166666666666666,4.133333333333333],"thickness":3,"color":"blue"},"4":{"className":"Const","arguments":[-7.166666666666666]},"5":{"className":"Const","arguments":[4.133333333333333]},"7":{"className":"Point","arguments":[-4.233333333333333,4.2],"thickness":3,"color":"blue"},"8":{"className":"Const","arguments":[-4.233333333333333]},"9":{"className":"Const","arguments":[4.2]},"11":{"className":"Point","arguments":[-7.033333333333333,1.3666666666666663],"thickness":3,"color":"blue"},"12":{"className":"Const","arguments":[-7.033333333333333]},"13":{"className":"Const","arguments":[1.3666666666666663]},"15":{"className":"Point","arguments":[-2.033333333333333,0.5],"thickness":3,"color":"blue"},"16":{"className":"Const","arguments":[-2.033333333333333]},"17":{"className":"Const","arguments":[0.5]},"19":{"className":"Const","arguments":[1]},"20":{"className":"Circle","arguments":[11,19],"thickness":1,"color":"black"},"21":{"className":"Point","arguments":[100,100],"thickness":3,"color":"blue"},"22":{"className":"Const","arguments":[100]},"23":{"className":"Const","arguments":[100]},"24":{"className":"Distance","arguments":[11,15]},"25":{"className":"Circle","arguments":[11,24],"thickness":1,"color":"black"},"26":{"className":"Point","arguments":[100,100],"thickness":3,"color":"blue"},"27":{"className":"Const","arguments":[100]},"28":{"className":"Const","arguments":[100]},"29":{"className":"Distance","arguments":[3,7]},"30":{"className":"Circle","arguments":[11,29],"thickness":1,"color":"black"},"31":{"className":"Point","arguments":[100,100],"thickness":3,"color":"blue"},"32":{"className":"Const","arguments":[100]},"33":{"className":"Const","arguments":[100]}}
 loadJson(save, figure)

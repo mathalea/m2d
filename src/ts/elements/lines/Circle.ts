@@ -34,10 +34,8 @@ export class Circle extends Element2D {
   constructor (center: Point, arg2: number | Point | Measure, { color = 'black', thickness = 1, fill = 'none', temp = false, dashed = false }: OptionsGraphiques = {}) {
     let rayon
     if (arg2 instanceof Point) rayon = new Distance(center, arg2)
-    else {
-      if (typeof arg2 === 'number') rayon = new Const(center.parentFigure, arg2)
-      else rayon = new CalculDynamic((r: Measure[]) => Math.abs(r[0].value), [arg2])
-    }
+    else if (typeof arg2 === 'number') rayon = new Const(center.parentFigure, arg2)
+    else rayon = arg2
     super(center.parentFigure)
     this._radius = rayon
     this.pointOnCircle = arg2 instanceof Point ? arg2 : null
@@ -74,8 +72,7 @@ export class Circle extends Element2D {
       this.exist = center.exist
     }
     this.update()
-    if (arg2 instanceof Point) this.parentFigure.save[this.id] = { className: 'CircleCenterPoint', arguments: [center.id, arg2.id], thickness, color }
-    else this.parentFigure.save[this.id] = { className: 'CircleCenterRadius', arguments: [center.id, this._radius.id], thickness, color }
+    this.parentFigure.save[this.id] = { className: 'Circle', arguments: [this.center.id, this._radius.id], thickness, color }
   }
 
   /**
