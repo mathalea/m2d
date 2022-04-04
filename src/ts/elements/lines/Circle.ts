@@ -70,9 +70,16 @@ export class Circle extends Element2D {
     } else {
       center.addChild(this)
       this.exist = center.exist
+      rayon.addChild(this)
     }
     this.update()
-    this.parentFigure.save[this.id] = { className: 'Circle', arguments: [this.center.id, this._radius.id], thickness, color }
+  }
+
+  /**
+   * Sauvegarde les informations pour refaire cet élément
+   */
+  save () {
+    this.parentFigure.save[this.id] = { className: 'Circle', arguments: [this.center.id, this._radius.id], thickness: this.thickness, color: this.color }
   }
 
   /**

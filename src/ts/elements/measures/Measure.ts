@@ -24,6 +24,10 @@ export abstract class Measure {
       this.parents = []
       this._value = 0
       this._exist = true
+      parentFigure.setMeasures.add(this)
+    }
+
+    save () {
     }
 
     set value (x) {

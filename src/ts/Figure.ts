@@ -16,6 +16,7 @@ import { handlePointerAction, initMessageAction } from './pointerAction/handlePo
 import { newPointByCoords } from './pointerAction/newPointByCoords'
 import { Coords } from './elements/others/Coords'
 import { Cross } from './elements/others/Cross'
+import { Measure } from './elements/measures/Measure'
 
 type ElementSaved = {className: string, arguments: (string | number)[], color?: string, thickness?: number, dashed?: boolean, fill?: boolean}
 export type Save = {[id: number]: ElementSaved}
@@ -26,6 +27,7 @@ export class Figure {
   save: Save
   pixelsPerUnit: number
   set: Set<Element2D>
+  setMeasures: Set<Measure>
   dictionnary : {[id: number]: Element2D}
   selectedElements: Element2D[]
   isDynamic: boolean
@@ -59,6 +61,7 @@ export class Figure {
     this.dy = dy
     this.isDynamic = isDynamic
     this.set = new Set()
+    this.setMeasures = new Set()
     this.selectedElements = []
     this._pointerAction = 'drag'
     this.pointerSetOptions = { color: 'black', thickness: 1 }
@@ -158,8 +161,12 @@ export class Figure {
     this.clearSelectedElements()
     initMessageAction(this, action)
     if (action === 'pointByCoords') newPointByCoords(this) // Cette action ne doit pas attendre un clic sur la figure
-    else if (action === 'save') alert(JSON.stringify(this.save))
-    else if (action === 'latex') alert(this.latex)
+    else if (action === 'save') {
+      for (const e of [...this.setMeasures, ...this.set]) {
+        e.save()
+      }
+      alert(JSON.stringify(this.save))
+    } else if (action === 'latex') alert(this.latex)
     this.updateStyleCursor()
   }
 

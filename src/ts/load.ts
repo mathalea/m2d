@@ -16,7 +16,6 @@ export function loadJson (save: Save, figure: Figure) {
       const x = save[e].arguments[0] as number
       const y = save[e].arguments[1] as number
       const A = new Point(figure, x, y)
-      console.log(x, y)
       elements.push(A)
       exIds[e] = A
     } else if (save[e].className === 'Segment') {

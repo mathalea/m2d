@@ -53,6 +53,9 @@ export abstract class Element2D {
     this._exist = true
   }
 
+  save () {
+  }
+
   /**
    * Permet d'indiquer à l'objet quel élément (child) dépend de lui.
    */

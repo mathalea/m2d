@@ -21,6 +21,9 @@ export class Distance extends Measure {
       A.addChild(this)
       B.addChild(this)
       this.update()
+    }
+
+    save () {
       this.parentFigure.save[this.id] = { className: 'Distance', arguments: [this.A.id, this.B.id] }
     }
 
