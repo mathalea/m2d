@@ -44,9 +44,9 @@ figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
 // Ma figure
-const k = new Cursor(figure, -4, 7, { min: -2, max: 2, step: 0.1, length: 5, value: 1 })
+const k = new Cursor(figure, -4, 7, { min: 3, max: 8, step: 1, length: 5, value: 1 })
 const angle = new Cursor(figure, -4, 6, { min: -180, max: 180, step: 1, length: 5, value: 0 })
 
 const O = new Point(figure, 0, 0, { label: 'O' })
 const A = new Point(figure, 5, 1, { label: 'A' })
-const p = new RegularPolygon(O, A, 1, {color: 'blue'})
+const p = new RegularPolygon(O, A, k, { color: 'blue' })
