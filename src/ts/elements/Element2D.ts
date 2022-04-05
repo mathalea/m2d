@@ -174,7 +174,8 @@ export abstract class Element2D {
   }
 
   get thickness () {
-    return this._thickness
+    // ToFix L'interface graphique renvoie parfois des thickness string par erreur
+    return (typeof this._thickness === 'string') ? parseInt(this._thickness) : this._thickness
   }
 
   set thickness (thickness) {

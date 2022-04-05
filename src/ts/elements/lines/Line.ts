@@ -86,7 +86,7 @@ export class Line extends Element2D {
   }
 
   save () {
-    this.parentFigure.save[this.id] = { className: 'Line', arguments: [this.A.id, this.B.id], thickness: this.thickness, color: this.color, dashed: this.dashed }
+    this.parentFigure.save[this.id] = { className: 'Line', arguments: [this.A.id, this.B.id], thickness: this.thickness, color: this.color, dashed: this.dashed, isVisible: this.isVisible }
   }
 
   update () {

@@ -18,7 +18,7 @@ import { Coords } from './elements/others/Coords'
 import { Cross } from './elements/others/Cross'
 import { Measure } from './elements/measures/Measure'
 
-type ElementSaved = {className: string, arguments: (string | number)[], color?: string, thickness?: number, dashed?: boolean, fill?: boolean}
+export type ElementSaved = {className: string, arguments: (string | number)[], color?: string, thickness?: number, dashed?: boolean, fill?: boolean, isVisible?: boolean}
 export type Save = {[id: number]: ElementSaved}
 export class Figure {
   width: number
@@ -165,7 +165,15 @@ export class Figure {
       for (const e of [...this.setMeasures, ...this.set]) {
         e.save()
       }
-      alert(JSON.stringify(this.save))
+      const saveTxt = JSON.stringify(this.save)
+      updateClipboard(saveTxt)
+      function updateClipboard (newClip: string) {
+        navigator.clipboard.writeText(newClip).then(function () {
+          alert('Figure sauvegardée dans le presse-papier')
+        }, function () {
+          alert(saveTxt)
+        })
+      }
     } else if (action === 'latex') alert(this.latex)
     this.updateStyleCursor()
   }

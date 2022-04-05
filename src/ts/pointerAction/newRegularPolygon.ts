@@ -3,7 +3,7 @@ import { Point } from '../elements/points/Point'
 import { Figure } from '../Figure'
 
 export function newRegularPolygon (points: Point[]) {
-  const figure = points[0]?.parentFigure 
+  const figure = points[0]?.parentFigure
   for (const e of points) {
     if (figure.selectedElements.length === 0) {
       e.select()

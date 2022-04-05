@@ -79,7 +79,7 @@ export class Circle extends Element2D {
    * Sauvegarde les informations pour refaire cet élément
    */
   save () {
-    this.parentFigure.save[this.id] = { className: 'Circle', arguments: [this.center.id, this._radius.id], thickness: this.thickness, color: this.color }
+    this.parentFigure.save[this.id] = { className: 'Circle', arguments: [this.center.id, this._radius.id], thickness: this.thickness, color: this.color, dashed: this.dashed, isVisible: this.isVisible }
   }
 
   /**

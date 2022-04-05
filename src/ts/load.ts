@@ -8,7 +8,7 @@ import { Const } from './elements/measures/Const'
 import { Distance } from './elements/measures/Distance'
 import { Measure } from './elements/measures/Measure'
 import { Point } from './elements/points/Point'
-import { Figure, Save } from './Figure'
+import { Figure, Save, ElementSaved } from './Figure'
 
 export function loadJson (save: Save, figure: Figure) {
   const elements: (Element2D | Measure)[] = []
@@ -32,11 +32,6 @@ export function loadJson (save: Save, figure: Figure) {
       if (s !== null) {
         elements.push(s)
         exIds[e] = s
-        s.color = save[e].color || 'black'
-        s.dashed = save[e].dashed || false
-        const thickness = save[e].thickness
-        console.log(save[e], thickness)
-        if (typeof thickness === 'number') s.thickness = thickness
       }
     } else if (save[e].className === 'Circle') {
       const id1 = save[e].arguments[0] as number
@@ -70,6 +65,20 @@ export function loadJson (save: Save, figure: Figure) {
       elements.push(p)
       exIds[e] = p
     }
+    const lastElement = elements[elements.length - 1]
+    if (lastElement instanceof Element2D) handleOptions(lastElement, save[e])
+  }
+
+  for (const e of elements) {
+    if (e instanceof Element2D && !e.isVisible) e.hide()
   }
   return elements
+}
+
+function handleOptions (e: Element2D, save: ElementSaved) {
+  const { thickness, isVisible, color, dashed } = save
+  e.color = color || 'black'
+  e.dashed = dashed || false
+  if (typeof isVisible === 'boolean') e.isVisible = isVisible
+  if (typeof thickness === 'number') e.thickness = thickness
 }
