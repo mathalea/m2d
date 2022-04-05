@@ -3,7 +3,7 @@ import { Point } from '../elements/points/Point'
 import { Figure } from '../Figure'
 
 export function newPolygon (points: Point[]) {
-  const figure = points[0].parentFigure
+  const figure = points[0]?.parentFigure
   for (const e of points) {
     if (figure.selectedElements[0] === e) {
       const points = figure.selectedElements as Point[]
@@ -13,6 +13,7 @@ export function newPolygon (points: Point[]) {
       if (figure.pointerSetOptions.dashed !== undefined) p.dashed = figure.pointerSetOptions.dashed
       figure.selectedElements = []
       figure.displayMessage('')
+      p.addSegments()
       return p
     } else {
       e.select()

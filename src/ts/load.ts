@@ -1,6 +1,8 @@
 import { Element2D } from './elements/Element2D'
 import { Circle } from './elements/lines/Circle'
 import { Line } from './elements/lines/Line'
+import { Polygon } from './elements/lines/Polygon'
+import { Ray } from './elements/lines/Ray'
 import { Segment } from './elements/lines/Segment'
 import { Const } from './elements/measures/Const'
 import { Distance } from './elements/measures/Distance'
@@ -18,22 +20,24 @@ export function loadJson (save: Save, figure: Figure) {
       const A = new Point(figure, x, y)
       elements.push(A)
       exIds[e] = A
-    } else if (save[e].className === 'Segment') {
+    } else if (save[e].className === 'Line' || save[e].className === 'Segment' || save[e].className === 'Ray') {
       const id1 = save[e].arguments[0] as number
       const id2 = save[e].arguments[1] as number
       const A = exIds[id1] as Point
       const B = exIds[id2] as Point
-      const s = new Segment(A, B)
-      elements.push(s)
-      exIds[e] = s
-    } else if (save[e].className === 'Line') {
-      const id1 = save[e].arguments[0] as number
-      const id2 = save[e].arguments[1] as number
-      const A = exIds[id1] as Point
-      const B = exIds[id2] as Point
-      const s = new Line(A, B)
-      elements.push(s)
-      exIds[e] = s
+      let s: (Line | Segment | Ray | null) = null
+      if (save[e].className === 'Line') s = new Line(A, B)
+      else if (save[e].className === 'Segment') s = new Segment(A, B)
+      else if (save[e].className === 'Ray') s = new Ray(A, B)
+      if (s !== null) {
+        elements.push(s)
+        exIds[e] = s
+        s.color = save[e].color || 'black'
+        s.dashed = save[e].dashed || false
+        const thickness = save[e].thickness
+        console.log(save[e], thickness)
+        if (typeof thickness === 'number') s.thickness = thickness
+      }
     } else if (save[e].className === 'Circle') {
       const id1 = save[e].arguments[0] as number
       const id2 = save[e].arguments[1] as number
@@ -55,6 +59,16 @@ export function loadJson (save: Save, figure: Figure) {
       const c = new Const(figure, k)
       elements.push(c)
       exIds[e] = c
+    } else if (save[e].className === 'Polygon') {
+      const pointsId = save[e].arguments as number[]
+      const points: Point[] = []
+      for (const id of pointsId) points.push(exIds[id] as Point)
+      const p = new Polygon(...points)
+      p.color = save[e].color || 'black'
+      p.dashed = save[e].dashed || false
+      p.thickness = save[e].thickness ?? 1
+      elements.push(p)
+      exIds[e] = p
     }
   }
   return elements

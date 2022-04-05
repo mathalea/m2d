@@ -57,6 +57,11 @@ export class Segment extends Line {
     }
   }
 
+  save () {
+    super.save()
+    this.parentFigure.save[this.id].className = 'Segment'
+  }
+
   get latex () {
     try {
       if (!this.isVisible) return ''

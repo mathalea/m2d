@@ -69,10 +69,19 @@ export class Polygon extends Element2D {
         if (name) point.labelElement = (new TextByPoint(this.labelsPoints[this.labelsPoints.length - 1], name))
         point.addChild(this)
       }
-      for (let i = 0; i < points.length - 1; i++) {
-        this.segments.push(new Segment(points[i], points[i + 1], { thickness: 0 }))
+    }
+
+    save () {
+      const pointsId: number[] = []
+      for (const e of this.points) pointsId.push(e.id)
+      this.parentFigure.save[this.id] = { className: 'Polygon', arguments: pointsId, thickness: this.thickness, color: this.color, dashed: this.dashed }
+    }
+
+    addSegments () {
+      for (let i = 0; i < this.points.length - 1; i++) {
+        this.segments.push(new Segment(this.points[i], this.points[i + 1], { thickness: 0 }))
       }
-      this.segments.push(new Segment(points[points.length - 1], points[0], { thickness: 0 }))
+      this.segments.push(new Segment(this.points[this.points.length - 1], this.points[0], { thickness: 0 }))
     }
 
     update (): void {

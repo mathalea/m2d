@@ -26,6 +26,11 @@ export class Ray extends Line {
     super(A, B, { lineType: 'Ray', color, thickness, style, temp, dashed })
   }
 
+  save () {
+    super.save()
+    this.parentFigure.save[this.id].className = 'Ray'
+  }
+
   update (): void {
     try {
       ;[this.x1, this.y1, this.x2, this.y2] = getRayCoordsOut(this.A, this.B)

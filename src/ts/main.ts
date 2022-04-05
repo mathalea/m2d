@@ -1,18 +1,4 @@
-import { VectorByPoints } from './elements/others/VectorByPoints'
-import { Vector } from './elements/others/Vector'
-import { PointByTranslation } from './elements/points/PointByTranslation'
 import { Figure } from './Figure'
-import { PointByRotation } from './elements/points/PointByRotation'
-import { Point } from './elements/points/Point'
-import { Segment } from './elements/lines/Segment'
-import { Const } from './elements/measures/Const'
-import { Arc } from './elements/lines/Arc'
-import { Circle } from './elements/lines/Circle'
-import { testAll } from './tests'
-import { Cursor } from './elements/measures/Cursor'
-import { Line } from './elements/lines/Line'
-import { Polygon } from './elements/lines/Polygon'
-import { RegularPolygon } from './elements/lines/RegularPolygon'
 import { loadJson } from './load'
 
 /*
@@ -45,5 +31,5 @@ figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
 // Ma figure
-const save = { 3: { className: 'Point', arguments: [-6.133333333333333, 1.166666666666667], thickness: 3, color: 'blue' }, 7: { className: 'Point', arguments: [-1.9000000000000004, 1.4333333333333336], thickness: 3, color: 'blue' }, 11: { className: 'Point', arguments: [-0.5999999999999996, -0.6999999999999993], thickness: 3, color: 'blue' }, 15: { className: 'Distance', arguments: [3, 7] }, 16: { className: 'Circle', arguments: [3, 15], thickness: 1, color: 'black' }, 20: { className: 'Const', arguments: [1] }, 21: { className: 'Circle', arguments: [11, 20], thickness: 1, color: 'black' }, 25: { className: 'Distance', arguments: [3, 7] }, 26: { className: 'Circle', arguments: [11, 25], thickness: 1, color: 'black' } }
+const save = {"3":{"className":"Point","arguments":[-0.8666666666666671,2.7333333333333334],"thickness":3,"color":"blue"},"7":{"className":"Point","arguments":[-4.2,-1.3999999999999995],"thickness":3,"color":"blue"},"11":{"className":"Point","arguments":[4.199999999999999,-1.2999999999999998],"thickness":3,"color":"blue"},"15":{"className":"Polygon","arguments":[3,7,11],"thickness":"2","color":"green","dashed":true},"49":{"className":"Segment","arguments":[3,7],"thickness":0,"color":"black","dashed":false},"50":{"className":"Segment","arguments":[7,11],"thickness":0,"color":"black","dashed":false},"51":{"className":"Segment","arguments":[11,3],"thickness":0,"color":"black","dashed":false}}
 loadJson(save, figure)
