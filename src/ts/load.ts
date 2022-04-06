@@ -7,7 +7,9 @@ import { Segment } from './elements/lines/Segment'
 import { Const } from './elements/measures/Const'
 import { Distance } from './elements/measures/Distance'
 import { Measure } from './elements/measures/Measure'
+import { Middle } from './elements/points/Middle'
 import { Point } from './elements/points/Point'
+import { PointByHomothetie } from './elements/points/PointByHomothetie'
 import { Figure, Save, ElementSaved } from './Figure'
 
 export function loadJson (save: Save, figure: Figure) {
@@ -20,6 +22,24 @@ export function loadJson (save: Save, figure: Figure) {
       const A = new Point(figure, x, y)
       elements.push(A)
       exIds[e] = A
+    } else if (save[e].className === 'Middle') {
+      const id1 = save[e].arguments[0]
+      const id2 = save[e].arguments[1]
+      const A = exIds[id1] as Point
+      const B = exIds[id2] as Point
+      const M = new Middle(new Segment(A, B, { temp: true }))
+      elements.push(M)
+      exIds[e] = M
+    } else if (save[e].className === 'PointByHomothetie') {
+      const id1 = save[e].arguments[0]
+      const id2 = save[e].arguments[1]
+      const id3 = save[e].arguments[2]
+      const previous = exIds[id1] as Point
+      const center = exIds[id2] as Point
+      const k = exIds[id3] as Measure
+      const M = new PointByHomothetie(previous, center, k)
+      elements.push(M)
+      exIds[e] = M
     } else if (save[e].className === 'Line' || save[e].className === 'Segment' || save[e].className === 'Ray') {
       const id1 = save[e].arguments[0] as number
       const id2 = save[e].arguments[1] as number

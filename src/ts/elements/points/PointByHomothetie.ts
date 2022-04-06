@@ -22,19 +22,23 @@ export class PointByHomothetie extends Point {
     constructor (A: Point, center: Point, k: number | Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
       const x = (center.x + (k instanceof Measure ? k.value : k) * (A.x - center.x))
       const y = (center.y + (k instanceof Measure ? k.value : k) * (A.y - center.y))
+      if (typeof k === 'number') k = new Const(A.parentFigure, k)
       super(A.parentFigure, x, y, { style, size, thickness, color, draggable, temp, exist: !isNaN(x) })
       this.center = center
-      if (typeof k === 'number') this.k = new Const(A.parentFigure, k)
-      else {
-        this.k = k
-        k.addChild(this)
-      }
+      this.k = k
+      this.k.addChild(this)
       this.previous = A
       if (label !== undefined) this.label = label
       A.addChild(this)
       center.addChild(this)
       if (isNaN(this.k.value)) this.exist = false
       else this.exist = true
+    }
+
+    save () {
+      super.save()
+      this.parentFigure.save[this.id].className = 'PointByHomothetie'
+      this.parentFigure.save[this.id].arguments = [this.previous.id, this.center.id, this.k.id]
     }
 
     update (): void {

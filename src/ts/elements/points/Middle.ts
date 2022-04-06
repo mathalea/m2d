@@ -20,6 +20,12 @@ export class Middle extends Point {
     this.line = s
   }
 
+  save () {
+    super.save()
+    this.parentFigure.save[this.id].className = 'Middle'
+    this.parentFigure.save[this.id].arguments = [this.line.A.id, this.line.B.id]
+  }
+
   update (): void {
     try {
       this.moveTo((this.line.A.x + this.line.B.x) / 2, (this.line.A.y + this.line.B.y) / 2)
