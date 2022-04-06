@@ -18,7 +18,7 @@ export class PointByTranslationVector extends Point {
   previous: Point
   vector: Vector | VectorByPoints
   constructor (A: Point, v: Vector | VectorByPoints, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
-    super(A.parentFigure, A.x + v.x, A.y + v.y, { style, size, thickness, color, draggable, temp })
+    super(A.parentFigure, A.x + v.x, A.y + v.y, { style, size, thickness, color, draggable, temp, label })
     this.previous = A
     this.vector = v
     if (label !== undefined) this.label = label

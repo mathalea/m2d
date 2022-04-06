@@ -249,30 +249,6 @@ export class Line extends Element2D {
     }
   }
 
-  /* usage : Segment.homothetie(segment, center, factor)
-  static homothetie (line: Line, center: Point, k:number|Measure) {
-    try {
-      const M = new PointByHomothetie(line.A, center, k, { temp: true })
-      const N = new PointByHomothetie(line.B, center, k, { temp: true })
-      return new Line(M, N)
-    } catch (error) {
-      console.log('Erreur dans Line.homothetie()', error)
-      return new Line(line.A, line.A)
-    }
-  }
-
-  static rotation (line: Line, center: Point, angle: number|Measure) {
-    try {
-      const M = new PointByRotation(line.A, center, angle, { temp: true })
-      const N = new PointByRotation(line.B, center, angle, { temp: true })
-      console.log(line.lineType)
-      return new Line(M, N, { lineType: line.lineType })
-    } catch (error) {
-      console.log('Erreur dans Line.homothetie()', error)
-      return new Line(line.A, line.A)
-    }
-  }
-*/
   rotation (center: Point, angle: number|Measure) {
     try {
       const M = new PointByRotation(this.A, center, angle, { temp: true })
@@ -283,18 +259,6 @@ export class Line extends Element2D {
       return new Line(this.A, this.B)
     }
   }
-  /*
-  static similitude (line: Line, center: Point, k: number|Measure, angle: number|Measure) {
-    try {
-      const M = new PointBySimilitude(line.A, center, k, angle, { temp: true })
-      const N = new PointBySimilitude(line.B, center, k, angle, { temp: true })
-      return new Line(M, N)
-    } catch (error) {
-      console.log('Erreur dans Line.similitude()', error)
-      return new Line(line.A, line.A)
-    }
-  }
-*/
 
   similitude (center: Point, k: number|Measure, angle: number|Measure) {
     try {
