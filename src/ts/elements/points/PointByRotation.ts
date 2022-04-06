@@ -19,16 +19,14 @@ export class PointByRotation extends Point {
     angle: Measure // Angle en degré
     previous: Point
     constructor (A: Point, center: Point, angle: number | Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
-      const angleMeasure = (typeof angle === 'number') ? angle : angle.value
+      if (typeof angle === 'number') angle = new Const(A.parentFigure, angle)
+      const angleMeasure = angle.value
       const x = (center.x + (A.x - center.x) * Math.cos((angleMeasure * Math.PI) / 180) - (A.y - center.y) * Math.sin((angleMeasure * Math.PI) / 180))
       const y = (center.y + (A.x - center.x) * Math.sin((angleMeasure * Math.PI) / 180) + (A.y - center.y) * Math.cos((angleMeasure * Math.PI) / 180))
       super(A.parentFigure, x, y, { style, size, thickness, color, draggable, temp })
       this.center = center
-      if (typeof angle === 'number') this.angle = new Const(A.parentFigure, angle)
-      else {
-        this.angle = angle
-        angle.addChild(this)
-      }
+      this.angle = angle
+      angle.addChild(this)
       this.previous = A
       if (label !== undefined) this.label = label
       A.addChild(this)
@@ -36,6 +34,12 @@ export class PointByRotation extends Point {
       if (typeof angle !== 'number') {
         this.exist = A.exist && angle.exist && center.exist
       } else this.exist = A.exist && center.exist
+    }
+
+    save () {
+      super.save()
+      this.parentFigure.save[this.id].className = 'PointByRotation'
+      this.parentFigure.save[this.id].arguments = [this.previous.id, this.center.id, this.angle.id]
     }
 
     update (): void {

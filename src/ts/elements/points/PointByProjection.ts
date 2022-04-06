@@ -25,6 +25,12 @@ export class PointByProjection extends Point {
       L.addChild(this)
     }
 
+    save () {
+      super.save()
+      this.parentFigure.save[this.id].className = 'PointByProjection'
+      this.parentFigure.save[this.id].arguments = [this.previous.id, this.line.id]
+    }
+
     update (): void {
       try {
         const coords = Coords.orthogonalProjectionCoord(this.previous, this.line)

@@ -10,6 +10,9 @@ import { Measure } from './elements/measures/Measure'
 import { Middle } from './elements/points/Middle'
 import { Point } from './elements/points/Point'
 import { PointByHomothetie } from './elements/points/PointByHomothetie'
+import { PointByProjection } from './elements/points/PointByProjection'
+import { PointByReflectionOverLine } from './elements/points/PointByReflectionOverLine'
+import { PointByRotation } from './elements/points/PointByRotation'
 import { Figure, Save, ElementSaved } from './Figure'
 
 export function loadJson (save: Save, figure: Figure) {
@@ -38,6 +41,28 @@ export function loadJson (save: Save, figure: Figure) {
       const center = exIds[id2] as Point
       const k = exIds[id3] as Measure
       const M = new PointByHomothetie(previous, center, k)
+      elements.push(M)
+      exIds[e] = M
+    } else if (save[e].className === 'PointByProjection') {
+      const [id1, id2] = save[e].arguments
+      const previous = exIds[id1] as Point
+      const line = exIds[id2] as Line
+      const M = new PointByProjection(previous, line)
+      elements.push(M)
+      exIds[e] = M
+    } else if (save[e].className === 'PointByReflectionOverLine') {
+      const [id1, id2] = save[e].arguments
+      const previous = exIds[id1] as Point
+      const line = exIds[id2] as Line
+      const M = new PointByReflectionOverLine(previous, line)
+      elements.push(M)
+      exIds[e] = M
+    } else if (save[e].className === 'PointByRotation') {
+      const [id1, id2, id3] = save[e].arguments
+      const previous = exIds[id1] as Point
+      const center = exIds[id2] as Point
+      const angle = exIds[id3] as Measure
+      const M = new PointByRotation(previous, center, angle)
       elements.push(M)
       exIds[e] = M
     } else if (save[e].className === 'Line' || save[e].className === 'Segment' || save[e].className === 'Ray') {

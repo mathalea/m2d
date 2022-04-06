@@ -37,6 +37,12 @@ export class PointByReflectionOverLine extends Point {
       line.addChild(this)
     }
 
+    save () {
+      super.save()
+      this.parentFigure.save[this.id].className = 'PointByReflectionOverLine'
+      this.parentFigure.save[this.id].arguments = [this.previous.id, this.line.id]
+    }
+
     update (): void {
       try {
         let x, y
