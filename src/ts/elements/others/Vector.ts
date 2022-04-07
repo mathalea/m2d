@@ -22,30 +22,25 @@ export class Vector extends Element2D {
   private _y: Measure
 
   constructor (figure: Figure, arg1: number | Point | Measure, arg2: number | Point| Measure) {
-    super(figure)
     let correct = true
-    this._x = new Const(figure, 0)
-    this._y = new Const(figure, 0)
+    let x, y
     try {
       if (typeof arg1 === 'number') {
-        this._x.value = arg1
-        if (typeof arg2 === 'number') this._y.value = arg2
+        x = new Const(figure, arg1)
+        if (typeof arg2 === 'number') y = new Const(figure, arg2)
         else if (arg2 instanceof Measure) {
-          this._y = arg2
-          arg2.addChild(this)
+          y = arg2
         } else correct = false
       } else if (arg1 instanceof Measure) {
-        this._x = arg1
-        arg1.addChild(this)
+        x = arg1
         if (typeof arg2 === 'number') {
-          this._y.value = arg2
+          y = new Const(figure, arg2)
         } else if (arg2 instanceof Measure) {
-          this._y = arg2
-          arg2.addChild(this)
+          y = arg2
         } else correct = false
       } else if (arg1 instanceof Point && arg2 instanceof Point) {
-        this._x = new Const(figure, arg2.x - arg1.x)
-        this._y = new Const(figure, arg2.y - arg1.y)
+        x = new Const(figure, arg2.x - arg1.x)
+        y = new Const(figure, arg2.y - arg1.y)
       } else {
         correct = false
       }
@@ -53,6 +48,11 @@ export class Vector extends Element2D {
       console.log(error)
       correct = false
     }
+    super(figure)
+    this._x = x || new Const(figure, 0)
+    this._y = y || new Const(figure, 0)
+    if (arg1 instanceof Measure) arg1.addChild(this)
+    if (arg2 instanceof Measure) arg2.addChild(this)
     if (!correct) {
       this.exist = false
     }
