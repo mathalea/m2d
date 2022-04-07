@@ -18,12 +18,19 @@ export class PointByTranslationVector extends Point {
   previous: Point
   vector: Vector | VectorByPoints
   constructor (A: Point, v: Vector | VectorByPoints, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
+    console.log(v, v instanceof Vector)
     super(A.parentFigure, A.x + v.x, A.y + v.y, { style, size, thickness, color, draggable, temp })
     this.previous = A
     this.vector = v
     if (label !== undefined) this.label = label
     A.addChild(this)
     v.addChild(this)
+  }
+
+  save () {
+    super.save()
+    this.parentFigure.save[this.id].className = 'PointByTranslationVector'
+    this.parentFigure.save[this.id].arguments = [this.previous.id, this.vector.id]
   }
 
   update (): void {

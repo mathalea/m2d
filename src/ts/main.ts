@@ -31,5 +31,5 @@ figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
 // Ma figure
-const save = { 3: { className: 'Point', arguments: [-3.7, 3.5], thickness: 3, color: 'blue' }, 7: { className: 'Point', arguments: [4.533333333333333, 3.2333333333333334], thickness: 3, color: 'blue' }, 11: { className: 'Const', arguments: [-15] }, 12: { className: 'PointByRotation', arguments: [3, 7, 11], thickness: 3, color: 'black' } }
+const save = { 3: { className: 'Point', arguments: [-6.433333333333334, 0.3333333333333339], thickness: 3, color: 'blue' }, 7: { className: 'Point', arguments: [-3.4000000000000004, 2.833333333333334], thickness: 3, color: 'blue' }, 11: { className: 'Point', arguments: [0.06666666666666643, -0.6999999999999993], thickness: 3, color: 'blue' }, 15: { className: 'VectorByPoints', arguments: [3, 11] }, 16: { className: 'PointByTranslationVector', arguments: [7, 15], thickness: 3, color: 'black' } }
 loadJson(save, figure)

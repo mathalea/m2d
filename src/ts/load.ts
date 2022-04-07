@@ -7,12 +7,16 @@ import { Segment } from './elements/lines/Segment'
 import { Const } from './elements/measures/Const'
 import { Distance } from './elements/measures/Distance'
 import { Measure } from './elements/measures/Measure'
+import { Vector } from './elements/others/Vector'
 import { Middle } from './elements/points/Middle'
 import { Point } from './elements/points/Point'
 import { PointByHomothetie } from './elements/points/PointByHomothetie'
 import { PointByProjection } from './elements/points/PointByProjection'
 import { PointByReflectionOverLine } from './elements/points/PointByReflectionOverLine'
 import { PointByRotation } from './elements/points/PointByRotation'
+import { PointBySimilitude } from './elements/points/PointBySimilitude'
+import { PointByTranslation } from './elements/points/PointByTranslation'
+import { PointByTranslationVector } from './elements/points/PointByTranslationVector'
 import { Figure, Save, ElementSaved } from './Figure'
 
 export function loadJson (save: Save, figure: Figure) {
@@ -65,6 +69,32 @@ export function loadJson (save: Save, figure: Figure) {
       const M = new PointByRotation(previous, center, angle)
       elements.push(M)
       exIds[e] = M
+    } else if (save[e].className === 'PointBySimilitude') {
+      const [id1, id2, id3, id4] = save[e].arguments
+      const previous = exIds[id1] as Point
+      const center = exIds[id2] as Point
+      const k = exIds[id3] as Measure
+      const angle = exIds[id4] as Measure
+      const M = new PointBySimilitude(previous, center, k, angle)
+      elements.push(M)
+      exIds[e] = M
+    } else if (save[e].className === 'PointByTranslation') {
+      const [id1, id2, id3] = save[e].arguments
+      const previous = exIds[id1] as Point
+      const xt = exIds[id2] as Measure
+      const yt = exIds[id3] as Measure
+      const M = new PointByTranslation(previous, xt, yt)
+      elements.push(M)
+      exIds[e] = M
+    } else if (save[e].className === 'PointByTranslationVector') {
+      const [id1, id2] = save[e].arguments
+      const previous = exIds[id1] as Point
+      const v = exIds[id2] as Vector
+      console.log(previous, v)
+      const M = new PointByTranslationVector(previous, v)
+      console.log(M)
+      elements.push(M)
+      exIds[e] = M
     } else if (save[e].className === 'Line' || save[e].className === 'Segment' || save[e].className === 'Ray') {
       const id1 = save[e].arguments[0] as number
       const id2 = save[e].arguments[1] as number
@@ -78,6 +108,20 @@ export function loadJson (save: Save, figure: Figure) {
         elements.push(s)
         exIds[e] = s
       }
+    } else if (save[e].className === 'Vector') {
+      const [id1, id2] = save[e].arguments
+      const x = exIds[id1] as Measure
+      const y = exIds[id2] as Measure
+      const v = new Vector(x.parentFigure, x, y)
+      elements.push(v)
+      exIds[e] = v
+    } else if (save[e].className === 'VectorByPoints') {
+      const [id1, id2] = save[e].arguments
+      const origin = exIds[id1] as Point
+      const end = exIds[id2] as Point
+      const v = new Vector(origin.parentFigure, origin, end)
+      elements.push(v)
+      exIds[e] = v
     } else if (save[e].className === 'Circle') {
       const id1 = save[e].arguments[0] as number
       const id2 = save[e].arguments[1] as number

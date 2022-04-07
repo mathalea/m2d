@@ -19,24 +19,23 @@ export class PointByTranslation extends Point {
     yt: Measure
     previous: Point
     constructor (A: Point, xt: number|Measure, yt: number|Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
-      super(A.parentFigure, A.x, A.y, { style, size, thickness, color, draggable, temp })
-
-      if (typeof xt === 'number') {
-        xt = new Const(A.parentFigure, xt)
-      } else {
-        xt.addChild(this)
-      }
-      if (typeof yt === 'number') {
-        yt = new Const(A.parentFigure, yt)
-      } else {
-        yt.addChild(this)
-      }
+      if (typeof xt === 'number') xt = new Const(A.parentFigure, xt)
+      if (typeof yt === 'number') yt = new Const(A.parentFigure, yt)
+      super(A.parentFigure, A.x + xt.value, A.y + yt.value, { style, size, thickness, color, draggable, temp })
+      xt.addChild(this)
+      yt.addChild(this)
       this.moveTo(A.x + xt.value, A.y + yt.value)
       this.xt = xt
       this.yt = yt
       this.previous = A
       if (label !== undefined) this.label = label
       A.addChild(this)
+    }
+
+    save () {
+      super.save()
+      this.parentFigure.save[this.id].className = 'PointByTranslation'
+      this.parentFigure.save[this.id].arguments = [this.previous.id, this.xt.id, this.yt.id]
     }
 
     update (): void {

@@ -19,18 +19,16 @@ export class PointBySimilitude extends Point {
     angle: Measure// Angle en degré
     k: Measure // Coefficient
     previous: Point
-    constructor (A: Point, center: Point, k: number |Measure, angle: number | Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
+    constructor (A: Point, center: Point, k: number | Measure, angle: number | Measure, { label, style = 'x', size = 0.15, thickness = 3, color = 'black', draggable = false, temp = false }: PointOptions = {}) {
+      if (typeof k === 'number') k = new Const(center.parentFigure, k)
       super(A.parentFigure, 0, 0, { style, size, thickness, color, draggable, temp })
       if (typeof angle === 'number') this.angle = new Const(center.parentFigure, angle)
       else {
         this.angle = angle
         angle.addChild(this)
       }
-      if (typeof k === 'number') this.k = new Const(center.parentFigure, k)
-      else {
-        this.k = k
-        k.addChild(this)
-      }
+      this.k = k
+      k.addChild(this)
       const angleRadian = this.angle.value * Math.PI / 180
       this.x = (center.x + this.k.value * (Math.cos(angleRadian) * (A.x - center.x) - Math.sin(angleRadian) * (A.y - center.y)))
       this.y = (center.y + this.k.value * (Math.cos(angleRadian) * (A.y - center.y) + Math.sin(angleRadian) * (A.x - center.x)))
@@ -44,6 +42,12 @@ export class PointBySimilitude extends Point {
           this.exist = A.exist && center.exist && angle.exist && k.exist
         } else this.exist = A.exist && center.exist && angle.exist
       } else this.exist = A.exist && center.exist
+    }
+
+    save () {
+      super.save()
+      this.parentFigure.save[this.id].className = 'PointBySimilitude'
+      this.parentFigure.save[this.id].arguments = [this.previous.id, this.center.id, this.k.id, this.angle.id]
     }
 
     update (): void {

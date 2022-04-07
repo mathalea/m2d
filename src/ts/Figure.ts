@@ -162,6 +162,7 @@ export class Figure {
     initMessageAction(this, action)
     if (action === 'pointByCoords') newPointByCoords(this) // Cette action ne doit pas attendre un clic sur la figure
     else if (action === 'save') {
+      console.log(this.set)
       for (const e of [...this.setMeasures, ...this.set]) {
         e.save()
       }
