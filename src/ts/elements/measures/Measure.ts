@@ -51,6 +51,10 @@ export abstract class Measure {
       }
     }
 
+    erase () {
+      this.exist = false
+    }
+
     set exist (arg: boolean) {
       try {
         let allParentsExist = true

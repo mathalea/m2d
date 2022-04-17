@@ -34,9 +34,5 @@ figure.svg.style.display = 'block'
 figure.svg.style.border = 'solid'
 
 // Ma figure
-const save = { 3: { className: 'Point', arguments: [-6.433333333333334, 0.3333333333333339], thickness: 3, color: 'blue' }, 7: { className: 'Point', arguments: [-3.4000000000000004, 2.833333333333334], thickness: 3, color: 'blue' }, 11: { className: 'Point', arguments: [0.06666666666666643, -0.6999999999999993], thickness: 3, color: 'blue' }, 15: { className: 'VectorByPoints', arguments: [3, 11] }, 16: { className: 'PointByTranslationVector', arguments: [7, 15], thickness: 3, color: 'black' } }
+const save = { 3: { className: 'Point', arguments: [-3.3666666666666663, 9.466666666666665], thickness: 3, color: 'blue' }, 7: { className: 'Point', arguments: [1.1999999999999993, 9.466666666666665], thickness: 3, color: 'blue' }, 11: { className: 'Point', arguments: [-1.9333333333333336, 6.7333333333333325], thickness: 3, color: 'blue' }, 17: { className: 'Vector', arguments: [15, 16] }, 18: { className: 'PointByTranslationVector', arguments: [11, 17], thickness: 3, color: 'black' } }
 loadJson(save, figure)
-const A = new Point(figure, 0, 0, { label: 'A' })
-const B = new Point(figure, 5, 0, { label: 'B' })
-const V = new VectorByPoints(A, B)
-const C = new PointByTranslationVector(B, V, { label: 'C' })

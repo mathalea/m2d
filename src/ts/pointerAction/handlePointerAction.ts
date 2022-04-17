@@ -45,7 +45,7 @@ export function handlePointerAction (figure: Figure, event: PointerEvent) {
   else if (figure.pointerAction === 'pointByCoords') newPointByCoords(figure)
   else if (figure.pointerAction === 'middle') newMiddle(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'drag') startDrag(figure, pointerX, pointerY)
-  else if (figure.pointerAction === 'erase') erase(figure, pointerX, pointerY)
+  else if (figure.pointerAction === 'erase') erase(clickedElements)
   else if (figure.pointerAction === 'hide') hide(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'segment') newSegment(figure, pointerX, pointerY)
   else if (figure.pointerAction === 'line') newLine(figure, pointerX, pointerY)

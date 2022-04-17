@@ -127,6 +127,12 @@ export abstract class Element2D {
     if (changeIsVisible) this.isVisible = true
   }
 
+  erase () {
+    this.parentFigure.set.delete(this)
+    this.g.remove()
+    for (const e of this.childs) e.erase()
+  }
+
   set exist (arg: boolean) {
     try {
       let allParentsExist = true

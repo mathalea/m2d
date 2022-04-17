@@ -56,6 +56,11 @@ export class Vector extends Element2D {
     if (!correct) {
       this.exist = false
     }
+    this.parentFigure.set.add(this)
+  }
+
+  save () {
+    this.parentFigure.save[this.id] = { className: 'Vector', arguments: [this._x.id, this._y.id] }
   }
 
   get norme () {
